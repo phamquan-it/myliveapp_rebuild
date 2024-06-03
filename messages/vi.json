@@ -1,0 +1,80 @@
+{
+  "Authenlication": {
+    "donothaveanacount": "Chưa có tài khoản?",
+    "rpassword": "Xác nhận mật khẩu",
+    "gotohomepage": "Đi tới trang chủ",
+    "username": "Tên người dùng",
+    "password": "Mật khẩu",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "forgot": "Quên mật khẩu?",
+    "fullname": "Họ tên",
+    "requiredFullname": "Họ tên không được để trống",
+    "requiredEmail": "Email không được để trống!",
+    "email": "Email",
+    "requiredpassword": "Mật khẩu không được để trống!",
+    "confirmpassword": "Xác nhận nhận mật khẩu không được để trống!",
+    "confirmpasswordError": "Xác nhận mật khẩu không khớp!",
+    "success": "Thành công!",
+    "min5char": "Mật khẩu phải có tối thiểu 5 ký tự!"
+  },
+  "Index": {
+    "title": "Start",
+    "description": "Das ist die Startseite."
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "Zu {locale, select, de {Deutsch} en {Englisch} other {Unbekannt}} wechseln"
+  },
+  "PageLayout": {
+    "pageTitle": "next-intl",
+    "login":"Đăng nhập",
+    "register":"Đăng ký"
+  },
+  "DashboardMenu": {
+    "home": "Trang chủ",
+    "services": "Dịch vụ",
+    "contact": "Liên hệ",
+    "platform": "Nền tảng",
+    "category": "Thể loại",
+    "refund": "Hoàn tiền",
+    "order": "Đặt hàng",
+    "user": "Người dùng",
+    "userprofile": "Thông tin cá nhân",
+    "Settings": "Thiết lập",
+    "neworder": "Đặt hàng",
+    "payment": "Thanh toán",
+    "paymenthistory": "Lịch sử thanh toán"
+  },
+  "MyLanguage": {
+    "minorder":"Nhỏ nhất",
+    "maxorder":"Lớn nhất",
+    "buy":"Mua",
+    "rate":"Đánh giá",
+    "entryno": "STT",
+    "role": "Vai trò",
+    "createAt": "Ngày tạo",
+    "name": "Tên",
+    "location": "Vị trí",
+    "createat": "Ngày tạo",
+    "updateat": "Ngày cập nhật",
+    "action": "Hành động",
+    "areyousure": "Bạn có chắc không?",
+    "delete": "Xóa",
+    "service": "Dịch vụ",
+    "mailUser": "Mail người dùng",
+    "createneworder": "Tạo đơn hàng mới",
+    "updateorder": "Cập nhật thông tin đơn hàng",
+    "createnewuser": "Tạo người dùng mới",
+    "accept": "Chấp nhận",
+    "cancel": "Từ chối",
+    "searchplh": "Tìm kiếm",
+    "chooseanuser": "Chọn một người dùng",
+    "link": "Liên kết",
+    "totalmoney": "Tổng tiền",
+    "fund": "Số dư",
+    "isactive": "Đã kích hoạt",
+    "quantity": "Số lượng",
+    "status": "Trạng thái",
+    "remains": "Còn lại"
+  }
+}
