@@ -15,13 +15,10 @@ import { Content } from "antd/lib/layout/layout";
 
 const Home = ({
   locale,
-  serviceData_en,
-  serviceData_vi,
+  serviceData,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const t = useTranslations("MyLanguage");
-  const [serviceData, setServiceData] = useState<any[]>(
-    locale == "vi" ? serviceData_vi : serviceData_en
-  );
+
   const [pageSize, setPageSize] = useState(20);
   const router = useRouter();
   const columns: any = [
@@ -116,8 +113,6 @@ const Home = ({
               <div className="flex gap-1">
                 <LocaleSwitcher
                   onChange={(value: string) => {
-                    if (locale == "en") setServiceData(serviceData_vi);
-                    else setServiceData(serviceData_en);
                     router.push(router, "", { locale: value });
                   }}
                 />
@@ -193,23 +188,15 @@ const Home = ({
 };
 export default Home;
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
-  let serviceData_en: any[] = [];
-  let serviceData_vi: any[] = [];
+  let serviceData: any[] = [];
   try {
-    const response = await axiosClient.get("/service/list-public?language=en");
-    const response_vi = await axiosClient.get(
-      "/service/list-public?language=vi"
+    const response = await axiosClient.get(
+      "/service/list-public?language=" + locale
     );
     response.data.data.map((item: any) => {
-      serviceData_en.push(item);
+      serviceData.push(item);
       item.serviceCategories.map((serviceCategory: any) => {
-        serviceData_en.push(serviceCategory.service);
-      });
-    });
-    response_vi.data.data.map((item: any) => {
-      serviceData_vi.push(item);
-      item.serviceCategories.map((serviceCategory: any) => {
-        serviceData_vi.push(serviceCategory.service);
+        serviceData.push(serviceCategory.service);
       });
     });
   } catch (error) {
@@ -219,8 +206,7 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
       locale,
-      serviceData_vi,
-      serviceData_en,
+      serviceData,
       messages: (await import(`../../messages/${locale}.json`)).default,
     },
   };
