@@ -11,7 +11,7 @@ import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import { getCookie } from "cookies-next";
 
 export default function Index() {
-  const token = getCookie("token")
+  const token = getCookie("token");
   const format = useFormatter();
   const [seriveData, setSeriveData] = useState({
     data: [],
@@ -23,8 +23,8 @@ export default function Index() {
       axiosClient.get("/service/list?language=en", {
         params,
         headers: {
-          "Authorization": `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       }),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
     onSuccess: (data) => {
@@ -53,11 +53,11 @@ export default function Index() {
     });
     console.log(userMutation);
   }, []);
-  const t = useTranslations("MyLanguage")
+  const t = useTranslations("MyLanguage");
   const [pageIndex, setPageIndex] = useState(1);
   const columns: any[] = [
     {
-      title: t('entryno'),
+      title: t("entryno"),
       dataIndex: "key",
       key: "key",
     },
@@ -133,11 +133,7 @@ export default function Index() {
       render: (text: string, record: any) => (
         <>
           <div className="flex justify-center">
-            {record.service.level != undefined ? (
-              <></>
-            ) : (
-              ""
-            )}
+            {record.service.level != undefined ? <></> : ""}
           </div>
         </>
       ),
@@ -152,7 +148,7 @@ export default function Index() {
         <link rel="icon" href="/logo.png" />
       </Head>
       <DashBoardLayout>
-      <div>
+        <div>
           {userMutation.isPending ? (
             <>Loading...</>
           ) : userMutation.isError ? (
@@ -169,20 +165,20 @@ export default function Index() {
               onCancel={() => setShowPopup(false)}
             >
               {editServideID}
-             
             </Modal>
 
             <div className="flex">
               <div className="py-3 w-1/5">
                 <Input placeholder="Search..." />
               </div>
-              <div className="py-3 w-1/5 ms-3">
-                
-              </div>
+              <div className="py-3 w-1/5 ms-3"></div>
             </div>
 
             <Table
-              dataSource={seriveData?.data.map((item: any, index: number) => ({ ...item, key: pageIndex * 10 + (index + 1) - 10 }))}
+              dataSource={seriveData?.data.map((item: any, index: number) => ({
+                ...item,
+                key: pageIndex * 10 + (index + 1) - 10,
+              }))}
               columns={columns}
               expandable={{
                 expandedRowRender: (record: any) => (

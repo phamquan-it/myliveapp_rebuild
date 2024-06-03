@@ -3,8 +3,15 @@ import axiosClient from "@/apiClient/axiosClient";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import format from "@/hooks/dayjsformatter";
 import { useQuery } from "@tanstack/react-query";
-import lodash from "lodash";
-import { Image, Input, Switch, Table, TablePaginationConfig } from "antd";
+import lodash, { values } from "lodash";
+import {
+  Image,
+  Input,
+  Select,
+  Switch,
+  Table,
+  TablePaginationConfig,
+} from "antd";
 import { AnyObject } from "antd/es/_util/type";
 import {
   FilterValue,
@@ -15,9 +22,20 @@ import { getCookie } from "cookies-next";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Platform } from "@/@type";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPlatform } from "@/libs/redux/slices/platformSlice";
+import { RootState } from "@/libs/redux/store";
 
 const Page = () => {
+  const dispatch = useDispatch();
+  const { platforms, isPending, isSuccess } = useSelector(
+    (state: RootState) => state.platformSlice
+  );
+  useEffect(() => {
+    dispatch(fetchPlatform());
+  }, [dispatch]);
   const [pageIndex, setPageIndex] = useState(1);
   const token = getCookie("token");
   const router = useRouter();
@@ -65,7 +83,6 @@ const Page = () => {
       }),
     placeholderData: (previousData) => previousData,
   });
-  console.log(data);
   const handleTableChange = (
     pagination: TablePaginationConfig,
     filters: Record<string, FilterValue | null>,
@@ -79,12 +96,14 @@ const Page = () => {
     const limit = current * pageSize;
     setParams({ ...params, limit: limit, offset: offset });
   };
+  const [platformValue, setPlatformValue] = useState<number>(1);
   return (
     <>
       <DashBoardLayout>
-        <div>
+        <div className="flex justify-start gap-1">
           <Input
-            placeholder="Search"
+            style={{ width: 200 }}
+            placeholder="Search..."
             onChange={(e) => {
               setKeyword(e.target.value);
               const search = lodash.debounce(() => {
@@ -96,7 +115,34 @@ const Page = () => {
               search();
             }}
           />
+          <Select
+            showSearch
+            options={platforms.map((platform) => ({
+              label: (
+                <>
+                  <div className="flex items-center gap-1">
+                    <Image
+                      src={platform.icon}
+                      alt=""
+                      width={25}
+                      preview={false}
+                    />
+                    <span>{platform.name}</span>
+                  </div>
+                </>
+              ),
+              value: `${platform.id}#${platform.name}`,
+            }))}
+            style={{ width: 200 }}
+            placeholder="Select a platform"
+            onChange={(value) => {
+              const regex = /(\d+)#/;
+              const match = parseInt(value.match(regex));
+              setPlatformValue(match || 1);
+            }}
+          ></Select>
         </div>
+
         <Table
           dataSource={data?.data.data.map((item: any, index: number) => ({
             ...item,
