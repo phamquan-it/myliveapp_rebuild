@@ -48,7 +48,6 @@ const Page = () => {
       }),
     placeholderData: (previousData) => previousData,
   });
-  console.log(data);
   const handleTableChange = (
     pagination: TablePaginationConfig,
     filters: Record<string, FilterValue | null>,

@@ -13,7 +13,12 @@ const options: LocaleOption[] = [
     value: "en",
     label: (
       <div className="flex items-center gap-1">
-        <Image src="/en.png" alt="" width={25} preview={false} />{" "}
+        <Image
+          src="https://cdn-icons-png.flaticon.com/128/330/330425.png"
+          alt=""
+          width={25}
+          preview={false}
+        />{" "}
         <span>English</span>
       </div>
     ),
@@ -23,7 +28,12 @@ const options: LocaleOption[] = [
     value: "vi",
     label: (
       <div className="flex items-center gap-1">
-        <Image src="/vi.png" alt="" width={25} preview={false} />
+        <Image
+          src="https://cdn-icons-png.flaticon.com/128/555/555515.png"
+          alt=""
+          width={25}
+          preview={false}
+        />
         <span>Tiếng việt</span>
       </div>
     ),

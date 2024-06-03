@@ -3,7 +3,6 @@ import { useTranslations } from "next-intl";
 import { ReactNode } from "react";
 import { Header } from "antd/es/layout/layout";
 import { Button, Image } from "antd";
-import LocaleSwitcher from "../LocaleSwitcher";
 import { useRouter } from "next/router";
 
 type Props = {

@@ -149,14 +149,6 @@ export default function Index() {
       </Head>
       <DashBoardLayout>
         <div>
-          {userMutation.isPending ? (
-            <>Loading...</>
-          ) : userMutation.isError ? (
-            <>An error occured</>
-          ) : (
-            <></>
-          )}
-
           <>
             <Modal
               title=""
@@ -175,6 +167,7 @@ export default function Index() {
             </div>
 
             <Table
+              loading={userMutation.isPending}
               dataSource={seriveData?.data.map((item: any, index: number) => ({
                 ...item,
                 key: pageIndex * 10 + (index + 1) - 10,

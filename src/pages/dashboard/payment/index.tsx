@@ -3,7 +3,7 @@ import axiosClient from "@/apiClient/axiosClient";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import format from "@/hooks/dayjsformatter";
 import { useQuery } from "@tanstack/react-query";
-import lodash from "lodash";
+import lodash, { method } from "lodash";
 import { Image, Input, Switch, Table, TablePaginationConfig } from "antd";
 import { AnyObject } from "antd/es/_util/type";
 import {
@@ -30,14 +30,28 @@ const Page = () => {
     },
     {
       title: t("name"),
-      dataIndex: "name",
-      key: "name",
-      render: (text: string, record: Category) => (
-        <div className="flex items-center gap-2">
-          <Image width={25} src={record.icon} alt="image" />
-          {text}
-        </div>
-      ),
+      dataIndex: "account",
+      key: "account",
+    },
+    {
+      title: t("name"),
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: t("name"),
+      dataIndex: "paymethod",
+      key: "paymethod",
+    },
+    {
+      title: t("name"),
+      dataIndex: "account",
+      key: "account",
+    },
+    {
+      title: t("name"),
+      dataIndex: "account",
+      key: "account",
     },
     {
       title: t("createat"),
@@ -54,18 +68,18 @@ const Page = () => {
     limit: 10,
   });
 
-  const { data, isFetching, isError } = useQuery({
-    queryKey: ["orders", params],
-    queryFn: () =>
-      axiosClient.get("/categories/list?language=en", {
-        params: params,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }),
-    placeholderData: (previousData) => previousData,
-  });
-  console.log(data);
+  // const { data, isFetching, isError } = useQuery({
+  //   queryKey: ["orders", params],
+  //   queryFn: () =>
+  //     axiosClient.get("/categories/list?language=en", {
+  //       params: params,
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }),
+  //   placeholderData: (previousData) => previousData,
+  // });
+  //console.log(data);
   const handleTableChange = (
     pagination: TablePaginationConfig,
     filters: Record<string, FilterValue | null>,
@@ -98,16 +112,16 @@ const Page = () => {
           />
         </div>
         <Table
-          dataSource={data?.data.data.map((item: any, index: number) => ({
+          dataSource={data?.data.map((item: any, index: number) => ({
             ...item,
             key: pageIndex * 10 + (index + 1) - 10,
           }))}
           columns={columns}
-          loading={isFetching}
+          //loading={isFetching}
           onChange={handleTableChange}
-          pagination={{
-            total: data?.data.total,
-          }}
+          // pagination={{
+          //   total: data?.data.total,
+          // }}
         />
       </DashBoardLayout>
     </>
@@ -122,3 +136,19 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
     },
   };
 }
+
+const data = {
+  data: Array.from({ length: 50 }, (_, index) => ({
+    id: index + 1,
+    account: `tuyen${index}@gmail.com`,
+    creator: `quan${index}`,
+    paymethod: "QR_code",
+    date: "2023-08-24T12:34:13.000Z",
+    content: "azseo",
+    status: "processing",
+    amount: 1,
+    rate: 1,
+    amount_vi: 100,
+  })),
+  total: 50,
+};

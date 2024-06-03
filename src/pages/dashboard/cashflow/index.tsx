@@ -27,6 +27,7 @@ import { Platform } from "@/@type";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPlatform } from "@/libs/redux/slices/platformSlice";
 import { RootState } from "@/libs/redux/store";
+import axios from "axios";
 
 const Page = () => {
   const dispatch = useDispatch();
@@ -47,22 +48,24 @@ const Page = () => {
       key: "key",
     },
     {
-      title: t("name"),
-      dataIndex: "name",
-      key: "name",
-      render: (text: string, record: Category) => (
-        <div className="flex items-center gap-2">
-          <Image width={25} src={record.icon} alt="image" />
-          {text}
-        </div>
-      ),
+      title: t("email"),
+      dataIndex: "email",
+      key: "email",
     },
     {
-      title: t("createat"),
-      dataIndex: "createdAt",
-      width: "100px",
-      key: "createdAt",
-      render: (text: string) => format(text, router.locale || "en"),
+      title: t("action"),
+      dataIndex: "action",
+      key: "action",
+    },
+    {
+      title: "Amount of money",
+      dataIndex: "monney",
+      key: "monney",
+    },
+    {
+      title: t("fund"),
+      dataIndex: "fund",
+      key: "fund",
     },
   ];
   const [keyword, setKeyword] = useState("");
@@ -72,17 +75,17 @@ const Page = () => {
     limit: 10,
   });
 
-  const { data, isFetching, isError } = useQuery({
-    queryKey: ["orders", params],
-    queryFn: () =>
-      axiosClient.get("/categories/list?language=en", {
-        params: params,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }),
-    placeholderData: (previousData) => previousData,
-  });
+  // const { data, isFetching, isError } = useQuery({
+  //   queryKey: ["orders", params],
+  //   queryFn: () =>
+  //     axios.get("http://localhost:3000/api/cashflow", {
+  //       params: params,
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }),
+  //   placeholderData: (previousData) => previousData,
+  // });
   const handleTableChange = (
     pagination: TablePaginationConfig,
     filters: Record<string, FilterValue | null>,
@@ -96,7 +99,94 @@ const Page = () => {
     const limit = current * pageSize;
     setParams({ ...params, limit: limit, offset: offset });
   };
-  const [platformValue, setPlatformValue] = useState<number>(1);
+  const data = [
+    {
+      id: 1,
+      email: "john@example.com",
+      action: "deposit",
+      money: 100,
+      fund: "A",
+    },
+    {
+      id: 2,
+      email: "jane@example.com",
+      action: "withdrawal",
+      money: 200,
+      fund: "B",
+    },
+    {
+      id: 3,
+      email: "sam@example.com",
+      action: "transfer",
+      money: 300,
+      fund: "C",
+    },
+    {
+      id: 4,
+      email: "alice@example.com",
+      action: "deposit",
+      money: 400,
+      fund: "D",
+    },
+    {
+      id: 5,
+      email: "bob@example.com",
+      action: "withdrawal",
+      money: 500,
+      fund: "E",
+    },
+    {
+      id: 6,
+      email: "charlie@example.com",
+      action: "transfer",
+      money: 600,
+      fund: "F",
+    },
+    {
+      id: 4,
+      email: "alice@example.com",
+      action: "deposit",
+      money: 400,
+      fund: "D",
+    },
+    {
+      id: 5,
+      email: "bob@example.com",
+      action: "withdrawal",
+      money: 500,
+      fund: "E",
+    },
+    {
+      id: 6,
+      email: "charlie@example.com",
+      action: "transfer",
+      money: 600,
+      fund: "F",
+    },
+    {
+      id: 7,
+      email: "alice@example.com",
+      action: "deposit",
+      money: 400,
+      fund: "D",
+    },
+    {
+      id: 8,
+      email: "bob@example.com",
+      action: "withdrawal",
+      money: 500,
+      fund: "E",
+    },
+    {
+      id: 9,
+      email: "charlie@example.com",
+      action: "transfer",
+      money: 600,
+      fund: "F",
+    },
+    // Add more data as needed
+  ];
+
   return (
     <>
       <DashBoardLayout>
@@ -115,44 +205,18 @@ const Page = () => {
               search();
             }}
           />
-          <Select
-            showSearch
-            options={platforms.map((platform) => ({
-              label: (
-                <>
-                  <div className="flex items-center gap-1">
-                    <Image
-                      src={platform.icon}
-                      alt=""
-                      width={25}
-                      preview={false}
-                    />
-                    <span>{platform.name}</span>
-                  </div>
-                </>
-              ),
-              value: `${platform.id}#${platform.name}`,
-            }))}
-            style={{ width: 200 }}
-            placeholder="Select a platform"
-            onChange={(value) => {
-              const regex = /(\d+)#/;
-              const match = parseInt(value.match(regex));
-              setPlatformValue(match || 1);
-            }}
-          ></Select>
         </div>
 
         <Table
-          dataSource={data?.data.data.map((item: any, index: number) => ({
+          dataSource={data.map((item: any, index: number) => ({
             ...item,
             key: pageIndex * 10 + (index + 1) - 10,
           }))}
           columns={columns}
-          loading={isFetching}
+          //   loading={isFetching}
           onChange={handleTableChange}
           pagination={{
-            total: data?.data.total,
+            total: 20,
           }}
         />
       </DashBoardLayout>

@@ -24,7 +24,7 @@ import { useTranslations } from "next-intl";
 import Title from "antd/es/typography/Title";
 import { deleteCookie } from "cookies-next";
 import { ToastContainer } from "react-toastify";
-import LanguageChoose from "@/LocaleChoose";
+import LocaleSwitcher from "@/LocaleSwitcher";
 
 const { Header, Sider, Content } = Layout;
 
@@ -157,7 +157,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
         <div
           className={`bg-white h-full custom-scrollbar ${
             collapsed ? "overflow-y-hidden" : "overflow-y-scroll"
-          }`}
+          }  `}
         >
           <Sider
             theme="light"
@@ -248,7 +248,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             <div className="w-full flex justify-between pe-10">
               <span style={{ color: "purple" }}>LiveLogo</span>
               <div className="flex items-center gap-2">
-                <LanguageChoose />
+                <LocaleSwitcher />
               </div>
             </div>
           </div>

@@ -75,6 +75,8 @@
     "isactive": "Đã kích hoạt",
     "quantity": "Số lượng",
     "status": "Trạng thái",
-    "remains": "Còn lại"
+    "remains": "Còn lại",
+    "email":"Email",
+    "method":"Phương thức"
   }
 }

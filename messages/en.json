@@ -76,6 +76,8 @@
     "isactive": "Is Active",
     "quantity": "Quantity",
     "status": "Status",
-    "remains": "Remains"
+    "remains": "Remains",
+    "email":"Email",
+    "method":"Method"
   }
 }
