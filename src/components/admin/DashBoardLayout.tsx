@@ -24,7 +24,7 @@ import { useTranslations } from "next-intl";
 import Title from "antd/es/typography/Title";
 import { deleteCookie } from "cookies-next";
 import { ToastContainer } from "react-toastify";
-import LocaleSwitcher from "../general/LocaleSwitcher";
+import LanguageChoose from "@/LocaleChoose";
 
 const { Header, Sider, Content } = Layout;
 
@@ -144,16 +144,22 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
     <Layout style={{ height: "100vh" }} className="!bg-white">
       <ToastContainer />
       <div className="">
-      <div className={`px-3 py-3 pt-5 text-gray-600 absolute z-30 bg-white ${collapsed ? "hidden" : "block"}`}>
+        <div
+          className={`px-3 py-3 pt-5 text-gray-600 absolute z-30 bg-white ${
+            collapsed ? "hidden" : "block"
+          }`}
+        >
           <Title level={3} className="!mb-0 !pb-0">
             Pham Quan
           </Title>
           <p>quanqqq11@gmail.com</p>
         </div>
         <div
-          className={`bg-white h-full custom-scrollbar ${(collapsed)?"overflow-y-hidden":"overflow-y-scroll"}  `}>
+          className={`bg-white h-full custom-scrollbar ${
+            collapsed ? "overflow-y-hidden" : "overflow-y-scroll"
+          }`}
+        >
           <Sider
-
             theme="light"
             trigger
             collapsible={false}
@@ -162,7 +168,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
           >
             <div className="demo-logo-vertical" />
             <div className={`${collapsed ? "hidden" : "block"}`}>
-              <div style={{height:100}}></div>
+              <div style={{ height: 100 }}></div>
               <div className="my-2 border mx-3 rounded-md font-semibold">
                 <div className="bg-blue-100 flex justify-between p-3 ">
                   <span className="text-gray-700">Funds</span>
@@ -224,7 +230,10 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
         </div>
       </div>
       <Layout className="">
-        <Header style={{ padding: 0, background: colorBgContainer }} className="-ms-1">
+        <Header
+          style={{ padding: 0, background: colorBgContainer }}
+          className="-ms-1"
+        >
           <div className="flex">
             <Button
               type="text"
@@ -239,7 +248,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             <div className="w-full flex justify-between pe-10">
               <span style={{ color: "purple" }}>LiveLogo</span>
               <div className="flex items-center gap-2">
-                <LocaleSwitcher />
+                <LanguageChoose />
               </div>
             </div>
           </div>

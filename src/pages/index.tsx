@@ -6,10 +6,8 @@ import { useRouter } from "next/router";
 import axiosClient from "@/apiClient/axiosClient";
 import { useEffect, useState } from "react";
 import { Footer, Header } from "antd/es/layout/layout";
-import LocaleSwitcher from "@/components/general/LocaleSwitcher";
+import LocaleSwitcher from "@/LocaleSwitcher";
 import { StarFilled } from "@ant-design/icons";
-import { text } from "stream/consumers";
-import { Service } from "@/@type/Service";
 import TextArea from "antd/lib/input/TextArea";
 import { Content } from "antd/lib/layout/layout";
 

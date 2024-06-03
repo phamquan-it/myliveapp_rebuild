@@ -13,7 +13,8 @@ const options: LocaleOption[] = [
     value: "en",
     label: (
       <div className="flex items-center gap-1">
-        <Image src="/en.png" alt="" width={25} /> <span>English</span>
+        <Image src="/en.png" alt="" width={25} preview={false} />{" "}
+        <span>English</span>
       </div>
     ),
   },
@@ -22,7 +23,7 @@ const options: LocaleOption[] = [
     value: "vi",
     label: (
       <div className="flex items-center gap-1">
-        <Image src="/vi.png" alt="" width={25} preview={false} />{" "}
+        <Image src="/vi.png" alt="" width={25} preview={false} />
         <span>Tiếng việt</span>
       </div>
     ),
@@ -36,11 +37,11 @@ const LocaleSwitcher = (props: any) => {
   };
   return (
     <Select
+      onChange={switchLocale}
+      {...props}
       style={{ width: 150 }}
       options={options}
       defaultValue={router.locale}
-      onChange={switchLocale}
-      {...props}
     />
   );
 };

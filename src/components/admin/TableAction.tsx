@@ -1,15 +1,13 @@
 import { Button } from "antd";
 
-const TableAction = ()=>{
-  return(
+const TableAction = () => {
+  return (
     <>
-    <Button type="default">
-        Edit
-    </Button>
-    <Button type="primary" danger>
+      <Button type="default">Edit</Button>
+      <Button type="primary" danger>
         Delete
-    </Button>
+      </Button>
     </>
-    ); 
-} 
- export default TableAction
+  );
+};
+export default TableAction;
