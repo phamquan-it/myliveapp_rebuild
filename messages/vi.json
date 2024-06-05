@@ -28,7 +28,16 @@
   "PageLayout": {
     "pageTitle": "next-intl",
     "login":"Đăng nhập",
-    "register":"Đăng ký"
+    "register":"Đăng ký",
+    "easy":"Dễ dàng",
+    "crossplatform":"Đa nền tảng",
+    "support":"Hỗ trợ",
+    "stable":"Ổn định",
+    "professtitle":"Ứng dụng Live Streams chuyên nghiệp",
+    "easy_desc":"Thao tác đơn giản, chỉ cần 1 vài cú click chuột là bạn có thể tạo luồng phát trực tiếp như ý muốn.",
+    "stable_desc":"Hệ thống tối ưu cho phép live ổn định, không giật lag, có thể livestream được video chất lượng 4K.",
+    "crossplatform_desc":"Bạn có thể live 24/7 trên rất nhiều nền tảng mạng xã hội khác nhau như Youtube, Facebook, Twitch...",
+    "support_desc":"Bạn sẽ được hỗ trợ với đội ngũ nhiệt tình, chúng tôi sẽ đem đến cho bạn trải nghiệm dịch vụ tốt nhất."
   },
   "DashboardMenu": {
     "home": "Trang chủ",
@@ -77,6 +86,12 @@
     "status": "Trạng thái",
     "remains": "Còn lại",
     "email":"Email",
-    "method":"Phương thức"
+    "method":"Phương thức",
+    "paymethod":"Phương thức thanh toán",
+    "date":"Ngày",
+    "content":"Content",
+    "amountusd":"Số lượng(USD)",
+    "amountvnd":"Số lượng(VND)",
+    "account":"Tài khoản"
   }
 }

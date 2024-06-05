@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
 
 export function middleware(req:NextRequest){
+   
     //next request
     const response = NextResponse.next()
     //get token
-   
+    if(req.nextUrl.pathname.includes("assets")) return response;
     
     const token = req.cookies.get("token")
     try{

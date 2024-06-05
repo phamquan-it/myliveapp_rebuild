@@ -1,6 +1,7 @@
 import ReactQueryProvider from "@/libs/react-query/ReactQueryProvider";
 import ReduxProvider from "@/libs/redux/Provider";
 import "@/styles/globals.css";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import "react-toastify/dist/ReactToastify.css";
 import theme from "@/theme/themeConfig";
 import { ConfigProvider } from "antd";
@@ -10,6 +11,10 @@ import { useRouter } from "next/router";
 import NextProgress from "next-progress";
 import vi from "antd/locale/vi_VN";
 import en from "antd/locale/en_US";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+config.autoAddCss = false;
+
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   return (

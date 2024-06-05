@@ -1,12 +1,12 @@
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
-import FastInfoList from "@/components/admin/FastInfoList";
+
 import { GetStaticPropsContext } from "next";
 
 const Page = () => {
   return (
     <>
       <DashBoardLayout>
-        <FastInfoList />
+        <div></div>
       </DashBoardLayout>
     </>
   );

@@ -28,7 +28,16 @@
   "PageLayout": {
     "pageTitle": "next-intl",
     "login":"Login",
-    "register":"Register"
+    "register":"Register",
+    "easy":"Easy",
+    "crossplatform":"Cross platform",
+    "support":"Support",
+    "stable":"Stable",
+    "professtitle":"Professional Live Streams application",
+    "easy_desc":"Simple operation, just a few mouse clicks and you can create the live stream you want.",
+    "stable_desc":"The optimized system allows stable live streaming, no lag, and can livestream 4K quality videos.",
+    "crossplatform_desc":"You can live 24/7 on many different social networking platforms such as Youtube, Facebook, Twitch...",
+    "support_desc":"You will be supported by an enthusiastic team, we will bring you the best service experience."
   },
   "DashboardMenu": {
     "home": "Home",
@@ -78,6 +87,12 @@
     "status": "Status",
     "remains": "Remains",
     "email":"Email",
-    "method":"Method"
+    "method":"Method",
+    "paymethod":"Payment method",
+    "date":"Date",
+    "content":"Content",
+    "amountusd":"Amount(USD)",
+    "amountvnd":"Amount(VND)",
+    "account":"Account"
   }
 }
