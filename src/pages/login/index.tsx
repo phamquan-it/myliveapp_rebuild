@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Form, Input, Button} from "antd";
+import { Form, Input, Button } from "antd";
 import Title from "antd/es/typography/Title";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
@@ -8,7 +8,7 @@ import FormLayout from "@/components/client/FormLayout";
 import { useTranslations } from "next-intl";
 import { GetStaticPropsContext } from "next";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState,AppDispatch } from  '@/libs/redux/store'
+import { RootState, AppDispatch } from "@/libs/redux/store";
 import { resetState } from "@/libs/redux/slices/authenlicationSlice";
 import { loginAsync } from "@/libs/redux/asyncthunkfunc/authenlicateAsyncThunk";
 import { ToastContainer, toast } from "react-toastify";
@@ -17,37 +17,36 @@ import axios from "axios";
 import axiosClient from "@/apiClient/axiosClient";
 import { setCookie } from "cookies-next";
 const LoginForm = () => {
-   const t = useTranslations("Authenlication");
-  
+  const t = useTranslations("Authenlication");
+
   const layout = {
     labelCol: { span: 24 }, // Set the label width to take up the full width
     wrapperCol: { span: 24 }, // Set the input width to take up the full width
   };
   const router = useRouter();
   const dispatch = useDispatch();
-  const {isPending, mutate}  = useMutation({
-    mutationKey:["login"],
-    mutationFn:(body)=>axiosClient.post("/auth/login?language=en",body),
-    onSuccess:(data)=>{
-      toast.success("Success")
-      setCookie("token",data.data.token);
-      setCookie("refresh_token",data.data.refresh_token);
-      router.push("/dashboard")
+  const { isPending, mutate } = useMutation({
+    mutationKey: ["login"],
+    mutationFn: (body) => axiosClient.post("/auth/login?language=en", body),
+    onSuccess: (data) => {
+      toast.success("Success");
+      setCookie("token", data.data.token);
+      setCookie("refresh_token", data.data.refresh_token);
+      router.push("/dashboard");
     },
-    onError:(err)=>{
+    onError: (err) => {
       console.log(err);
-      
-      toast.error("Email  or password is not valid!")
-    }
-  })
+
+      toast.error("Email  or password is not valid!");
+    },
+  });
   async function onFinish(values: any) {
-    mutate(values)
+    mutate(values);
   }
 
   return (
     <>
       <FormLayout>
-       
         <Form
           className="w-full py-5 pe-3"
           name="basic"
@@ -62,7 +61,7 @@ const LoginForm = () => {
             <Form.Item
               label={t("email")}
               name="email"
-              rules={[{ required: true, message: ("requiredEmail") }]}
+              rules={[{ required: true, message: t("requiredEmail") }]}
             >
               <Input />
             </Form.Item>
@@ -71,10 +70,10 @@ const LoginForm = () => {
               label={t("password")}
               name="password"
               rules={[
-                { required: true, message: ("requiredpassword") },
+                { required: true, message: t("requiredpassword") },
                 {
                   min: 5,
-                  message: "Password should have at least 5 characters",
+                  message: t("min5char"),
                 },
               ]}
             >
@@ -82,11 +81,16 @@ const LoginForm = () => {
             </Form.Item>
 
             <Form.Item className="!mt-3">
-              <Button type="primary" block htmlType="submit" loading={isPending}>
+              <Button
+                type="primary"
+                block
+                htmlType="submit"
+                loading={isPending}
+              >
                 {t("login")}
               </Button>
               <p className="text-center">
-                {t('donothaveanacount')}
+                {t("donothaveanacount")}
                 <Button
                   className="!px-0"
                   type="link"
@@ -107,7 +111,7 @@ const LoginForm = () => {
     </>
   );
 };
- export default LoginForm;
+export default LoginForm;
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {

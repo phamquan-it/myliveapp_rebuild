@@ -1,8 +1,14 @@
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
-import { Table } from "antd";
+import DeleteForm from "@/components/admin/DeleteForm";
+import TableAction from "@/components/admin/TableAction";
+import EditCategory from "@/components/admin/crudform/EditCategory";
+import { Button, Form, Input, Table } from "antd";
 import { GetStaticPropsContext } from "next";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 const Page = () => {
+  const t = useTranslations("MyLanguage");
   const dataSource = [
     {
       key: "1",
@@ -20,24 +26,105 @@ const Page = () => {
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: "No.",
+      dataIndex: "key",
+      key: "key",
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
+      title: "Services",
+      dataIndex: "email",
+      key: "email",
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
+      title: "User",
+      dataIndex: "action",
+      key: "action",
+    },
+    {
+      title: "Create date",
+      dataIndex: "monney",
+      key: "monney",
+    },
+    {
+      title: "Start date",
+      dataIndex: "fund",
+      key: "fund",
+    },
+    {
+      title: "Link",
+      dataIndex: "action",
+      key: "action",
+    },
+    {
+      title: "Charge",
+      dataIndex: "action",
+      key: "action",
+    },
+    {
+      title: "Quantity",
+      dataIndex: "action",
+      key: "action",
+    },
+    {
+      title: t("action"),
+      dataIndex: "id",
+      key: "id",
+      render: (text: string, record: any) => {
+        return (
+          <TableAction
+            openState={openState}
+            viewDetail={<>view detail</>}
+            syncFunc={() => {
+              //synchonized data here
+            }}
+            editForm={
+              <>
+                <Form
+                  name="basic"
+                  layout="vertical"
+                  initialValues={{ remember: true }}
+                  // onFinish={onFinish}
+                  // onFinishFailed={onFinishFailed}
+                >
+                  <EditCategory />
+
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Update
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </>
+            }
+            deleteForm={
+              <DeleteForm
+                onCancel={() => {
+                  setOpenState(!openState);
+                }}
+                onDelete={() => {
+                  setOpenState(!openState);
+                }}
+              />
+            }
+          />
+        );
+      },
     },
   ];
+  const [openState, setOpenState] = useState(false);
+
   return (
     <>
       <DashBoardLayout>
+        <div>
+          <Input
+            placeholder="Search..."
+            style={{
+              width: 200,
+            }}
+          />
+        </div>
+
         <Table dataSource={dataSource} columns={columns} />
       </DashBoardLayout>
     </>

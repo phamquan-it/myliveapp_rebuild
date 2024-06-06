@@ -1,21 +1,37 @@
 import axiosClient from "@/apiClient/axiosClient";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
+import DeleteForm from "@/components/admin/DeleteForm";
+import TableAction from "@/components/admin/TableAction";
+import EditCategory from "@/components/admin/crudform/EditCategory";
 import format from "@/hooks/dayjsformatter";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  CloseOutlined,
+  PlusCircleFilled,
+} from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Switch, Table, TablePaginationConfig } from "antd";
+import {
+  Form,
+  Input,
+  Modal,
+  Select,
+  Switch,
+  Table,
+  TablePaginationConfig,
+} from "antd";
 import { AnyObject } from "antd/es/_util/type";
 import {
   FilterValue,
   SorterResult,
   TableCurrentDataSource,
 } from "antd/es/table/interface";
+import { Button } from "antd/lib";
 import { getCookie } from "cookies-next";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
 import { useState } from "react";
-
+const { Option } = Select;
 const Page = () => {
   const [pageIndex, setPageIndex] = useState(1);
   const token = getCookie("token");
@@ -66,7 +82,53 @@ const Page = () => {
       dataIndex: "role",
       key: "role",
     },
+    {
+      title: t("action"),
+      dataIndex: "id",
+      key: "id",
+      render: (text: string, record: any) => {
+        return (
+          <TableAction
+            openState={openState}
+            viewDetail={<>view detail</>}
+            syncFunc={() => {
+              //synchonized data here
+            }}
+            editForm={
+              <>
+                <Form
+                  name="basic"
+                  layout="vertical"
+                  initialValues={{ remember: true }}
+                  // onFinish={onFinish}
+                  // onFinishFailed={onFinishFailed}
+                >
+                  <EditCategory />
+
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Update
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </>
+            }
+            deleteForm={
+              <DeleteForm
+                onCancel={() => {
+                  setOpenState(!openState);
+                }}
+                onDelete={() => {
+                  setOpenState(!openState);
+                }}
+              />
+            }
+          />
+        );
+      },
+    },
   ];
+  const [openState, setOpenState] = useState(false);
   const [params, setParams] = useState({ offset: 0, limit: 10 });
 
   const { data, isFetching, isError } = useQuery({
@@ -94,9 +156,99 @@ const Page = () => {
     const limit = current * pageSize;
     setParams({ ...params, limit: limit, offset: offset });
   };
+
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const hideModal = () => {
+    setShowModal(false);
+  };
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const onFinish = (values: any) => {
+    console.log("Form values:", values);
+    // Handle form submission logic here
+  };
   return (
     <>
       <DashBoardLayout>
+        <Modal
+          title={t("create")}
+          open={showModal}
+          onCancel={hideModal}
+          footer={null}
+        >
+          <Form onFinish={onFinish} layout="vertical">
+            <Form.Item
+              label="Name"
+              name="name"
+              rules={[{ required: true, message: "Please enter your name" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  type: "email",
+                  message: "Please enter a valid email address",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                { required: true, message: "Please enter your password" },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Form.Item label="Phone" name="phone">
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Is Active"
+              name="isActive"
+              valuePropName="checked"
+            >
+              <Switch />
+            </Form.Item>
+            <Form.Item label="Fund Number" name="fundNumber">
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item label="Total Money" name="totalMoney">
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item label="Role" name="role">
+              <Select>
+                <Option value="admin">Admin</Option>
+                <Option value="user">User</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+        <div className="flex justify-between">
+          <div>
+            <Input placeholder="Search..." />
+          </div>
+          <Button
+            type="primary"
+            icon={<PlusCircleFilled />}
+            iconPosition="end"
+            onClick={openModal}
+          >
+            {t("create")}
+          </Button>
+        </div>
         <Table
           dataSource={data?.data.data.map((item: any, index: number) => ({
             ...item,

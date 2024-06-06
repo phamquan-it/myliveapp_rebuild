@@ -51,8 +51,15 @@
     "userprofile": "Thông tin cá nhân",
     "Settings": "Thiết lập",
     "neworder": "Đặt hàng",
+    "funds":"Số dư",
+    "inprogress":"Đang xử lý",
+    "deposit":"Nạp tiền",
     "payment": "Thanh toán",
-    "paymenthistory": "Lịch sử thanh toán"
+    "paymenthistory": "Lịch sử thanh toán",
+    "cashflow":"Dòng tiền",
+    "log":"Nhật ký",
+    "logout":"Đăng xuất",
+    "voucher":"Khuyến mãi"
   },
   "MyLanguage": {
     "minorder":"Nhỏ nhất",
@@ -92,6 +99,21 @@
     "content":"Content",
     "amountusd":"Số lượng(USD)",
     "amountvnd":"Số lượng(VND)",
-    "account":"Tài khoản"
+    "account":"Tài khoản",
+    "level":"Cấp độ",
+    "rate_config":"Tỷ lệ",
+    "initial_rate":"Tỷ lệ ban đầu",
+    "create":"Tạo mới",
+    "amountPaid":"Đã thanh toán",
+    "refundAmount":"Đã hoàn tiền",
+    "code":"Mã",
+    "minprice":"Giá thấp nhất",
+    "discountpercentage":"Tỷ lệ chiết khấu",
+    "starttime":"Thời gian bắt đầu",
+    "endtime":"Thời gian kết thúc",
+    "update":"Cập nhật",
+    "edit":"Chỉnh sửa",
+    "sync":"Đồng bộ",
+    "view_detail":"Xem chi tiết"
   }
 }

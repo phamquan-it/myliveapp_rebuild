@@ -22,9 +22,12 @@ import {
 } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 import Title from "antd/es/typography/Title";
-import { deleteCookie } from "cookies-next";
+import { deleteCookie, getCookie } from "cookies-next";
 import { ToastContainer } from "react-toastify";
 import LocaleSwitcher from "@/LocaleSwitcher";
+import { jwtDecode } from "jwt-decode";
+import { useQuery } from "@tanstack/react-query";
+import axiosClient from "@/apiClient/axiosClient";
 
 const { Header, Sider, Content } = Layout;
 
@@ -48,12 +51,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       page: "/dashboard/service",
     },
     {
-      key: "4",
-      icon: <FaMoneyBill />,
-      label: "Cash flow",
-      page: "/dashboard/cashflow",
-    },
-    {
       key: "5",
       icon: <TbCategoryFilled />,
       label: t("category"),
@@ -64,6 +61,12 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       icon: <FundOutlined />,
       label: t("refund"),
       page: "/dashboard/refund",
+    },
+    {
+      key: "4",
+      icon: <FaMoneyBill />,
+      label: t("cashflow"),
+      page: "/dashboard/cashflow",
     },
     {
       key: "2",
@@ -117,13 +120,13 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
     {
       key: "13",
       icon: <FaVolumeOff />,
-      label: "Voucher",
+      label: t("voucher"),
       page: "/dashboard/voucher",
     },
     {
       key: "14",
       icon: <DiffOutlined />,
-      label: "Log",
+      label: t("log"),
       page: "/dashboard/log",
     },
   ];
@@ -139,20 +142,34 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       if (item.page == router.asPath) setDefaultMenuActive([item.key]);
     });
   }, []);
+  const token = getCookie("token");
 
+  const { data } = useQuery({
+    queryKey: ["info"],
+    queryFn: () =>
+      axiosClient.get(`/user/info?language=${router.locale}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+  });
+  useEffect(() => {
+    console.log(collapsed);
+  }, [collapsed]);
   return (
     <Layout style={{ height: "100vh" }} className="!bg-white">
       <ToastContainer />
       <div className="">
         <div
-          className={`px-3 py-3 pt-5 text-gray-600 absolute z-30 bg-white ${
+          style={{ width: 190 }}
+          className={`px-6 py-3 pt-5 text-gray-600 absolute z-30 bg-white ${
             collapsed ? "hidden" : "block"
           }`}
         >
           <Title level={3} className="!mb-0 !pb-0">
-            Pham Quan
+            {data?.data.data.name}
           </Title>
-          <p>quanqqq11@gmail.com</p>
+          <p>{data?.data.data.email}</p>
         </div>
         <div
           className={`bg-white h-full custom-scrollbar ${
@@ -171,11 +188,11 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
               <div style={{ height: 100 }}></div>
               <div className="my-2 border mx-3 rounded-md font-semibold">
                 <div className="bg-blue-100 flex justify-between p-3 ">
-                  <span className="text-gray-700">Funds</span>
+                  <span className="text-gray-700">{t("funds")}</span>
                   <span className="text-blue-500">$0</span>
                 </div>
                 <div className=" flex justify-between p-3">
-                  <span className="text-gray-700">Inprogess</span>
+                  <span className="text-gray-700">{t("inprogress")}</span>
                   <span className="text-blue-900">$0</span>
                 </div>
               </div>
@@ -197,7 +214,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                   className="!bg-green-600"
                   icon={<PlusCircleFilled />}
                 >
-                  Deposit
+                  {t("deposit")}
                 </Button>
               </div>
             </div>
@@ -216,15 +233,15 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
               items={items_menu}
             />
           </Sider>
-          <div className="grid pb-8">
+          <div className={`grid pb-8 ${collapsed ? "!hidden" : "px-3"}`}>
             <Button
-              className={`${!collapsed ? "!mx-3" : "!hidden"}`}
+              className=""
               onClick={() => {
                 deleteCookie("token");
                 router.push("/login");
               }}
             >
-              Logout
+              {t("logout")}
             </Button>
           </div>
         </div>

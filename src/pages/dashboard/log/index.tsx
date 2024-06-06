@@ -1,7 +1,19 @@
 import axiosClient from "@/apiClient/axiosClient";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
+import DeleteForm from "@/components/admin/DeleteForm";
+import TableAction from "@/components/admin/TableAction";
+import EditCategory from "@/components/admin/crudform/EditCategory";
 import { useQuery } from "@tanstack/react-query";
-import { Table, TablePaginationConfig, Tag } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Select,
+  Table,
+  TablePaginationConfig,
+  Tag,
+} from "antd";
 import { AnyObject } from "antd/es/_util/type";
 import {
   FilterValue,
@@ -12,44 +24,95 @@ import { getCookie } from "cookies-next";
 import dayjs from "dayjs";
 import { GetStaticPropsContext } from "next";
 import { useState } from "react";
+import { useTranslations } from "use-intl";
 
-const columns = [
-  {
-    title: "No.",
-    dataIndex: "key",
-    key: "key",
-  },
-  {
-    title: "Name.",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    key: "email",
-  },
-  {
-    title: "Method",
-    dataIndex: "method",
-    key: "method",
-    render: (text: string) => (
-      <Tag color={text == "POST" ? "orange" : "purple"}>{text}</Tag>
-    ),
-  },
-  {
-    title: "Action",
-    dataIndex: "action",
-    key: "action",
-  },
-  {
-    title: "Create At",
-    dataIndex: "createdAt",
-    key: "createdAt",
-    render: (text: string) => <>{dayjs(text).format("DD/MM/YYYY hh:mm:ss")}</>,
-  },
-];
 const Page = () => {
+  const t = useTranslations("MyLanguage");
+  const columns = [
+    {
+      title: t("entryno"),
+      dataIndex: "key",
+      key: "key",
+    },
+    {
+      title: t("name"),
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: t("email"),
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: t("method"),
+      dataIndex: "method",
+      key: "method",
+      render: (text: string) => (
+        <Tag color={text == "POST" ? "orange" : "purple"}>{text}</Tag>
+      ),
+    },
+    {
+      title: t("action"),
+      dataIndex: "action",
+      key: "action",
+    },
+    {
+      title: t("createAt"),
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (text: string) => (
+        <>{dayjs(text).format("DD/MM/YYYY hh:mm:ss")}</>
+      ),
+    },
+    {
+      title: "",
+      dataIndex: "id",
+      key: "id",
+      render: (text: string, record: any) => {
+        return (
+          <TableAction
+            openState={openState}
+            viewDetail={<>view detail</>}
+            syncFunc={() => {
+              //synchonized data here
+            }}
+            editForm={
+              <>
+                <Form
+                  name="basic"
+                  layout="vertical"
+                  initialValues={{ remember: true }}
+                  // onFinish={onFinish}
+                  // onFinishFailed={onFinishFailed}
+                >
+                  <EditCategory />
+
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Update
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </>
+            }
+            deleteForm={
+              <DeleteForm
+                onCancel={() => {
+                  setOpenState(!openState);
+                }}
+                onDelete={() => {
+                  setOpenState(!openState);
+                }}
+              />
+            }
+          />
+        );
+      },
+    },
+  ];
+  const [openState, setOpenState] = useState(false);
+
   const [pageIndex, setPageIndex] = useState(1);
   const token = getCookie("token");
   const [params, setParams] = useState({ offset: 0, limit: 10 });
@@ -80,7 +143,13 @@ const Page = () => {
   return (
     <>
       <DashBoardLayout>
+        <div className="my-3 flex gap-1">
+          <Input placeholder="Search..." className="" style={{ width: 200 }} />
+          <DatePicker placeholder="Start date" picker="date" />
+          <DatePicker placeholder="End date" picker="date" />
+        </div>
         <Table
+          className="border rounded"
           loading={isFetching}
           onChange={handleTableChange}
           dataSource={data?.data.data.map((item: any, index: number) => ({

@@ -8,7 +8,6 @@ import {
   Image,
   Input,
   Layout,
-  Menu,
   Modal,
   Select,
   Table,
@@ -29,14 +28,15 @@ import TextArea from "antd/lib/input/TextArea";
 import { Content } from "antd/lib/layout/layout";
 import Title from "antd/es/typography/Title";
 import { useQuery } from "@tanstack/react-query";
+import OrderForm from "@/components/client/OrderForm";
 
 const Home = ({
   locale,
   serviceData,
+  platformdata,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [serviceDataTable, setserviceDataTable] = useState(serviceData);
   const t = useTranslations("MyLanguage");
-
   const [pageSize, setPageSize] = useState(20);
   const router = useRouter();
   const columns: any = [
@@ -102,7 +102,8 @@ const Home = ({
               type="primary"
               className="!bg-blue-500 hover:!shadow-md hover:!bg-blue-400"
               onClick={() => {
-                setShowModal(true);
+                // setShowModal(true);
+                router.push(`/order/${record.platformId}/${record.id}`);
               }}
             >
               {t("buy")}
@@ -146,15 +147,10 @@ const Home = ({
     },
   ];
 
-  const { data } = useQuery({
-    queryKey: ["platform/select"],
-    queryFn: () => axiosClient.get(`/platform/list?language=${locale}`),
-  });
   const [txtSearch, setTxtSearch] = useState("");
   const [platform, setPlatform] = useState(1);
-  useEffect(() => {
-    console.log(txtSearch);
 
+  useEffect(() => {
     const result: any[] = [];
     serviceData.forEach((service) => {
       if (service.platformId == platform) {
@@ -177,19 +173,12 @@ const Home = ({
       }
     });
     setserviceDataTable(result);
-  }, [txtSearch, platform, locale]);
+  }, [txtSearch, platform, locale, serviceData]);
   const [showModal, setShowModal] = useState(false);
   const hideModal = () => {
     setShowModal(false);
   };
-
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
+  const [platformValue, setPlatformValue] = useState("1#Youtube");
   return (
     <main className="bg-gray-50">
       <Modal
@@ -200,36 +189,32 @@ const Home = ({
       >
         <Form name="trigger" layout="vertical" autoComplete="off">
           <Alert message="Use 'max' rule, continue type chars to see it" />
-          <Form.Item label="Platform">
-            <Select
-              defaultActiveFirstOption
-              options={data?.data.data.map((item: any, index: number) => ({
-                ...item,
-                key: index,
-                value: `${item.id}#${item.name}`,
-                label: (
-                  <div className="flex items-center gap-2">
-                    <Image src={item.icon} width={20} alt="" preview={false} />
-                    {item.name}
-                  </div>
-                ),
-              }))}
-              placeholder="Select platform"
-              disabled
-            />
+          <OrderForm />
+          <Form.Item label="" name="">
+            <div className="">
+              <Button
+                type="default"
+                onClick={() => {
+                  hideModal();
+                }}
+              >
+                Cancel
+              </Button>
+              <Button type="primary">Continue</Button>
+            </div>
           </Form.Item>
         </Form>
       </Modal>
 
       <Layout className="">
-        <div className="container m-auto">
+        <div className="container m-auto" style={{ maxWidth: 1300 }}>
           <Header className="!bg-transparent mb-10">
             <div className="flex justify-between items-center">
               <Image
                 preview={false}
                 width={200}
                 height={50}
-                src={`https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png?random`}
+                src={`/assets/logo.png`}
                 alt=""
               />
               <div className="flex gap-1">
@@ -305,8 +290,8 @@ const Home = ({
                   }}
                 />
                 <Select
-                  defaultActiveFirstOption
-                  options={data?.data.data.map((item: any, index: number) => ({
+                  value={platformValue}
+                  options={platformdata.map((item: any, index: number) => ({
                     ...item,
                     key: index,
                     value: `${item.id}#${item.name}`,
@@ -326,6 +311,9 @@ const Home = ({
                   style={{ width: 200 }}
                   placeholder="Select platform"
                   onChange={(value) => {
+                    console.log(value);
+
+                    setPlatformValue(value);
                     const regex = /^.*?(?=#)/;
                     const match = parseInt(value.match(regex));
                     setPlatform(match || 1);
@@ -379,7 +367,10 @@ const Home = ({
           </Layout>
         </div>
         <Footer className="!bg-gray-800 !rounded-t-2xl !text-slate-50">
-          <div className="container mx-auto grid grid-cols-3 gap-4">
+          <div
+            className="container mx-auto grid grid-cols-3 gap-4"
+            style={{ maxWidth: 1200 }}
+          >
             <div>
               <h2 className="text-lg font-semibold">About Us</h2>
               <p>Learn more about our company and mission.</p>
@@ -406,7 +397,14 @@ const Home = ({
 export default Home;
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   let serviceData: any[] = [];
+  let platformdata: any = [];
   try {
+    const dataResponse = await axiosClient.get(
+      `/platform/list?language=${locale}`
+    );
+    dataResponse.data.data.map((item: any) => {
+      platformdata.push(item);
+    });
     const response = await axiosClient.get(
       "/service/list-public?language=" + locale
     );
@@ -423,6 +421,7 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
 
   return {
     props: {
+      platformdata,
       locale,
       serviceData,
       messages: (await import(`../../messages/${locale}.json`)).default,

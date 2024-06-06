@@ -1,7 +1,11 @@
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
-import { Table } from "antd";
+import DeleteForm from "@/components/admin/DeleteForm";
+import TableAction from "@/components/admin/TableAction";
+import EditCategory from "@/components/admin/crudform/EditCategory";
+import { Button, DatePicker, Form, Input, Table } from "antd";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 const Page = () => {
   const t = useTranslations("MyLanguage");
@@ -73,14 +77,64 @@ const Page = () => {
 
     {
       title: t("action"),
-      dataIndex: "acction",
-      key: "acction",
+      dataIndex: "id",
+      key: "id",
+      render: (text: string, record: any) => {
+        return (
+          <TableAction
+            openState={openState}
+            viewDetail={<>view detail</>}
+            syncFunc={() => {
+              //synchonized data here
+            }}
+            editForm={
+              <>
+                <Form
+                  name="basic"
+                  layout="vertical"
+                  initialValues={{ remember: true }}
+                  // onFinish={onFinish}
+                  // onFinishFailed={onFinishFailed}
+                >
+                  <EditCategory />
+
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Update
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </>
+            }
+            deleteForm={
+              <DeleteForm
+                onCancel={() => {
+                  setOpenState(!openState);
+                }}
+                onDelete={() => {
+                  setOpenState(!openState);
+                }}
+              />
+            }
+          />
+        );
+      },
     },
   ];
+  const [openState, setOpenState] = useState(false);
   return (
     <>
       <DashBoardLayout>
-        <Table dataSource={dataSource} columns={columns} />
+        <div className="flex gap-1 my-3">
+          <Input placeholder="Search..." style={{ width: 200 }} />
+          <DatePicker placeholder="Start Date" />
+          <DatePicker placeholder="End Date" />
+        </div>
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          className="border rounded-md"
+        />
       </DashBoardLayout>
     </>
   );

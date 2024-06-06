@@ -5,8 +5,12 @@ import format from "@/hooks/dayjsformatter";
 import { useQuery } from "@tanstack/react-query";
 import lodash, { values } from "lodash";
 import {
+  Button,
+  DatePicker,
+  Form,
   Image,
   Input,
+  Modal,
   Select,
   Switch,
   Table,
@@ -28,6 +32,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPlatform } from "@/libs/redux/slices/platformSlice";
 import { RootState } from "@/libs/redux/store";
 import axios from "axios";
+import { PlusCircleFilled } from "@ant-design/icons";
+import DeleteForm from "@/components/admin/DeleteForm";
+import EditCategory from "@/components/admin/crudform/EditCategory";
+import TableAction from "@/components/admin/TableAction";
+import EditCashFlow from "@/components/admin/crudform/EditCashFlow";
 
 const Page = () => {
   const dispatch = useDispatch();
@@ -58,7 +67,7 @@ const Page = () => {
       key: "action",
     },
     {
-      title: "Amount of money",
+      title: "Amount",
       dataIndex: "monney",
       key: "monney",
     },
@@ -67,7 +76,58 @@ const Page = () => {
       dataIndex: "fund",
       key: "fund",
     },
+    {
+      title: t("createat"),
+      dataIndex: "action",
+      key: "action",
+    },
+    {
+      title: t("action"),
+      dataIndex: "id",
+      key: "id",
+      render: (text: string, record: any) => {
+        return (
+          <TableAction
+            openState={openState}
+            viewDetail={<>view detail</>}
+            syncFunc={() => {
+              //synchonized data here
+            }}
+            editForm={
+              <>
+                <Form
+                  name="basic"
+                  layout="vertical"
+                  initialValues={{ remember: true }}
+                  // onFinish={onFinish}
+                  // onFinishFailed={onFinishFailed}
+                >
+                  <EditCashFlow />
+
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Update
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </>
+            }
+            deleteForm={
+              <DeleteForm
+                onCancel={() => {
+                  setOpenState(!openState);
+                }}
+                onDelete={() => {
+                  setOpenState(!openState);
+                }}
+              />
+            }
+          />
+        );
+      },
+    },
   ];
+  const [openState, setOpenState] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [params, setParams] = useState({
     keyword: keyword,
@@ -186,25 +246,107 @@ const Page = () => {
     },
     // Add more data as needed
   ];
-
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const hideModal = () => {
+    setShowModal(false);
+  };
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const onFinish = (values: any) => {
+    console.log("Form values:", values);
+    // Handle form submission logic here
+  };
   return (
     <>
       <DashBoardLayout>
-        <div className="flex justify-start gap-1">
-          <Input
-            style={{ width: 200 }}
-            placeholder="Search..."
-            onChange={(e) => {
-              setKeyword(e.target.value);
-              const search = lodash.debounce(() => {
-                setParams({
-                  ...params,
-                  keyword,
-                });
-              }, 300);
-              search();
-            }}
-          />
+        <div className="flex justify-between gap-1 items-center">
+          <div>
+            <Input
+              style={{ width: 200 }}
+              placeholder="Search..."
+              onChange={(e) => {
+                setKeyword(e.target.value);
+                const search = lodash.debounce(() => {
+                  setParams({
+                    ...params,
+                    keyword,
+                  });
+                }, 300);
+                search();
+              }}
+            />
+            <Modal
+              title={t("create")}
+              open={showModal}
+              onCancel={hideModal}
+              footer={null}
+            >
+              <div>
+                <h1>My Form</h1>
+                <Form layout="vertical" onFinish={onFinish}>
+                  <Form.Item
+                    label="Email"
+                    name="email"
+                    rules={[
+                      { required: true, message: "Please enter an email" },
+                    ]}
+                  >
+                    <Input placeholder="Enter email" />
+                  </Form.Item>
+                  <Form.Item
+                    label="Date"
+                    name="date"
+                    rules={[
+                      { required: true, message: "Please select a date" },
+                    ]}
+                  >
+                    <DatePicker />
+                  </Form.Item>
+                  <Form.Item
+                    label="Action"
+                    name="action"
+                    rules={[
+                      { required: true, message: "Please enter an action" },
+                    ]}
+                  >
+                    <Input placeholder="Enter action" />
+                  </Form.Item>
+                  <Form.Item
+                    label="Amount"
+                    name="amount"
+                    rules={[
+                      { required: true, message: "Please enter an amount" },
+                    ]}
+                  >
+                    <Input type="number" placeholder="Enter amount" />
+                  </Form.Item>
+                  <Form.Item
+                    label="Fund"
+                    name="fund"
+                    rules={[{ required: true, message: "Please enter a fund" }]}
+                  >
+                    <Input type="number" placeholder="Enter fund" />
+                  </Form.Item>
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </div>
+            </Modal>
+          </div>
+          <div>
+            <Button
+              type="primary"
+              iconPosition="end"
+              onClick={openModal}
+              icon={<PlusCircleFilled />}
+            >
+              {t("create")}
+            </Button>
+          </div>
         </div>
 
         <Table

@@ -16,7 +16,7 @@ const Page = () => {
           </div>
           <p>Sorry, the page you visited does not exist.</p>
           <div className=" flex justify-center">
-            <Button type="primary" className="m-auto">
+            <Button type="primary" className="m-auto" href="/">
               Back Home
             </Button>
           </div>

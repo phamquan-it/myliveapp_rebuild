@@ -51,9 +51,15 @@
     "userprofile": "User profile",
     "Settings": "Settings",
     "neworder": "New order",
-    "funds": "Funds",
+    "funds":"Funds",
+    "inprogress":"Inprogress",
+    "deposit":"Deposit",
     "payment": "Payments",
-    "paymenthistory": "Payment history"
+    "paymenthistory": "Payment history",
+    "cashflow":"Cash flow",
+    "log":"Log",
+    "logout":"Logout",
+    "voucher":"Voucher"
   },
   "MyLanguage": {
     "minorder":"Min order",
@@ -93,6 +99,21 @@
     "content":"Content",
     "amountusd":"Amount(USD)",
     "amountvnd":"Amount(VND)",
-    "account":"Account"
+    "account":"Account",
+    "level":"Level",
+    "rate_config":"Rate config",
+    "initial_rate":"Rate config",
+    "create":"Create",
+    "amountPaid":"Amount paid",
+    "refundAmount":"Refund amount",
+    "code":"Code",
+    "minprice":"Min price",
+    "discountpercentage":"Discount Percentage",
+    "starttime":"Start time",
+    "endtime":"End time",
+    "update":"Update",
+    "edit":"Edit",
+    "sync":"Sync",
+    "view_detail":"View detail"
   }
 }

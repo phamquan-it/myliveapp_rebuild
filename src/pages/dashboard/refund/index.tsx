@@ -1,10 +1,29 @@
 import { Category } from "@/@type/Category";
 import axiosClient from "@/apiClient/axiosClient";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
+import DeleteForm from "@/components/admin/DeleteForm";
+import TableAction from "@/components/admin/TableAction";
+import EditCategory from "@/components/admin/crudform/EditCategory";
+import UpdateRefund from "@/components/admin/crudform/EditRefund";
 import format from "@/hooks/dayjsformatter";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  CloseOutlined,
+  PlusCircleFilled,
+} from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Image, Switch, Table, TablePaginationConfig } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Image,
+  Input,
+  Modal,
+  Select,
+  Switch,
+  Table,
+  TablePaginationConfig,
+} from "antd";
 import { AnyObject } from "antd/es/_util/type";
 import {
   FilterValue,
@@ -16,6 +35,7 @@ import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
 import { useState } from "react";
+const { Option } = Select;
 
 const Page = () => {
   const [pageIndex, setPageIndex] = useState(1);
@@ -29,12 +49,98 @@ const Page = () => {
       key: "key",
     },
     {
+      title: "ID",
+      dataIndex: "key",
+      key: "key",
+    },
+    {
+      title: t("date"),
+      dataIndex: "key",
+      key: "key",
+    },
+    {
+      title: t("email"),
+      dataIndex: "key",
+      key: "key",
+    },
+    {
+      title: t("service"),
+      dataIndex: "key",
+      key: "key",
+    },
+    {
+      title: t("link"),
+      dataIndex: "key",
+      key: "key",
+    },
+    {
+      title: t("status"),
+      dataIndex: "key",
+      key: "key",
+    },
+    {
+      title: t("amountPaid"),
+      dataIndex: "key",
+      key: "key",
+    },
+    {
+      title: t("refundAmount"),
+      dataIndex: "key",
+      key: "key",
+    },
+    {
       title: t("createat"),
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text: string) => format(text, router.locale || "en"),
     },
+    {
+      title: t("action"),
+      dataIndex: "id",
+      key: "id",
+      render: (text: string, record: any) => {
+        return (
+          <TableAction
+            openState={openState}
+            viewDetail={<>view detail</>}
+            syncFunc={() => {
+              //synchonized data here
+            }}
+            editForm={
+              <>
+                <Form
+                  name="basic"
+                  layout="vertical"
+                  initialValues={{ remember: true }}
+                  // onFinish={onFinish}
+                  // onFinishFailed={onFinishFailed}
+                >
+                  <UpdateRefund />
+
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Update
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </>
+            }
+            deleteForm={
+              <DeleteForm
+                onCancel={() => {
+                  setOpenState(!openState);
+                }}
+                onDelete={() => {
+                  setOpenState(!openState);
+                }}
+              />
+            }
+          />
+        );
+      },
+    },
   ];
+  const [openState, setOpenState] = useState(false);
   const [params, setParams] = useState({ offset: 0, limit: 10 });
 
   const { data, isFetching, isError } = useQuery({
@@ -61,10 +167,96 @@ const Page = () => {
     const limit = current * pageSize;
     setParams({ ...params, limit: limit, offset: offset });
   };
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const hideModal = () => {
+    setShowModal(false);
+  };
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const onFinish = (values: any) => {
+    console.log("Form values:", values);
+    // Handle form submission logic here
+  };
   return (
     <>
       <DashBoardLayout>
+        <div className="flex justify-between my-3">
+          <Modal
+            title={t("create")}
+            open={showModal}
+            onCancel={hideModal}
+            footer={null}
+          >
+            <div>
+              <Form layout="vertical" onFinish={onFinish}>
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  rules={[{ required: true, message: "Please enter an email" }]}
+                >
+                  <Input placeholder="Enter email" />
+                </Form.Item>
+                <Form.Item
+                  label="Service"
+                  name="service"
+                  rules={[
+                    { required: true, message: "Please select a service" },
+                  ]}
+                >
+                  <Select placeholder="Select service">
+                    <Option value="service1">Service 1</Option>
+                    <Option value="service2">Service 2</Option>
+                    <Option value="service3">Service 3</Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item label="Status" name="status" valuePropName="checked">
+                  <Switch />
+                </Form.Item>
+                <Form.Item
+                  label="Amount Paid"
+                  name="amountPaid"
+                  rules={[
+                    { required: true, message: "Please enter amount paid" },
+                  ]}
+                >
+                  <Input type="number" placeholder="Enter amount paid" />
+                </Form.Item>
+                <Form.Item
+                  label="Refund Amount"
+                  name="refundAmount"
+                  rules={[
+                    { required: true, message: "Please enter refund amount" },
+                  ]}
+                >
+                  <Input type="number" placeholder="Enter refund amount" />
+                </Form.Item>
+                <Form.Item label="Create At" name="createAt">
+                  <DatePicker />
+                </Form.Item>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    {t("create")}
+                  </Button>
+                </Form.Item>
+              </Form>
+            </div>
+          </Modal>
+
+          <div className="flex">
+            <Input placeholder="Search..." style={{ width: 200 }} />
+          </div>
+          <Button
+            type="primary"
+            icon={<PlusCircleFilled />}
+            iconPosition="end"
+            onClick={openModal}
+          >
+            {t("create")}
+          </Button>
+        </div>
         <Table
+          className="border rounded"
           dataSource={data?.data.data.map((item: any, index: number) => ({
             ...item,
             key: pageIndex * 10 + (index + 1) - 10,
