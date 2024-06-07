@@ -311,12 +311,11 @@ const Home = ({
                   style={{ width: 200 }}
                   placeholder="Select platform"
                   onChange={(value) => {
-                    console.log(value);
-
-                    setPlatformValue(value);
-                    const regex = /^.*?(?=#)/;
-                    const match = parseInt(value.match(regex));
-                    setPlatform(match || 1);
+                    // console.log(value);
+                    // setPlatformValue(value);
+                    // const regex = /^.*?(?=#)/;
+                    // const match = parseInt(value.match(regex));
+                    // setPlatform(match || 1);
                   }}
                 />
               </div>
