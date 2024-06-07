@@ -3,14 +3,9 @@ import axiosClient from "@/apiClient/axiosClient";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
-import EditCategory from "@/components/admin/crudform/EditCategory";
-import UpdateRefund from "@/components/admin/crudform/EditRefund";
+import UpdateRefund from "@/components/admin/crudform/edit/EditRefund";
 import format from "@/hooks/dayjsformatter";
-import {
-  CheckOutlined,
-  CloseOutlined,
-  PlusCircleFilled,
-} from "@ant-design/icons";
+import { PlusCircleFilled } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
@@ -35,6 +30,7 @@ import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { toast } from "react-toastify";
 const { Option } = Select;
 
 const Page = () => {
@@ -50,43 +46,61 @@ const Page = () => {
     },
     {
       title: "ID",
-      dataIndex: "key",
-      key: "key",
-    },
-    {
-      title: t("date"),
-      dataIndex: "key",
-      key: "key",
+      dataIndex: "id",
+      key: "id",
     },
     {
       title: t("email"),
       dataIndex: "key",
       key: "key",
+      render: (text: string, record: any) => {
+        console.log(record.order);
+
+        return record?.order?.user?.email;
+      },
+    },
+    {
+      title: t("date"),
+      dataIndex: "key",
+      key: "key",
+      render: (text: string, record: any) =>
+        format(record.createdAt, router.locale || "en"),
     },
     {
       title: t("service"),
       dataIndex: "key",
       key: "key",
+      render: (text: string, record: any) => {
+        return record?.order?.service?.name;
+      },
+      ellipsis: true,
     },
     {
       title: t("link"),
       dataIndex: "key",
       key: "key",
+      render: (text: string, record: any) => {
+        return <>{record?.order?.link}</>;
+      },
+      ellipsis: true,
     },
     {
       title: t("status"),
       dataIndex: "key",
       key: "key",
+      render: (text: string, record: any) => {
+        return <>{record?.order?.status}</>;
+      },
     },
     {
       title: t("amountPaid"),
-      dataIndex: "key",
-      key: "key",
+      dataIndex: "charge_original",
+      key: "charge_original",
     },
     {
       title: t("refundAmount"),
-      dataIndex: "key",
-      key: "key",
+      dataIndex: "refund",
+      key: "refund",
     },
     {
       title: t("createat"),
@@ -131,6 +145,14 @@ const Page = () => {
                   setOpenState(!openState);
                 }}
                 onDelete={() => {
+                  axiosClient
+                    .delete(`/refund/delete/${text}`)
+                    .then(() => {
+                      toast.success("success");
+                    })
+                    .catch((err) => {
+                      toast.error(err.message);
+                    });
                   setOpenState(!openState);
                 }}
               />
@@ -257,10 +279,12 @@ const Page = () => {
         </div>
         <Table
           className="border rounded"
-          dataSource={data?.data.data.map((item: any, index: number) => ({
-            ...item,
-            key: pageIndex * 10 + (index + 1) - 10,
-          }))}
+          dataSource={
+            data?.data?.data?.map((item: any, index: number) => ({
+              ...item,
+              key: pageIndex * 10 + (index + 1) - 10,
+            })) ?? []
+          }
           columns={columns}
           loading={isFetching}
           onChange={handleTableChange}

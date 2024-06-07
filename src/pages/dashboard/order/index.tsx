@@ -29,8 +29,10 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { Input, Select } from "antd";
 import DeleteForm from "@/components/admin/DeleteForm";
-import EditCategory from "@/components/admin/crudform/EditCategory";
+import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import TableAction from "@/components/admin/TableAction";
+import EditOrder from "@/components/admin/crudform/edit/EditOrder";
+import { toast } from "react-toastify";
 
 const { Option } = Select;
 
@@ -119,7 +121,7 @@ const Page = () => {
                   // onFinish={onFinish}
                   // onFinishFailed={onFinishFailed}
                 >
-                  <EditCategory />
+                  <EditOrder initialValues={record} />
 
                   <Form.Item>
                     <Button type="primary" htmlType="submit">
@@ -135,6 +137,22 @@ const Page = () => {
                   setOpenState(!openState);
                 }}
                 onDelete={() => {
+                  axiosClient
+                    .delete(`/platform/delete/${text}/?language=en`, {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    })
+                    .then(() => {
+                      console.log("ok");
+
+                      toast.success("success");
+                    })
+                    .catch((err) => {
+                      console.log(err);
+
+                      toast.error(err.message);
+                    });
                   setOpenState(!openState);
                 }}
               />
@@ -202,8 +220,6 @@ const Page = () => {
             >
               <Select placeholder="Select service">
                 <Option value="service1">Service 1</Option>
-                <Option value="service2">Service 2</Option>
-                <Option value="service3">Service 3</Option>
               </Select>
             </Form.Item>
             <Form.Item label="Provider" name="provider">
@@ -222,32 +238,37 @@ const Page = () => {
             >
               <Input placeholder="Enter user email" />
             </Form.Item>
-            <Form.Item label="Charge" name="charge">
-              <Input type="number" placeholder="Enter charge" />
-            </Form.Item>
+            <div className="grid grid-cols-2 gap-2">
+              <Form.Item label="Charge" name="charge">
+                <Input type="number" placeholder="Enter charge" />
+              </Form.Item>
+              <Form.Item label="Start Count" name="startCount">
+                <Input type="number" placeholder="Enter start count" />
+              </Form.Item>
+            </div>
             <Form.Item label="Actually Spent" name="actuallySpent">
               <Input type="number" placeholder="Enter actually spent" />
             </Form.Item>
-            <Form.Item label="Start Count" name="startCount">
-              <Input type="number" placeholder="Enter start count" />
-            </Form.Item>
-            <Form.Item label="Quantity" name="quantity">
-              <Input type="number" placeholder="Enter quantity" />
-            </Form.Item>
-            <Form.Item
-              label="Status"
-              name="status"
-              rules={[{ required: true, message: "Please select a status" }]}
-            >
-              <Select placeholder="Select status">
-                <Option value="In progress">In progress</Option>
-                <Option value="Completed">Completed</Option>
-                <Option value="Error">Error</Option>
-              </Select>
-            </Form.Item>
+
+            <div className="grid md:grid-cols-2 gap-2">
+              <Form.Item
+                label="Status"
+                name="status"
+                rules={[{ required: true, message: "Please select a status" }]}
+              >
+                <Select placeholder="Select status">
+                  <Option value="In progress">In progress</Option>
+                  <Option value="Completed">Completed</Option>
+                  <Option value="Error">Error</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item label="Quantity" name="quantity">
+                <Input type="number" placeholder="Enter quantity" />
+              </Form.Item>
+            </div>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Submit
+                {t("create")}
               </Button>
             </Form.Item>
           </Form>

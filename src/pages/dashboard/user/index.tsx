@@ -2,7 +2,8 @@ import axiosClient from "@/apiClient/axiosClient";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
-import EditCategory from "@/components/admin/crudform/EditCategory";
+import EditCategory from "@/components/admin/crudform/edit/EditCategory";
+import EditUser from "@/components/admin/crudform/edit/EditUser";
 import format from "@/hooks/dayjsformatter";
 import {
   CheckOutlined,
@@ -31,6 +32,7 @@ import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { toast } from "react-toastify";
 const { Option } = Select;
 const Page = () => {
   const [pageIndex, setPageIndex] = useState(1);
@@ -103,7 +105,7 @@ const Page = () => {
                   // onFinish={onFinish}
                   // onFinishFailed={onFinishFailed}
                 >
-                  <EditCategory />
+                  <EditUser formValues={record} />
 
                   <Form.Item>
                     <Button type="primary" htmlType="submit">
@@ -119,6 +121,22 @@ const Page = () => {
                   setOpenState(!openState);
                 }}
                 onDelete={() => {
+                  axiosClient
+                    .delete(`/user/delete/${text}/?language=en`, {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    })
+                    .then(() => {
+                      console.log("ok");
+
+                      toast.success("success");
+                    })
+                    .catch((err) => {
+                      console.log(err);
+
+                      toast.error(err.message);
+                    });
                   setOpenState(!openState);
                 }}
               />
@@ -210,19 +228,21 @@ const Page = () => {
             <Form.Item label="Phone" name="phone">
               <Input />
             </Form.Item>
-            <Form.Item
-              label="Is Active"
-              name="isActive"
-              valuePropName="checked"
-            >
-              <Switch />
-            </Form.Item>
-            <Form.Item label="Fund Number" name="fundNumber">
-              <Input type="number" />
-            </Form.Item>
-            <Form.Item label="Total Money" name="totalMoney">
-              <Input type="number" />
-            </Form.Item>
+            <div className="grid grid-cols-3 gap-2">
+              <Form.Item label="Fund Number" name="fundNumber">
+                <Input type="number" />
+              </Form.Item>
+              <Form.Item label="Total Money" name="totalMoney">
+                <Input type="number" />
+              </Form.Item>
+              <Form.Item
+                label="Is Active"
+                name="isActive"
+                valuePropName="checked"
+              >
+                <Switch />
+              </Form.Item>
+            </div>
             <Form.Item label="Role" name="role">
               <Select>
                 <Option value="admin">Admin</Option>

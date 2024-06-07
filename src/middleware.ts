@@ -6,7 +6,7 @@ export function middleware(req:NextRequest){
     //next request
     const response = NextResponse.next()
     //get token
-    if(req.nextUrl.pathname.includes("assets")) return response;
+    if(req.nextUrl.pathname.includes("assets") || req.nextUrl.pathname.includes("/api")) return response;
     
     const token = req.cookies.get("token")
     try{

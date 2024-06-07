@@ -114,6 +114,9 @@
     "update":"Update",
     "edit":"Edit",
     "sync":"Sync",
-    "view_detail":"View detail"
+    "view_detail":"View detail",
+    "amount":"Amount",
+    "orderid":"Order ID",
+    "serviceid":"Service ID"
   }
 }

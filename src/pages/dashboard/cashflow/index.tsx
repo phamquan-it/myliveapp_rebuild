@@ -34,9 +34,10 @@ import { RootState } from "@/libs/redux/store";
 import axios from "axios";
 import { PlusCircleFilled } from "@ant-design/icons";
 import DeleteForm from "@/components/admin/DeleteForm";
-import EditCategory from "@/components/admin/crudform/EditCategory";
+import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import TableAction from "@/components/admin/TableAction";
-import EditCashFlow from "@/components/admin/crudform/EditCashFlow";
+import EditCashFlow from "@/components/admin/crudform/edit/EditCashFlow";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const dispatch = useDispatch();
@@ -67,9 +68,9 @@ const Page = () => {
       key: "action",
     },
     {
-      title: "Amount",
-      dataIndex: "monney",
-      key: "monney",
+      title: t("amount"),
+      dataIndex: "money",
+      key: "money",
     },
     {
       title: t("fund"),
@@ -102,7 +103,7 @@ const Page = () => {
                   // onFinish={onFinish}
                   // onFinishFailed={onFinishFailed}
                 >
-                  <EditCashFlow />
+                  <EditCashFlow value={record} />
 
                   <Form.Item>
                     <Button type="primary" htmlType="submit">
@@ -118,6 +119,14 @@ const Page = () => {
                   setOpenState(!openState);
                 }}
                 onDelete={() => {
+                  axiosClient
+                    .delete(`/cashflow/delete/${text}`)
+                    .then(() => {
+                      toast.success("success");
+                    })
+                    .catch((err) => {
+                      toast.error(err.message);
+                    });
                   setOpenState(!openState);
                 }}
               />

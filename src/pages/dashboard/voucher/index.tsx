@@ -1,7 +1,8 @@
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
-import EditCategory from "@/components/admin/crudform/EditCategory";
+import EditCategory from "@/components/admin/crudform/edit/EditCategory";
+import EditVoucher from "@/components/admin/crudform/edit/EditVoucher";
 import { PlusCircleFilled } from "@ant-design/icons";
 import { Button, DatePicker, Form, Input, Modal, Switch, Table } from "antd";
 import { GetStaticPropsContext } from "next";
@@ -10,19 +11,33 @@ import { useState } from "react";
 
 const Page = () => {
   const t = useTranslations("MyLanguage");
+
   const dataSource = [
     {
       key: "1",
-      name: "Mike",
-      age: 32,
-      address: "10 Downing Street",
+      name: "John Brown",
+      code: "JB001",
+      minPrice: 100.0,
+      discountPercentage: 10,
+      createdAt: "2023-01-01",
+      startTime: "2023-01-01 10:00:00",
+      endTime: "2023-01-01 18:00:00",
+      isActive: 1,
+      id: "1",
     },
     {
       key: "2",
-      name: "John",
-      age: 42,
-      address: "10 Downing Street",
+      name: "Jane Smith",
+      code: "JS002",
+      minPrice: 150.0,
+      discountPercentage: 15,
+      createdAt: "2023-02-01",
+      startTime: "2023-02-01 10:00:00",
+      endTime: "2023-02-01 18:00:00",
+      isActive: 0,
+      id: "2",
     },
+    // Add more data here
   ];
 
   const columns = [
@@ -95,7 +110,7 @@ const Page = () => {
                   // onFinish={onFinish}
                   // onFinishFailed={onFinishFailed}
                 >
-                  <EditCategory />
+                  <EditVoucher value={record} />
 
                   <Form.Item>
                     <Button type="primary" htmlType="submit">

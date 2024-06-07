@@ -12,9 +12,15 @@ import { Platform } from "@/@type";
 import lodash from "lodash";
 import { PlusCircleFilled, UploadOutlined } from "@ant-design/icons";
 import DeleteForm from "@/components/admin/DeleteForm";
-import EditCategory from "@/components/admin/crudform/EditCategory";
+import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import TableAction from "@/components/admin/TableAction";
+import EditPlatForm from "@/components/admin/crudform/edit/EditPlatform";
+import PlatformDetail from "@/components/admin/crudform/details/PlatformDetail";
+import axiosClient from "@/apiClient/axiosClient";
+import { toast } from "react-toastify";
+import { getCookie } from "cookies-next";
 const Page = () => {
+  const token = getCookie("token");
   const dispatch = useDispatch();
   const router = useRouter();
   const t = useTranslations("MyLanguage");
@@ -77,7 +83,11 @@ const Page = () => {
         return (
           <TableAction
             openState={openState}
-            viewDetail={<>view detail</>}
+            viewDetail={
+              <>
+                <PlatformDetail />
+              </>
+            }
             syncFunc={() => {
               //synchonized data here
             }}
@@ -90,7 +100,7 @@ const Page = () => {
                   // onFinish={onFinish}
                   // onFinishFailed={onFinishFailed}
                 >
-                  <EditCategory />
+                  <EditPlatForm initialValues={record} />
 
                   <Form.Item>
                     <Button type="primary" htmlType="submit">
@@ -103,6 +113,22 @@ const Page = () => {
             deleteForm={
               <DeleteForm
                 onCancel={() => {
+                  axiosClient
+                    .delete(`/platform/delete/${text}/?language=en`, {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    })
+                    .then(() => {
+                      console.log("ok");
+
+                      toast.success("success");
+                    })
+                    .catch((err) => {
+                      console.log(err);
+
+                      toast.error(err.message);
+                    });
                   setOpenState(!openState);
                 }}
                 onDelete={() => {
@@ -115,6 +141,7 @@ const Page = () => {
       },
     },
   ];
+
   const [openState, setOpenState] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const hideModal = () => {

@@ -33,7 +33,9 @@ import { RootState } from "@/libs/redux/store";
 import { PlusCircleFilled } from "@ant-design/icons";
 import TableAction from "@/components/admin/TableAction";
 import DeleteForm from "@/components/admin/DeleteForm";
-import EditCategory from "@/components/admin/crudform/EditCategory";
+import EditCategory from "@/components/admin/crudform/edit/EditCategory";
+import CategoryDetail from "@/components/admin/crudform/details/CategoryDetail";
+import { toast } from "react-toastify";
 const { Option } = Select;
 const Page = () => {
   const dispatch = useDispatch();
@@ -79,7 +81,7 @@ const Page = () => {
         return (
           <TableAction
             openState={openState}
-            viewDetail={<>view detail</>}
+            viewDetail={<CategoryDetail />}
             syncFunc={() => {
               //synchonized data here
             }}
@@ -92,7 +94,7 @@ const Page = () => {
                   // onFinish={onFinish}
                   // onFinishFailed={onFinishFailed}
                 >
-                  <EditCategory />
+                  <EditCategory value={record} />
 
                   <Form.Item>
                     <Button type="primary" htmlType="submit">
@@ -108,6 +110,14 @@ const Page = () => {
                   setOpenState(!openState);
                 }}
                 onDelete={() => {
+                  axiosClient
+                    .delete(`/category/delete/${text}`)
+                    .then(() => {
+                      toast.success("success");
+                    })
+                    .catch((err) => {
+                      toast.error(err.message);
+                    });
                   setOpenState(!openState);
                 }}
               />

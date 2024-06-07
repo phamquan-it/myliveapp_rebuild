@@ -10,9 +10,12 @@ import axiosClient from "@/apiClient/axiosClient";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import { getCookie } from "cookies-next";
 import TableAction from "@/components/admin/TableAction";
-import EditCategory from "@/components/admin/crudform/EditCategory";
+import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import DeleteForm from "@/components/admin/DeleteForm";
-import EditService from "@/components/admin/crudform/EditService";
+import EditService from "@/components/admin/crudform/edit/EditService";
+import CreateService from "@/components/admin/crudform/create/CreateService";
+import ServiceDetail from "@/components/admin/crudform/details/ServiceDetail";
+import { toast } from "react-toastify";
 const { Option } = Select;
 export default function Index() {
   const token = getCookie("token");
@@ -148,42 +151,57 @@ export default function Index() {
       key: "id",
       render: (text: string, record: any) => {
         return (
-          <TableAction
-            openState={openState}
-            viewDetail={<>view detail</>}
-            syncFunc={() => {
-              //synchonized data here
-            }}
-            editForm={
-              <>
-                <Form
-                  name="basic"
-                  layout="vertical"
-                  initialValues={{ remember: true }}
-                  // onFinish={onFinish}
-                  // onFinishFailed={onFinishFailed}
-                >
-                  <EditService />
+          <>
+            {record.service.icon == undefined ? (
+              <TableAction
+                openState={openState}
+                viewDetail={<ServiceDetail />}
+                syncFunc={() => {
+                  //synchonized data here
+                }}
+                editForm={
+                  <>
+                    <Form
+                      name="basic"
+                      layout="vertical"
+                      initialValues={{ remember: true }}
+                      // onFinish={onFinish}
+                      // onFinishFailed={onFinishFailed}
+                    >
+                      <EditService service={record} />
 
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      {t("update")}
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </>
-            }
-            deleteForm={
-              <DeleteForm
-                onCancel={() => {
-                  setOpenState(!openState);
-                }}
-                onDelete={() => {
-                  setOpenState(!openState);
-                }}
+                      <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                          {t("update")}
+                        </Button>
+                      </Form.Item>
+                    </Form>
+                  </>
+                }
+                deleteForm={
+                  <DeleteForm
+                    onCancel={() => {
+                      setOpenState(!openState);
+                    }}
+                    onDelete={() => {
+                      axiosClient
+                        .delete(`/service/delete/${text}`)
+                        .then(() => {
+                          toast.success("success");
+                        })
+                        .catch((err) => {
+                          toast.error(err.message);
+                        });
+
+                      setOpenState(!openState);
+                    }}
+                  />
+                }
               />
-            }
-          />
+            ) : (
+              ""
+            )}
+          </>
         );
       },
     },
@@ -217,90 +235,7 @@ export default function Index() {
             >
               <div>
                 <Form layout="vertical" onFinish={onFinish}>
-                  <Form.Item
-                    label="Platform"
-                    name="platform"
-                    rules={[
-                      { required: true, message: "Please select a platform" },
-                    ]}
-                  >
-                    <Select placeholder="Select platform">
-                      <Option value="web">Web</Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item
-                    label="Category"
-                    name="category"
-                    rules={[
-                      { required: true, message: "Please select a category" },
-                    ]}
-                  >
-                    <Select placeholder="Select category">
-                      <Option value="development">Development</Option>
-                      <Option value="design">Design</Option>
-                      <Option value="marketing">Marketing</Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item
-                    label="Name"
-                    name="name"
-                    rules={[{ required: true, message: "Please enter a name" }]}
-                  >
-                    <Input placeholder="Enter name" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Rate"
-                    name="rate"
-                    rules={[{ required: true, message: "Please enter a rate" }]}
-                  >
-                    <Input placeholder="Enter rate" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Min"
-                    name="min"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter a minimum value",
-                      },
-                    ]}
-                  >
-                    <Input type="number" placeholder="Enter min" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Max"
-                    name="max"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter a maximum value",
-                      },
-                    ]}
-                  >
-                    <Input type="number" placeholder="Enter max" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Level"
-                    name="level"
-                    rules={[
-                      { required: true, message: "Please select a level" },
-                    ]}
-                  >
-                    <Select placeholder="Select level">
-                      <Option value="beginner">Beginner</Option>
-                      <Option value="intermediate">Intermediate</Option>
-                      <Option value="advanced">Advanced</Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item label="First Rate Config" name="first_rate_config">
-                    <Input
-                      type="number"
-                      placeholder="Enter first rate config"
-                    />
-                  </Form.Item>
-                  <Form.Item label="Rate Config" name="rate_config">
-                    <Input type="number" placeholder="Enter rate config" />
-                  </Form.Item>
+                  <CreateService />
                   <Form.Item>
                     <Button type="primary" htmlType="submit">
                       Submit
@@ -310,7 +245,7 @@ export default function Index() {
               </div>
             </Modal>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <div className="flex">
                 <div className="py-3">
                   <Input placeholder="Search..." />

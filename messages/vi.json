@@ -114,6 +114,9 @@
     "update":"Cập nhật",
     "edit":"Chỉnh sửa",
     "sync":"Đồng bộ",
-    "view_detail":"Xem chi tiết"
+    "view_detail":"Xem chi tiết",
+    "amount":"Số lượng",
+    "orderid":"ID đặt hàng",
+    "serviceid":"ID dịch vụ"
   }
 }

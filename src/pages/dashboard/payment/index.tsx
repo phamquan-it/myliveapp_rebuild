@@ -29,9 +29,10 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { PlusCircleFilled } from "@ant-design/icons";
 import DeleteForm from "@/components/admin/DeleteForm";
-import EditCategory from "@/components/admin/crudform/EditCategory";
+import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import TableAction from "@/components/admin/TableAction";
-import EditPayment from "@/components/admin/crudform/EditPayment";
+import EditPayment from "@/components/admin/crudform/edit/EditPayment";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const [pageIndex, setPageIndex] = useState(1);
@@ -45,29 +46,29 @@ const Page = () => {
       key: "key",
     },
     {
-      title: t("name"),
+      title: t("email"),
       dataIndex: "account",
       key: "account",
     },
     {
-      title: t("name"),
-      dataIndex: "id",
+      title: t("create"),
+      dataIndex: "creator",
       key: "id",
     },
     {
-      title: t("name"),
+      title: t("method"),
       dataIndex: "paymethod",
       key: "paymethod",
     },
     {
-      title: t("name"),
-      dataIndex: "account",
-      key: "account",
+      title: t("rate"),
+      dataIndex: "rate",
+      key: "rate",
     },
     {
-      title: t("name"),
-      dataIndex: "account",
-      key: "account",
+      title: t("status"),
+      dataIndex: "status",
+      key: "status",
     },
     {
       title: t("createat"),
@@ -97,7 +98,7 @@ const Page = () => {
                   // onFinish={onFinish}
                   // onFinishFailed={onFinishFailed}
                 >
-                  <EditPayment />
+                  <EditPayment value={record} />
 
                   <Form.Item>
                     <Button type="primary" htmlType="submit">
@@ -113,6 +114,14 @@ const Page = () => {
                   setOpenState(!openState);
                 }}
                 onDelete={() => {
+                  axiosClient
+                    .delete(`/payment/delete/${text}`)
+                    .then(() => {
+                      toast.success("success");
+                    })
+                    .catch((err) => {
+                      toast.error(err.message);
+                    });
                   setOpenState(!openState);
                 }}
               />

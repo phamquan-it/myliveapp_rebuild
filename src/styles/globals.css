@@ -65,4 +65,6 @@ textarea.ant-input{
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
 }

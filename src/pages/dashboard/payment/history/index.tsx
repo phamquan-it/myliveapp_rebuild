@@ -1,7 +1,7 @@
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
-import EditCategory from "@/components/admin/crudform/EditCategory";
+import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import { Button, DatePicker, Form, Input, Table } from "antd";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
@@ -87,25 +87,6 @@ const Page = () => {
             syncFunc={() => {
               //synchonized data here
             }}
-            editForm={
-              <>
-                <Form
-                  name="basic"
-                  layout="vertical"
-                  initialValues={{ remember: true }}
-                  // onFinish={onFinish}
-                  // onFinishFailed={onFinishFailed}
-                >
-                  <EditCategory />
-
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Update
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </>
-            }
             deleteForm={
               <DeleteForm
                 onCancel={() => {

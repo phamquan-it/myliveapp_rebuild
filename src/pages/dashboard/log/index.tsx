@@ -2,7 +2,7 @@ import axiosClient from "@/apiClient/axiosClient";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
-import EditCategory from "@/components/admin/crudform/EditCategory";
+import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
@@ -77,25 +77,6 @@ const Page = () => {
             syncFunc={() => {
               //synchonized data here
             }}
-            editForm={
-              <>
-                <Form
-                  name="basic"
-                  layout="vertical"
-                  initialValues={{ remember: true }}
-                  // onFinish={onFinish}
-                  // onFinishFailed={onFinishFailed}
-                >
-                  <EditCategory />
-
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Update
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </>
-            }
             deleteForm={
               <DeleteForm
                 onCancel={() => {
@@ -127,6 +108,7 @@ const Page = () => {
       }),
     placeholderData: (previousData) => previousData,
   });
+  const [pageSize, setPageSize] = useState(10);
   const handleTableChange = (
     pagination: TablePaginationConfig,
     filters: Record<string, FilterValue | null>,
@@ -136,6 +118,7 @@ const Page = () => {
     const current = pagination.current || 1;
     setPageIndex(current);
     const pageSize = pagination.pageSize || 10;
+    setPageSize(pageSize);
     const offset = (current - 1) * pageSize;
     const limit = current * pageSize;
     setParams({ ...params, limit: limit, offset: offset });
@@ -154,7 +137,7 @@ const Page = () => {
           onChange={handleTableChange}
           dataSource={data?.data.data.map((item: any, index: number) => ({
             ...item,
-            key: pageIndex * 10 + (index + 1) - 10,
+            key: pageIndex * pageSize + (index + 1) - pageSize,
           }))}
           columns={columns}
           pagination={{

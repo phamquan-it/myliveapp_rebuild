@@ -2,26 +2,37 @@ import React from "react";
 import { Form, Input, Select, Switch, DatePicker, Button } from "antd";
 
 const { Option } = Select;
-const EditPayment = () => {
+interface editPaymentProps {
+  value: any;
+}
+const EditPayment: React.FC<editPaymentProps> = ({ value }) => {
   return (
     <>
       <Form.Item
         label="Id"
         name="id"
         rules={[{ required: true, message: "Please enter id" }]}
+        initialValue={value.id}
       >
-        <Input placeholder="Enter name" />
+        <Input
+          placeholder="Enter id"
+          onChange={() => {
+            console.log(value);
+          }}
+        />
       </Form.Item>
       <Form.Item
         label="Name"
         name="name"
         rules={[{ required: true, message: "Please enter a name" }]}
+        initialValue={value.creator}
       >
         <Input placeholder="Enter name" />
       </Form.Item>
       <Form.Item
         label="Email"
         name="email"
+        initialValue={value.account}
         rules={[
           {
             required: true,
@@ -36,6 +47,7 @@ const EditPayment = () => {
         label="Action"
         name="action"
         rules={[{ required: true, message: "Please select an action" }]}
+        initialValue={value.paymethod}
       >
         <Select placeholder="Select action">
           <Option value="action1">Action 1</Option>
@@ -46,6 +58,7 @@ const EditPayment = () => {
       <Form.Item
         label="Amount"
         name="amount"
+        initialValue={value.amount}
         rules={[
           {
             required: true,
@@ -57,8 +70,9 @@ const EditPayment = () => {
         <Input type="number" placeholder="Enter amount" />
       </Form.Item>
       <Form.Item
-        label="Fund"
-        name="fund"
+        initialValue={value.rate}
+        label="Rate"
+        name="Rate"
         rules={[
           {
             required: true,
@@ -68,6 +82,19 @@ const EditPayment = () => {
         ]}
       >
         <Input type="number" placeholder="Enter fund" />
+      </Form.Item>
+      <Form.Item
+        label="Date"
+        name="date"
+        initialValue={value.date}
+        rules={[
+          {
+            required: true,
+            message: "Please enter a valid date",
+          },
+        ]}
+      >
+        <Input type="text" placeholder="Enter date" />
       </Form.Item>
     </>
   );

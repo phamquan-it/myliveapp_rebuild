@@ -48,6 +48,7 @@ const TableAction: React.FC<TableActionProps> = ({
         open={isModalVisible}
         onCancel={handleCancel}
         footer={null}
+        width={800}
       >
         {activeButton == "Delete"
           ? deleteForm
