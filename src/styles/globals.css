@@ -68,3 +68,28 @@ textarea.ant-input{
   padding-top: 8px !important;
   padding-bottom: 8px !important;
 }
+
+.pr_decoration::after{
+  content: "";
+  border-radius: 50px;
+  padding: 1px 80px;
+  background-color: #1677ff;
+}
+
+#buy{
+  padding-top: 1px !important;
+  padding-bottom: 1px !important;
+}
+
+.ant-form-item .ant-form-item-label >label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before{
+  content: none !important;
+}
+
+.ant-form-item .ant-form-item-label >label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::after{
+  content: "*" !important;
+  font-weight: bold;
+  color: red;
+}
+.ant-form-vertical .ant-form-item-label >label::after, .ant-col-24.ant-form-item-label >label::after, .ant-col-xl-24.ant-form-item-label >label::after{
+  visibility: visible !important;
+}

@@ -132,7 +132,7 @@ const Page = () => {
           <DatePicker placeholder="End date" picker="date" />
         </div>
         <Table
-          className="border rounded"
+          className="border rounded shadow-md"
           loading={isFetching}
           onChange={handleTableChange}
           dataSource={data?.data.data.map((item: any, index: number) => ({

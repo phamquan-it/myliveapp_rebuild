@@ -27,14 +27,15 @@ import {
 import TextArea from "antd/lib/input/TextArea";
 import { Content } from "antd/lib/layout/layout";
 import Title from "antd/es/typography/Title";
-import { useQuery } from "@tanstack/react-query";
 import OrderForm from "@/components/client/OrderForm";
+import { format } from "path";
 
 const Home = ({
   locale,
   serviceData,
   platformdata,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const p = useTranslations("Placeholder");
   const [serviceDataTable, setserviceDataTable] = useState(serviceData);
   const t = useTranslations("MyLanguage");
   const [pageSize, setPageSize] = useState(20);
@@ -100,7 +101,8 @@ const Home = ({
             <Button
               size="small"
               type="primary"
-              className="!bg-blue-500 hover:!shadow-md hover:!bg-blue-400"
+              className="!bg-blue-500 hover:!shadow-md hover:!bg-blue-400 !py-0"
+              id="buy"
               onClick={() => {
                 // setShowModal(true);
                 router.push(`/order/${record.platformId}/${record.id}`);
@@ -115,11 +117,19 @@ const Home = ({
       ),
     },
   ];
+  const [platformValue, setPlatformValue] = useState("1#Youtube");
   //multiple locale
   const d = useTranslations("PageLayout");
   const handleTable = (pagination: any) => {
     setPageSize(pagination.pageSize);
   };
+  useEffect(() => {
+    const initialQueryObject = {
+      ...serviceDataTable,
+      ...router.query,
+    };
+    filter(getObjecFormUrlParameters()?.search, platformValue);
+  }, [platformValue]);
   //profess list
   const professList = [
     {
@@ -146,39 +156,78 @@ const Home = ({
       description: d("support_desc"),
     },
   ];
-
-  const [txtSearch, setTxtSearch] = useState("");
-  const [platform, setPlatform] = useState(1);
-
-  useEffect(() => {
-    const result: any[] = [];
-    serviceData.forEach((service) => {
-      if (service.platformId == platform) {
-        if (locale == "vi" && service.name_vi != undefined) {
-          if (service.name_vi.includes(txtSearch)) {
-            result.push(service);
-          }
-        } else if (locale == "en" && service.name != undefined) {
-          if (service.name.includes(txtSearch)) {
-            result.push(service);
-          }
-        }
-        if (
-          service.icon != undefined &&
-          locale != "en" &&
-          service.name.includes(txtSearch)
-        ) {
-          result.push(service);
-        }
-      }
-    });
-    setserviceDataTable(result);
-  }, [txtSearch, platform, locale, serviceData]);
+  const { platformId, txtsearch } = router.query;
   const [showModal, setShowModal] = useState(false);
   const hideModal = () => {
     setShowModal(false);
   };
-  const [platformValue, setPlatformValue] = useState("1#Youtube");
+
+  //reload page and push data to url
+  const filter = (keyword: string, platformVal: string) => {
+    let id = "";
+    for (let i = 0; i < platformVal.length; i++) {
+      const element = platformValue[i];
+      if (element == "#") break;
+      id += element;
+    }
+
+    router.push(
+      router,
+      {
+        query: {
+          platform: id,
+          search: keyword,
+        },
+      },
+      {
+        locale: locale,
+        shallow: false,
+        scroll: true,
+      }
+    );
+  };
+  const search = lodash.debounce((e: any) => {
+    let txtSearch = e.target.value;
+    filter(txtSearch, platformValue);
+  }, 300);
+  //filter follow condition form url
+  const DataHasChange = serviceData.filter((item) => {
+    const queryString = router.asPath.split("?").slice(1).join("?");
+    // Extract query parameters using URLSearchParams
+    const params: any = new URLSearchParams(queryString);
+    // Convert URLSearchParams to object
+    const queryObject: any = {};
+    for (const [key, value] of params) {
+      queryObject[key] = value;
+    }
+
+    const pid = queryObject.platform ?? 1;
+    const txtSearch: string = queryObject.search ?? "";
+
+    return (
+      (item.platformId == pid &&
+        item?.name_vi
+          ?.toLocaleLowerCase()
+          ?.includes(txtSearch?.toLocaleLowerCase())) ||
+      (item.platformId == pid &&
+        item?.name
+          ?.toLocaleLowerCase()
+          ?.includes(txtSearch?.toLocaleLowerCase()))
+    );
+  });
+  const getObjecFormUrlParameters = () => {
+    const queryString = router.asPath.split("?").slice(1).join("?");
+    // Extract query parameters using URLSearchParams
+    const params: any = new URLSearchParams(queryString);
+    // Convert URLSearchParams to object
+    const queryObject: any = {};
+    for (const [key, value] of params) {
+      queryObject[key] = value;
+    }
+    return queryObject;
+  };
+  console.log(getObjecFormUrlParameters());
+
   return (
     <main className="bg-gray-50">
       <Modal
@@ -208,7 +257,7 @@ const Home = ({
 
       <Layout className="">
         <div className="container m-auto" style={{ maxWidth: 1300 }}>
-          <Header className="!bg-transparent mb-10">
+          <Header className="!bg-transparent mb-10 py-3">
             <div className="flex justify-between items-center">
               <Image
                 preview={false}
@@ -217,7 +266,7 @@ const Home = ({
                 src={`/assets/logo.png`}
                 alt=""
               />
-              <div className="flex gap-1">
+              <div className="flex gap-1 items-center">
                 <LocaleSwitcher
                   onChange={(value: string) => {
                     router.push(router, "", { locale: value });
@@ -248,13 +297,16 @@ const Home = ({
           <Layout>
             <Content>
               <div className="mb-5">
-                <div className="pb-3">
-                  <Title
-                    className="!font-medium text-center !text-gray-700"
-                    level={3}
-                  >
-                    {d("professtitle")}
-                  </Title>
+                <div className="flex justify-center">
+                  <div className="">
+                    <Title
+                      className="!font-medium text-center !text-gray-700 !pb-0 !my-2"
+                      level={3}
+                    >
+                      {d("professtitle")}
+                    </Title>
+                    <div className="pb-3 pr_decoration my-3 ms-5"></div>
+                  </div>
                 </div>
                 <div className="grid grid-cols-6 gap-2">
                   <div></div>
@@ -280,14 +332,13 @@ const Home = ({
                 className="flex gap-2 py-3"
               >
                 <Input
-                  placeholder="Enter search..."
+                  placeholder={p("search")}
                   style={{
                     width: 200,
                     fontSize: 12,
                   }}
-                  onChange={(e) => {
-                    setTxtSearch(e.target.value);
-                  }}
+                  onChange={search}
+                  defaultValue={getObjecFormUrlParameters().search || ""}
                 />
                 <Select
                   value={platformValue}
@@ -311,11 +362,7 @@ const Home = ({
                   style={{ width: 200 }}
                   placeholder="Select platform"
                   onChange={(value) => {
-                    // console.log(value);
-                    // setPlatformValue(value);
-                    // const regex = /^.*?(?=#)/;
-                    // const match = parseInt(value.match(regex));
-                    // setPlatform(match || 1);
+                    setPlatformValue(value);
                   }}
                 />
               </div>
@@ -324,15 +371,16 @@ const Home = ({
                 className="customIndexTable"
                 rowClassName={"custom_row_height"}
                 onChange={handleTable}
-                dataSource={serviceDataTable.map((item, index) => {
+                dataSource={DataHasChange.map((item, index) => {
                   var name;
-                  if (item.icon == undefined) {
-                    name = locale == "en" ? item.name : item.name_vi;
+                  if (item?.icon == undefined) {
+                    name = locale == "en" ? item.name : item?.name_vi;
                   } else {
                     name = item.name;
                   }
+                  const convertedItem = { ...item, name: name, key: index };
 
-                  return { ...item, name: name, key: index };
+                  return convertedItem;
                 })}
                 columns={columns}
                 pagination={{
@@ -371,11 +419,11 @@ const Home = ({
             style={{ maxWidth: 1200 }}
           >
             <div>
-              <h2 className="text-lg font-semibold">About Us</h2>
+              <h2 className="text-lg font-semibold">{d("aboutus")}</h2>
               <p>Learn more about our company and mission.</p>
             </div>
             <div>
-              <h2 className="text-lg font-semibold">Contact</h2>
+              <h2 className="text-lg font-semibold">{d("contact")}</h2>
               <p>Email: info@example.com</p>
               <p>Phone: +1 123-456-7890</p>
             </div>

@@ -37,7 +37,10 @@
     "easy_desc":"Thao tác đơn giản, chỉ cần 1 vài cú click chuột là bạn có thể tạo luồng phát trực tiếp như ý muốn.",
     "stable_desc":"Hệ thống tối ưu cho phép live ổn định, không giật lag, có thể livestream được video chất lượng 4K.",
     "crossplatform_desc":"Bạn có thể live 24/7 trên rất nhiều nền tảng mạng xã hội khác nhau như Youtube, Facebook, Twitch...",
-    "support_desc":"Bạn sẽ được hỗ trợ với đội ngũ nhiệt tình, chúng tôi sẽ đem đến cho bạn trải nghiệm dịch vụ tốt nhất."
+    "support_desc":"Bạn sẽ được hỗ trợ với đội ngũ nhiệt tình, chúng tôi sẽ đem đến cho bạn trải nghiệm dịch vụ tốt nhất.",
+    "aboutus":"Về chúng tôi",
+    "contact":"Liên hệ",
+    "terms":"Điểu khoản & chính sách"
   },
   "DashboardMenu": {
     "home": "Trang chủ",
@@ -118,5 +121,8 @@
     "amount":"Số lượng",
     "orderid":"ID đặt hàng",
     "serviceid":"ID dịch vụ"
+  },
+  "Placeholder":{
+    "search":"Tìm kiếm..."
   }
 }

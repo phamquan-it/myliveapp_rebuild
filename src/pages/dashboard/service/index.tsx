@@ -280,7 +280,7 @@ export default function Index() {
             </div>
 
             <Table
-              className="border rounded-md"
+              className="border rounded-md shadow-md"
               loading={userMutation.isPending}
               dataSource={seriveData?.data.map((item: any, index: number) => ({
                 ...item,

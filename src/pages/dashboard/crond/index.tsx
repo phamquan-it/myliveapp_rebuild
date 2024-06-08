@@ -106,7 +106,11 @@ const Page = () => {
           />
         </div>
 
-        <Table dataSource={dataSource} columns={columns} />
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          className="border shadow-md rounded-md mt-3"
+        />
       </DashBoardLayout>
     </>
   );

@@ -278,7 +278,7 @@ const Page = () => {
           </Button>
         </div>
         <Table
-          className="border rounded"
+          className="border rounded shadow-md"
           dataSource={
             data?.data?.data?.map((item: any, index: number) => ({
               ...item,

@@ -37,7 +37,10 @@
     "easy_desc":"Simple operation, just a few mouse clicks and you can create the live stream you want.",
     "stable_desc":"The optimized system allows stable live streaming, no lag, and can livestream 4K quality videos.",
     "crossplatform_desc":"You can live 24/7 on many different social networking platforms such as Youtube, Facebook, Twitch...",
-    "support_desc":"You will be supported by an enthusiastic team, we will bring you the best service experience."
+    "support_desc":"You will be supported by an enthusiastic team, we will bring you the best service experience.",
+    "aboutus":"About us",
+    "contact":"Contact",
+    "terms":"Terms"
   },
   "DashboardMenu": {
     "home": "Home",
@@ -118,5 +121,8 @@
     "amount":"Amount",
     "orderid":"Order ID",
     "serviceid":"Service ID"
+  },
+  "Placeholder":{
+    "search":"Search..."
   }
 }

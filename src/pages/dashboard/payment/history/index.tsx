@@ -114,7 +114,7 @@ const Page = () => {
         <Table
           dataSource={dataSource}
           columns={columns}
-          className="border rounded-md"
+          className="border rounded-md shadow-md"
         />
       </DashBoardLayout>
     </>

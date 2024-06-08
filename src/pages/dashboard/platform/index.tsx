@@ -200,6 +200,7 @@ const Page = () => {
         </div>
 
         <Table
+          className="shadow-md border rounded-md"
           dataSource={platformData}
           columns={columns}
           loading={isPending}
