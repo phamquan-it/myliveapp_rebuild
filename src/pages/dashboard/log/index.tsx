@@ -127,26 +127,24 @@ const Page = () => {
   };
   return (
     <>
-      <DashBoardLayout>
-        <div className="my-3 flex gap-1">
-          <Input placeholder="Search..." className="" style={{ width: 200 }} />
-          <DatePicker placeholder="Start date" picker="date" />
-          <DatePicker placeholder="End date" picker="date" />
-        </div>
-        <Table
-          className="border rounded shadow-md"
-          loading={isFetching}
-          onChange={handleTableChange}
-          dataSource={data?.data.data.map((item: any, index: number) => ({
-            ...item,
-            key: pageIndex * pageSize + (index + 1) - pageSize,
-          }))}
-          columns={columns}
-          pagination={{
-            total: data?.data.total,
-          }}
-        />
-      </DashBoardLayout>
+      <div className="my-3 flex gap-1">
+        <Input placeholder="Search..." className="" style={{ width: 200 }} />
+        <DatePicker placeholder="Start date" picker="date" />
+        <DatePicker placeholder="End date" picker="date" />
+      </div>
+      <Table
+        className="border rounded shadow-md"
+        loading={isFetching}
+        onChange={handleTableChange}
+        dataSource={data?.data.data.map((item: any, index: number) => ({
+          ...item,
+          key: pageIndex * pageSize + (index + 1) - pageSize,
+        }))}
+        columns={columns}
+        pagination={{
+          total: data?.data.total,
+        }}
+      />
     </>
   );
 };

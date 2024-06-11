@@ -1,15 +1,19 @@
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import { Button, DatePicker, Form, Input, Switch } from "antd";
+import Title from "antd/es/typography/Title";
 import { GetStaticPropsContext } from "next";
+import { useTranslations } from "next-intl";
 
 const Page = () => {
   const onFinish = (values: any) => {
     console.log("Form values:", values);
     // Handle form submission here
   };
+  const d = useTranslations("DashboardMenu");
   return (
     <>
-      <DashBoardLayout>
+      <Title className="!semi-boldb !text-center">{d("Settings")}</Title>
+      <div className="bg-white rounded-2xl p-5 w-5/6 m-auto">
         <Form onFinish={onFinish} layout="vertical">
           <Form.Item
             label="Name"
@@ -74,7 +78,7 @@ const Page = () => {
             </Button>
           </Form.Item>
         </Form>
-      </DashBoardLayout>
+      </div>
     </>
   );
 };

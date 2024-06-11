@@ -284,110 +284,104 @@ const Page = () => {
   };
   return (
     <>
-      <DashBoardLayout>
-        <div className="flex justify-between gap-1 items-center">
-          <div>
-            <Input
-              style={{ width: 200 }}
-              placeholder="Search..."
-              onChange={(e) => {
-                setKeyword(e.target.value);
-                const search = lodash.debounce(() => {
-                  setParams({
-                    ...params,
-                    keyword,
-                  });
-                }, 300);
-                search();
-              }}
-            />
-            <Modal
-              title={t("create")}
-              open={showModal}
-              onCancel={hideModal}
-              footer={null}
-            >
-              <div>
-                <h1>My Form</h1>
-                <Form layout="vertical" onFinish={onFinish}>
-                  <Form.Item
-                    label="Email"
-                    name="email"
-                    rules={[
-                      { required: true, message: "Please enter an email" },
-                    ]}
-                  >
-                    <Input placeholder="Enter email" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Date"
-                    name="date"
-                    rules={[
-                      { required: true, message: "Please select a date" },
-                    ]}
-                  >
-                    <DatePicker />
-                  </Form.Item>
-                  <Form.Item
-                    label="Action"
-                    name="action"
-                    rules={[
-                      { required: true, message: "Please enter an action" },
-                    ]}
-                  >
-                    <Input placeholder="Enter action" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Amount"
-                    name="amount"
-                    rules={[
-                      { required: true, message: "Please enter an amount" },
-                    ]}
-                  >
-                    <Input type="number" placeholder="Enter amount" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Fund"
-                    name="fund"
-                    rules={[{ required: true, message: "Please enter a fund" }]}
-                  >
-                    <Input type="number" placeholder="Enter fund" />
-                  </Form.Item>
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Submit
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </div>
-            </Modal>
-          </div>
-          <div>
-            <Button
-              type="primary"
-              iconPosition="end"
-              onClick={openModal}
-              icon={<PlusCircleFilled />}
-            >
-              {t("create")}
-            </Button>
-          </div>
+      <div className="flex justify-between gap-1 items-center">
+        <div>
+          <Input
+            style={{ width: 200 }}
+            placeholder="Search..."
+            onChange={(e) => {
+              setKeyword(e.target.value);
+              const search = lodash.debounce(() => {
+                setParams({
+                  ...params,
+                  keyword,
+                });
+              }, 300);
+              search();
+            }}
+          />
+          <Modal
+            title={t("create")}
+            open={showModal}
+            onCancel={hideModal}
+            footer={null}
+          >
+            <div>
+              <h1>My Form</h1>
+              <Form layout="vertical" onFinish={onFinish}>
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  rules={[{ required: true, message: "Please enter an email" }]}
+                >
+                  <Input placeholder="Enter email" />
+                </Form.Item>
+                <Form.Item
+                  label="Date"
+                  name="date"
+                  rules={[{ required: true, message: "Please select a date" }]}
+                >
+                  <DatePicker />
+                </Form.Item>
+                <Form.Item
+                  label="Action"
+                  name="action"
+                  rules={[
+                    { required: true, message: "Please enter an action" },
+                  ]}
+                >
+                  <Input placeholder="Enter action" />
+                </Form.Item>
+                <Form.Item
+                  label="Amount"
+                  name="amount"
+                  rules={[
+                    { required: true, message: "Please enter an amount" },
+                  ]}
+                >
+                  <Input type="number" placeholder="Enter amount" />
+                </Form.Item>
+                <Form.Item
+                  label="Fund"
+                  name="fund"
+                  rules={[{ required: true, message: "Please enter a fund" }]}
+                >
+                  <Input type="number" placeholder="Enter fund" />
+                </Form.Item>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Submit
+                  </Button>
+                </Form.Item>
+              </Form>
+            </div>
+          </Modal>
         </div>
+        <div>
+          <Button
+            type="primary"
+            iconPosition="end"
+            onClick={openModal}
+            icon={<PlusCircleFilled />}
+          >
+            {t("create")}
+          </Button>
+        </div>
+      </div>
 
-        <Table
-          className="border rounded-md mt-3 shadow-md"
-          dataSource={data.map((item: any, index: number) => ({
-            ...item,
-            key: pageIndex * 10 + (index + 1) - 10,
-          }))}
-          columns={columns}
-          //   loading={isFetching}
-          onChange={handleTableChange}
-          pagination={{
-            total: 20,
-          }}
-        />
-      </DashBoardLayout>
+      <Table
+        className="border rounded-md mt-3 shadow-md"
+        dataSource={data.map((item: any, index: number) => ({
+          ...item,
+          key: pageIndex * 10 + (index + 1) - 10,
+        }))}
+        columns={columns}
+        //   loading={isFetching}
+        onChange={handleTableChange}
+        pagination={{
+          total: 20,
+        }}
+      />
     </>
   );
 };

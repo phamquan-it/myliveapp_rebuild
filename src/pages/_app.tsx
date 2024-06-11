@@ -13,10 +13,16 @@ import vi from "antd/locale/vi_VN";
 import en from "antd/locale/en_US";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import DashBoardLayout from "@/components/admin/DashBoardLayout";
+import { useEffect, useState } from "react";
+import { setInterval } from "timers/promises";
 config.autoAddCss = false;
 
 export default function App({ Component, pageProps }: AppProps) {
+  const Layout = (Component as any).Layout ?? DashBoardLayout;
   const router = useRouter();
+  const [key, setKey] = useState(Math.random());
+
   return (
     <NextIntlClientProvider
       locale={router.locale}
@@ -32,8 +38,10 @@ export default function App({ Component, pageProps }: AppProps) {
             theme={theme}
             locale={router.locale == "vi" ? vi : en}
           >
-            <NextProgress delay={300} options={{ showSpinner: false }} />
-            <Component {...pageProps} />
+            <Layout>
+              <NextProgress delay={300} options={{ showSpinner: false }} />
+              <Component {...pageProps} />
+            </Layout>
           </ConfigProvider>
         </ReactQueryProvider>
       </ReduxProvider>

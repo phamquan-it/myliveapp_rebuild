@@ -30,6 +30,7 @@ import Title from "antd/es/typography/Title";
 import OrderForm from "@/components/client/OrderForm";
 import { format } from "path";
 import { revalidatePath } from "next/cache";
+import PageLayout from "@/components/PageLayout";
 
 const Home = ({
   locale,
@@ -443,6 +444,8 @@ const Home = ({
   );
 };
 export default Home;
+Home.Layout = PageLayout;
+
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   let serviceData: any[] = [];
   let platformdata: any = [];

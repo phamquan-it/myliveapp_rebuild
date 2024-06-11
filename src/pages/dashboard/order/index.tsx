@@ -252,142 +252,140 @@ const Page = () => {
   };
   return (
     <>
-      <DashBoardLayout>
-        <div className="border shadow-sm rounded-md">
-          <Title className="p-3 border-b bg-gray-100" level={5}>
-            All orders
-          </Title>
-          <ul className="grid grid-cols-7 gap-3 p-3">
-            {statisticalOrder.map((item) => {
-              return (
-                <>
-                  <li className="text-center">
-                    <Title level={5} className="!mb-0">
-                      {item.amount}
-                    </Title>
-                    <p>{item.status}</p>
-                  </li>
-                </>
-              );
-            })}
-          </ul>
-        </div>
-        <Modal
-          title={t("create")}
-          open={showModal}
-          onCancel={hideModal}
-          footer={null}
-        >
-          <Form layout="vertical" onFinish={onFinish}>
+      <div className="border shadow-sm rounded-md bg-white">
+        <Title className="p-3 border-b bg-gray-100" level={5}>
+          All orders
+        </Title>
+        <ul className="grid grid-cols-7 gap-3 p-3">
+          {statisticalOrder.map((item) => {
+            return (
+              <>
+                <li className="text-center">
+                  <Title level={5} className="!mb-0">
+                    {item.amount}
+                  </Title>
+                  <p>{item.status}</p>
+                </li>
+              </>
+            );
+          })}
+        </ul>
+      </div>
+      <Modal
+        title={t("create")}
+        open={showModal}
+        onCancel={hideModal}
+        footer={null}
+      >
+        <Form layout="vertical" onFinish={onFinish}>
+          <Form.Item
+            label="Services"
+            name="services"
+            rules={[{ required: true, message: "Please select a service" }]}
+          >
+            <Select placeholder="Select service">
+              <Option value="service1">Service 1</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="Provider" name="provider">
+            <Input placeholder="Enter provider" />
+          </Form.Item>
+          <Form.Item
+            label="User"
+            name="user"
+            rules={[
+              {
+                required: true,
+                type: "email",
+                message: "Please enter a valid email",
+              },
+            ]}
+          >
+            <Input placeholder="Enter user email" />
+          </Form.Item>
+          <div className="grid grid-cols-2 gap-2">
+            <Form.Item label="Charge" name="charge">
+              <Input type="number" placeholder="Enter charge" />
+            </Form.Item>
+            <Form.Item label="Start Count" name="startCount">
+              <Input type="number" placeholder="Enter start count" />
+            </Form.Item>
+          </div>
+          <Form.Item label="Actually Spent" name="actuallySpent">
+            <Input type="number" placeholder="Enter actually spent" />
+          </Form.Item>
+
+          <div className="grid md:grid-cols-2 gap-2">
             <Form.Item
-              label="Services"
-              name="services"
-              rules={[{ required: true, message: "Please select a service" }]}
+              label="Status"
+              name="status"
+              rules={[{ required: true, message: "Please select a status" }]}
             >
-              <Select placeholder="Select service">
-                <Option value="service1">Service 1</Option>
+              <Select placeholder="Select status">
+                <Option value="In progress">In progress</Option>
+                <Option value="Completed">Completed</Option>
+                <Option value="Error">Error</Option>
               </Select>
             </Form.Item>
-            <Form.Item label="Provider" name="provider">
-              <Input placeholder="Enter provider" />
+            <Form.Item label="Quantity" name="quantity">
+              <Input type="number" placeholder="Enter quantity" />
             </Form.Item>
-            <Form.Item
-              label="User"
-              name="user"
-              rules={[
-                {
-                  required: true,
-                  type: "email",
-                  message: "Please enter a valid email",
-                },
-              ]}
-            >
-              <Input placeholder="Enter user email" />
-            </Form.Item>
-            <div className="grid grid-cols-2 gap-2">
-              <Form.Item label="Charge" name="charge">
-                <Input type="number" placeholder="Enter charge" />
-              </Form.Item>
-              <Form.Item label="Start Count" name="startCount">
-                <Input type="number" placeholder="Enter start count" />
-              </Form.Item>
-            </div>
-            <Form.Item label="Actually Spent" name="actuallySpent">
-              <Input type="number" placeholder="Enter actually spent" />
-            </Form.Item>
-
-            <div className="grid md:grid-cols-2 gap-2">
-              <Form.Item
-                label="Status"
-                name="status"
-                rules={[{ required: true, message: "Please select a status" }]}
-              >
-                <Select placeholder="Select status">
-                  <Option value="In progress">In progress</Option>
-                  <Option value="Completed">Completed</Option>
-                  <Option value="Error">Error</Option>
-                </Select>
-              </Form.Item>
-              <Form.Item label="Quantity" name="quantity">
-                <Input type="number" placeholder="Enter quantity" />
-              </Form.Item>
-            </div>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                {t("create")}
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal>
-        <div className="flex justify-between my-3 mt-10">
-          <div style={{ display: "flex", gap: "1rem" }}>
-            <div>
-              <Input placeholder="Search" style={{ flex: 1 }} />
-            </div>
-            <Select placeholder="Select status" style={{ width: 150 }}>
-              <Option value="In progress">In progress</Option>
-              <Option value="Completed">Completed</Option>
-              <Option value="Partial">Partial</Option>
-              <Option value="Canceled">Canceled</Option>
-              <Option value="Processing">Processing</Option>
-              <Option value="Pending">Pending</Option>
-              <Option value="Queue">Queue</Option>
-            </Select>
-            <Select
-              placeholder="Select provider"
-              style={{ width: 150 }}
-              className=""
-            >
-              <Option value="provider1">Provider 1</Option>
-              <Option value="provider2">Provider 2</Option>
-              <Option value="provider3">Provider 3</Option>
-            </Select>
           </div>
-          <div>
-            <Button
-              type="primary"
-              icon={<PlusCircleFilled />}
-              iconPosition="end"
-              onClick={openModal}
-            >
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
               {t("create")}
             </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+      <div className="flex justify-between my-3 mt-10">
+        <div style={{ display: "flex", gap: "1rem" }}>
+          <div>
+            <Input placeholder="Search" style={{ flex: 1 }} />
           </div>
+          <Select placeholder="Select status" style={{ width: 150 }}>
+            <Option value="In progress">In progress</Option>
+            <Option value="Completed">Completed</Option>
+            <Option value="Partial">Partial</Option>
+            <Option value="Canceled">Canceled</Option>
+            <Option value="Processing">Processing</Option>
+            <Option value="Pending">Pending</Option>
+            <Option value="Queue">Queue</Option>
+          </Select>
+          <Select
+            placeholder="Select provider"
+            style={{ width: 150 }}
+            className=""
+          >
+            <Option value="provider1">Provider 1</Option>
+            <Option value="provider2">Provider 2</Option>
+            <Option value="provider3">Provider 3</Option>
+          </Select>
         </div>
-        <Table
-          className="border rounded-md shadow-md"
-          dataSource={data?.data.data.map((item: any, index: number) => ({
-            ...item,
-            key: pageIndex * 10 + (index + 1) - 10,
-          }))}
-          columns={columns}
-          loading={isFetching}
-          onChange={handleTableChange}
-          pagination={{
-            total: data?.data.total,
-          }}
-        />
-      </DashBoardLayout>
+        <div>
+          <Button
+            type="primary"
+            icon={<PlusCircleFilled />}
+            iconPosition="end"
+            onClick={openModal}
+          >
+            {t("create")}
+          </Button>
+        </div>
+      </div>
+      <Table
+        className="border rounded-md shadow-md"
+        dataSource={data?.data.data.map((item: any, index: number) => ({
+          ...item,
+          key: pageIndex * 10 + (index + 1) - 10,
+        }))}
+        columns={columns}
+        loading={isFetching}
+        onChange={handleTableChange}
+        pagination={{
+          total: data?.data.total,
+        }}
+      />
     </>
   );
 };

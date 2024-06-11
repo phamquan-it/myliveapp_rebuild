@@ -21,15 +21,13 @@ const Page = () => {
 
   return (
     <>
-      <DashBoardLayout>
-        <UserProfile
-          active={data?.data.data.isActive}
-          funds={data?.data.data.funds}
-          name={data?.data.data.name}
-          email={data?.data.data.email}
-          role={data?.data.data.role.name}
-        />
-      </DashBoardLayout>
+      <UserProfile
+        active={data?.data.data.isActive}
+        funds={data?.data.data.funds}
+        name={data?.data.data.name}
+        email={data?.data.data.email}
+        role={data?.data.data.role.name}
+      />
     </>
   );
 };

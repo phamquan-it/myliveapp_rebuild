@@ -204,113 +204,109 @@ const Page = () => {
 
   return (
     <>
-      <DashBoardLayout>
-        <Modal
-          title={t("create")}
-          open={showModal}
-          onCancel={hideModal}
-          footer={null}
-        >
-          <div>
-            <Form layout="vertical" onFinish={onFinish}>
-              <Form.Item
-                label="Title"
-                name="title"
-                rules={[{ required: true, message: "Please enter title" }]}
-              >
-                <Input placeholder="Enter title..," />
-              </Form.Item>
-              <Form.Item
-                label="Platform"
-                name="platform"
-                rules={[
-                  { required: true, message: "Please select a platform" },
-                ]}
-              >
-                <Select placeholder="Select platform">
-                  <Option value="web">Web</Option>
-                </Select>
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  {t("create")}
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </Modal>
+      <Modal
+        title={t("create")}
+        open={showModal}
+        onCancel={hideModal}
+        footer={null}
+      >
+        <div>
+          <Form layout="vertical" onFinish={onFinish}>
+            <Form.Item
+              label="Title"
+              name="title"
+              rules={[{ required: true, message: "Please enter title" }]}
+            >
+              <Input placeholder="Enter title..," />
+            </Form.Item>
+            <Form.Item
+              label="Platform"
+              name="platform"
+              rules={[{ required: true, message: "Please select a platform" }]}
+            >
+              <Select placeholder="Select platform">
+                <Option value="web">Web</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                {t("create")}
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      </Modal>
 
-        <div className="flex justify-between">
-          <div className="flex justify-start gap-1">
-            <Input
-              style={{ width: 200 }}
-              placeholder="Search..."
-              onChange={(e) => {
-                setKeyword(e.target.value);
-                const search = lodash.debounce(() => {
-                  setParams({
-                    ...params,
-                    keyword,
-                  });
-                }, 300);
-                search();
-              }}
-            />
-            <Select
-              showSearch
-              options={platforms.map((platform) => ({
-                label: (
-                  <>
-                    <div className="flex items-center gap-1">
-                      <Image
-                        src={platform.icon}
-                        alt=""
-                        width={25}
-                        preview={false}
-                      />
-                      <span>{platform.name}</span>
-                    </div>
-                  </>
-                ),
-                value: `${platform.id}#${platform.name}`,
-              }))}
-              style={{ width: 200 }}
-              placeholder="Select a platform"
-              onChange={(value) => {
-                const regex = /(\d+)#/;
-                const match = parseInt(value.match(regex));
-                setPlatformValue(match || 1);
+      <div className="flex justify-between">
+        <div className="flex justify-start gap-1">
+          <Input
+            style={{ width: 200 }}
+            placeholder="Search..."
+            onChange={(e) => {
+              setKeyword(e.target.value);
+              const search = lodash.debounce(() => {
                 setParams({
                   ...params,
-                  platformId: match.toString(),
+                  keyword,
                 });
-              }}
-            ></Select>
-          </div>
-          <Button
-            type="primary"
-            icon={<PlusCircleFilled />}
-            iconPosition="end"
-            onClick={openModal}
-          >
-            {t("create")}
-          </Button>
+              }, 300);
+              search();
+            }}
+          />
+          <Select
+            showSearch
+            options={platforms.map((platform) => ({
+              label: (
+                <>
+                  <div className="flex items-center gap-1">
+                    <Image
+                      src={platform.icon}
+                      alt=""
+                      width={25}
+                      preview={false}
+                    />
+                    <span>{platform.name}</span>
+                  </div>
+                </>
+              ),
+              value: `${platform.id}#${platform.name}`,
+            }))}
+            style={{ width: 200 }}
+            placeholder="Select a platform"
+            onChange={(value) => {
+              const regex = /(\d+)#/;
+              const match = parseInt(value.match(regex));
+              setPlatformValue(match || 1);
+              setParams({
+                ...params,
+                platformId: match.toString(),
+              });
+            }}
+          ></Select>
         </div>
+        <Button
+          type="primary"
+          icon={<PlusCircleFilled />}
+          iconPosition="end"
+          onClick={openModal}
+        >
+          {t("create")}
+        </Button>
+      </div>
 
-        <Table
-          className="border shadow-md rounded-md mt-3"
-          dataSource={data?.data.data.map((item: any, index: number) => ({
-            ...item,
-            key: pageIndex * 10 + (index + 1) - 10,
-          }))}
-          columns={columns}
-          loading={isFetching}
-          onChange={handleTableChange}
-          pagination={{
-            total: data?.data.total,
-          }}
-        />
-      </DashBoardLayout>
+      <Table
+        className="border shadow-md rounded-md mt-3"
+        dataSource={data?.data.data.map((item: any, index: number) => ({
+          ...item,
+          key: pageIndex * 10 + (index + 1) - 10,
+        }))}
+        columns={columns}
+        loading={isFetching}
+        onChange={handleTableChange}
+        pagination={{
+          total: data?.data.total,
+        }}
+      />
     </>
   );
 };

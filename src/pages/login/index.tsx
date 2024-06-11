@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { PropsWithChildren, useEffect } from "react";
 import { Form, Input, Button } from "antd";
 import Title from "antd/es/typography/Title";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,6 +16,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import axiosClient from "@/apiClient/axiosClient";
 import { setCookie } from "cookies-next";
+import PageLayout from "@/components/PageLayout";
 const LoginForm = () => {
   const t = useTranslations("Authenlication");
 
@@ -112,7 +113,7 @@ const LoginForm = () => {
   );
 };
 export default LoginForm;
-
+LoginForm.Layout = PageLayout;
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {

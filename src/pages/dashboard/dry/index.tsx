@@ -37,9 +37,7 @@ const Page = () => {
   ];
   return (
     <>
-      <DashBoardLayout>
-        <Table dataSource={dataSource} columns={columns} />
-      </DashBoardLayout>
+      <Table dataSource={dataSource} columns={columns} />
     </>
   );
 };

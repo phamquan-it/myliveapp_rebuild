@@ -157,45 +157,43 @@ const Page = () => {
   const [openState, setOpenState] = useState(false);
   return (
     <>
-      <DashBoardLayout>
-        <div className="flex gap-1 my-3">
-          <Input placeholder="Search..." style={{ width: 200 }} />
-          <DatePicker placeholder="Start Date" />
-          <DatePicker placeholder="End Date" />
-        </div>
-        <div className="my-3 gap-3 grid grid-cols-5">
-          <HistoryStatitical
-            color="rgb(10, 143, 220)"
-            monney={0.207}
-            info="Current Viral SMM balance"
-          />
-          <HistoryStatitical
-            color="rgb(23, 182, 221)"
-            monney={0.207}
-            info="Current Viral SMM balance"
-          />
-          <HistoryStatitical
-            color="rgb(73, 189, 101)"
-            monney={0.207}
-            info="Current Viral SMM balance"
-          />
-          <HistoryStatitical
-            color="rgb(244, 152, 32)"
-            monney={0.207}
-            info="Current Viral SMM balance"
-          />
-          <HistoryStatitical
-            color="rgb(158, 73, 230)"
-            monney={0.207}
-            info="Current Viral SMM balance"
-          />
-        </div>
-        <Table
-          dataSource={dataSource}
-          columns={columns}
-          className="border rounded-md shadow-md"
+      <div className="flex gap-1 my-3">
+        <Input placeholder="Search..." style={{ width: 200 }} />
+        <DatePicker placeholder="Start Date" />
+        <DatePicker placeholder="End Date" />
+      </div>
+      <div className="my-3 gap-3 grid grid-cols-5">
+        <HistoryStatitical
+          color="rgb(10, 143, 220)"
+          monney={0.207}
+          info="Current Viral SMM balance"
         />
-      </DashBoardLayout>
+        <HistoryStatitical
+          color="rgb(23, 182, 221)"
+          monney={0.207}
+          info="Current Viral SMM balance"
+        />
+        <HistoryStatitical
+          color="rgb(73, 189, 101)"
+          monney={0.207}
+          info="Current Viral SMM balance"
+        />
+        <HistoryStatitical
+          color="rgb(244, 152, 32)"
+          monney={0.207}
+          info="Current Viral SMM balance"
+        />
+        <HistoryStatitical
+          color="rgb(158, 73, 230)"
+          monney={0.207}
+          info="Current Viral SMM balance"
+        />
+      </div>
+      <Table
+        dataSource={dataSource}
+        columns={columns}
+        className="border rounded-md shadow-md"
+      />
     </>
   );
 };

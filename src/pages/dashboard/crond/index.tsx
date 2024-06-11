@@ -121,22 +121,20 @@ const Page = () => {
 
   return (
     <>
-      <DashBoardLayout>
-        <div>
-          <Input
-            placeholder="Search..."
-            style={{
-              width: 200,
-            }}
-          />
-        </div>
-
-        <Table
-          dataSource={fakeData}
-          columns={columns}
-          className="border shadow-md rounded-md mt-3"
+      <div>
+        <Input
+          placeholder="Search..."
+          style={{
+            width: 200,
+          }}
         />
-      </DashBoardLayout>
+      </div>
+
+      <Table
+        dataSource={fakeData}
+        columns={columns}
+        className="border shadow-md rounded-md mt-3"
+      />
     </>
   );
 };

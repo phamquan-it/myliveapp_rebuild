@@ -24,16 +24,14 @@ import { Pie } from "react-chartjs-2";
 const Page = () => {
   return (
     <>
-      <DashBoardLayout>
-        <div
-          style={{
-            width: 300,
-          }}
-        >
-          <Pie data={dataPie} />;
-          <Line data={data} />
-        </div>
-      </DashBoardLayout>
+      <div
+        style={{
+          width: 300,
+        }}
+      >
+        <Pie data={dataPie} />;
+        <Line data={data} />
+      </div>
     </>
   );
 };

@@ -35,6 +35,7 @@ interface DashBoardLayoutLayout {
   children: ReactNode;
 }
 const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
+  console.log("re-render");
   const [role, setRole] = useState("user");
   useEffect(() => {
     try {
@@ -158,6 +159,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const [defaultMenuActive, setDefaultMenuActive] = useState<string[]>([]);
+  const [activeKey, setActiveKey] = useState();
   const router = useRouter();
   useEffect(() => {
     console.log(router.pathname);
@@ -247,11 +249,12 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
               className="!text-sm !font-medium"
               theme="light"
               mode="inline"
-              selectedKeys={defaultMenuActive}
+              selectedKeys={activeKey}
               // defaultSelectedKeys={defaultMenuActive}
               onClick={(e) => {
                 items_menu.map((item: any) => {
                   if (e.key == item.key) {
+                    setActiveKey(item.key);
                     router.push(item.page);
                   }
                 });

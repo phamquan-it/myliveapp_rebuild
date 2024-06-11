@@ -190,119 +190,117 @@ const Page = () => {
 
   return (
     <>
-      <DashBoardLayout>
-        <Modal
-          title={t("create")}
-          open={showModal}
-          footer={false}
-          onCancel={hideModal}
-        >
-          <div>
-            <Form layout="vertical" onFinish={onFinish}>
-              <Form.Item
-                label="Name"
-                name="name"
-                rules={[{ required: true, message: "Please enter a name" }]}
-              >
-                <Input placeholder="Enter name" />
-              </Form.Item>
-              <Form.Item
-                label="Email"
-                name="email"
-                rules={[
-                  {
-                    required: true,
-                    type: "email",
-                    message: "Please enter a valid email",
-                  },
-                ]}
-              >
-                <Input placeholder="Enter email" />
-              </Form.Item>
-              <Form.Item
-                label="Action"
-                name="action"
-                rules={[{ required: true, message: "Please select an action" }]}
-              >
-                <Select placeholder="Select action">
-                  <Option value="action1">Action 1</Option>
-                  <Option value="action2">Action 2</Option>
-                  <Option value="action3">Action 3</Option>
-                </Select>
-              </Form.Item>
-              <Form.Item
-                label="Amount"
-                name="amount"
-                rules={[
-                  {
-                    required: true,
-                    type: "number",
-                    message: "Please enter a valid amount",
-                  },
-                ]}
-              >
-                <Input type="number" placeholder="Enter amount" />
-              </Form.Item>
-              <Form.Item
-                label="Fund"
-                name="fund"
-                rules={[
-                  {
-                    required: true,
-                    type: "number",
-                    message: "Please enter a valid fund",
-                  },
-                ]}
-              >
-                <Input type="number" placeholder="Enter fund" />
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </Modal>
-
-        <div className="flex justify-between">
-          <Input
-            placeholder="Search..."
-            style={{ width: 200 }}
-            onChange={(e) => {
-              setKeyword(e.target.value);
-              const search = lodash.debounce(() => {
-                setParams({
-                  ...params,
-                  keyword,
-                });
-              }, 300);
-              search();
-            }}
-          />
-          <Button
-            type="primary"
-            onClick={openModal}
-            icon={<PlusCircleFilled />}
-            iconPosition="end"
-          >
-            {t("create")}
-          </Button>
+      <Modal
+        title={t("create")}
+        open={showModal}
+        footer={false}
+        onCancel={hideModal}
+      >
+        <div>
+          <Form layout="vertical" onFinish={onFinish}>
+            <Form.Item
+              label="Name"
+              name="name"
+              rules={[{ required: true, message: "Please enter a name" }]}
+            >
+              <Input placeholder="Enter name" />
+            </Form.Item>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  type: "email",
+                  message: "Please enter a valid email",
+                },
+              ]}
+            >
+              <Input placeholder="Enter email" />
+            </Form.Item>
+            <Form.Item
+              label="Action"
+              name="action"
+              rules={[{ required: true, message: "Please select an action" }]}
+            >
+              <Select placeholder="Select action">
+                <Option value="action1">Action 1</Option>
+                <Option value="action2">Action 2</Option>
+                <Option value="action3">Action 3</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Amount"
+              name="amount"
+              rules={[
+                {
+                  required: true,
+                  type: "number",
+                  message: "Please enter a valid amount",
+                },
+              ]}
+            >
+              <Input type="number" placeholder="Enter amount" />
+            </Form.Item>
+            <Form.Item
+              label="Fund"
+              name="fund"
+              rules={[
+                {
+                  required: true,
+                  type: "number",
+                  message: "Please enter a valid fund",
+                },
+              ]}
+            >
+              <Input type="number" placeholder="Enter fund" />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
         </div>
-        <Table
-          className="border rounded-md shadow-md mt-3"
-          dataSource={data?.data.map((item: any, index: number) => ({
-            ...item,
-            key: pageIndex * 10 + (index + 1) - 10,
-          }))}
-          columns={columns}
-          //loading={isFetching}
-          onChange={handleTableChange}
-          // pagination={{
-          //   total: data?.data.total,
-          // }}
+      </Modal>
+
+      <div className="flex justify-between">
+        <Input
+          placeholder="Search..."
+          style={{ width: 200 }}
+          onChange={(e) => {
+            setKeyword(e.target.value);
+            const search = lodash.debounce(() => {
+              setParams({
+                ...params,
+                keyword,
+              });
+            }, 300);
+            search();
+          }}
         />
-      </DashBoardLayout>
+        <Button
+          type="primary"
+          onClick={openModal}
+          icon={<PlusCircleFilled />}
+          iconPosition="end"
+        >
+          {t("create")}
+        </Button>
+      </div>
+      <Table
+        className="border rounded-md shadow-md mt-3"
+        dataSource={data?.data.map((item: any, index: number) => ({
+          ...item,
+          key: pageIndex * 10 + (index + 1) - 10,
+        }))}
+        columns={columns}
+        //loading={isFetching}
+        onChange={handleTableChange}
+        // pagination={{
+        //   total: data?.data.total,
+        // }}
+      />
     </>
   );
 };

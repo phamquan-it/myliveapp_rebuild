@@ -198,101 +198,97 @@ const Page = () => {
   };
   return (
     <>
-      <DashBoardLayout>
-        <Modal
-          title={t("create")}
-          open={showModal}
-          onCancel={hideModal}
-          footer={null}
-        >
-          <Form onFinish={onFinish} layout="vertical">
-            <Form.Item
-              label="Name"
-              name="name"
-              rules={[{ required: true, message: "Please enter your name" }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[
-                {
-                  required: true,
-                  type: "email",
-                  message: "Please enter a valid email address",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[
-                { required: true, message: "Please enter your password" },
-              ]}
-            >
-              <Input.Password />
-            </Form.Item>
-            <Form.Item label="Phone" name="phone">
-              <Input />
-            </Form.Item>
-            <div className="grid grid-cols-3 gap-2">
-              <Form.Item label="Fund Number" name="fundNumber">
-                <Input type="number" />
-              </Form.Item>
-              <Form.Item label="Total Money" name="totalMoney">
-                <Input type="number" />
-              </Form.Item>
-              <Form.Item
-                label="Is Active"
-                name="isActive"
-                valuePropName="checked"
-              >
-                <Switch />
-              </Form.Item>
-            </div>
-            <Form.Item label="Role" name="role">
-              <Select>
-                <Option value="admin">Admin</Option>
-                <Option value="user">User</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal>
-        <div className="flex justify-between">
-          <div>
-            <Input placeholder="Search..." />
-          </div>
-          <Button
-            type="primary"
-            icon={<PlusCircleFilled />}
-            iconPosition="end"
-            onClick={openModal}
+      <Modal
+        title={t("create")}
+        open={showModal}
+        onCancel={hideModal}
+        footer={null}
+      >
+        <Form onFinish={onFinish} layout="vertical">
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[{ required: true, message: "Please enter your name" }]}
           >
-            {t("create")}
-          </Button>
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              {
+                required: true,
+                type: "email",
+                message: "Please enter a valid email address",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: "Please enter your password" }]}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item label="Phone" name="phone">
+            <Input />
+          </Form.Item>
+          <div className="grid grid-cols-3 gap-2">
+            <Form.Item label="Fund Number" name="fundNumber">
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item label="Total Money" name="totalMoney">
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item
+              label="Is Active"
+              name="isActive"
+              valuePropName="checked"
+            >
+              <Switch />
+            </Form.Item>
+          </div>
+          <Form.Item label="Role" name="role">
+            <Select>
+              <Option value="admin">Admin</Option>
+              <Option value="user">User</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+      <div className="flex justify-between">
+        <div>
+          <Input placeholder="Search..." />
         </div>
-        <Table
-          className="rounded-md shadow-md border mt-3"
-          dataSource={data?.data.data.map((item: any, index: number) => ({
-            ...item,
-            key: pageIndex * 10 + (index + 1) - 10,
-          }))}
-          columns={columns}
-          loading={isFetching}
-          onChange={handleTableChange}
-          pagination={{
-            total: data?.data.total,
-          }}
-        />
-      </DashBoardLayout>
+        <Button
+          type="primary"
+          icon={<PlusCircleFilled />}
+          iconPosition="end"
+          onClick={openModal}
+        >
+          {t("create")}
+        </Button>
+      </div>
+      <Table
+        className="rounded-md shadow-md border mt-3"
+        dataSource={data?.data.data.map((item: any, index: number) => ({
+          ...item,
+          key: pageIndex * 10 + (index + 1) - 10,
+        }))}
+        columns={columns}
+        loading={isFetching}
+        onChange={handleTableChange}
+        pagination={{
+          total: data?.data.total,
+        }}
+      />
     </>
   );
 };

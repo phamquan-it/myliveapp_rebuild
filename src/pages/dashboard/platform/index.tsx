@@ -126,7 +126,7 @@ const Page = () => {
               }
               deleteForm={
                 <DeleteForm
-                  onCancel={() => {
+                  onDelete={() => {
                     axiosClient
                       .delete(`/platform/delete/${text}/?language=en`, {
                         headers: {
@@ -145,7 +145,7 @@ const Page = () => {
                       });
                     setOpenState(!openState);
                   }}
-                  onDelete={() => {
+                  onCancel={() => {
                     setOpenState(!openState);
                   }}
                 />
@@ -169,58 +169,56 @@ const Page = () => {
   };
   return (
     <>
-      <DashBoardLayout>
-        <div className="py-2">
-          <Modal
-            title="Upload form"
-            open={showModal}
-            footer={null}
-            onCancel={hideModal}
-          >
-            <div>
-              <Form layout="vertical" onFinish={onFinish}>
-                <Form.Item label="Title">
-                  <Input placeholder="Enter title" />
-                </Form.Item>
-                <Form.Item label="Upload File" name="file">
-                  <Upload>
-                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                  </Upload>
-                </Form.Item>
-                <Form.Item>
-                  <Button type="primary" htmlType="submit">
-                    Submit
-                  </Button>
-                </Form.Item>
-              </Form>
-            </div>
-          </Modal>
-
-          <div className="flex justify-between">
-            <Input
-              placeholder="Search..."
-              onChange={handleSearch}
-              style={{ width: 200 }}
-            />
-            <Button
-              icon={<PlusCircleFilled />}
-              type="primary"
-              onClick={() => {
-                setShowModal(true);
-              }}
-            >
-              {t("create")}
-            </Button>
+      <div className="py-2">
+        <Modal
+          title="Upload form"
+          open={showModal}
+          footer={null}
+          onCancel={hideModal}
+        >
+          <div>
+            <Form layout="vertical" onFinish={onFinish}>
+              <Form.Item label="Title">
+                <Input placeholder="Enter title" />
+              </Form.Item>
+              <Form.Item label="Upload File" name="file">
+                <Upload>
+                  <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                </Upload>
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </Form.Item>
+            </Form>
           </div>
-        </div>
+        </Modal>
 
-        <Table
-          className="shadow-md border rounded-md"
-          dataSource={platformData}
-          columns={columns}
-          loading={isPending}
-        />
-      </DashBoardLayout>
+        <div className="flex justify-between">
+          <Input
+            placeholder="Search..."
+            onChange={handleSearch}
+            style={{ width: 200 }}
+          />
+          <Button
+            icon={<PlusCircleFilled />}
+            type="primary"
+            onClick={() => {
+              setShowModal(true);
+            }}
+          >
+            {t("create")}
+          </Button>
+        </div>
+      </div>
+
+      <Table
+        className="shadow-md border rounded-md"
+        dataSource={platformData}
+        columns={columns}
+        loading={isPending}
+      />
     </>
   );
 };

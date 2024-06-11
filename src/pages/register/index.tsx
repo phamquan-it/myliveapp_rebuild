@@ -11,46 +11,48 @@ import FormLayout from "@/components/client/FormLayout";
 import axiosClient from "@/apiClient/axiosClient";
 import { useMutation } from "@tanstack/react-query";
 import { setCookie } from "cookies-next";
+import PageLayout from "@/components/PageLayout";
 
 const RegiterForm = () => {
   const t = useTranslations("Authenlication");
   const router = useRouter();
-  const [info, setInfo]  = useState();
+  const [info, setInfo] = useState();
   const layout = {
     labelCol: { span: 24 }, // Set the label width to take up the full width
     wrapperCol: { span: 24 }, // Set the input width to take up the full width
   };
   const mutationLogin = useMutation({
-    mutationKey:["/register"],
-    mutationFn:(value)=>axiosClient.post("/auth/login?language=en",value),
-    onSuccess:(data)=>{
-      setCookie("token",data.data.token);
-      setCookie("refresh_token",data.data.refresh_token);
-      router.push("/")
+    mutationKey: ["/register"],
+    mutationFn: (value) => axiosClient.post("/auth/login?language=en", value),
+    onSuccess: (data) => {
+      setCookie("token", data.data.token);
+      setCookie("refresh_token", data.data.refresh_token);
+      router.push("/");
     },
-    onError:()=>{
-      router.push("/login")
-    }
-  })
-  const {isPending, mutate} = useMutation({
-    mutationKey:["/register"],
-    mutationFn:(value)=>axiosClient.post("/auth/register?language=en",value),
-    onSuccess:(data)=>{
-      toast.success("Success")
-      mutationLogin.mutate(info)
+    onError: () => {
+      router.push("/login");
     },
-    onError:((err)=>{
+  });
+  const { isPending, mutate } = useMutation({
+    mutationKey: ["/register"],
+    mutationFn: (value) =>
+      axiosClient.post("/auth/register?language=en", value),
+    onSuccess: (data) => {
+      toast.success("Success");
+      mutationLogin.mutate(info);
+    },
+    onError: (err) => {
       console.log(err);
-      toast.error("An error occured")
-    })
-  })
+      toast.error("An error occured");
+    },
+  });
   const onFinish = async (values: any) => {
     if (values.confirmpassword != values.password) {
       toast.error(t("confirmpasswordError"));
       return;
     }
-    setInfo(values)
-    mutate(values)
+    setInfo(values);
+    mutate(values);
   };
   return (
     <>
@@ -132,6 +134,7 @@ const RegiterForm = () => {
 };
 
 export default RegiterForm;
+RegiterForm.Layout = PageLayout;
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {

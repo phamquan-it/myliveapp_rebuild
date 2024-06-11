@@ -240,83 +240,81 @@ export default function Index() {
         <title>Service</title>
         <link rel="icon" href="/logo.png" />
       </Head>
-      <DashBoardLayout>
-        <div>
-          <>
-            <Modal
-              title={t("create")}
-              open={showModal}
-              onCancel={hideModal}
-              footer={null}
-            >
-              <div>
-                <Form layout="vertical" onFinish={onFinish}>
-                  <CreateService />
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Submit
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </div>
-            </Modal>
+      <div>
+        <>
+          <Modal
+            title={t("create")}
+            open={showModal}
+            onCancel={hideModal}
+            footer={null}
+          >
+            <div>
+              <Form layout="vertical" onFinish={onFinish}>
+                <CreateService />
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Submit
+                  </Button>
+                </Form.Item>
+              </Form>
+            </div>
+          </Modal>
 
-            <div className="flex justify-between items-center">
-              <div className="flex gap-2">
-                <div className="">
-                  <Input placeholder="Search..." />
-                </div>
-                <div className="">
-                  <PlatformSelect noLabel={true} />
-                </div>
+          <div className="flex justify-between items-center">
+            <div className="flex gap-2">
+              <div className="">
+                <Input placeholder="Search..." />
               </div>
-              <div>
-                <Button
-                  type="primary"
-                  className="p-0"
-                  iconPosition="end"
-                  onClick={openModal}
-                  icon={<PlusCircleFilled />}
-                >
-                  {t("create")}
-                </Button>
+              <div className="">
+                <PlatformSelect noLabel={true} />
               </div>
             </div>
+            <div>
+              <Button
+                type="primary"
+                className="p-0"
+                iconPosition="end"
+                onClick={openModal}
+                icon={<PlusCircleFilled />}
+              >
+                {t("create")}
+              </Button>
+            </div>
+          </div>
 
-            <Table
-              className="border rounded-md shadow-md"
-              loading={userMutation.isPending}
-              dataSource={seriveData?.data.map((item: any, index: number) => ({
-                ...item,
-                key: index + 1,
-              }))}
-              columns={columns}
-              expandable={{
-                expandedRowRender: (record: any) => (
-                  <TextArea
-                    value={record.service.description_en}
-                    readOnly
-                    autoSize
-                  />
-                ),
-                rowExpandable: (record) =>
-                  record?.service?.description_en !== undefined,
-              }}
-              pagination={{
-                position: ["bottomCenter"],
-                defaultCurrent: 1,
-                showSizeChanger: true,
-                showQuickJumper: true,
-                pageSize: pageSize,
-              }}
-              onChange={(pagination: any) => {
-                setPageSize(pagination.pageSize);
-                setPageIndex(pagination.current);
-              }}
-            />
-          </>
-        </div>
-      </DashBoardLayout>
+          <Table
+            className="border rounded-md shadow-md"
+            loading={userMutation.isPending}
+            dataSource={seriveData?.data.map((item: any, index: number) => ({
+              ...item,
+              key: index + 1,
+            }))}
+            columns={columns}
+            expandable={{
+              expandedRowRender: (record: any) => (
+                <TextArea
+                  value={record.service.description_en}
+                  readOnly
+                  autoSize
+                />
+              ),
+              rowExpandable: (record) =>
+                record?.service?.description_en !== undefined,
+            }}
+            pagination={{
+              position: ["bottomCenter"],
+              defaultCurrent: 1,
+              showSizeChanger: true,
+              showQuickJumper: true,
+              pageSize: pageSize,
+            }}
+            onChange={(pagination: any) => {
+              setPageSize(pagination.pageSize);
+              setPageIndex(pagination.current);
+            }}
+          />
+        </>
+      </div>
     </div>
   );
 }

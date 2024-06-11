@@ -219,97 +219,93 @@ const Page = () => {
   };
   return (
     <>
-      <DashBoardLayout>
-        <div className="flex justify-between my-3">
-          <Modal
-            title={t("create")}
-            open={showModal}
-            onCancel={hideModal}
-            footer={null}
-          >
-            <div>
-              <Form layout="vertical" onFinish={onFinish}>
-                <Form.Item
-                  label="Email"
-                  name="email"
-                  rules={[{ required: true, message: "Please enter an email" }]}
-                >
-                  <Input placeholder="Enter email" />
-                </Form.Item>
-                <Form.Item
-                  label="Service"
-                  name="service"
-                  rules={[
-                    { required: true, message: "Please select a service" },
-                  ]}
-                >
-                  <Select placeholder="Select service">
-                    <Option value="service1">Service 1</Option>
-                    <Option value="service2">Service 2</Option>
-                    <Option value="service3">Service 3</Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item label="Status" name="status" valuePropName="checked">
-                  <Switch />
-                </Form.Item>
-                <Form.Item
-                  label="Amount Paid"
-                  name="amountPaid"
-                  rules={[
-                    { required: true, message: "Please enter amount paid" },
-                  ]}
-                >
-                  <Input type="number" placeholder="Enter amount paid" />
-                </Form.Item>
-                <Form.Item
-                  label="Refund Amount"
-                  name="refundAmount"
-                  rules={[
-                    { required: true, message: "Please enter refund amount" },
-                  ]}
-                >
-                  <Input type="number" placeholder="Enter refund amount" />
-                </Form.Item>
-                <Form.Item label="Create At" name="createAt">
-                  <DatePicker />
-                </Form.Item>
-                <Form.Item>
-                  <Button type="primary" htmlType="submit">
-                    {t("create")}
-                  </Button>
-                </Form.Item>
-              </Form>
-            </div>
-          </Modal>
-
-          <div className="flex">
-            <Input placeholder="Search..." style={{ width: 200 }} />
+      <div className="flex justify-between my-3">
+        <Modal
+          title={t("create")}
+          open={showModal}
+          onCancel={hideModal}
+          footer={null}
+        >
+          <div>
+            <Form layout="vertical" onFinish={onFinish}>
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={[{ required: true, message: "Please enter an email" }]}
+              >
+                <Input placeholder="Enter email" />
+              </Form.Item>
+              <Form.Item
+                label="Service"
+                name="service"
+                rules={[{ required: true, message: "Please select a service" }]}
+              >
+                <Select placeholder="Select service">
+                  <Option value="service1">Service 1</Option>
+                  <Option value="service2">Service 2</Option>
+                  <Option value="service3">Service 3</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item label="Status" name="status" valuePropName="checked">
+                <Switch />
+              </Form.Item>
+              <Form.Item
+                label="Amount Paid"
+                name="amountPaid"
+                rules={[
+                  { required: true, message: "Please enter amount paid" },
+                ]}
+              >
+                <Input type="number" placeholder="Enter amount paid" />
+              </Form.Item>
+              <Form.Item
+                label="Refund Amount"
+                name="refundAmount"
+                rules={[
+                  { required: true, message: "Please enter refund amount" },
+                ]}
+              >
+                <Input type="number" placeholder="Enter refund amount" />
+              </Form.Item>
+              <Form.Item label="Create At" name="createAt">
+                <DatePicker />
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  {t("create")}
+                </Button>
+              </Form.Item>
+            </Form>
           </div>
-          <Button
-            type="primary"
-            icon={<PlusCircleFilled />}
-            iconPosition="end"
-            onClick={openModal}
-          >
-            {t("create")}
-          </Button>
+        </Modal>
+
+        <div className="flex">
+          <Input placeholder="Search..." style={{ width: 200 }} />
         </div>
-        <Table
-          className="border rounded shadow-md"
-          dataSource={
-            data?.data?.data?.map((item: any, index: number) => ({
-              ...item,
-              key: pageIndex * 10 + (index + 1) - 10,
-            })) ?? []
-          }
-          columns={columns}
-          loading={isFetching}
-          onChange={handleTableChange}
-          pagination={{
-            total: data?.data.total,
-          }}
-        />
-      </DashBoardLayout>
+        <Button
+          type="primary"
+          icon={<PlusCircleFilled />}
+          iconPosition="end"
+          onClick={openModal}
+        >
+          {t("create")}
+        </Button>
+      </div>
+      <Table
+        className="border rounded shadow-md"
+        dataSource={
+          data?.data?.data?.map((item: any, index: number) => ({
+            ...item,
+            key: pageIndex * 10 + (index + 1) - 10,
+          })) ?? []
+        }
+        columns={columns}
+        loading={isFetching}
+        onChange={handleTableChange}
+        pagination={{
+          total: data?.data.total,
+        }}
+      />
     </>
   );
 };
