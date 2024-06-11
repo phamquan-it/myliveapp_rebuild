@@ -35,12 +35,22 @@ interface DashBoardLayoutLayout {
   children: ReactNode;
 }
 const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
+  const [role, setRole] = useState("user");
+  useEffect(() => {
+    try {
+      const data: any = jwtDecode(getCookie("token") ?? "");
+      setRole(data?.role);
+    } catch (error) {}
+  }, []);
+  console.log(role);
+
   const t = useTranslations("DashboardMenu");
   const items_menu = [
     {
       key: "1",
-      icon: <HomeFilled />,
+      icon: <HomeFilled className="!text-lg" />,
       label: t("home"),
+      role: "admin",
       page: "/dashboard",
     },
 
@@ -48,17 +58,20 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       key: "3",
       icon: <FaListUl />,
       label: t("services"),
+      role: "user",
       page: "/dashboard/service",
     },
     {
       key: "5",
       icon: <TbCategoryFilled />,
       label: t("category"),
+      role: "admin",
       page: "/dashboard/category",
     },
     {
       key: "6",
       icon: <FundOutlined />,
+      role: "admin",
       label: t("refund"),
       page: "/dashboard/refund",
     },
@@ -66,54 +79,62 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       key: "4",
       icon: <FaMoneyBill />,
       label: t("cashflow"),
+      role: "admin",
       page: "/dashboard/cashflow",
     },
     {
       key: "2",
       icon: <HistoryOutlined />,
       label: t("payment"),
+      role: "admin",
       page: "/dashboard/payment",
     },
     {
       key: "7",
       icon: <HistoryOutlined />,
+      role: "admin",
       label: t("paymenthistory"),
       page: "/dashboard/payment/history",
     },
     {
       key: "15",
       icon: <CalendarFilled />,
+      role: "admin",
       label: t("platform"),
       page: "/dashboard/platform",
     },
     {
       key: "8",
       icon: <CalendarFilled />,
-      label: "Crond",
+      label: t("cron"),
       page: "/dashboard/crond",
     },
     {
       key: "9",
       icon: <FaBuyNLarge />,
       label: t("order"),
+      role: "user",
       page: "/dashboard/order",
     },
     {
       key: "10",
       icon: <TeamOutlined />,
       label: t("user"),
+      role: "user",
       page: "/dashboard/user",
     },
     {
       key: "11",
       icon: <UserOutlined />,
       label: t("userprofile"),
+      role: "user",
       page: "/dashboard/user/info",
     },
 
     {
       key: "12",
       icon: <SettingOutlined />,
+      role: "admin",
       label: t("Settings"),
       page: "/dashboard/settings",
     },
@@ -121,12 +142,14 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       key: "13",
       icon: <FaVolumeOff />,
       label: t("voucher"),
+      role: "admin",
       page: "/dashboard/voucher",
     },
     {
       key: "14",
       icon: <DiffOutlined />,
       label: t("log"),
+      role: "admin",
       page: "/dashboard/log",
     },
   ];
@@ -161,7 +184,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       <ToastContainer />
       <div className="">
         <div
-          style={{ width: 190 }}
+          style={{ width: 250 }}
           className={`px-6 py-3 pt-5 text-gray-600 absolute z-30 bg-white ${
             collapsed ? "hidden" : "block"
           }`}
@@ -175,8 +198,10 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
           className={`bg-white h-full custom-scrollbar ${
             collapsed ? "overflow-y-hidden" : "overflow-y-scroll"
           }  `}
+          style={collapsed ? {} : {}}
         >
           <Sider
+            width={250}
             theme="light"
             trigger
             collapsible={false}
@@ -219,6 +244,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
               </div>
             </div>
             <Menu
+              className="!text-sm !font-medium"
               theme="light"
               mode="inline"
               selectedKeys={defaultMenuActive}
@@ -230,12 +256,19 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                   }
                 });
               }}
-              items={items_menu}
+              // data?.data.data.map((item: any, index: number) => ({
+              //   ...item,
+              //   key: pageIndex * 10 + (index + 1) - 10,
+              // }))}
+              items={items_menu.filter((item: any) => {
+                if (role != "admin") return role == item.role;
+                else return true;
+              })}
             />
           </Sider>
           <div className={`grid pb-8 ${collapsed ? "!hidden" : "px-3"}`}>
             <Button
-              className=""
+              className="!text-sm"
               onClick={() => {
                 deleteCookie("token");
                 router.push("/login");
@@ -248,8 +281,11 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       </div>
       <Layout className="">
         <Header
-          style={{ padding: 0, background: colorBgContainer }}
-          className="-ms-1"
+          style={{
+            padding: 0,
+            background: colorBgContainer,
+          }}
+          className=" border"
         >
           <div className="flex">
             <Button
@@ -263,7 +299,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
               }}
             />
             <div className="w-full flex justify-between pe-10">
-              <span style={{ color: "purple" }}>LiveLogo</span>
+              <span style={{ color: "" }}>LiveLogo</span>
               <div className="flex items-center gap-2">
                 <LocaleSwitcher />
               </div>

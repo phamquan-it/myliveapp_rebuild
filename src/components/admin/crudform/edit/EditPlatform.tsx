@@ -23,7 +23,12 @@ const EditPlatForm: React.FC<EditPlatFormProps> = ({ initialValues }) => {
   };
   return (
     <>
-      <Form.Item label="ID" name="id" initialValue={initialValues.id}>
+      <Form.Item
+        label="ID"
+        name="id"
+        initialValue={initialValues.id}
+        className="hidden"
+      >
         <Input placeholder="ID" disabled />
       </Form.Item>
       <Form.Item label="Title" name="title" initialValue={initialValues.name}>

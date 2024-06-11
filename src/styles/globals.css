@@ -33,13 +33,15 @@
   font-size: 15px !important;
   
 }
-*{
+/* *{
   font-size: small;
-}
-
-textarea.ant-input{
+} */
+/* .ant-menu .ant-menu-item .ant-menu-item-icon svg, .ant-menu .ant-menu-submenu-title .ant-menu-item-icon svg{
   font-size: small !important;
 }
+textarea.ant-input{
+  font-size: small;
+} */
 
 .customIndexTable table{
   border: 1px solid rgb(218, 218, 218) !important;
@@ -69,13 +71,6 @@ textarea.ant-input{
   padding-bottom: 8px !important;
 }
 
-.pr_decoration::after{
-  content: "";
-  border-radius: 50px;
-  padding: 1px 80px;
-  background-color: #1677ff;
-}
-
 #buy{
   padding-top: 1px !important;
   padding-bottom: 1px !important;
@@ -92,4 +87,27 @@ textarea.ant-input{
 }
 .ant-form-vertical .ant-form-item-label >label::after, .ant-col-24.ant-form-item-label >label::after, .ant-col-xl-24.ant-form-item-label >label::after{
   visibility: visible !important;
+}
+
+.ant-table-wrapper .ant-table-cell, .ant-table-wrapper .ant-table-thead>tr>th, .ant-table-wrapper .ant-table-tbody>tr>th, .ant-table-wrapper .ant-table-tbody>tr>td, .ant-table-wrapper tfoot>tr>th, .ant-table-wrapper tfoot>tr>td{
+  padding: 10px 8px !important;
+}
+.ant-layout-sider-children{
+  font-size: medium !important;
+}
+
+.ant-table-thead{
+  background-color: #f3f3f3 !important;
+}
+
+.order_btn.ant-btn{
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+.ant-layout-content{
+  background-color: transparent !important;
+}
+
+.ant-layout-content, table{
+  font-size: small;
 }

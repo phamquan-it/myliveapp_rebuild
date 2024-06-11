@@ -9,6 +9,7 @@ const EditVoucher: React.FC<EditVoucherProps> = ({ value }) => {
       <Form.Item
         label="Id"
         name="id"
+        className="hidden"
         rules={[{ required: true, message: "Please enter a id" }]}
         initialValue={value.id}
       >

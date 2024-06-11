@@ -5,6 +5,7 @@ export function middleware(req:NextRequest){
    
     //next request
     const response = NextResponse.next()
+    return response;
     //get token
     if(req.nextUrl.pathname.includes("assets") || req.nextUrl.pathname.includes("/api")) return response;
     

@@ -1,12 +1,67 @@
-import React from "react";
-import { Form, Input, Select, Button } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Select, Button, Image } from "antd";
 import { useTranslations } from "next-intl";
+import { StarFilled } from "@ant-design/icons";
+import PlatformSelect from "../../PlatformSelect";
+import { useQuery } from "@tanstack/react-query";
+import axiosClient from "@/apiClient/axiosClient";
+import CategorySelect from "../../CategorySelect";
 
 const { Option } = Select;
 interface editServiceProps {
   service: any;
 }
+
 const EditService: React.FC<editServiceProps> = ({ service }) => {
+  const levels = [
+    {
+      value: 1,
+      label: (
+        <div className="flex gap-1">
+          1<StarFilled className="!text-orange-400" />{" "}
+        </div>
+      ),
+    },
+    {
+      value: 2,
+      label: (
+        <div className="flex gap-1">
+          2<StarFilled className="!text-orange-400" />{" "}
+        </div>
+      ),
+    },
+    {
+      value: 3,
+      label: (
+        <div className="flex gap-1">
+          3<StarFilled className="!text-orange-400" />{" "}
+        </div>
+      ),
+    },
+    {
+      value: 4,
+      label: (
+        <div className="flex gap-1">
+          4<StarFilled className="!text-orange-400" />{" "}
+        </div>
+      ),
+    },
+    {
+      value: 5,
+      label: (
+        <div className="flex gap-1">
+          5<StarFilled className="!text-orange-400" />{" "}
+        </div>
+      ),
+    },
+  ];
+  const { data } = useQuery({
+    queryKey: ["platform"],
+    queryFn: () => axiosClient.get(`/platform/list?language=en`),
+  });
+  const [platformId, setPlatformId] = useState();
+  const [categgoryId, setCateggoryId] = useState();
+
   const t = useTranslations("DashboardMenu");
   const d = useTranslations("MyLanguage");
   return (
@@ -14,41 +69,27 @@ const EditService: React.FC<editServiceProps> = ({ service }) => {
       <Form.Item
         label="ID"
         name="id"
-        className="md:col-span-3"
+        className="md:col-span-3 !hidden"
         rules={[{ required: true }]}
         initialValue={service.service.id}
       >
         <Input
+          type="hidden"
           placeholder="Enter ID"
           onChange={() => {
             console.log(service);
           }}
         />
       </Form.Item>
-      <Form.Item
-        label={t("platform")}
-        name="platform"
-        rules={[{ required: true }]}
-      >
-        <Select placeholder="Select Platform">
-          <Option value="web">Web</Option>
-          <Option value="mobile">Mobile</Option>
-          {/* Add other platform options */}
-        </Select>
-      </Form.Item>
-      <Form.Item
-        initialValue={service.categoriesId}
-        label={t("category")}
-        name="category"
-        className="md:col-span-2"
-        rules={[{ required: true }]}
-      >
-        <Select placeholder="Select Category">
-          <Option value="frontend">Frontend</Option>
-          <Option value="backend">Backend</Option>
-          {/* Add other category options */}
-        </Select>
-      </Form.Item>
+      <PlatformSelect
+        props={{ style: { width: 200 } }}
+        required={true}
+        onChange={(value) => {
+          setPlatformId(value);
+          console.log(value);
+        }}
+      />
+      <CategorySelect initialValue={14} />
       <Form.Item
         label={d("name")}
         name="name"
@@ -75,11 +116,7 @@ const EditService: React.FC<editServiceProps> = ({ service }) => {
         <Input type="number" placeholder="Enter Max" />
       </Form.Item>
       <Form.Item label="Level" name={d("level")} rules={[{ required: true }]}>
-        <Select placeholder="Select Level">
-          <Option value="beginner">Beginner</Option>
-          <Option value="intermediate">Intermediate</Option>
-          {/* Add other level options */}
-        </Select>
+        <Select placeholder="Select Level" options={levels} />
       </Form.Item>
       <Form.Item
         label={d("rate")}

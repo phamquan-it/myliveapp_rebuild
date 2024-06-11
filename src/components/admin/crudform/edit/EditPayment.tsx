@@ -13,6 +13,7 @@ const EditPayment: React.FC<editPaymentProps> = ({ value }) => {
         name="id"
         rules={[{ required: true, message: "Please enter id" }]}
         initialValue={value.id}
+        className="hidden"
       >
         <Input
           placeholder="Enter id"
@@ -84,6 +85,7 @@ const EditPayment: React.FC<editPaymentProps> = ({ value }) => {
         <Input type="number" placeholder="Enter fund" />
       </Form.Item>
       <Form.Item
+        className="hidden"
         label="Date"
         name="date"
         initialValue={value.date}

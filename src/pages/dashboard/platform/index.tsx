@@ -10,7 +10,11 @@ import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { Platform } from "@/@type";
 import lodash from "lodash";
-import { PlusCircleFilled, UploadOutlined } from "@ant-design/icons";
+import {
+  MenuOutlined,
+  PlusCircleFilled,
+  UploadOutlined,
+} from "@ant-design/icons";
 import DeleteForm from "@/components/admin/DeleteForm";
 import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import TableAction from "@/components/admin/TableAction";
@@ -46,7 +50,14 @@ const Page = () => {
     }
   }, [isPending]);
 
-  const columns = [
+  const columns: any = [
+    {
+      title: "",
+      dataIndex: "key",
+      key: "key",
+      width: 10,
+      render: () => <MenuOutlined className="ms-2 me-2" />,
+    },
     {
       title: t("entryno"),
       dataIndex: "key",
@@ -76,67 +87,71 @@ const Page = () => {
       render: (text: string) => <>{format(text, router.locale || "en")}</>,
     },
     {
+      width: "15%",
+      align: "center",
       title: t("action"),
       dataIndex: "id",
       key: "id",
       render: (text: string, record: any) => {
         return (
-          <TableAction
-            openState={openState}
-            viewDetail={
-              <>
-                <PlatformDetail />
-              </>
-            }
-            syncFunc={() => {
-              //synchonized data here
-            }}
-            editForm={
-              <>
-                <Form
-                  name="basic"
-                  layout="vertical"
-                  initialValues={{ remember: true }}
-                  // onFinish={onFinish}
-                  // onFinishFailed={onFinishFailed}
-                >
-                  <EditPlatForm initialValues={record} />
+          <div className="flex justify-center">
+            <TableAction
+              openState={openState}
+              // viewDetail={
+              //   <>
+              //     <PlatformDetail />
+              //   </>
+              // }
+              // syncFunc={() => {
+              //   //synchonized data here
+              // }}
+              editForm={
+                <>
+                  <Form
+                    name="basic"
+                    layout="vertical"
+                    initialValues={{ remember: true }}
+                    // onFinish={onFinish}
+                    // onFinishFailed={onFinishFailed}
+                  >
+                    <EditPlatForm initialValues={record} />
 
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Update
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </>
-            }
-            deleteForm={
-              <DeleteForm
-                onCancel={() => {
-                  axiosClient
-                    .delete(`/platform/delete/${text}/?language=en`, {
-                      headers: {
-                        Authorization: `Bearer ${token}`,
-                      },
-                    })
-                    .then(() => {
-                      console.log("ok");
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit">
+                        Update
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </>
+              }
+              deleteForm={
+                <DeleteForm
+                  onCancel={() => {
+                    axiosClient
+                      .delete(`/platform/delete/${text}/?language=en`, {
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                        },
+                      })
+                      .then(() => {
+                        console.log("ok");
 
-                      toast.success("success");
-                    })
-                    .catch((err) => {
-                      console.log(err);
+                        toast.success("success");
+                      })
+                      .catch((err) => {
+                        console.log(err);
 
-                      toast.error(err.message);
-                    });
-                  setOpenState(!openState);
-                }}
-                onDelete={() => {
-                  setOpenState(!openState);
-                }}
-              />
-            }
-          />
+                        toast.error(err.message);
+                      });
+                    setOpenState(!openState);
+                  }}
+                  onDelete={() => {
+                    setOpenState(!openState);
+                  }}
+                />
+              }
+            />
+          </div>
         );
       },
     },

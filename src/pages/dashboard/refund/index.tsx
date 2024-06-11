@@ -18,6 +18,7 @@ import {
   Switch,
   Table,
   TablePaginationConfig,
+  Tag,
 } from "antd";
 import { AnyObject } from "antd/es/_util/type";
 import {
@@ -26,6 +27,7 @@ import {
   TableCurrentDataSource,
 } from "antd/es/table/interface";
 import { getCookie } from "cookies-next";
+import dayjs from "dayjs";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
@@ -43,11 +45,14 @@ const Page = () => {
       title: t("entryno"),
       dataIndex: "key",
       key: "key",
+      width: 80,
+      align: "center",
     },
     {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      width: 80,
     },
     {
       title: t("email"),
@@ -58,13 +63,15 @@ const Page = () => {
 
         return record?.order?.user?.email;
       },
+      ellipsis: true,
     },
     {
+      width: 160,
       title: t("date"),
-      dataIndex: "key",
-      key: "key",
+      dataIndex: "createdAt",
+      key: "createdAt",
       render: (text: string, record: any) =>
-        format(record.createdAt, router.locale || "en"),
+        dayjs(record.createdAt).format("DD/MM/YYYY HH:mm:ss"), //
     },
     {
       title: t("service"),
@@ -88,79 +95,89 @@ const Page = () => {
       title: t("status"),
       dataIndex: "key",
       key: "key",
-      render: (text: string, record: any) => {
-        return <>{record?.order?.status}</>;
-      },
+      width: 100,
+      render: (text: string, record: any) => (
+        <Tag color={record?.order?.status == "Canceled" ? "volcano" : "purple"}>
+          {record?.order?.status}
+        </Tag>
+      ),
     },
     {
+      width: 130,
+      align: "right",
       title: t("amountPaid"),
       dataIndex: "charge_original",
       key: "charge_original",
+      render: (text: string) => {
+        const number = parseFloat(text);
+        return parseFloat(number.toFixed(5));
+      },
     },
     {
+      width: 130,
+      align: "right",
       title: t("refundAmount"),
       dataIndex: "refund",
       key: "refund",
-    },
-    {
-      title: t("createat"),
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (text: string) => format(text, router.locale || "en"),
-    },
-    {
-      title: t("action"),
-      dataIndex: "id",
-      key: "id",
-      render: (text: string, record: any) => {
-        return (
-          <TableAction
-            openState={openState}
-            viewDetail={<>view detail</>}
-            syncFunc={() => {
-              //synchonized data here
-            }}
-            editForm={
-              <>
-                <Form
-                  name="basic"
-                  layout="vertical"
-                  initialValues={{ remember: true }}
-                  // onFinish={onFinish}
-                  // onFinishFailed={onFinishFailed}
-                >
-                  <UpdateRefund />
-
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Update
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </>
-            }
-            deleteForm={
-              <DeleteForm
-                onCancel={() => {
-                  setOpenState(!openState);
-                }}
-                onDelete={() => {
-                  axiosClient
-                    .delete(`/refund/delete/${text}`)
-                    .then(() => {
-                      toast.success("success");
-                    })
-                    .catch((err) => {
-                      toast.error(err.message);
-                    });
-                  setOpenState(!openState);
-                }}
-              />
-            }
-          />
-        );
+      render: (text: string) => {
+        const number = parseFloat(text);
+        return parseFloat(number.toFixed(5));
       },
     },
+    // {
+    //   title: t("action"),
+    //   dataIndex: "id",
+    //   key: "id",
+    //   width: 200,
+    //   render: (text: string, record: any) => {
+    //     return (
+    //       <TableAction
+    //         openState={openState}
+    //         viewDetail={<>view detail</>}
+    //         syncFunc={() => {
+    //           //synchonized data here
+    //         }}
+    //         editForm={
+    //           <>
+    //             <Form
+    //               name="basic"
+    //               layout="vertical"
+    //               initialValues={{ remember: true }}
+    //               // onFinish={onFinish}
+    //               // onFinishFailed={onFinishFailed}
+    //             >
+    //               <UpdateRefund />
+
+    //               <Form.Item>
+    //                 <Button type="primary" htmlType="submit">
+    //                   Update
+    //                 </Button>
+    //               </Form.Item>
+    //             </Form>
+    //           </>
+    //         }
+    //         deleteForm={
+    //           <DeleteForm
+    //             onCancel={() => {
+    //               setOpenState(!openState);
+    //             }}
+    //             onDelete={() => {
+    //               axiosClient
+    //                 .delete(`/refund/delete/${text}`)
+    //                 .then(() => {
+    //                   toast.success("success");
+    //                 })
+    //                 .catch((err) => {
+    //                   toast.error(err.message);
+    //                 });
+    //               setOpenState(!openState);
+    //             }}
+    //           />
+    //         }
+    //       />
+    //     );
+    //   },
+    // },
   ];
   const [openState, setOpenState] = useState(false);
   const [params, setParams] = useState({ offset: 0, limit: 10 });

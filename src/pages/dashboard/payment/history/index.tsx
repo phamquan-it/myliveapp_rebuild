@@ -2,7 +2,9 @@ import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
 import EditCategory from "@/components/admin/crudform/edit/EditCategory";
+import HistoryStatitical from "@/components/admin/crudform/statistical/HistoryStatitical";
 import { Button, DatePicker, Form, Input, Table } from "antd";
+import Title from "antd/es/typography/Title";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -23,7 +25,7 @@ const Page = () => {
     },
   ];
 
-  const columns = [
+  const columns: any = [
     {
       title: t("entryno"),
       dataIndex: "key",
@@ -70,34 +72,84 @@ const Page = () => {
       key: "rate",
     },
     {
+      align: "right",
       title: t("amountvnd"),
       dataIndex: "amountvnd",
       key: "amountvnd",
     },
 
     {
+      witdth: 200,
+      align: "center",
       title: t("action"),
       dataIndex: "id",
       key: "id",
       render: (text: string, record: any) => {
         return (
-          <TableAction
-            openState={openState}
-            viewDetail={<>view detail</>}
-            syncFunc={() => {
-              //synchonized data here
-            }}
-            deleteForm={
-              <DeleteForm
-                onCancel={() => {
-                  setOpenState(!openState);
-                }}
-                onDelete={() => {
-                  setOpenState(!openState);
-                }}
-              />
-            }
-          />
+          <div className="flex justify-center">
+            <TableAction
+              openState={openState}
+              // viewDetail={<>view detail</>}
+              // syncFunc={() => {
+              //   //synchonized data here
+              // }}
+              editForm={
+                <>
+                  <Form
+                    layout="vertical"
+                    name="basic"
+                    // labelCol={{ span: 8 }}
+                    // wrapperCol={{ span: 16 }}
+                    initialValues={{ remember: true }}
+                    // onFinish={onFinish}
+                    // onFinishFailed={onFinishFailed}
+                  >
+                    <Form.Item
+                      label="Username"
+                      name="username"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your username!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Password"
+                      name="password"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your password!",
+                        },
+                      ]}
+                    >
+                      <Input.Password />
+                    </Form.Item>
+
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit">
+                        Submit
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </>
+              }
+              // deleteForm={
+              //   <DeleteForm
+              //     onCancel={() => {
+              //       setOpenState(!openState);
+              //     }}
+              //     onDelete={() => {
+              //       setOpenState(!openState);
+              //     }}
+              //   />
+              // }
+            />
+          </div>
         );
       },
     },
@@ -110,6 +162,33 @@ const Page = () => {
           <Input placeholder="Search..." style={{ width: 200 }} />
           <DatePicker placeholder="Start Date" />
           <DatePicker placeholder="End Date" />
+        </div>
+        <div className="my-3 gap-3 grid grid-cols-5">
+          <HistoryStatitical
+            color="rgb(10, 143, 220)"
+            monney={0.207}
+            info="Current Viral SMM balance"
+          />
+          <HistoryStatitical
+            color="rgb(23, 182, 221)"
+            monney={0.207}
+            info="Current Viral SMM balance"
+          />
+          <HistoryStatitical
+            color="rgb(73, 189, 101)"
+            monney={0.207}
+            info="Current Viral SMM balance"
+          />
+          <HistoryStatitical
+            color="rgb(244, 152, 32)"
+            monney={0.207}
+            info="Current Viral SMM balance"
+          />
+          <HistoryStatitical
+            color="rgb(158, 73, 230)"
+            monney={0.207}
+            info="Current Viral SMM balance"
+          />
         </div>
         <Table
           dataSource={dataSource}

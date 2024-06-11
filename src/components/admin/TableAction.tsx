@@ -44,7 +44,7 @@ const TableAction: React.FC<TableActionProps> = ({
   return (
     <div style={{ display: "flex", justifyContent: "space-between" }}>
       <Modal
-        title={`Modal for ${activeButton}`}
+        title={`${activeButton}`}
         open={isModalVisible}
         onCancel={handleCancel}
         footer={null}
@@ -57,45 +57,60 @@ const TableAction: React.FC<TableActionProps> = ({
           : viewDetail}
       </Modal>
       <Space>
-        <Tooltip title={t("view_detail")}>
-          <Button
-            disabled={hasProvider(viewDetail)}
-            className={`${classBtn}`}
-            icon={<EyeFilled />}
-            onClick={() => showModal("View Details")}
-          ></Button>
-        </Tooltip>
+        {viewDetail == undefined ? (
+          ""
+        ) : (
+          <Tooltip title={t("view_detail")}>
+            <Button
+              disabled={hasProvider(viewDetail)}
+              className={`${classBtn} !text-sm `}
+              icon={<EyeFilled />}
+              onClick={() => showModal("View Details")}
+            ></Button>
+          </Tooltip>
+        )}
+        {editForm == undefined ? (
+          <></>
+        ) : (
+          <Tooltip title={t("edit")}>
+            <Button
+              disabled={hasProvider(editForm)}
+              type="primary"
+              className={`${classBtn} !bg-green-600 !text-sm`}
+              icon={<EditFilled />}
+              onClick={() => showModal("Edit")}
+            ></Button>
+          </Tooltip>
+        )}
 
-        <Tooltip title={t("edit")}>
-          <Button
-            disabled={hasProvider(editForm)}
-            type="primary"
-            className={`${classBtn} !bg-green-600`}
-            icon={<EditFilled />}
-            onClick={() => showModal("Edit")}
-          ></Button>
-        </Tooltip>
+        {deleteForm == undefined ? (
+          <></>
+        ) : (
+          <Tooltip title={t("delete")}>
+            <Button
+              disabled={hasProvider(deleteForm)}
+              className={`${classBtn}`}
+              type="primary"
+              danger
+              icon={<DeleteFilled />}
+              onClick={() => showModal("Delete")}
+            ></Button>
+          </Tooltip>
+        )}
 
-        <Tooltip title={t("delete")}>
-          <Button
-            disabled={hasProvider(deleteForm)}
-            className={`${classBtn}`}
-            type="primary"
-            danger
-            icon={<DeleteFilled />}
-            onClick={() => showModal("Delete")}
-          ></Button>
-        </Tooltip>
-
-        <Tooltip title={t("sync")}>
-          <Button
-            disabled={hasProvider(syncFunc)}
-            className={`${classBtn}`}
-            type="primary"
-            icon={<SyncOutlined />} // Add the reload icon
-            // onClick={handleReload}
-          ></Button>
-        </Tooltip>
+        {syncFunc == undefined ? (
+          <></>
+        ) : (
+          <Tooltip title={t("sync")}>
+            <Button
+              disabled={hasProvider(syncFunc)}
+              className={`${classBtn} !text-sm`}
+              type="primary"
+              icon={<SyncOutlined />} // Add the reload icon
+              // onClick={handleReload}
+            ></Button>
+          </Tooltip>
+        )}
       </Space>
     </div>
   );

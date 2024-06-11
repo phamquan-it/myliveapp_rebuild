@@ -40,11 +40,12 @@ const Page = () => {
     // Add more data here
   ];
 
-  const columns = [
+  const columns: any = [
     {
       title: t("entryno"),
       dataIndex: "key",
       key: "key",
+      align: "center",
     },
     {
       title: t("name"),
@@ -93,44 +94,48 @@ const Page = () => {
       title: t("action"),
       dataIndex: "id",
       key: "id",
+      align: "center",
+      width: 200,
       render: (text: string, record: any) => {
         return (
-          <TableAction
-            openState={openState}
-            viewDetail={<>view detail</>}
-            syncFunc={() => {
-              //synchonized data here
-            }}
-            editForm={
-              <>
-                <Form
-                  name="basic"
-                  layout="vertical"
-                  initialValues={{ remember: true }}
-                  // onFinish={onFinish}
-                  // onFinishFailed={onFinishFailed}
-                >
-                  <EditVoucher value={record} />
+          <div className="flex justify-center">
+            <TableAction
+              openState={openState}
+              // viewDetail={<>view detail</>}
+              // syncFunc={() => {
+              //   //synchonized data here
+              // }}
+              editForm={
+                <>
+                  <Form
+                    name="basic"
+                    layout="vertical"
+                    initialValues={{ remember: true }}
+                    // onFinish={onFinish}
+                    // onFinishFailed={onFinishFailed}
+                  >
+                    <EditVoucher value={record} />
 
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Update
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </>
-            }
-            deleteForm={
-              <DeleteForm
-                onCancel={() => {
-                  setOpenState(!openState);
-                }}
-                onDelete={() => {
-                  setOpenState(!openState);
-                }}
-              />
-            }
-          />
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit">
+                        Update
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </>
+              }
+              // deleteForm={
+              //   <DeleteForm
+              //     onCancel={() => {
+              //       setOpenState(!openState);
+              //     }}
+              //     onDelete={() => {
+              //       setOpenState(!openState);
+              //     }}
+              //   />
+              // }
+            />
+          </div>
         );
       },
     },

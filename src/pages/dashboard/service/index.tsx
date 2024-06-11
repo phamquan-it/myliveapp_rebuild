@@ -16,6 +16,7 @@ import EditService from "@/components/admin/crudform/edit/EditService";
 import CreateService from "@/components/admin/crudform/create/CreateService";
 import ServiceDetail from "@/components/admin/crudform/details/ServiceDetail";
 import { toast } from "react-toastify";
+import PlatformSelect from "@/components/admin/PlatformSelect";
 const { Option } = Select;
 export default function Index() {
   const token = getCookie("token");
@@ -27,7 +28,7 @@ export default function Index() {
   const queryClient = useQueryClient();
   const userMutation = useMutation({
     mutationFn: (params) =>
-      axiosClient.get("/service/list?language=en", {
+      axiosClient.get(`/service/list?language=en`, {
         params,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -61,13 +62,16 @@ export default function Index() {
     console.log(userMutation);
   }, []);
   const t = useTranslations("MyLanguage");
+  const d = useTranslations("MyLanguage");
   const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState(50);
   const columns: any[] = [
-    {
-      title: t("entryno"),
-      dataIndex: "key",
-      key: "key",
-    },
+    // {
+    //   title: t("entryno"),
+    //   dataIndex: "key",
+    //   key: "key",
+    //   align: "center",
+    // },
     {
       title: t("name"),
       dataIndex: "service",
@@ -133,6 +137,7 @@ export default function Index() {
       ),
     },
     {
+      align: "right",
       title: t("initial_rate"),
       dataIndex: "initial_rate",
       key: "initial_rate",
@@ -146,62 +151,73 @@ export default function Index() {
       render: (text: string, record: any) => <>{record.service.rate_config}</>,
     },
     {
+      width: 200,
       title: t("action"),
       dataIndex: "id",
       key: "id",
+      align: "center",
       render: (text: string, record: any) => {
         return (
-          <>
+          <div className="flex justify-center">
             {record.service.icon == undefined ? (
-              <TableAction
-                openState={openState}
-                viewDetail={<ServiceDetail />}
-                syncFunc={() => {
-                  //synchonized data here
-                }}
-                editForm={
-                  <>
-                    <Form
-                      name="basic"
-                      layout="vertical"
-                      initialValues={{ remember: true }}
-                      // onFinish={onFinish}
-                      // onFinishFailed={onFinishFailed}
-                    >
-                      <EditService service={record} />
+              <div className="flex gap-1">
+                <TableAction
+                  openState={openState}
+                  // viewDetail={<ServiceDetail />}
+                  // syncFunc={() => {
+                  //   //synchonized data here
+                  // }}
+                  editForm={
+                    <>
+                      <Form
+                        name="basic"
+                        layout="vertical"
+                        initialValues={{ remember: true }}
+                        // onFinish={onFinish}
+                        // onFinishFailed={onFinishFailed}
+                      >
+                        <EditService service={record} />
 
-                      <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                          {t("update")}
-                        </Button>
-                      </Form.Item>
-                    </Form>
-                  </>
-                }
-                deleteForm={
-                  <DeleteForm
-                    onCancel={() => {
-                      setOpenState(!openState);
-                    }}
-                    onDelete={() => {
-                      axiosClient
-                        .delete(`/service/delete/${text}`)
-                        .then(() => {
-                          toast.success("success");
-                        })
-                        .catch((err) => {
-                          toast.error(err.message);
-                        });
+                        <Form.Item>
+                          <Button type="primary" htmlType="submit">
+                            {t("update")}
+                          </Button>
+                        </Form.Item>
+                      </Form>
+                    </>
+                  }
+                  // deleteForm={
+                  //   <DeleteForm
+                  //     onCancel={() => {
+                  //       setOpenState(!openState);
+                  //     }}
+                  //     onDelete={() => {
+                  //       axiosClient
+                  //         .delete(`/service/delete/${text}`)
+                  //         .then(() => {
+                  //           toast.success("success");
+                  //         })
+                  //         .catch((err) => {
+                  //           toast.error(err.message);
+                  //         });
 
-                      setOpenState(!openState);
-                    }}
-                  />
-                }
-              />
+                  //       setOpenState(!openState);
+                  //     }}
+                  //   />
+                  // }
+                />
+                <Button
+                  type="primary"
+                  size="small"
+                  className="!pb-0 order_btn !text-sm"
+                >
+                  {t("order")}
+                </Button>
+              </div>
             ) : (
               ""
             )}
-          </>
+          </div>
         );
       },
     },
@@ -246,24 +262,12 @@ export default function Index() {
             </Modal>
 
             <div className="flex justify-between items-center">
-              <div className="flex">
-                <div className="py-3">
+              <div className="flex gap-2">
+                <div className="">
                   <Input placeholder="Search..." />
                 </div>
-                <div className="py-3 ms-3">
-                  <Select
-                    showSearch
-                    style={{ width: 200 }}
-                    placeholder="Select a platform"
-                    // onChange={onChange}
-                    // onFocus={onFocus}
-                    // onBlur={onBlur}
-                    // onSearch={onSearch}
-                  >
-                    <Select.Option value="jack">Jack</Select.Option>
-                    <Select.Option value="lucy">Lucy</Select.Option>
-                    <Select.Option value="tom">Tom</Select.Option>
-                  </Select>
+                <div className="">
+                  <PlatformSelect noLabel={true} />
                 </div>
               </div>
               <div>
@@ -284,7 +288,7 @@ export default function Index() {
               loading={userMutation.isPending}
               dataSource={seriveData?.data.map((item: any, index: number) => ({
                 ...item,
-                key: pageIndex * 10 + (index + 1) - 10,
+                key: index + 1,
               }))}
               columns={columns}
               expandable={{
@@ -295,15 +299,18 @@ export default function Index() {
                     autoSize
                   />
                 ),
-                rowExpandable: (record) => record.name !== "Not Expandable",
+                rowExpandable: (record) =>
+                  record?.service?.description_en !== undefined,
               }}
               pagination={{
                 position: ["bottomCenter"],
                 defaultCurrent: 1,
                 showSizeChanger: true,
                 showQuickJumper: true,
+                pageSize: pageSize,
               }}
               onChange={(pagination: any) => {
+                setPageSize(pagination.pageSize);
                 setPageIndex(pagination.current);
               }}
             />

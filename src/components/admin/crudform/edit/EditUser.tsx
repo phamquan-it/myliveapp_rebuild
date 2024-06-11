@@ -19,7 +19,12 @@ interface EditUserProps {
 const EditUser: React.FC<EditUserProps> = ({ formValues }) => {
   return (
     <>
-      <Form.Item label="ID" name="id" initialValue={formValues.id}>
+      <Form.Item
+        label="ID"
+        name="id"
+        initialValue={formValues.id}
+        className="hidden"
+      >
         <Input
           placeholder="ID"
           onChange={() => {

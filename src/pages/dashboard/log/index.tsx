@@ -28,11 +28,12 @@ import { useTranslations } from "use-intl";
 
 const Page = () => {
   const t = useTranslations("MyLanguage");
-  const columns = [
+  const columns: any = [
     {
       title: t("entryno"),
       dataIndex: "key",
       key: "key",
+      align: "center",
     },
     {
       title: t("name"),
@@ -65,32 +66,33 @@ const Page = () => {
         <>{dayjs(text).format("DD/MM/YYYY hh:mm:ss")}</>
       ),
     },
-    {
-      title: "",
-      dataIndex: "id",
-      key: "id",
-      render: (text: string, record: any) => {
-        return (
-          <TableAction
-            openState={openState}
-            viewDetail={<>view detail</>}
-            syncFunc={() => {
-              //synchonized data here
-            }}
-            deleteForm={
-              <DeleteForm
-                onCancel={() => {
-                  setOpenState(!openState);
-                }}
-                onDelete={() => {
-                  setOpenState(!openState);
-                }}
-              />
-            }
-          />
-        );
-      },
-    },
+    // {
+    //   title: "",
+    //   width: 200,
+    //   dataIndex: "id",
+    //   key: "id",
+    //   render: (text: string, record: any) => {
+    //     return (
+    //       <TableAction
+    //         openState={openState}
+    //         viewDetail={<>view detail</>}
+    //         syncFunc={() => {
+    //           //synchonized data here
+    //         }}
+    //         deleteForm={
+    //           <DeleteForm
+    //             onCancel={() => {
+    //               setOpenState(!openState);
+    //             }}
+    //             onDelete={() => {
+    //               setOpenState(!openState);
+    //             }}
+    //           />
+    //         }
+    //       />
+    //     );
+    //   },
+    // },
   ];
   const [openState, setOpenState] = useState(false);
 

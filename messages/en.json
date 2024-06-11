@@ -62,9 +62,11 @@
     "cashflow":"Cash flow",
     "log":"Log",
     "logout":"Logout",
-    "voucher":"Voucher"
+    "voucher":"Voucher",
+    "cron":"Crond"
   },
   "MyLanguage": {
+    "order":"Order",
     "minorder":"Min order",
     "maxorder":"Max order",
     "buy":"Buy",
@@ -120,7 +122,10 @@
     "view_detail":"View detail",
     "amount":"Amount",
     "orderid":"Order ID",
-    "serviceid":"Service ID"
+    "serviceid":"Service ID",
+    "startdate":"Start date",
+    "charge":"Charge"
+
   },
   "Placeholder":{
     "search":"Search..."

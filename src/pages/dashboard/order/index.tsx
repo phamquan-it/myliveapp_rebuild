@@ -33,9 +33,47 @@ import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import TableAction from "@/components/admin/TableAction";
 import EditOrder from "@/components/admin/crudform/edit/EditOrder";
 import { toast } from "react-toastify";
+import Title from "antd/es/typography/Title";
+import dayjs from "dayjs";
 
 const { Option } = Select;
-
+const statisticalOrder = [
+  {
+    key: 1,
+    amount: 15.752,
+    status: "Completed",
+  },
+  {
+    key: 2,
+    amount: 89,
+    status: "Partial",
+  },
+  {
+    key: 3,
+    amount: 5,
+    status: "In progress",
+  },
+  {
+    key: 4,
+    amount: 0,
+    status: "Processing",
+  },
+  {
+    key: 5,
+    amount: 0,
+    status: "Pending",
+  },
+  {
+    key: 6,
+    amount: 0,
+    status: "Queue",
+  },
+  {
+    key: 7,
+    amount: 531,
+    status: "Canceled",
+  },
+];
 const Page = () => {
   const [pageIndex, setPageIndex] = useState(1);
   const token = getCookie("token");
@@ -46,6 +84,7 @@ const Page = () => {
       title: t("entryno"),
       dataIndex: "key",
       key: "key",
+      align: "center",
     },
     {
       title: t("link"),
@@ -92,72 +131,80 @@ const Page = () => {
       title: t("createat"),
       dataIndex: "create_date",
       key: "create_date",
+      align: "center",
       render: (text: string) => <>{format(text, router.locale || "en")}</>,
     },
     {
       title: t("updateat"),
       dataIndex: "updatedAt",
       key: "updatedAt",
-      render: (text: string) => <>{format(text, router.locale || "en")}</>,
+      align: "center",
+      render: (text: string) => (
+        <>{dayjs(text).isValid() ? format(text, router.locale || "en") : ""}</>
+      ),
     },
     {
       title: t("action"),
       dataIndex: "id",
       key: "id",
+      width: 200,
+      align: "center",
       render: (text: string, record: any) => {
         return (
-          <TableAction
-            openState={openState}
-            viewDetail={<>view detail</>}
-            syncFunc={() => {
-              //synchonized data here
-            }}
-            editForm={
-              <>
-                <Form
-                  name="basic"
-                  layout="vertical"
-                  initialValues={{ remember: true }}
-                  // onFinish={onFinish}
-                  // onFinishFailed={onFinishFailed}
-                >
-                  <EditOrder initialValues={record} />
+          <div className="flex justify-center">
+            <TableAction
+              openState={openState}
+              viewDetail={<>view detail</>}
+              // syncFunc={() => {
+              //   //synchonized data here
+              // }}
+              // editForm={
+              //   <>
+              //     <Form
+              //       name="basic"
+              //       layout="vertical"
+              //       initialValues={{ remember: true }}
+              //       // onFinish={onFinish}
+              //       // onFinishFailed={onFinishFailed}
+              //     >
+              //       <EditOrder initialValues={record} />
 
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Update
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </>
-            }
-            deleteForm={
-              <DeleteForm
-                onCancel={() => {
-                  setOpenState(!openState);
-                }}
-                onDelete={() => {
-                  axiosClient
-                    .delete(`/platform/delete/${text}/?language=en`, {
-                      headers: {
-                        Authorization: `Bearer ${token}`,
-                      },
-                    })
-                    .then(() => {
-                      console.log("ok");
+              //       <Form.Item>
+              //         <Button type="primary" htmlType="submit">
+              //           Update
+              //         </Button>
+              //       </Form.Item>
+              //     </Form>
+              //   </>
+              // }
+              // deleteForm={
+              //   <DeleteForm
+              //     onCancel={() => {
+              //       setOpenState(!openState);
+              //     }}
+              //     onDelete={() => {
+              //       axiosClient
+              //         .delete(`/platform/delete/${text}/?language=en`, {
+              //           headers: {
+              //             Authorization: `Bearer ${token}`,
+              //           },
+              //         })
+              //         .then(() => {
+              //           console.log("ok");
 
-                      toast.success("success");
-                    })
-                    .catch((err) => {
-                      console.log(err);
+              //           toast.success("success");
+              //         })
+              //         .catch((err) => {
+              //           console.log(err);
 
-                      toast.error(err.message);
-                    });
-                  setOpenState(!openState);
-                }}
-              />
-            }
-          />
+              //           toast.error(err.message);
+              //         });
+              //       setOpenState(!openState);
+              //     }}
+              //   />
+              // }
+            />
+          </div>
         );
       },
     },
@@ -206,6 +253,25 @@ const Page = () => {
   return (
     <>
       <DashBoardLayout>
+        <div className="border shadow-sm rounded-md">
+          <Title className="p-3 border-b bg-gray-100" level={5}>
+            All orders
+          </Title>
+          <ul className="grid grid-cols-7 gap-3 p-3">
+            {statisticalOrder.map((item) => {
+              return (
+                <>
+                  <li className="text-center">
+                    <Title level={5} className="!mb-0">
+                      {item.amount}
+                    </Title>
+                    <p>{item.status}</p>
+                  </li>
+                </>
+              );
+            })}
+          </ul>
+        </div>
         <Modal
           title={t("create")}
           open={showModal}
@@ -273,15 +339,25 @@ const Page = () => {
             </Form.Item>
           </Form>
         </Modal>
-        <div className="flex justify-between my-3">
+        <div className="flex justify-between my-3 mt-10">
           <div style={{ display: "flex", gap: "1rem" }}>
-            <Input placeholder="Search" style={{ flex: 1 }} />
+            <div>
+              <Input placeholder="Search" style={{ flex: 1 }} />
+            </div>
             <Select placeholder="Select status" style={{ width: 150 }}>
               <Option value="In progress">In progress</Option>
               <Option value="Completed">Completed</Option>
-              <Option value="Error">Error</Option>
+              <Option value="Partial">Partial</Option>
+              <Option value="Canceled">Canceled</Option>
+              <Option value="Processing">Processing</Option>
+              <Option value="Pending">Pending</Option>
+              <Option value="Queue">Queue</Option>
             </Select>
-            <Select placeholder="Select provider" style={{ width: 150 }}>
+            <Select
+              placeholder="Select provider"
+              style={{ width: 150 }}
+              className=""
+            >
               <Option value="provider1">Provider 1</Option>
               <Option value="provider2">Provider 2</Option>
               <Option value="provider3">Provider 3</Option>

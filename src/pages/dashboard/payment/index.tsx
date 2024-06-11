@@ -27,7 +27,7 @@ import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { PlusCircleFilled } from "@ant-design/icons";
+import { PlusCircleFilled, StarFilled } from "@ant-design/icons";
 import DeleteForm from "@/components/admin/DeleteForm";
 import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import TableAction from "@/components/admin/TableAction";
@@ -44,6 +44,7 @@ const Page = () => {
       title: t("entryno"),
       dataIndex: "key",
       key: "key",
+      align: "center",
     },
     {
       title: t("email"),
@@ -64,6 +65,11 @@ const Page = () => {
       title: t("rate"),
       dataIndex: "rate",
       key: "rate",
+      render: (text: string) => (
+        <>
+          {text} <StarFilled className="!text-orange-400" />
+        </>
+      ),
     },
     {
       title: t("status"),
@@ -73,60 +79,65 @@ const Page = () => {
     {
       title: t("createat"),
       dataIndex: "createdAt",
-      width: "100px",
+      width: "10%",
+      align: "center",
       key: "createdAt",
       render: (text: string) => format(text, router.locale || "en"),
     },
     {
+      align: "center",
+      width: 200,
       title: t("action"),
       dataIndex: "id",
       key: "id",
       render: (text: string, record: any) => {
         return (
-          <TableAction
-            openState={openState}
-            viewDetail={<>view detail</>}
-            syncFunc={() => {
-              //synchonized data here
-            }}
-            editForm={
-              <>
-                <Form
-                  name="basic"
-                  layout="vertical"
-                  initialValues={{ remember: true }}
-                  // onFinish={onFinish}
-                  // onFinishFailed={onFinishFailed}
-                >
-                  <EditPayment value={record} />
+          <div className="flex justify-center">
+            <TableAction
+              openState={openState}
+              // viewDetail={<>view detail</>}
+              // syncFunc={() => {
+              //   //synchonized data here
+              // }}
+              editForm={
+                <>
+                  <Form
+                    name="basic"
+                    layout="vertical"
+                    initialValues={{ remember: true }}
+                    // onFinish={onFinish}
+                    // onFinishFailed={onFinishFailed}
+                  >
+                    <EditPayment value={record} />
 
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Update
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </>
-            }
-            deleteForm={
-              <DeleteForm
-                onCancel={() => {
-                  setOpenState(!openState);
-                }}
-                onDelete={() => {
-                  axiosClient
-                    .delete(`/payment/delete/${text}`)
-                    .then(() => {
-                      toast.success("success");
-                    })
-                    .catch((err) => {
-                      toast.error(err.message);
-                    });
-                  setOpenState(!openState);
-                }}
-              />
-            }
-          />
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit">
+                        Update
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </>
+              }
+              deleteForm={
+                <DeleteForm
+                  onCancel={() => {
+                    setOpenState(!openState);
+                  }}
+                  onDelete={() => {
+                    axiosClient
+                      .delete(`/payment/delete/${text}`)
+                      .then(() => {
+                        toast.success("success");
+                      })
+                      .catch((err) => {
+                        toast.error(err.message);
+                      });
+                    setOpenState(!openState);
+                  }}
+                />
+              }
+            />
+          </div>
         );
       },
     },

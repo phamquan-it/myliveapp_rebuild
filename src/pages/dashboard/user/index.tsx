@@ -41,9 +41,11 @@ const Page = () => {
   const t = useTranslations("MyLanguage");
   const columns: any[] = [
     {
+      align: "center",
       title: t("entryno"),
       dataIndex: "key",
       key: "key",
+      // render: (text: string) => <div className="ms-3">{text}</div>,
     },
     {
       title: t("name"),
@@ -59,27 +61,31 @@ const Page = () => {
       title: t("isactive"),
       dataIndex: "isActive",
       key: "isActive",
-      render: (text: number) => (
-        <Switch defaultChecked={text == 1 ? true : false} />
+      render: (text: string, record: any) => (
+        <Switch defaultChecked={record?.isActive == "1" ? true : false} />
       ),
     },
     {
       title: t("createat"),
       dataIndex: "createdAt",
       key: "createdAt",
+      align: "center",
       render: (text: string) => format(text, router.locale || "en"),
     },
     {
       title: t("fund"),
       dataIndex: "funds",
       key: "funds",
+      align: "right",
     },
     {
       title: t("totalmoney"),
       dataIndex: "total_money",
       key: "total_money",
+      align: "right",
     },
     {
+      align: "center",
       title: t("role"),
       dataIndex: "role",
       key: "role",
@@ -88,60 +94,64 @@ const Page = () => {
       title: t("action"),
       dataIndex: "id",
       key: "id",
+      align: "center",
+      width: 200,
       render: (text: string, record: any) => {
         return (
-          <TableAction
-            openState={openState}
-            viewDetail={<>view detail</>}
-            syncFunc={() => {
-              //synchonized data here
-            }}
-            editForm={
-              <>
-                <Form
-                  name="basic"
-                  layout="vertical"
-                  initialValues={{ remember: true }}
-                  // onFinish={onFinish}
-                  // onFinishFailed={onFinishFailed}
-                >
-                  <EditUser formValues={record} />
+          <div className="flex justify-center">
+            <TableAction
+              openState={openState}
+              // viewDetail={<>view detail</>}
+              // syncFunc={() => {
+              //   //synchonized data here
+              // }}
+              editForm={
+                <>
+                  <Form
+                    name="basic"
+                    layout="vertical"
+                    initialValues={{ remember: true }}
+                    // onFinish={onFinish}
+                    // onFinishFailed={onFinishFailed}
+                  >
+                    <EditUser formValues={record} />
 
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Update
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </>
-            }
-            deleteForm={
-              <DeleteForm
-                onCancel={() => {
-                  setOpenState(!openState);
-                }}
-                onDelete={() => {
-                  axiosClient
-                    .delete(`/user/delete/${text}/?language=en`, {
-                      headers: {
-                        Authorization: `Bearer ${token}`,
-                      },
-                    })
-                    .then(() => {
-                      console.log("ok");
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit">
+                        Update
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </>
+              }
+              // deleteForm={
+              //   <DeleteForm
+              //     onCancel={() => {
+              //       setOpenState(!openState);
+              //     }}
+              //     onDelete={() => {
+              //       axiosClient
+              //         .delete(`/user/delete/${text}/?language=en`, {
+              //           headers: {
+              //             Authorization: `Bearer ${token}`,
+              //           },
+              //         })
+              //         .then(() => {
+              //           console.log("ok");
 
-                      toast.success("success");
-                    })
-                    .catch((err) => {
-                      console.log(err);
+              //           toast.success("success");
+              //         })
+              //         .catch((err) => {
+              //           console.log(err);
 
-                      toast.error(err.message);
-                    });
-                  setOpenState(!openState);
-                }}
-              />
-            }
-          />
+              //           toast.error(err.message);
+              //         });
+              //       setOpenState(!openState);
+              //     }}
+              //   />
+              // }
+            />
+          </div>
         );
       },
     },

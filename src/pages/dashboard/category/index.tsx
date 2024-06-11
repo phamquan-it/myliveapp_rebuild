@@ -30,12 +30,13 @@ import { Platform } from "@/@type";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPlatform } from "@/libs/redux/slices/platformSlice";
 import { RootState } from "@/libs/redux/store";
-import { PlusCircleFilled } from "@ant-design/icons";
+import { MenuOutlined, PlusCircleFilled } from "@ant-design/icons";
 import TableAction from "@/components/admin/TableAction";
 import DeleteForm from "@/components/admin/DeleteForm";
 import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import CategoryDetail from "@/components/admin/crudform/details/CategoryDetail";
 import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
 const { Option } = Select;
 const Page = () => {
   const dispatch = useDispatch();
@@ -49,80 +50,108 @@ const Page = () => {
   const token = getCookie("token");
   const router = useRouter();
   const t = useTranslations("MyLanguage");
+  const d = useTranslations("DashboardMenu");
   const columns: any[] = [
+    {
+      title: "",
+      dataIndex: "key",
+      key: "key",
+      width: 10,
+      render: () => <MenuOutlined className="ms-3 me-2" />,
+    },
     {
       title: t("entryno"),
       dataIndex: "key",
       key: "key",
+      align: "center",
+      width: 100,
     },
     {
       title: t("name"),
       dataIndex: "name",
       key: "name",
+    },
+    {
+      title: "Icon",
+      dataIndex: "name",
+      key: "name",
       render: (text: string, record: Category) => (
         <div className="flex items-center gap-2">
           <Image width={25} src={record.icon} alt="image" />
-          {text}
         </div>
       ),
     },
     {
+      title: d("platform"),
+      dataIndex: "createdAt",
+      width: "20%",
+      key: "createdAt",
+      render: (text: string, record: any) => {
+        return record?.platform?.name;
+      },
+    },
+    {
       title: t("createat"),
       dataIndex: "createdAt",
-      width: "100px",
+      width: "150px",
       key: "createdAt",
       render: (text: string) => format(text, router.locale || "en"),
     },
+
     {
+      align: "center",
+      width: 200,
       title: t("action"),
       dataIndex: "id",
       key: "id",
       render: (text: string, record: any) => {
         return (
-          <TableAction
-            openState={openState}
-            viewDetail={<CategoryDetail />}
-            syncFunc={() => {
-              //synchonized data here
-            }}
-            editForm={
-              <>
-                <Form
-                  name="basic"
-                  layout="vertical"
-                  initialValues={{ remember: true }}
-                  // onFinish={onFinish}
-                  // onFinishFailed={onFinishFailed}
-                >
-                  <EditCategory value={record} />
+          <div className="flex justify-center">
+            <TableAction
+              openState={openState}
+              // viewDetail={<CategoryDetail />}
+              // syncFunc={() => {
+              //   //synchonized data here
+              // }}
+              editForm={
+                <>
+                  <Form
+                    name="basic"
+                    layout="vertical"
+                    initialValues={{ remember: true }}
+                    // onFinish={onFinish}
+                    // onFinishFailed={onFinishFailed}
+                  >
+                    <EditCategory value={record} />
 
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Update
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </>
-            }
-            deleteForm={
-              <DeleteForm
-                onCancel={() => {
-                  setOpenState(!openState);
-                }}
-                onDelete={() => {
-                  axiosClient
-                    .delete(`/category/delete/${text}`)
-                    .then(() => {
-                      toast.success("success");
-                    })
-                    .catch((err) => {
-                      toast.error(err.message);
-                    });
-                  setOpenState(!openState);
-                }}
-              />
-            }
-          />
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit">
+                        Update
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </>
+              }
+              deleteForm={
+                <DeleteForm
+                  onCancel={() => {
+                    setOpenState(!openState);
+                  }}
+                  onDelete={() => {
+                    axiosClient
+                      .delete(`/category/delete/${text}`)
+                      .then(() => {
+                        toast.success("success");
+                      })
+                      .catch((err) => {
+                        toast.error(err.message);
+                      });
+                    setOpenState(!openState);
+                  }}
+                />
+              }
+            />
+          </div>
         );
       },
     },
@@ -169,9 +198,10 @@ const Page = () => {
     setShowModal(true);
   };
   const onFinish = (values: any) => {
-    console.log("Form values:", values);
+    // console.log("Form values:", values);
     // Handle form submission logic here
   };
+
   return (
     <>
       <DashBoardLayout>

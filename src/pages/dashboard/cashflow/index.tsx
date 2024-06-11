@@ -51,11 +51,16 @@ const Page = () => {
   const token = getCookie("token");
   const router = useRouter();
   const t = useTranslations("MyLanguage");
+  const calculateColumnWidth = (text: string, multiplier = 10) => {
+    return text.length * multiplier;
+  };
   const columns: any[] = [
     {
       title: t("entryno"),
       dataIndex: "key",
       key: "key",
+      width: "6%",
+      align: "center",
     },
     {
       title: t("email"),
@@ -66,75 +71,86 @@ const Page = () => {
       title: t("action"),
       dataIndex: "action",
       key: "action",
+      width: "13%",
+      align: "center",
     },
     {
       title: t("amount"),
       dataIndex: "money",
       key: "money",
+      width: "10%",
+      align: "center",
     },
     {
       title: t("fund"),
       dataIndex: "fund",
       key: "fund",
+      width: "10%",
+      align: "right",
     },
     {
       title: t("createat"),
       dataIndex: "action",
       key: "action",
+      width: "15%",
+      align: "center",
     },
-    {
-      title: t("action"),
-      dataIndex: "id",
-      key: "id",
-      render: (text: string, record: any) => {
-        return (
-          <TableAction
-            openState={openState}
-            viewDetail={<>view detail</>}
-            syncFunc={() => {
-              //synchonized data here
-            }}
-            editForm={
-              <>
-                <Form
-                  name="basic"
-                  layout="vertical"
-                  initialValues={{ remember: true }}
-                  // onFinish={onFinish}
-                  // onFinishFailed={onFinishFailed}
-                >
-                  <EditCashFlow value={record} />
 
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Update
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </>
-            }
-            deleteForm={
-              <DeleteForm
-                onCancel={() => {
-                  setOpenState(!openState);
-                }}
-                onDelete={() => {
-                  axiosClient
-                    .delete(`/cashflow/delete/${text}`)
-                    .then(() => {
-                      toast.success("success");
-                    })
-                    .catch((err) => {
-                      toast.error(err.message);
-                    });
-                  setOpenState(!openState);
-                }}
-              />
-            }
-          />
-        );
-      },
-    },
+    // {
+    //   align: "center",
+    //   title: t("action"),
+    //   dataIndex: "id",
+    //   key: "id",
+    //   width: 200,
+    //   render: (text: string, record: any) => {
+    //     return (
+    //       <TableAction
+    //         openState={openState}
+    //         viewDetail={<>view detail</>}
+    //         syncFunc={() => {
+    //           //synchonized data here
+    //         }}
+    //         editForm={
+    //           <>
+    //             <Form
+    //               name="basic"
+    //               layout="vertical"
+    //               initialValues={{ remember: true }}
+    //               // onFinish={onFinish}
+    //               // onFinishFailed={onFinishFailed}
+    //             >
+    //               <EditCashFlow value={record} />
+
+    //               <Form.Item>
+    //                 <Button type="primary" htmlType="submit">
+    //                   Update
+    //                 </Button>
+    //               </Form.Item>
+    //             </Form>
+    //           </>
+    //         }
+    //         deleteForm={
+    //           <DeleteForm
+    //             onCancel={() => {
+    //               setOpenState(!openState);
+    //             }}
+    //             onDelete={() => {
+    //               axiosClient
+    //                 .delete(`/cashflow/delete/${text}`)
+    //                 .then(() => {
+    //                   toast.success("success");
+    //                 })
+    //                 .catch((err) => {
+    //                   toast.error(err.message);
+    //                 });
+    //               setOpenState(!openState);
+    //             }}
+    //           />
+    //         }
+    //       />
+    //     );
+    //   },
+    // },
   ];
   const [openState, setOpenState] = useState(false);
   const [keyword, setKeyword] = useState("");

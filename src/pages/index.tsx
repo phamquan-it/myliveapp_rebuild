@@ -29,6 +29,7 @@ import { Content } from "antd/lib/layout/layout";
 import Title from "antd/es/typography/Title";
 import OrderForm from "@/components/client/OrderForm";
 import { format } from "path";
+import { revalidatePath } from "next/cache";
 
 const Home = ({
   locale,
@@ -473,5 +474,6 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
       serviceData,
       messages: (await import(`../../messages/${locale}.json`)).default,
     },
+    revalidate: 86400,
   };
 }

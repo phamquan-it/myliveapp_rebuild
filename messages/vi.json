@@ -47,7 +47,7 @@
     "services": "Dịch vụ",
     "contact": "Liên hệ",
     "platform": "Nền tảng",
-    "category": "Thể loại",
+    "category": "Danh mục",
     "refund": "Hoàn tiền",
     "order": "Đặt hàng",
     "user": "Người dùng",
@@ -62,9 +62,11 @@
     "cashflow":"Dòng tiền",
     "log":"Nhật ký",
     "logout":"Đăng xuất",
-    "voucher":"Khuyến mãi"
+    "voucher":"Khuyến mãi",
+    "cron":"Lên lịch"
   },
   "MyLanguage": {
+    "order":"Đặt hàng",
     "minorder":"Nhỏ nhất",
     "maxorder":"Lớn nhất",
     "buy":"Mua",
@@ -120,7 +122,9 @@
     "view_detail":"Xem chi tiết",
     "amount":"Số lượng",
     "orderid":"ID đặt hàng",
-    "serviceid":"ID dịch vụ"
+    "serviceid":"ID dịch vụ",
+    "startdate":"Thời gian chạy",
+    "charge":"Chi phí"
   },
   "Placeholder":{
     "search":"Tìm kiếm..."
