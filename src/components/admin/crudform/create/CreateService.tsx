@@ -66,21 +66,25 @@ const CreateService: React.FC = () => {
         <Input type="number" placeholder="Enter Rate" />
       </Form.Item>
 
-      <Form.Item
-        label={d("initial_rate")}
-        name="firstrateconfig"
-        rules={[{ required: true }]}
-        className="col-span-2"
-      >
-        <Input type="number" placeholder="Enter First Rate Config" />
-      </Form.Item>
-      <Form.Item
-        label={d("rate_config")}
-        name="rateconfig"
-        rules={[{ required: true }]}
-      >
-        <Input type="number" placeholder="Enter Rate Config" />
-      </Form.Item>
+      <div className="col-span-3">
+        <div className="grid grid-cols-2 gap-2">
+          <Form.Item
+            label={d("initial_rate")}
+            name="firstrateconfig"
+            rules={[{ required: true }]}
+            className=""
+          >
+            <Input type="number" placeholder="Enter First Rate Config" />
+          </Form.Item>
+          <Form.Item
+            label={d("rate_config")}
+            name="rateconfig"
+            rules={[{ required: true }]}
+          >
+            <Input type="number" placeholder="Enter Rate Config" />
+          </Form.Item>
+        </div>
+      </div>
     </div>
   );
 };

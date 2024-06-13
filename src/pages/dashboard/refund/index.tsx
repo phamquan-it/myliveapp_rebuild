@@ -6,6 +6,7 @@ import TableAction from "@/components/admin/TableAction";
 import UpdateRefund from "@/components/admin/crudform/edit/EditRefund";
 import format from "@/hooks/dayjsformatter";
 import { PlusCircleFilled } from "@ant-design/icons";
+import _ from "lodash";
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
@@ -33,10 +34,10 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import Title from "antd/es/typography/Title";
 const { Option } = Select;
 
 const Page = () => {
-  const [pageIndex, setPageIndex] = useState(1);
   const token = getCookie("token");
   const router = useRouter();
   const t = useTranslations("MyLanguage");
@@ -97,7 +98,10 @@ const Page = () => {
       key: "key",
       width: 100,
       render: (text: string, record: any) => (
-        <Tag color={record?.order?.status == "Canceled" ? "volcano" : "purple"}>
+        <Tag
+          color={record?.order?.status == "Canceled" ? "volcano" : "purple"}
+          className="my-1"
+        >
           {record?.order?.status}
         </Tag>
       ),
@@ -180,32 +184,6 @@ const Page = () => {
     // },
   ];
   const [openState, setOpenState] = useState(false);
-  const [params, setParams] = useState({ offset: 0, limit: 10 });
-
-  const { data, isFetching, isError } = useQuery({
-    queryKey: ["orders", params],
-    queryFn: () =>
-      axiosClient.get("/refund-money/list?language=en", {
-        params: params,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }),
-    placeholderData: (previousData) => previousData,
-  });
-  const handleTableChange = (
-    pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue | null>,
-    sorter: SorterResult<AnyObject> | SorterResult<AnyObject>[],
-    extra: TableCurrentDataSource<AnyObject>
-  ) => {
-    const current = pagination.current || 1;
-    setPageIndex(current);
-    const pageSize = pagination.pageSize || 10;
-    const offset = (current - 1) * pageSize;
-    const limit = current * pageSize;
-    setParams({ ...params, limit: limit, offset: offset });
-  };
   const [showModal, setShowModal] = useState<boolean>(false);
   const hideModal = () => {
     setShowModal(false);
@@ -217,8 +195,42 @@ const Page = () => {
     console.log("Form values:", values);
     // Handle form submission logic here
   };
+
+  //handle filter
+  const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [keyword, setKeyword] = useState("");
+  const { data, isFetching, isError } = useQuery({
+    queryKey: ["orders", router.locale, pageSize, pageIndex, keyword],
+    queryFn: () =>
+      axiosClient.get(`/refund-money/list?language=${router.locale}`, {
+        params: {
+          keyword: keyword,
+          offset: (pageIndex - 1) * pageSize,
+          limit: pageIndex * pageSize,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    placeholderData: (previousData) => previousData,
+  });
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    const current = pagination.current || 1;
+    setPageIndex(current);
+    const pageSize = pagination.pageSize || 10;
+    setPageSize(pageSize);
+  };
+  const handleSearch = _.debounce((e: any) => {
+    setKeyword(e.target.value);
+  }, 300);
+  const d = useTranslations("DashboardMenu");
+  const p = useTranslations("Placeholder");
   return (
     <>
+      <Title level={2} className="text-center">
+        {d("refund")}
+      </Title>
       <div className="flex justify-between my-3">
         <Modal
           title={t("create")}
@@ -279,10 +291,16 @@ const Page = () => {
           </div>
         </Modal>
 
-        <div className="flex">
-          <Input placeholder="Search..." style={{ width: 200 }} />
+        <div className="flex" id="filter">
+          <Input
+            className="!py-1"
+            placeholder={p("search")}
+            style={{ width: 200 }}
+            onChange={handleSearch}
+          />
         </div>
         <Button
+          id="create"
           type="primary"
           icon={<PlusCircleFilled />}
           iconPosition="end"
@@ -296,7 +314,7 @@ const Page = () => {
         dataSource={
           data?.data?.data?.map((item: any, index: number) => ({
             ...item,
-            key: pageIndex * 10 + (index + 1) - 10,
+            key: pageIndex * pageSize + (index + 1) - pageSize,
           })) ?? []
         }
         columns={columns}

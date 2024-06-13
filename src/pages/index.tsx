@@ -119,7 +119,7 @@ const Home = ({
       ),
     },
   ];
-  const [platformValue, setPlatformValue] = useState("1#Youtube");
+  const [platformValue, setPlatformValue] = useState("2#Instagram");
   //multiple locale
   const d = useTranslations("PageLayout");
   const handleTable = (pagination: any) => {
@@ -203,7 +203,7 @@ const Home = ({
       queryObject[key] = value;
     }
 
-    const pid = queryObject.platform ?? 1;
+    const pid = queryObject.platform ?? 2;
     const txtSearch: string = queryObject.search ?? "";
 
     return (
@@ -270,6 +270,7 @@ const Home = ({
               />
               <div className="flex gap-1 items-center">
                 <LocaleSwitcher
+                  className="!h-10"
                   onChange={(value: string) => {
                     router.push(router, "", { locale: value });
                     router.events.on("routeChangeComplete", () => {
@@ -278,7 +279,8 @@ const Home = ({
                   }}
                 />
                 <Button
-                  type="primary"
+                  type="default"
+                  className="!bg-sky-600 !text-white"
                   onClick={() => {
                     router.push("/login");
                   }}
@@ -287,6 +289,7 @@ const Home = ({
                 </Button>
                 <Button
                   type="default"
+                  className=""
                   onClick={() => {
                     router.push("/register");
                   }}
@@ -321,7 +324,7 @@ const Home = ({
                             {item.title}
                           </span>
                         </h1>
-                        <p className="text-lg">{item.description}</p>
+                        <p className="text-base">{item.description}</p>
                       </div>
                     );
                   })}
@@ -364,13 +367,15 @@ const Home = ({
                   style={{ width: 200 }}
                   placeholder="Select platform"
                   onChange={(value) => {
+                    console.log(value);
+
                     setPlatformValue(value);
                   }}
                 />
               </div>
               <Table
                 style={{ maxWidth: 1200, margin: "auto" }}
-                className="customIndexTable"
+                className="customIndexTable !text-sm"
                 rowClassName={"custom_row_height"}
                 onChange={handleTable}
                 dataSource={DataHasChange.map((item, index) => {

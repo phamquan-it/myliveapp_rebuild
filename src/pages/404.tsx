@@ -1,4 +1,5 @@
 import notround from "@/assets/notfound.svg";
+import PageLayout from "@/components/PageLayout";
 import { Button, Image } from "antd";
 const Page = () => {
   return (

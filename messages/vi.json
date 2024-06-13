@@ -62,7 +62,7 @@
     "cashflow":"Dòng tiền",
     "log":"Nhật ký",
     "logout":"Đăng xuất",
-    "voucher":"Khuyến mãi",
+    "voucher":"Mã giảm giá",
     "cron":"Lên lịch"
   },
   "MyLanguage": {
@@ -127,6 +127,34 @@
     "charge":"Chi phí"
   },
   "Placeholder":{
-    "search":"Tìm kiếm..."
+    "search":"Tìm kiếm...",
+    "selectplatform":"Chọn nền tảng",
+    "selectcategory":"Chọn danh mục",
+    "selectprovider":"Chọn nhà cung cấp",
+    "select status":"Chọn trạng thái"
+  },
+  "UserProfile":{
+    "name":"Tên",
+    "update":"Cập nhật",
+    "oldpassword":"Mật khẩu cũ",
+    "newpassword":"Mật khẩu mới",
+    "confirmpassword":"Xác nhận mật khẩu",
+    "changepassword":"Thay đổi mật khẩu",
+    "profile":"Thông tin cá nhân"
+  },
+  "Settings":{
+    "timeupdateservice":"Thời gian cập nhật dịch vụ",
+    "timeupdateorder":"Thời gian cập nhật đơn hàng",
+    "timeupdaterate_hour":"Thời gian cập nhật tỷ giá (giờ)",
+    "exchangeratediffernces":"Chênh lệch tỷ giá (VND)" ,
+    "bank":"Ngân hàng",
+    "accountname":"Chủ tài khoản",
+    "accountnumber":"Số tài khoản",
+    "perfectmonneyaccountnumber":"Số tài khoản Perfect Money",
+    "timeupdateorderfinishday":"Thời gian cập nhật đơn hàng kết thúc (ngày)",
+    "timedenypaymentprocessingday":"Thời gian từ chối đơn nạp tiền đang xử lý (ngày)",
+    "timecancelqueueorderday":"Thời gian huỷ đơn hàng đang chờ (ngày)",
+    "provider":"Nhà cung cấp",
+    "update":"Cập nhật"
   }
 }

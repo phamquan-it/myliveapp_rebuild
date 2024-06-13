@@ -23,10 +23,12 @@ import PlatformDetail from "@/components/admin/crudform/details/PlatformDetail";
 import axiosClient from "@/apiClient/axiosClient";
 import { toast } from "react-toastify";
 import { getCookie } from "cookies-next";
+import Title from "antd/es/typography/Title";
 const Page = () => {
   const token = getCookie("token");
   const dispatch = useDispatch();
   const router = useRouter();
+  const d = useTranslations("DashboardMenu");
   const t = useTranslations("MyLanguage");
   const { platforms, isPending, isError, isSuccess } = useSelector(
     (state: RootState) => state.platformSlice
@@ -170,6 +172,9 @@ const Page = () => {
   return (
     <>
       <div className="py-2">
+        <Title level={2} className="text-center">
+          {d("platform")}
+        </Title>
         <Modal
           title="Upload form"
           open={showModal}
@@ -196,12 +201,17 @@ const Page = () => {
         </Modal>
 
         <div className="flex justify-between">
-          <Input
-            placeholder="Search..."
-            onChange={handleSearch}
-            style={{ width: 200 }}
-          />
+          <div id="filter">
+            <Input
+              placeholder="Search..."
+              className="!py-1"
+              onChange={handleSearch}
+              style={{ width: 200 }}
+            />
+          </div>
+
           <Button
+            id="create"
             icon={<PlusCircleFilled />}
             type="primary"
             onClick={() => {

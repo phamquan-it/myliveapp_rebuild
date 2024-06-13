@@ -1,4 +1,5 @@
 import { Category } from "@/@type/Category";
+import _ from "lodash";
 import axiosClient from "@/apiClient/axiosClient";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import format from "@/hooks/dayjsformatter";
@@ -36,7 +37,7 @@ import DeleteForm from "@/components/admin/DeleteForm";
 import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import CategoryDetail from "@/components/admin/crudform/details/CategoryDetail";
 import { toast } from "react-toastify";
-import { jwtDecode } from "jwt-decode";
+import Title from "antd/es/typography/Title";
 const { Option } = Select;
 const Page = () => {
   const dispatch = useDispatch();
@@ -119,13 +120,14 @@ const Page = () => {
                     name="basic"
                     layout="vertical"
                     initialValues={{ remember: true }}
+
                     // onFinish={onFinish}
                     // onFinishFailed={onFinishFailed}
                   >
                     <EditCategory value={record} />
 
                     <Form.Item>
-                      <Button type="primary" htmlType="submit">
+                      <Button type="primary" htmlType="submit" id="create">
                         Update
                       </Button>
                     </Form.Item>
@@ -156,20 +158,38 @@ const Page = () => {
       },
     },
   ];
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const hideModal = () => {
+    setShowModal(false);
+  };
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const onFinish = (values: any) => {
+    // console.log("Form values:", values);
+    // Handle form submission logic here
+  };
   const [openState, setOpenState] = useState(false);
   const [keyword, setKeyword] = useState("");
-  const [params, setParams] = useState({
-    keyword: keyword,
-    offset: 0,
-    limit: 10,
-    platformId: "",
-  });
-
+  const [platformValue, setPlatformValue] = useState<number>();
+  const [pageSize, setPageSize] = useState(10);
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["category", params],
+    queryKey: [
+      "category",
+      pageIndex,
+      pageSize,
+      router.locale,
+      keyword,
+      platformValue,
+    ],
     queryFn: () =>
-      axiosClient.get("/categories/list?language=en", {
-        params: params,
+      axiosClient.get("/categories/list?language=" + router.locale, {
+        params: {
+          keyword: keyword,
+          platformId: platformValue,
+          offset: (pageIndex - 1) * pageSize,
+          limit: pageIndex * pageSize,
+        },
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -185,25 +205,20 @@ const Page = () => {
     const current = pagination.current || 1;
     setPageIndex(current);
     const pageSize = pagination.pageSize || 10;
-    const offset = (current - 1) * pageSize;
-    const limit = current * pageSize;
-    setParams({ ...params, limit: limit, offset: offset });
+    setPageSize(pageSize);
   };
-  const [platformValue, setPlatformValue] = useState<number>(1);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const hideModal = () => {
-    setShowModal(false);
+  const handleSearch = _.debounce((e: any) => {
+    setKeyword(e.target.value);
+  }, 300);
+  const handlePlatform = (value: any) => {
+    setPlatformValue(value);
   };
-  const openModal = () => {
-    setShowModal(true);
-  };
-  const onFinish = (values: any) => {
-    // console.log("Form values:", values);
-    // Handle form submission logic here
-  };
-
+  const p = useTranslations("Placeholder");
   return (
     <>
+      <Title level={2} className="text-center !mb-8">
+        {d("category")}
+      </Title>
       <Modal
         title={t("create")}
         open={showModal}
@@ -237,21 +252,12 @@ const Page = () => {
         </div>
       </Modal>
 
-      <div className="flex justify-between">
-        <div className="flex justify-start gap-1">
+      <div className="flex justify-between mt-10">
+        <div className="flex justify-start gap-1 " id="filter">
           <Input
             style={{ width: 200 }}
-            placeholder="Search..."
-            onChange={(e) => {
-              setKeyword(e.target.value);
-              const search = lodash.debounce(() => {
-                setParams({
-                  ...params,
-                  keyword,
-                });
-              }, 300);
-              search();
-            }}
+            placeholder={p("search")}
+            onChange={handleSearch}
           />
           <Select
             showSearch
@@ -265,27 +271,20 @@ const Page = () => {
                       width={25}
                       preview={false}
                     />
-                    <span>{platform.name}</span>
+                    <span style={{ fontSize: 14 }}>{platform.name}</span>
                   </div>
                 </>
               ),
-              value: `${platform.id}#${platform.name}`,
+              value: platform.id,
             }))}
             style={{ width: 200 }}
-            placeholder="Select a platform"
-            onChange={(value) => {
-              const regex = /(\d+)#/;
-              const match = parseInt(value.match(regex));
-              setPlatformValue(match || 1);
-              setParams({
-                ...params,
-                platformId: match.toString(),
-              });
-            }}
-          ></Select>
+            placeholder={p("selectplatform")}
+            onChange={handlePlatform}
+          />
         </div>
         <Button
           type="primary"
+          id="create"
           icon={<PlusCircleFilled />}
           iconPosition="end"
           onClick={openModal}
@@ -295,10 +294,10 @@ const Page = () => {
       </div>
 
       <Table
-        className="border shadow-md rounded-md mt-3"
+        className="border shadow-md rounded-md mt-4"
         dataSource={data?.data.data.map((item: any, index: number) => ({
           ...item,
-          key: pageIndex * 10 + (index + 1) - 10,
+          key: pageIndex * pageSize + (index + 1) - pageSize,
         }))}
         columns={columns}
         loading={isFetching}

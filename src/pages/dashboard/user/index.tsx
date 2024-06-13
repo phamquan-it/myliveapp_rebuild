@@ -26,19 +26,21 @@ import {
   SorterResult,
   TableCurrentDataSource,
 } from "antd/es/table/interface";
+import Title from "antd/es/typography/Title";
 import { Button } from "antd/lib";
 import { getCookie } from "cookies-next";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import _ from "lodash";
 import { toast } from "react-toastify";
 const { Option } = Select;
 const Page = () => {
-  const [pageIndex, setPageIndex] = useState(1);
   const token = getCookie("token");
   const router = useRouter();
   const t = useTranslations("MyLanguage");
+  const d = useTranslations("DashboardMenu");
   const columns: any[] = [
     {
       align: "center",
@@ -89,6 +91,7 @@ const Page = () => {
       title: t("role"),
       dataIndex: "role",
       key: "role",
+      render: (text: string, record: any) => record?.role?.name,
     },
     {
       title: t("action"),
@@ -156,34 +159,6 @@ const Page = () => {
       },
     },
   ];
-  const [openState, setOpenState] = useState(false);
-  const [params, setParams] = useState({ offset: 0, limit: 10 });
-
-  const { data, isFetching, isError } = useQuery({
-    queryKey: ["orders", params],
-    queryFn: () =>
-      axiosClient.get("/user/list?language=en", {
-        params: params,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }),
-    placeholderData: (previousData) => previousData,
-  });
-  console.log(data);
-  const handleTableChange = (
-    pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue | null>,
-    sorter: SorterResult<AnyObject> | SorterResult<AnyObject>[],
-    extra: TableCurrentDataSource<AnyObject>
-  ) => {
-    const current = pagination.current || 1;
-    setPageIndex(current);
-    const pageSize = pagination.pageSize || 10;
-    const offset = (current - 1) * pageSize;
-    const limit = current * pageSize;
-    setParams({ ...params, limit: limit, offset: offset });
-  };
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const hideModal = () => {
@@ -196,8 +171,42 @@ const Page = () => {
     console.log("Form values:", values);
     // Handle form submission logic here
   };
+  // handle filter
+  const [openState, setOpenState] = useState(false);
+
+  const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+  const [keyword, setKeyword] = useState("");
+  const { data, isFetching, isError } = useQuery({
+    queryKey: ["user", pageIndex, pageSize, router.locale, keyword],
+    queryFn: () =>
+      axiosClient.get("/user/list?language=en", {
+        params: {
+          keyword: keyword,
+          offset: (pageIndex - 1) * pageSize,
+          limit: pageIndex * pageSize,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    placeholderData: (previousData) => previousData,
+  });
+  console.log(data);
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    const current = pagination.current || 1;
+    setPageIndex(current);
+    const pageSize = pagination.pageSize || 20;
+    setPageSize(pageSize);
+  };
+  const handleSearch = _.debounce((e: any) => {
+    setKeyword(e.target.value);
+  }, 300);
   return (
     <>
+      <Title level={2} className="text-center">
+        {d("user")}
+      </Title>
       <Modal
         title={t("create")}
         open={showModal}
@@ -265,9 +274,10 @@ const Page = () => {
       </Modal>
       <div className="flex justify-between">
         <div>
-          <Input placeholder="Search..." />
+          <Input placeholder="Search..." onChange={handleSearch} />
         </div>
         <Button
+          id="create"
           type="primary"
           icon={<PlusCircleFilled />}
           iconPosition="end"

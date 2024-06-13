@@ -62,8 +62,10 @@ const TableAction: React.FC<TableActionProps> = ({
         ) : (
           <Tooltip title={t("view_detail")}>
             <Button
+              id="actionTableButton"
+              style={{ fontSize: "small" }}
               disabled={hasProvider(viewDetail)}
-              className={`${classBtn} !text-sm `}
+              className={`${classBtn} `}
               icon={<EyeFilled />}
               onClick={() => showModal("View Details")}
             ></Button>
@@ -74,9 +76,10 @@ const TableAction: React.FC<TableActionProps> = ({
         ) : (
           <Tooltip title={t("edit")}>
             <Button
+              id="btn_action"
               disabled={hasProvider(editForm)}
               type="primary"
-              className={`${classBtn} !bg-green-600 !text-sm`}
+              className={`${classBtn} !bg-green-600`}
               icon={<EditFilled />}
               onClick={() => showModal("Edit")}
             ></Button>
@@ -88,6 +91,7 @@ const TableAction: React.FC<TableActionProps> = ({
         ) : (
           <Tooltip title={t("delete")}>
             <Button
+              id="btn_action"
               disabled={hasProvider(deleteForm)}
               className={`${classBtn}`}
               type="primary"
@@ -105,6 +109,7 @@ const TableAction: React.FC<TableActionProps> = ({
             <Button
               disabled={hasProvider(syncFunc)}
               className={`${classBtn} !text-sm`}
+              style={{ fontSize: "small !important" }}
               type="primary"
               icon={<SyncOutlined />} // Add the reload icon
               // onClick={handleReload}

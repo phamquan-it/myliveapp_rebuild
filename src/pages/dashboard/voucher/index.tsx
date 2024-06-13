@@ -1,44 +1,51 @@
-import DashBoardLayout from "@/components/admin/DashBoardLayout";
+import axiosClient from "@/apiClient/axiosClient";
 import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
 import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import EditVoucher from "@/components/admin/crudform/edit/EditVoucher";
 import { PlusCircleFilled } from "@ant-design/icons";
-import { Button, DatePicker, Form, Input, Modal, Switch, Table } from "antd";
+import { useQuery } from "@tanstack/react-query";
+import _ from "lodash";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Modal,
+  Switch,
+  Table,
+  TablePaginationConfig,
+} from "antd";
+import Title from "antd/es/typography/Title";
+import { getCookie } from "cookies-next";
+import dayjs from "dayjs";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 const Page = () => {
   const t = useTranslations("MyLanguage");
-
-  const dataSource = [
-    {
-      key: "1",
-      name: "John Brown",
-      code: "JB001",
-      minPrice: 100.0,
-      discountPercentage: 10,
-      createdAt: "2023-01-01",
-      startTime: "2023-01-01 10:00:00",
-      endTime: "2023-01-01 18:00:00",
-      isActive: 1,
-      id: "1",
-    },
-    {
-      key: "2",
-      name: "Jane Smith",
-      code: "JS002",
-      minPrice: 150.0,
-      discountPercentage: 15,
-      createdAt: "2023-02-01",
-      startTime: "2023-02-01 10:00:00",
-      endTime: "2023-02-01 18:00:00",
-      isActive: 0,
-      id: "2",
-    },
-    // Add more data here
-  ];
+  const [pageIndex, setPageIndex] = useState(1);
+  const token = getCookie("token");
+  const router = useRouter();
+  const [keyword, setKeyword] = useState("");
+  const [pageSize, setPageSize] = useState(10);
+  const { data, isFetching, isError } = useQuery({
+    queryKey: ["orders", pageIndex, pageSize, keyword, router.locale],
+    queryFn: () =>
+      axiosClient.get("/discount/list?language=" + router.locale, {
+        params: {
+          keyword: keyword,
+          offset: (pageIndex - 1) * pageSize,
+          limit: pageIndex * pageSize,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    placeholderData: (previousData) => previousData,
+  });
 
   const columns: any = [
     {
@@ -59,36 +66,39 @@ const Page = () => {
     },
     {
       title: t("minprice"),
-      dataIndex: "minPrice",
+      dataIndex: "conditions_apply",
       key: "minPrice",
       //render: (text:string) => <span>{text.toFixed(2)}</span>,
     },
     {
       title: t("discountpercentage"),
-      dataIndex: "discountPercentage",
+      dataIndex: "discount_percentage",
       key: "discountPercentage",
+      render: (text: string) => text + "%",
     },
     {
       title: t("createAt"),
       dataIndex: "createdAt",
       key: "createdAt",
-      // render: (text) => format(text, router.locale || 'en'),
+      render: (text: string) => dayjs(text).format("YYYY-MM-DD"),
     },
     {
       title: t("starttime"),
-      dataIndex: "startTime",
+      dataIndex: "start_time",
       key: "startTime",
+      render: (text: string) => dayjs(text).format("YYYY-MM-DD"),
     },
     {
       title: t("endtime"),
-      dataIndex: "endTime",
+      dataIndex: "end_time",
       key: "endTime",
+      render: (text: string) => dayjs(text).format("YYYY-MM-DD"),
     },
     {
       title: t("status"),
-      dataIndex: "isActive",
-      key: "isActive",
-      render: (text: number) => <Switch defaultChecked={text === 1} />,
+      dataIndex: "status",
+      key: "status",
+      render: (text: number) => <Switch defaultChecked={text == 1} />,
     },
     {
       title: t("action"),
@@ -154,8 +164,21 @@ const Page = () => {
     // Handle form submission logic here
   };
 
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    const current = pagination.current || 1;
+    setPageIndex(current);
+    const pageSize = pagination.pageSize || 10;
+    setPageSize(pageSize);
+  };
+  const handleKeyword = (e: any) => {
+    setKeyword(e.target.value);
+  };
+  const d = useTranslations("DashboardMenu");
   return (
     <>
+      <Title className="text-center" level={2}>
+        {d("voucher")}
+      </Title>
       <Modal
         title={t("create")}
         open={showModal}
@@ -228,10 +251,17 @@ const Page = () => {
         </Form>
       </Modal>
       <div className="flex justify-between items-center my-3">
-        <Input placeholder="Search..." style={{ width: 200 }} />
+        <div id="filter">
+          <Input
+            placeholder="Search..."
+            style={{ width: 200 }}
+            onChange={handleKeyword}
+          />
+        </div>
 
         <Button
           type="primary"
+          id="create"
           icon={<PlusCircleFilled />}
           iconPosition="end"
           onClick={openModal}
@@ -240,10 +270,17 @@ const Page = () => {
         </Button>
       </div>
       <Table
-        dataSource={dataSource}
+        className="border rounded-md shadow-md"
+        dataSource={data?.data.data.map((item: any, index: number) => ({
+          ...item,
+          key: pageIndex * 10 + (index + 1) - 10,
+        }))}
         columns={columns}
-        className="border rounded-md shadow
-          "
+        loading={isFetching}
+        onChange={handleTableChange}
+        pagination={{
+          total: data?.data.total,
+        }}
       />
     </>
   );

@@ -26,8 +26,8 @@
 }
 
 /* For Firefox */
-.custom_row_height .ant-table-cell {
-  padding:5px 10px!important;
+ .ant-table-cell {
+  padding:0px 10px !important;
 }
 .custom_row_height .ant-table-cell .ant-btn span{
   font-size: 15px !important;
@@ -98,8 +98,8 @@ textarea.ant-input{
 
 .ant-table-thead{
   background-color: #f3f3f3 !important;
+  padding: 30px 5px !important;
 }
-
 .order_btn.ant-btn{
   padding-top: 0px !important;
   padding-bottom: 0px !important;
@@ -110,4 +110,44 @@ textarea.ant-input{
 
 .ant-layout-content, table{
   font-size: small;
+}
+
+.ant-table-wrapper .ant-table-tbody >tr >th, .ant-table-wrapper .ant-table-tbody >tr >td{
+  padding: 5px 10px !important;
+}
+
+.ant-layout{
+  background-color: transparent !important;
+}
+
+.ant-form-item{
+  margin-bottom: 10px !important;
+}
+
+#create{
+  padding: 5px 8px !important;
+  font-size: 12px !important;
+}
+
+#btn_action *, #actionTableButton{
+  font-size: small;
+}
+table{
+  font-size: small !important;
+}
+/* button, input, ant-select-selection-placeholder{
+  font-size: 14px !important;
+}
+
+.ant-select-single.ant-select-show-arrow .ant-select-selection-item, .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder{
+  font-size: 14px !important;
+} */
+#filter *,#filter select{
+  font-size: 14px !important;
+}
+form *:not(h3){
+  font-size: 14px !important;
+}
+.ant-pagination a, .ant-pagination .ant-pagination-options-size-changer *, .ant-select-item-option-content{
+  font-size: 14px !important;
 }

@@ -1,10 +1,17 @@
+import axiosClient from "@/apiClient/axiosClient";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import { Image, Progress, Switch, Table } from "antd";
-import Column from "antd/es/table/Column";
-import ColumnGroup from "antd/es/table/ColumnGroup";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Form, Image, Input, Progress, Switch, Table } from "antd";
 import Title from "antd/es/typography/Title";
+import { Button } from "antd/lib";
+import { getCookie } from "cookies-next";
+import { jwtDecode } from "jwt-decode";
+import { isError } from "lodash";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { useTranslations } from "use-intl";
+
 interface userProfileProps {
   email: string;
   name: string;
@@ -12,102 +19,167 @@ interface userProfileProps {
   role: string;
   active: number;
 }
+
 const UserProfile: React.FC<userProfileProps> = (props) => {
+  const token = getCookie("token");
   const router = useRouter();
+  const onFinish = (values: any) => {
+    if (values.confirmpassword == values.newpassword) {
+      const user = data?.data?.data;
+      axiosClient
+        .patch(
+          `/user/update/${user.id}?language=en`,
+          {
+            ...user,
+            old_password: values.oldpassword,
+            new_password: values.newpassword,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          toast.success(res.data.message);
+        })
+        .catch((err) => {
+          toast.error(err.message);
+          console.log(err);
+        });
+    } else {
+      toast.error("Confirm password does not match");
+    }
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
+  };
+  const { data, isSuccess } = useQuery({
+    queryKey: ["userinfo"],
+    queryFn: () =>
+      axiosClient.get("/user/info?language=en", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+  });
+  const t = useTranslations("UserProfile");
   return (
     <>
-      <div className="grid grid-cols-3 gap-3">
-        <div className="shadow h-full p-3">
-          <div className="flex justify-center">
-            <Image
-              width={150}
-              className="rounded-full shadow-sm border"
-              src={`https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png?random`}
-              placeholder=""
-              alt=""
-              preview={false}
-            />
-          </div>
-          <p className="text-center text-base">{props.email}</p>
-          <div className="my-3">
-            <a
-              className="btn border p-3 py-1  bg-blue-500 text-white me-2 hover:shadow-md hover:text-white hover:bg-pink-500 active:text-rose-700"
-              onClick={() => {
-                router.push("/dashboard");
+      <Title level={2} className="text-center !font-medium">
+        {t("profile")}
+      </Title>
+      <div className="w-10/12 grid md:grid-cols-2 m-auto gap-9 shadow-md p-4 rounded-md border min-w-80">
+        <div>
+          {isSuccess ? (
+            <Form
+              name="basic"
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              labelAlign="left"
+              initialValues={{ name: data?.data?.data?.name }}
+              onFinish={(value) => {
+                // console.log(value.name);
+
+                const user = data?.data?.data;
+                axiosClient
+                  .patch(
+                    `/user/update/${user.id}?language=en`,
+                    {
+                      ...user,
+                      name: value.name,
+                    },
+                    {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    toast.success(res.data.message);
+                  })
+                  .catch((err) => {
+                    toast.error(err.message);
+                    console.log(err);
+                  });
               }}
             >
-              Trang chủ
-            </a>
-            <a className="btn border p-3 py-1  bg-blue-500 text-white me-2 hover:shadow-md hover:text-white hover:bg-pink-500 active:text-rose-700">
-              Đổi mật khẩu
-            </a>
-          </div>
-          <div>
-            <ul className="my-4">
-              <li>
-                <span className="font-semibold">Full name:</span> {props.name}
-              </li>
-              <li>
-                <span className="font-semibold">Email:</span> {props.email}
-              </li>
-              <li>
-                <span className="font-semibold">Funds:</span> {props.funds}
-              </li>
-              <li>
-                <span className="font-semibold">Role:</span> {props.role}
-              </li>
-              <li>
-                <span className="font-semibold">Active</span>{" "}
-                <Switch
-                  checkedChildren={<CheckOutlined />}
-                  unCheckedChildren={<CloseOutlined />}
-                  defaultChecked={props.active == 1}
-                />
-              </li>
-            </ul>
-          </div>
+              <Form.Item
+                label={<span className="font-medium">{t("name")}</span>}
+                name="name"
+                rules={[{ required: true }]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                wrapperCol={{ offset: 8, span: 16 }}
+                className="flex justify-end"
+              >
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  id="create"
+                  size="small"
+                  className="me-7"
+                >
+                  {t("update")}
+                </Button>
+              </Form.Item>
+            </Form>
+          ) : (
+            ""
+          )}
         </div>
-        <div className="col-span-2">
-          <div className="rounded shadow p-3">
-            <div>
-              <Title level={5} style={{ marginBottom: 0 }}>
-                Số luồng đang chạy
-              </Title>
-              <Progress
-                percent={30}
-                size={"small"}
-                showInfo={false}
-                strokeColor={"rgb(219, 44, 146)"}
-              />
-            </div>
-            <div className="mt-3">
-              <Title level={5} style={{ marginBottom: 0 }}>
-                Số luồng đã tạo
-              </Title>
-              <Progress
-                percent={30}
-                size={"small"}
-                showInfo={false}
-                strokeColor={"rgb(219, 44, 146)"}
-              />
-            </div>
-          </div>
-          <div className="rounded shadow mt-4 p-3">
-            <Title level={5}>Lịch sử giao dịch</Title>
-            <Table dataSource={[]} bordered>
-              <Column title="ID" dataIndex="ID" key="id" />
-              <Column
-                title="Tên giao dịch"
-                dataIndex={"transactionName"}
-                key="transactionName"
-              />
-              <Column title="Ngày bắt đầu" dataIndex="Indate" key="indate" />
-              <Column title="Ngày kết thúc" dataIndex="Enddate" key="endate" />
-            </Table>
-          </div>
-        </div>
+
+        <Form
+          name="passwordChange"
+          labelCol={{ span: 6 }}
+          labelAlign="left"
+          wrapperCol={{ span: 18 }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
+          <Form.Item
+            label={<span className="font-medium">{t("oldpassword")}</span>}
+            name="oldpassword"
+            rules={[{ required: true }]}
+          >
+            <Input.Password />
+          </Form.Item>
+
+          <Form.Item
+            label={<span className="font-medium">{t("newpassword")}</span>}
+            name="newpassword"
+            rules={[{ required: true }]}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item
+            label={<span className="font-medium">{t("confirmpassword")}</span>}
+            name="confirmpassword"
+            rules={[{ required: true }]}
+          >
+            <Input.Password />
+          </Form.Item>
+
+          <Form.Item
+            wrapperCol={{ offset: 5, span: 16 }}
+            className="flex justify-end"
+          >
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="me-8"
+              id="create"
+            >
+              {t("changepassword")}
+            </Button>
+          </Form.Item>
+        </Form>
       </div>
     </>
   );
 };
+
 export default UserProfile;

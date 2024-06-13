@@ -45,7 +45,7 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
               label: (
                 <div className="flex items-center gap-1">
                   <Image src={item.icon} alt="" width={25} />
-                  {item.name}
+                  <span style={{ fontSize: 14 }}> {item.name}</span>
                 </div>
               ),
             };

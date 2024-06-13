@@ -134,7 +134,6 @@ const RegiterForm = () => {
 };
 
 export default RegiterForm;
-RegiterForm.Layout = PageLayout;
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {

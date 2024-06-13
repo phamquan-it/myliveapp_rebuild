@@ -1,8 +1,5 @@
 import axiosClient from "@/apiClient/axiosClient";
-import DashBoardLayout from "@/components/admin/DashBoardLayout";
-import DeleteForm from "@/components/admin/DeleteForm";
-import TableAction from "@/components/admin/TableAction";
-import EditCategory from "@/components/admin/crudform/edit/EditCategory";
+import _ from "lodash";
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
@@ -20,13 +17,16 @@ import {
   SorterResult,
   TableCurrentDataSource,
 } from "antd/es/table/interface";
+import Title from "antd/es/typography/Title";
 import { getCookie } from "cookies-next";
 import dayjs from "dayjs";
 import { GetStaticPropsContext } from "next";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useTranslations } from "use-intl";
 
 const Page = () => {
+  const d = useTranslations("DashboardMenu");
   const t = useTranslations("MyLanguage");
   const columns: any = [
     {
@@ -95,42 +95,50 @@ const Page = () => {
     // },
   ];
   const [openState, setOpenState] = useState(false);
-
+  const router = useRouter();
   const [pageIndex, setPageIndex] = useState(1);
   const token = getCookie("token");
-  const [params, setParams] = useState({ offset: 0, limit: 10 });
+  const [keyword, setKeyword] = useState("");
+  const [pageSize, setPageSize] = useState(10);
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["orders", params],
+    queryKey: ["orders", pageIndex, pageSize, router.locale, keyword],
     queryFn: () =>
-      axiosClient.get("/log/list?language=en", {
-        params: params,
+      axiosClient.get("/log/list?language=" + router.locale, {
+        params: {
+          keyword: keyword,
+          offset: (pageIndex - 1) * pageSize,
+          limit: pageIndex * pageSize,
+        },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }),
     placeholderData: (previousData) => previousData,
   });
-  const [pageSize, setPageSize] = useState(10);
-  const handleTableChange = (
-    pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue | null>,
-    sorter: SorterResult<AnyObject> | SorterResult<AnyObject>[],
-    extra: TableCurrentDataSource<AnyObject>
-  ) => {
+  const handleTableChange = (pagination: TablePaginationConfig) => {
     const current = pagination.current || 1;
     setPageIndex(current);
-    const pageSize = pagination.pageSize || 10;
+    const pageSize = pagination.pageSize || 20;
     setPageSize(pageSize);
-    const offset = (current - 1) * pageSize;
-    const limit = current * pageSize;
-    setParams({ ...params, limit: limit, offset: offset });
   };
+  const hanleKeyword = _.debounce((e: any) => {
+    setKeyword(e.target.value);
+  }, 300);
+  const p = useTranslations("Placeholder");
   return (
     <>
+      <Title level={2} className="text-center">
+        {d("log")}
+      </Title>
       <div className="my-3 flex gap-1">
-        <Input placeholder="Search..." className="" style={{ width: 200 }} />
-        <DatePicker placeholder="Start date" picker="date" />
-        <DatePicker placeholder="End date" picker="date" />
+        <div id="filter">
+          <Input
+            placeholder={p("search")}
+            className=""
+            style={{ width: 200 }}
+            onChange={hanleKeyword}
+          />
+        </div>
       </div>
       <Table
         className="border rounded shadow-md"
@@ -143,6 +151,7 @@ const Page = () => {
         columns={columns}
         pagination={{
           total: data?.data.total,
+          pageSize: pageSize,
         }}
       />
     </>

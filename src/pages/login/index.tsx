@@ -113,7 +113,6 @@ const LoginForm = () => {
   );
 };
 export default LoginForm;
-LoginForm.Layout = PageLayout;
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {

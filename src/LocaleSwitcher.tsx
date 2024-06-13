@@ -6,6 +6,7 @@ interface LocaleOption {
   key: string | number;
   value: string;
   label: ReactNode;
+  className?: string;
 }
 const options: LocaleOption[] = [
   {
@@ -37,6 +38,7 @@ const LocaleSwitcher = (props: any) => {
   };
   return (
     <Select
+      className={props.className}
       onChange={switchLocale}
       {...props}
       style={{ width: 150 }}

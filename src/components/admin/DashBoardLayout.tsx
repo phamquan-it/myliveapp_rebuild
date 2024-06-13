@@ -214,18 +214,25 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             <div className={`${collapsed ? "hidden" : "block"}`}>
               <div style={{ height: 100 }}></div>
               <div className="my-2 border mx-3 rounded-md font-semibold">
-                <div className="bg-blue-100 flex justify-between p-3 ">
+                <div
+                  className="bg-blue-100 flex justify-between p-3 "
+                  style={{ fontSize: "small" }}
+                >
                   <span className="text-gray-700">{t("funds")}</span>
                   <span className="text-blue-500">$0</span>
                 </div>
-                <div className=" flex justify-between p-3">
+                <div
+                  className=" flex justify-between p-3"
+                  style={{ fontSize: "small" }}
+                >
                   <span className="text-gray-700">{t("inprogress")}</span>
-                  <span className="text-blue-900">$0</span>
+                  <span className="text-blue-900">0</span>
                 </div>
               </div>
               <div className="mx-3 grid gap-2">
                 <Button
                   type="primary"
+                  style={{ fontSize: "small" }}
                   icon={<PlusCircleFilled />}
                   onClick={() => {
                     router.push("/dashboard/order/new-order");
@@ -234,6 +241,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                   {t("neworder")}
                 </Button>
                 <Button
+                  style={{ fontSize: "small" }}
                   onClick={() => {
                     router.push("/dashboard/deposit");
                   }}

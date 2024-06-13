@@ -16,11 +16,16 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import { useEffect, useState } from "react";
 import { setInterval } from "timers/promises";
+import PageLayout from "@/components/PageLayout";
 config.autoAddCss = false;
 
 export default function App({ Component, pageProps }: AppProps) {
-  const Layout = (Component as any).Layout ?? DashBoardLayout;
   const router = useRouter();
+  const path: string = router.asPath;
+  console.log(path);
+
+  const Layout = !path.includes("/dashboard") ? PageLayout : DashBoardLayout;
+
   const [key, setKey] = useState(Math.random());
 
   return (

@@ -15,6 +15,7 @@ import {
   Switch,
   Table,
   TablePaginationConfig,
+  Tag,
 } from "antd";
 import { AnyObject } from "antd/es/_util/type";
 import {
@@ -75,57 +76,43 @@ const statisticalOrder = [
   },
 ];
 const Page = () => {
-  const [pageIndex, setPageIndex] = useState(1);
-  const token = getCookie("token");
-  const router = useRouter();
+  const d = useTranslations("DashboardMenu");
   const t = useTranslations("MyLanguage");
   const columns: any[] = [
     {
-      title: t("entryno"),
-      dataIndex: "key",
-      key: "key",
+      title: "ID Orders",
+      dataIndex: "order_id",
+      key: "order_id",
       align: "center",
     },
     {
-      title: t("link"),
-      dataIndex: "link",
-      key: "link",
+      title: t("service"),
+      dataIndex: "service",
+      key: "service",
+      render: (text: any, record: any) => record?.service?.name,
+      ellipsis: true,
     },
     {
-      title: t("quantity"),
-      dataIndex: "quantity",
-      key: "quantity",
+      title: "ID Viralsmm/Gainsmm",
+      dataIndex: "key",
+      key: "key",
+      align: "center",
+      render: (text: any, record: any) => record?.service?.id,
     },
     {
-      title: t("status"),
-      dataIndex: "status",
-      key: "status",
-      render: (text: string) => {
-        return (
-          <>
-            <Switch
-              checkedChildren={<CheckOutlined />}
-              unCheckedChildren={<CloseOutlined />}
-              defaultChecked={text != "Canceled"}
-            />
-          </>
-        );
-      },
+      title: "Provider	",
+      dataIndex: "key",
+      key: "key",
+      align: "center",
+      render: (text: any, record: any) => record?.service?.provider?.name,
     },
     {
-      title: t("remains"),
-      dataIndex: "remains",
-      key: "remains",
-    },
-    {
-      title: "OrderID",
-      dataIndex: "order_id",
-      key: "order_id",
-    },
-    {
-      title: "ServiceId",
-      dataIndex: "serviceId",
-      key: "serviceId",
+      title: "User	",
+      dataIndex: "key",
+      key: "key",
+      align: "center",
+      render: (text: any, record: any) => record?.user?.email,
+      ellipsis: true,
     },
     {
       title: t("createat"),
@@ -135,19 +122,55 @@ const Page = () => {
       render: (text: string) => <>{format(text, router.locale || "en")}</>,
     },
     {
-      title: t("updateat"),
-      dataIndex: "updatedAt",
-      key: "updatedAt",
-      align: "center",
-      render: (text: string) => (
-        <>{dayjs(text).isValid() ? format(text, router.locale || "en") : ""}</>
-      ),
+      title: t("link"),
+      dataIndex: "link",
+      key: "link",
+      ellipsis: true,
+    },
+    {
+      title: "Charge",
+      dataIndex: "charge",
+      key: "charge",
+      render: (text: string) => parseFloat(text).toFixed(5),
+    },
+    {
+      title: "Actually spent",
+      dataIndex: "order_id",
+      key: "order_id",
+    },
+    {
+      title: "Start count",
+      dataIndex: "order_id",
+      key: "order_id",
+    },
+    {
+      title: t("quantity"),
+      dataIndex: "quantity",
+      key: "quantity",
+    },
+
+    {
+      title: t("remains"),
+      dataIndex: "remains",
+      key: "remains",
+    },
+    {
+      title: t("status"),
+      dataIndex: "status",
+      key: "status",
+      render: (text: string) => {
+        return (
+          <div className="flex justify-center">
+            <Tag color="green">Completed</Tag>
+          </div>
+        );
+      },
     },
     {
       title: t("action"),
       dataIndex: "id",
       key: "id",
-      width: 200,
+      width: 70,
       align: "center",
       render: (text: string, record: any) => {
         return (
@@ -209,15 +232,26 @@ const Page = () => {
       },
     },
   ];
+  const [pageIndex, setPageIndex] = useState(1);
+  const token = getCookie("token");
+  const router = useRouter();
+
   const [openState, setOpenState] = useState(false);
-
-  const [params, setParams] = useState({ offset: 0, limit: 10 });
-
+  const [status, setStatus] = useState();
+  const [provider, setProvider] = useState();
+  const [keyword, setIKeyword] = useState("");
+  const [pageSize, setPageSize] = useState(10);
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["orders", params],
+    queryKey: ["orders", pageIndex, pageSize, status, keyword, provider],
     queryFn: () =>
       axiosClient.get("/order/list?language=en", {
-        params: params,
+        params: {
+          providerId: provider,
+          keyword: keyword,
+          status: status,
+          offset: (pageIndex - 1) * pageSize,
+          limit: pageIndex * pageSize,
+        },
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -225,18 +259,11 @@ const Page = () => {
     placeholderData: (previousData) => previousData,
   });
 
-  const handleTableChange = (
-    pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue | null>,
-    sorter: SorterResult<AnyObject> | SorterResult<AnyObject>[],
-    extra: TableCurrentDataSource<AnyObject>
-  ) => {
+  const handleTableChange = (pagination: TablePaginationConfig) => {
     const current = pagination.current || 1;
     setPageIndex(current);
     const pageSize = pagination.pageSize || 10;
-    const offset = (current - 1) * pageSize;
-    const limit = current * pageSize;
-    setParams({ ...params, limit: limit, offset: offset });
+    setPageSize(pageSize);
   };
 
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -250,8 +277,20 @@ const Page = () => {
     console.log("Form values:", values);
     // Handle form submission logic here
   };
+  const handleStatus = (value: any) => {
+    setStatus(value);
+  };
+  const handlerProvider = (value: any) => {
+    setProvider(value);
+  };
+  const handleKeyword = (e: any) => {
+    setIKeyword(e.target.value);
+  };
   return (
     <>
+      <Title level={2} className="text-center">
+        {d("order")}
+      </Title>
       <div className="border shadow-sm rounded-md bg-white">
         <Title className="p-3 border-b bg-gray-100" level={5}>
           All orders
@@ -339,27 +378,48 @@ const Page = () => {
         </Form>
       </Modal>
       <div className="flex justify-between my-3 mt-10">
-        <div style={{ display: "flex", gap: "1rem" }}>
-          <div>
-            <Input placeholder="Search" style={{ flex: 1 }} />
-          </div>
-          <Select placeholder="Select status" style={{ width: 150 }}>
-            <Option value="In progress">In progress</Option>
-            <Option value="Completed">Completed</Option>
-            <Option value="Partial">Partial</Option>
-            <Option value="Canceled">Canceled</Option>
-            <Option value="Processing">Processing</Option>
-            <Option value="Pending">Pending</Option>
-            <Option value="Queue">Queue</Option>
+        <div style={{ display: "flex", gap: 5 }} id="filter">
+          <Input
+            placeholder="Search"
+            style={{ flex: 1 }}
+            onChange={handleKeyword}
+          />
+          <Select
+            placeholder="Select status"
+            style={{ width: 150 }}
+            onChange={handleStatus}
+          >
+            <Option value="In+progress">
+              <span className="text-sm">In progress</span>
+            </Option>
+            <Option value="Completed">
+              <span className="text-sm">Completed</span>
+            </Option>
+            <Option value="Partial">
+              <span className="text-sm">Partial</span>
+            </Option>
+            <Option value="Canceled">
+              <span className="text-sm">Canceled</span>
+            </Option>
+            <Option value="Processing">
+              <span className="text-sm">Processing</span>
+            </Option>
+            <Option value="Pending">
+              <span className="text-sm">Pending</span>
+            </Option>
           </Select>
           <Select
             placeholder="Select provider"
             style={{ width: 150 }}
             className=""
+            onChange={handlerProvider}
           >
-            <Option value="provider1">Provider 1</Option>
-            <Option value="provider2">Provider 2</Option>
-            <Option value="provider3">Provider 3</Option>
+            <Option value="1">
+              <span className="text-sm">Gainsmm</span>
+            </Option>
+            <Option value="2">
+              <span className="text-sm">Viralsmm</span>
+            </Option>
           </Select>
         </div>
         <div>
@@ -368,6 +428,7 @@ const Page = () => {
             icon={<PlusCircleFilled />}
             iconPosition="end"
             onClick={openModal}
+            id="create"
           >
             {t("create")}
           </Button>

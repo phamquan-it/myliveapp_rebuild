@@ -107,7 +107,7 @@
     "account":"Account",
     "level":"Level",
     "rate_config":"Rate config",
-    "initial_rate":"Rate config",
+    "initial_rate":"Initilial config",
     "create":"Create",
     "amountPaid":"Amount paid",
     "refundAmount":"Refund amount",
@@ -128,6 +128,34 @@
 
   },
   "Placeholder":{
-    "search":"Search..."
+    "search":"Search...",
+    "selectplatform":"Select platform",
+    "selectcategory":"Select category",
+    "selectprovider":"Select provider",
+    "select status":"Select status"
+  },
+  "UserProfile":{
+    "name":"Name",
+    "update":"Update",
+    "oldpassword":"Old password",
+    "newpassword":"New password",
+    "confirmpassword":"Confirm password",
+    "changepassword":"Change password",
+    "profile":"Profile"
+  },
+  "Settings":{
+    "timeupdateservice":"Time update service",
+    "timeupdateorder":"Time update order",
+    "timeupdaterate_hour":"Time update rate (hour)",
+    "exchangeratediffernces":"Exchange rate differences (VND)" ,
+    "bank":"Bank",
+    "accountname":"Account name",
+    "accountnumber":"Account number",
+    "perfectmonneyaccountnumber":"Perfect Money account number",
+    "timeupdateorderfinishday":"Time update order finished (day)",
+    "timedenypaymentprocessingday":"Time deny payment processing (day)",
+    "timecancelqueueorderday":"Time cancel queue order (day)",
+    "provider":"Provider",
+    "update":"Update"
   }
 }

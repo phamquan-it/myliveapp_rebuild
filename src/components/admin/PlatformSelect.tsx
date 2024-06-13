@@ -11,6 +11,8 @@ interface PlatformSelectProps {
   required?: boolean;
   onChange?: (value: any) => void;
   noLabel?: any;
+  className?: string;
+  value?: any;
 }
 
 const PlatformSelect: React.FC<PlatformSelectProps> = ({
@@ -18,6 +20,8 @@ const PlatformSelect: React.FC<PlatformSelectProps> = ({
   required,
   onChange,
   noLabel,
+  className,
+  value,
 }) => {
   const router = useRouter();
   const { data } = useQuery({
@@ -32,12 +36,15 @@ const PlatformSelect: React.FC<PlatformSelectProps> = ({
     <Form.Item
       label={noLabel == undefined ? t("platform") : ""}
       name="platform"
-      initialValue={1}
+      initialValue={value}
       rules={rules} // Apply rules conditionally
       {...props} // Spread additional props here
     >
       <Select
+        style={{ width: 200 }}
+        className={className}
         showSearch
+        value={value}
         placeholder="Select platform"
         options={data?.data?.data.map((item: any) => ({
           ...item,

@@ -264,7 +264,7 @@ const Page = () => {
         </div>
       </Modal>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between" id="filter">
         <Input
           placeholder="Search..."
           style={{ width: 200 }}
@@ -284,6 +284,7 @@ const Page = () => {
           onClick={openModal}
           icon={<PlusCircleFilled />}
           iconPosition="end"
+          id="create"
         >
           {t("create")}
         </Button>

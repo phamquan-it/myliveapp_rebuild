@@ -285,9 +285,10 @@ const Page = () => {
   return (
     <>
       <div className="flex justify-between gap-1 items-center">
-        <div>
+        <div id="filter">
           <Input
             style={{ width: 200 }}
+            className="!py-1"
             placeholder="Search..."
             onChange={(e) => {
               setKeyword(e.target.value);
@@ -362,6 +363,7 @@ const Page = () => {
             type="primary"
             iconPosition="end"
             onClick={openModal}
+            id="create"
             icon={<PlusCircleFilled />}
           >
             {t("create")}

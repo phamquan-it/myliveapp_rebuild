@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Form, Image, Input, Modal, Select, Table } from "antd";
 import Head from "next/head";
 import { GetStaticPropsContext } from "next";
@@ -7,16 +7,15 @@ import { PlusCircleFilled, StarFilled } from "@ant-design/icons";
 import { useFormatter, useTranslations } from "next-intl";
 import TextArea from "antd/lib/input/TextArea";
 import axiosClient from "@/apiClient/axiosClient";
-import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import { getCookie } from "cookies-next";
 import TableAction from "@/components/admin/TableAction";
-import EditCategory from "@/components/admin/crudform/edit/EditCategory";
-import DeleteForm from "@/components/admin/DeleteForm";
 import EditService from "@/components/admin/crudform/edit/EditService";
 import CreateService from "@/components/admin/crudform/create/CreateService";
-import ServiceDetail from "@/components/admin/crudform/details/ServiceDetail";
-import { toast } from "react-toastify";
 import PlatformSelect from "@/components/admin/PlatformSelect";
+import Title from "antd/es/typography/Title";
+import { useRouter } from "next/router";
+import _ from "lodash";
+import PlatformSelectForFilter from "@/components/admin/PlatformSelectForFilter";
 const { Option } = Select;
 export default function Index() {
   const token = getCookie("token");
@@ -25,42 +24,7 @@ export default function Index() {
     data: [],
     total: 0,
   });
-  const queryClient = useQueryClient();
-  const userMutation = useMutation({
-    mutationFn: (params) =>
-      axiosClient.get(`/service/list?language=en`, {
-        params,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
-    onSuccess: (data) => {
-      const results: any = [];
-      let total = 0;
-      data.data.data.map((item: any) => {
-        results.push({ service: { name: item.name, icon: item.icon } });
-        item.serviceCategories.map((service: any) => {
-          // console.log(service);
-          results.push(service);
-          setSeriveData({ data: results, total });
-        });
-      });
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-  function fetchServiceData(params: any) {
-    userMutation.mutate(params);
-  }
-  useEffect(() => {
-    fetchServiceData({
-      offset: 0,
-      limit: 2,
-    });
-    console.log(userMutation);
-  }, []);
+
   const t = useTranslations("MyLanguage");
   const d = useTranslations("MyLanguage");
   const [pageIndex, setPageIndex] = useState(1);
@@ -230,10 +194,74 @@ export default function Index() {
   const openModal = () => {
     setShowModal(true);
   };
+  const router = useRouter();
   const onFinish = (values: any) => {
     console.log("Form values:", values);
     // Handle form submission logic here
   };
+  const [platformId, setPlatformId] = useState(2);
+  const [category, setCategory] = useState();
+  const [keyword, setKeyword] = useState("");
+  const { data, isFetching, isError } = useQuery({
+    queryKey: ["service", router.locale, platformId, keyword, category],
+    queryFn: (querykey: any) => {
+      console.log(querykey);
+
+      return axiosClient.get(`/service/list?language=${router.locale}`, {
+        params: {
+          platformId: platformId,
+          keyword: keyword,
+          categoriesId: category,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    },
+  });
+  useEffect(() => {
+    const results: any = [];
+    let total = 0;
+    data?.data.data.map((item: any) => {
+      results.push({ service: { name: item.name, icon: item.icon } });
+      item.serviceCategories.map((service: any) => {
+        if (router.locale == "vi") {
+          service.service.description_en = service.service.description_vi;
+          if (
+            service.service.name_vi != undefined ||
+            service.service.name_vi == ""
+          )
+            service.service.name = service.service.name_vi;
+        }
+
+        results.push(service);
+        setSeriveData({ data: results, total });
+      });
+    });
+  }, [data]);
+  const handePlatform = (value: any) => {
+    setPlatformId(value);
+    setCategory(undefined);
+  };
+  const handleSearch = _.debounce((e: any) => {
+    setKeyword(e.target.value);
+  }, 300);
+  const categories = useQuery({
+    queryKey: ["category", platformId],
+    queryFn: () =>
+      axiosClient.get("/categories/list?language=en", {
+        params: {
+          platformId: platformId,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+  });
+  const hanleCategory = (value: any) => {
+    setCategory(value);
+  };
+  const p = useTranslations("Placeholder");
   return (
     <div className="">
       <Head>
@@ -242,6 +270,9 @@ export default function Index() {
       </Head>
       <div>
         <>
+          <Title level={2} className="text-center">
+            {t("service")}
+          </Title>
           <Modal
             title={t("create")}
             open={showModal}
@@ -260,19 +291,50 @@ export default function Index() {
             </div>
           </Modal>
 
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center my-3" id="filter">
             <div className="flex gap-2">
               <div className="">
-                <Input placeholder="Search..." />
+                <Input
+                  placeholder={p("search")}
+                  onChange={handleSearch}
+                  className="h-full"
+                />
               </div>
-              <div className="">
-                <PlatformSelect noLabel={true} />
+              <div className="flex gap-1">
+                <PlatformSelectForFilter
+                  noLabel={true}
+                  onChange={handePlatform}
+                  value={platformId}
+                />
+                <Select
+                  showSearch
+                  style={{ width: 220 }}
+                  value={category}
+                  placeholder={p("selectcategory")}
+                  onChange={hanleCategory}
+                  options={categories.data?.data?.data?.map((item: any) => ({
+                    ...item,
+                    label: (
+                      <div className="flex items-center gap-1">
+                        <Image
+                          src={item.icon}
+                          alt=""
+                          width={25}
+                          preview={false}
+                        />
+                        <span style={{ fontSize: 14 }}>{item.name}</span>
+                      </div>
+                    ),
+                    value: item.id,
+                  }))}
+                />
               </div>
             </div>
             <div>
               <Button
+                id="create"
                 type="primary"
-                className="p-0"
+                className="!p-0"
                 iconPosition="end"
                 onClick={openModal}
                 icon={<PlusCircleFilled />}
@@ -284,7 +346,7 @@ export default function Index() {
 
           <Table
             className="border rounded-md shadow-md"
-            loading={userMutation.isPending}
+            loading={isFetching}
             dataSource={seriveData?.data.map((item: any, index: number) => ({
               ...item,
               key: index + 1,
@@ -305,7 +367,7 @@ export default function Index() {
               position: ["bottomCenter"],
               defaultCurrent: 1,
               showSizeChanger: true,
-              showQuickJumper: true,
+              // showQuickJumper: true,
               pageSize: pageSize,
             }}
             onChange={(pagination: any) => {
