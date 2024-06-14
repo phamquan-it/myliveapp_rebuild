@@ -36,6 +36,7 @@ const PlatformSelectForFilter: React.FC<PlatformSelectProps> = ({
       showSearch
       value={value}
       placeholder={p("selectplatform")}
+      allowClear
       options={data?.data?.data.map((item: any) => ({
         ...item,
         value: item.id,

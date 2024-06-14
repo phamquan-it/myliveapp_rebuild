@@ -78,8 +78,7 @@ const TableAction: React.FC<TableActionProps> = ({
             <Button
               id="btn_action"
               disabled={hasProvider(editForm)}
-              type="primary"
-              className={`${classBtn} !bg-green-600`}
+              className={`${classBtn} !border-blue-600 !text-blue-600`}
               icon={<EditFilled />}
               onClick={() => showModal("Edit")}
             ></Button>
@@ -89,12 +88,11 @@ const TableAction: React.FC<TableActionProps> = ({
         {deleteForm == undefined ? (
           <></>
         ) : (
-          <Tooltip title={t("delete")}>
+          <Tooltip title={t("delete")} className="!text-sm">
             <Button
               id="btn_action"
               disabled={hasProvider(deleteForm)}
-              className={`${classBtn}`}
-              type="primary"
+              className={`${classBtn}  !border-red-600 !text-red-600`}
               danger
               icon={<DeleteFilled />}
               onClick={() => showModal("Delete")}

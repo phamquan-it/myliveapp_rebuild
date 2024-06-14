@@ -83,13 +83,13 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       role: "admin",
       page: "/dashboard/cashflow",
     },
-    {
-      key: "2",
-      icon: <HistoryOutlined />,
-      label: t("payment"),
-      role: "admin",
-      page: "/dashboard/payment",
-    },
+    // {
+    //   key: "2",
+    //   icon: <HistoryOutlined />,
+    //   label: t("payment"),
+    //   role: "admin",
+    //   page: "/dashboard/payment",
+    // },
     {
       key: "7",
       icon: <HistoryOutlined />,
@@ -159,7 +159,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const [defaultMenuActive, setDefaultMenuActive] = useState<string[]>([]);
-  const [activeKey, setActiveKey] = useState();
+  const [activeKey, setActiveKey] = useState(["1"]);
   const router = useRouter();
   useEffect(() => {
     console.log(router.pathname);
@@ -258,7 +258,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
               theme="light"
               mode="inline"
               selectedKeys={activeKey}
-              // defaultSelectedKeys={defaultMenuActive}
+              defaultSelectedKeys={defaultMenuActive}
               onClick={(e) => {
                 items_menu.map((item: any) => {
                   if (e.key == item.key) {
@@ -319,8 +319,8 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
         </Header>
         <Content
           style={{
-            margin: "24px 0px 16px 10px",
             padding: 24,
+            paddingTop: 50,
             minHeight: 280,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,

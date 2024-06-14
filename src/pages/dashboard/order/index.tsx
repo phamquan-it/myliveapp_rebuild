@@ -36,6 +36,8 @@ import EditOrder from "@/components/admin/crudform/edit/EditOrder";
 import { toast } from "react-toastify";
 import Title from "antd/es/typography/Title";
 import dayjs from "dayjs";
+import { text } from "stream/consumers";
+import Link from "next/link";
 
 const { Option } = Select;
 const statisticalOrder = [
@@ -81,8 +83,8 @@ const Page = () => {
   const columns: any[] = [
     {
       title: "ID Orders",
-      dataIndex: "order_id",
-      key: "order_id",
+      dataIndex: "id",
+      key: "id",
       align: "center",
     },
     {
@@ -94,17 +96,20 @@ const Page = () => {
     },
     {
       title: "ID Viralsmm/Gainsmm",
-      dataIndex: "key",
-      key: "key",
+      dataIndex: "order_id",
+      key: "order_id",
       align: "center",
-      render: (text: any, record: any) => record?.service?.id,
     },
     {
       title: "Provider	",
       dataIndex: "key",
       key: "key",
       align: "center",
-      render: (text: any, record: any) => record?.service?.provider?.name,
+      render: (text: any, record: any) => (
+        <Link href={`https://${record?.service?.provider?.name}.com/`}>
+          {record?.service?.provider?.name}
+        </Link>
+      ),
     },
     {
       title: "User	",
@@ -119,12 +124,23 @@ const Page = () => {
       dataIndex: "create_date",
       key: "create_date",
       align: "center",
-      render: (text: string) => <>{format(text, router.locale || "en")}</>,
+      render: (text: string) => (
+        <>
+          {dayjs(text).format("HH:mm:ss")}
+          <br />
+          {dayjs(text).format("YYYY-MM-DD")}
+        </>
+      ),
     },
     {
       title: t("link"),
       dataIndex: "link",
       key: "link",
+      render: (text: any) => (
+        <Link href={text} target="_blank">
+          {text}
+        </Link>
+      ),
       ellipsis: true,
     },
     {
@@ -137,11 +153,14 @@ const Page = () => {
       title: "Actually spent",
       dataIndex: "order_id",
       key: "order_id",
+      render: () => 0,
     },
     {
       title: "Start count",
-      dataIndex: "order_id",
-      key: "order_id",
+      dataIndex: "start_count",
+      key: "start_count",
+      render: (text: any) =>
+        text != null || text != undefined || text != null ? text : 0,
     },
     {
       title: t("quantity"),
@@ -161,7 +180,25 @@ const Page = () => {
       render: (text: string) => {
         return (
           <div className="flex justify-center">
-            <Tag color="green">Completed</Tag>
+            <Tag
+              color={
+                text == "Completed"
+                  ? "green"
+                  : text == "In progress"
+                  ? "yellow"
+                  : text == "Canceled"
+                  ? "orange"
+                  : text == "Processing"
+                  ? "cyan"
+                  : text == "Partial"
+                  ? "blue"
+                  : text == "Pending"
+                  ? "yellow"
+                  : "red"
+              }
+            >
+              {text == undefined ? "Null" : text}
+            </Tag>
           </div>
         );
       },
@@ -382,14 +419,16 @@ const Page = () => {
           <Input
             placeholder="Search"
             style={{ flex: 1 }}
+            allowClear
             onChange={handleKeyword}
           />
           <Select
             placeholder="Select status"
+            allowClear
             style={{ width: 150 }}
             onChange={handleStatus}
           >
-            <Option value="In+progress">
+            <Option value="In progress">
               <span className="text-sm">In progress</span>
             </Option>
             <Option value="Completed">
@@ -410,6 +449,7 @@ const Page = () => {
           </Select>
           <Select
             placeholder="Select provider"
+            allowClear
             style={{ width: 150 }}
             className=""
             onChange={handlerProvider}

@@ -151,3 +151,12 @@ form *:not(h3){
 .ant-pagination a, .ant-pagination .ant-pagination-options-size-changer *, .ant-select-item-option-content{
   font-size: 14px !important;
 }
+
+.ant-table-wrapper .ant-table-container table>thead>tr>th{
+  border-radius: 0px !important;
+}
+.ant-table-wrapper .ant-table-pagination.ant-pagination{
+  width: 97% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}

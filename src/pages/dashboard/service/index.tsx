@@ -29,6 +29,8 @@ export default function Index() {
   const d = useTranslations("MyLanguage");
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(50);
+  const [provider, setProvider] = useState();
+  const [status, setStatus] = useState();
   const columns: any[] = [
     // {
     //   title: t("entryno"),
@@ -41,8 +43,6 @@ export default function Index() {
       dataIndex: "service",
       key: "service",
       render: (text: string, record: any, index: number) => {
-        if (index == 0) console.log(record.service.icon);
-
         return (
           <div className="flex gap-1 items-center">
             {record.service.icon != undefined ? (
@@ -66,14 +66,15 @@ export default function Index() {
       dataIndex: "min",
       key: "min",
       align: "right",
+
       render: (text: string, record: any) => (
         <>
-          {!Number.isNaN(record.service.min)
-            ? ""
-            : format.number(parseFloat(record.service.min), {
-                style: "currency",
-                currency: "USD",
-              })}
+          {" "}
+          {record?.service?.min != undefined
+            ? parseFloat(record?.service?.min).toLocaleString(
+                router.locale == "en" ? "en-US" : "vi-VN"
+              )
+            : ""}
         </>
       ),
     },
@@ -81,7 +82,19 @@ export default function Index() {
       title: t("maxorder"),
       dataIndex: "max",
       key: "max",
-      render: (text: string, record: any) => <>{record.service.max}</>,
+      render: (text: string, record: any) => {
+        console.log(typeof record?.service?.min);
+
+        return (
+          <>
+            {record?.service?.max != undefined
+              ? parseFloat(record?.service?.max).toLocaleString(
+                  router.locale == "en" ? "en-US" : "vi-VN"
+                )
+              : ""}
+          </>
+        );
+      },
       align: "right",
     },
     {
@@ -203,12 +216,23 @@ export default function Index() {
   const [category, setCategory] = useState();
   const [keyword, setKeyword] = useState("");
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["service", router.locale, platformId, keyword, category],
+    queryKey: [
+      "service",
+      router.locale,
+      platformId,
+      keyword,
+      category,
+      pageIndex,
+      provider,
+      status,
+    ],
     queryFn: (querykey: any) => {
       console.log(querykey);
 
       return axiosClient.get(`/service/list?language=${router.locale}`, {
         params: {
+          providerId: provider,
+          status: status,
           platformId: platformId,
           keyword: keyword,
           categoriesId: category,
@@ -222,9 +246,11 @@ export default function Index() {
   useEffect(() => {
     const results: any = [];
     let total = 0;
+    setSeriveData({ data: [], total });
     data?.data.data.map((item: any) => {
       results.push({ service: { name: item.name, icon: item.icon } });
       item.serviceCategories.map((service: any) => {
+        service.platformId = item.platformId;
         if (router.locale == "vi") {
           service.service.description_en = service.service.description_vi;
           if (
@@ -233,12 +259,11 @@ export default function Index() {
           )
             service.service.name = service.service.name_vi;
         }
-
         results.push(service);
-        setSeriveData({ data: results, total });
       });
+      setSeriveData({ data: results, total });
     });
-  }, [data]);
+  }, [data, isFetching]);
   const handePlatform = (value: any) => {
     setPlatformId(value);
     setCategory(undefined);
@@ -260,6 +285,12 @@ export default function Index() {
   });
   const hanleCategory = (value: any) => {
     setCategory(value);
+  };
+  const handleProvider = (value: any) => {
+    setProvider(value);
+  };
+  const handleStatus = (value: any) => {
+    setStatus(value);
   };
   const p = useTranslations("Placeholder");
   return (
@@ -312,6 +343,7 @@ export default function Index() {
                   value={category}
                   placeholder={p("selectcategory")}
                   onChange={hanleCategory}
+                  allowClear
                   options={categories.data?.data?.data?.map((item: any) => ({
                     ...item,
                     label: (
@@ -327,6 +359,29 @@ export default function Index() {
                     ),
                     value: item.id,
                   }))}
+                />
+                <Select
+                  showSearch
+                  style={{ width: 170 }}
+                  placeholder={p("selectprovider")}
+                  onChange={handleProvider}
+                  allowClear
+                  options={[
+                    { value: 1, label: "Gainsmm" },
+                    { value: 2, label: "Viralsmm" },
+                  ]}
+                />
+                <Select
+                  showSearch
+                  style={{ width: 170 }}
+                  placeholder={p("select status")}
+                  onChange={handleStatus}
+                  allowClear
+                  options={[
+                    { value: 1, label: "Active" },
+                    { value: 2, label: "Blocked" },
+                    { value: 3, label: "Removed" },
+                  ]}
                 />
               </div>
             </div>

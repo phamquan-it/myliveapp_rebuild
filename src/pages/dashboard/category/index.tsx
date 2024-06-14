@@ -260,6 +260,7 @@ const Page = () => {
             onChange={handleSearch}
           />
           <Select
+            allowClear
             showSearch
             options={platforms.map((platform) => ({
               label: (

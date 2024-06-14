@@ -124,8 +124,8 @@
     "orderid":"Order ID",
     "serviceid":"Service ID",
     "startdate":"Start date",
-    "charge":"Charge"
-
+    "charge":"Charge",
+    "creator":"Creator"
   },
   "Placeholder":{
     "search":"Search...",

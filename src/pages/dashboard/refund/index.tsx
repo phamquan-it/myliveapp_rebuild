@@ -35,6 +35,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import Title from "antd/es/typography/Title";
+import Link from "next/link";
 const { Option } = Select;
 
 const Page = () => {
@@ -79,7 +80,9 @@ const Page = () => {
       dataIndex: "key",
       key: "key",
       render: (text: string, record: any) => {
-        return record?.order?.service?.name;
+        return record?.order?.service?.name == undefined
+          ? record?.order?.service?.name_vi
+          : record?.order?.service?.name;
       },
       ellipsis: true,
     },
@@ -88,7 +91,11 @@ const Page = () => {
       dataIndex: "key",
       key: "key",
       render: (text: string, record: any) => {
-        return <>{record?.order?.link}</>;
+        return (
+          <Link href={`${record?.order?.link}`} target="_blank">
+            {record?.order?.link}
+          </Link>
+        );
       },
       ellipsis: true,
     },

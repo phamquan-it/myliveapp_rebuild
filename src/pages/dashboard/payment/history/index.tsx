@@ -37,6 +37,12 @@ const Page = () => {
     },
     {
       title: t("account"),
+      dataIndex: "account",
+      key: "account",
+      render: (text: string, record: any) => record?.user?.email,
+    },
+    {
+      title: t("creator"),
       dataIndex: "userCreate",
       key: "userCreate",
       render: (text: string, record: any) => record?.userCreate?.email,
@@ -231,6 +237,7 @@ const Page = () => {
         <Select
           style={{ width: 200 }}
           placeholder="Select status"
+          allowClear
           onChange={handleStatus}
           options={[
             { value: -1, label: "Deny" },

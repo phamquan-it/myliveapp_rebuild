@@ -15,7 +15,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Button, Form, Image, Input, Modal, Table, Upload } from "antd";
+import { Button, Form, Input, Modal, Table, Upload } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useQuery } from "@tanstack/react-query";
 import axiosClient from "@/apiClient/axiosClient";
@@ -24,13 +24,6 @@ import { getCookie } from "cookies-next";
 import axios from "axios";
 import Title from "antd/es/typography/Title";
 import { useTranslations } from "next-intl";
-import DeleteForm from "@/components/admin/DeleteForm";
-import EditPlatForm from "@/components/admin/crudform/edit/EditPlatform";
-import TableAction from "@/components/admin/TableAction";
-import format from "@/hooks/dayjsformatter";
-import { useRouter } from "next/router";
-import { GetStaticPropsContext } from "next";
-import _ from "lodash";
 
 interface RowContextProps {
   setActivatorNodeRef?: (element: HTMLElement | null) => void;
@@ -52,6 +45,14 @@ const DragHandle: React.FC = () => {
     />
   );
 };
+
+const columns: ColumnsType<any> = [
+  { key: "sort", align: "center", width: 80, render: () => <DragHandle /> },
+  { title: "No.", dataIndex: "" },
+  { title: "Name", dataIndex: "name" },
+  { title: "Icon", dataIndex: "icon" },
+  { title: "createdAt", dataIndex: "createdAt" },
+];
 
 interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   "data-row-key": string;
@@ -87,19 +88,11 @@ const Row: React.FC<RowProps> = (props) => {
   );
 };
 
-const Page: React.FC = () => {
-  const router = useRouter();
+const App: React.FC = () => {
   const token = getCookie("token");
-  const [keyword, setKeyword] = useState();
-
   const { data, isFetching } = useQuery({
-    queryKey: ["platform", keyword],
-    queryFn: () =>
-      axiosClient.get(`/platform/list?language=${router.locale}`, {
-        params: {
-          keyword: keyword,
-        },
-      }),
+    queryKey: ["platform"],
+    queryFn: () => axiosClient.get("/platform/list?language=en"),
   });
 
   const [dataSource, setDataSource] = useState<any[]>([]);
@@ -176,109 +169,6 @@ const Page: React.FC = () => {
   };
   const d = useTranslations("DashboardMenu");
   const t = useTranslations("MyLanguage");
-  const columns: ColumnsType<any> = [
-    { key: "sort", align: "center", width: 80, render: () => <DragHandle /> },
-    {
-      title: t("entryno"),
-      dataIndex: "location",
-      key: "location",
-    },
-    {
-      title: t("name"),
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Icon",
-      dataIndex: "icon",
-      key: "icon",
-      render: (text: string) => {
-        return (
-          <>
-            <Image src={text} width={25} alt="" />
-          </>
-        );
-      },
-    },
-    {
-      title: t("createAt"),
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (text: string) => <>{format(text, router.locale || "en")}</>,
-    },
-    {
-      width: "15%",
-      align: "center",
-      title: t("action"),
-      dataIndex: "id",
-      key: "id",
-      render: (text: string, record: any) => {
-        return (
-          <div className="flex justify-center">
-            <TableAction
-              openState={openState}
-              // viewDetail={
-              //   <>
-              //     <PlatformDetail />
-              //   </>
-              // }
-              // syncFunc={() => {
-              //   //synchonized data here
-              // }}
-              editForm={
-                <>
-                  <Form
-                    name="basic"
-                    layout="vertical"
-                    initialValues={{ remember: true }}
-                    // onFinish={onFinish}
-                    // onFinishFailed={onFinishFailed}
-                  >
-                    <EditPlatForm initialValues={record} />
-
-                    <Form.Item>
-                      <Button type="primary" htmlType="submit">
-                        Update
-                      </Button>
-                    </Form.Item>
-                  </Form>
-                </>
-              }
-              deleteForm={
-                <DeleteForm
-                  onDelete={() => {
-                    axiosClient
-                      .delete(`/platform/delete/${text}/?language=en`, {
-                        headers: {
-                          Authorization: `Bearer ${token}`,
-                        },
-                      })
-                      .then(() => {
-                        console.log("ok");
-
-                        toast.success("success");
-                      })
-                      .catch((err) => {
-                        console.log(err);
-
-                        toast.error(err.message);
-                      });
-                    setOpenState(!openState);
-                  }}
-                  onCancel={() => {
-                    setOpenState(!openState);
-                  }}
-                />
-              }
-            />
-          </div>
-        );
-      },
-    },
-  ];
-  const handleSearch = _.debounce((e: any) => {
-    setKeyword(e.target.value);
-  }, 300);
   return (
     <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={onDragEnd}>
       <ToastContainer />
@@ -316,7 +206,7 @@ const Page: React.FC = () => {
             <Input
               placeholder="Search..."
               className="!py-1"
-              onChange={handleSearch}
+              // onChange={handleSearch}
               style={{ width: 200 }}
             />
           </div>
@@ -339,7 +229,7 @@ const Page: React.FC = () => {
         strategy={verticalListSortingStrategy}
       >
         <Table
-          className="border rounded-md shadow-md"
+          className="!border"
           rowKey="key"
           components={{ body: { row: Row } }}
           columns={columns}
@@ -351,12 +241,4 @@ const Page: React.FC = () => {
   );
 };
 
-export default Page;
-
-export async function getStaticProps({ locale }: GetStaticPropsContext) {
-  return {
-    props: {
-      messages: (await import(`../../../../messages/${locale}.json`)).default,
-    },
-  };
-}
+export default App;

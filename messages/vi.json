@@ -124,7 +124,8 @@
     "orderid":"ID đặt hàng",
     "serviceid":"ID dịch vụ",
     "startdate":"Thời gian chạy",
-    "charge":"Chi phí"
+    "charge":"Chi phí",
+    "creator":"Người tạo"
   },
   "Placeholder":{
     "search":"Tìm kiếm...",
