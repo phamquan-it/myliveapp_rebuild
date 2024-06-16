@@ -20,15 +20,17 @@ const data = {
 };
 import { GetStaticPropsContext } from "next";
 import { Pie } from "react-chartjs-2";
+import FastInfo from "@/components/admin/FastInfo";
+import { YoutubeFilled } from "@ant-design/icons";
+import FastInfoList from "@/components/admin/FastInfoList";
 
 const Page = () => {
   return (
     <>
       <div
-        style={{
-          width: 300,
-        }}
+      
       >
+        <FastInfoList/>
         <Pie data={dataPie} />;
         <Line data={data} />
       </div>
