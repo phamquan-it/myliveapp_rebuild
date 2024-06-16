@@ -6,15 +6,16 @@ const Line = dynamic(() => import("react-chartjs-2").then((mod) => mod.Line), {
 });
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import _ from "lodash-es";
-const data = {
+const data:any = {
   labels: ["January", "February", "March", "April", "May"],
   datasets: [
     {
-      label: "GeeksforGeeks Line Chart",
+      label: null,
       data: [65, 59, 80, 81, 56],
       fill: false,
       borderColor: "rgb(75, 192, 192)",
       tension: 0.1,
+      
     },
   ],
 };
@@ -31,10 +32,13 @@ const Page = () => {
       
       >
         <FastInfoList/>
+       <div className="flex">
+       
+        <div className="w-2/3"><Line data={data} /></div>
         <div className="w-80">
         <Pie data={dataPie} />
         </div>
-        <Line data={data} />
+       </div>
       </div>
     </>
   );
