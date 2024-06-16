@@ -31,7 +31,9 @@ const Page = () => {
       
       >
         <FastInfoList/>
-        <Pie data={dataPie} />;
+        <div className="w-80">
+        <Pie data={dataPie} />
+        </div>
         <Line data={data} />
       </div>
     </>
