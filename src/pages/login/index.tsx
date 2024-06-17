@@ -55,7 +55,7 @@ const LoginForm = () => {
           {...layout}
           onFinish={onFinish}
         >
-          <Title level={3} className="text-center !font-light !pt-4">
+          <Title level={3} className="text-center !pt-4">
             {t("login")}
           </Title>
           <div className="px-2">
@@ -81,7 +81,7 @@ const LoginForm = () => {
               <Input.Password />
             </Form.Item>
 
-            <Form.Item className="!mt-3">
+            <Form.Item className="!mt-5">
               <Button
                 type="primary"
                 block
@@ -90,7 +90,10 @@ const LoginForm = () => {
               >
                 {t("login")}
               </Button>
-              <p className="text-center">
+              <div className="mt-3">
+                <Link href={"/"}>{t("gotohomepage")}</Link>
+              </div>
+              <p className="text-center flex items-center mt-3">
                 {t("donothaveanacount")}
                 <Button
                   className="!px-0"
@@ -102,9 +105,6 @@ const LoginForm = () => {
                   {t("register")}
                 </Button>
               </p>
-            </Form.Item>
-            <Form.Item label="" name="">
-              <Link href={"/"}>{t("gotohomepage")}</Link>
             </Form.Item>
           </div>
         </Form>

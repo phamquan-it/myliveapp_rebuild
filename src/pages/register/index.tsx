@@ -72,7 +72,7 @@ const RegiterForm = () => {
             <Form.Item
               label={t("fullname")}
               name="name"
-              rules={[{ required: true, message: "Please input fullname!" }]}
+              rules={[{ required: true, message: t("requiredFullname") }]}
             >
               <Input />
             </Form.Item>
@@ -111,12 +111,24 @@ const RegiterForm = () => {
             </Form.Item>
 
             <Form.Item>
-              <div className="pb-3 flex gap-2">
-                <Button type="primary" htmlType="submit" loading={isPending}>
+              <div className="pb-3 mt-3">
+                <Button
+                  type="primary"
+                  block
+                  htmlType="submit"
+                  loading={isPending}
+                >
                   {t("register")}
                 </Button>
+              </div>
+              <Link href={"/"}>{t("gotohomepage")}</Link>
+            </Form.Item>
+            <Form.Item className="" label="" name="">
+              <div className="flex items-center">
+                You have an account?{" "}
                 <Button
-                  type="default"
+                  type="link"
+                  className="!px-1"
                   onClick={() => {
                     router.push("/login");
                   }}
@@ -124,7 +136,6 @@ const RegiterForm = () => {
                   {t("login")}
                 </Button>
               </div>
-              <Link href={"/"}>{t("gotohomepage")}</Link>
             </Form.Item>
           </Form>
         </div>

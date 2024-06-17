@@ -38,8 +38,10 @@ import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import CategoryDetail from "@/components/admin/crudform/details/CategoryDetail";
 import { toast } from "react-toastify";
 import Title from "antd/es/typography/Title";
+import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 const { Option } = Select;
 const Page = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { platforms, isPending, isSuccess } = useSelector(
     (state: RootState) => state.platformSlice
@@ -47,9 +49,13 @@ const Page = () => {
   useEffect(() => {
     dispatch(fetchPlatform());
   }, [dispatch]);
-  const [pageIndex, setPageIndex] = useState(1);
+  const [pageIndex, setPageIndex] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageIndex))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageIndex)
+      : 1
+  );
   const token = getCookie("token");
-  const router = useRouter();
+
   const t = useTranslations("MyLanguage");
   const d = useTranslations("DashboardMenu");
   const columns: any[] = [
@@ -170,8 +176,14 @@ const Page = () => {
     // Handle form submission logic here
   };
   const [openState, setOpenState] = useState(false);
-  const [keyword, setKeyword] = useState("");
-  const [platformValue, setPlatformValue] = useState<number>();
+  const [keyword, setKeyword] = useState(
+    getObjecFormUrlParameters(router)?.keyword
+  );
+  const [platformValue, setPlatformValue] = useState<number | null>(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.platform))
+      ? parseInt(getObjecFormUrlParameters(router)?.platform)
+      : null
+  );
   const [pageSize, setPageSize] = useState(10);
   const { data, isFetching, isError } = useQuery({
     queryKey: [
@@ -214,6 +226,15 @@ const Page = () => {
     setPlatformValue(value);
   };
   const p = useTranslations("Placeholder");
+  useEffect(() => {
+    router.push(router, {
+      query: {
+        keyword: keyword,
+        platform: platformValue,
+        pageIndex: pageIndex,
+      },
+    });
+  }, [router.asPath, keyword, platformValue, pageIndex]);
   return (
     <>
       <Title level={2} className="text-center !mb-8">
@@ -258,8 +279,10 @@ const Page = () => {
             style={{ width: 200 }}
             placeholder={p("search")}
             onChange={handleSearch}
+            defaultValue={keyword}
           />
           <Select
+            defaultValue={platformValue}
             allowClear
             showSearch
             options={platforms.map((platform) => ({
@@ -305,6 +328,8 @@ const Page = () => {
         onChange={handleTableChange}
         pagination={{
           total: data?.data.total,
+          current: pageIndex,
+          pageSize: pageSize,
         }}
       />
     </>

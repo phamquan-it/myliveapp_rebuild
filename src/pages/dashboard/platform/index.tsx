@@ -31,6 +31,13 @@ import format from "@/hooks/dayjsformatter";
 import { useRouter } from "next/router";
 import { GetStaticPropsContext } from "next";
 import _ from "lodash";
+import { TablePaginationConfig } from "antd/lib";
+import {
+  FilterValue,
+  SorterResult,
+  TableCurrentDataSource,
+} from "antd/lib/table/interface";
+import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 
 interface RowContextProps {
   setActivatorNodeRef?: (element: HTMLElement | null) => void;
@@ -90,7 +97,9 @@ const Row: React.FC<RowProps> = (props) => {
 const Page: React.FC = () => {
   const router = useRouter();
   const token = getCookie("token");
-  const [keyword, setKeyword] = useState();
+  const [keyword, setKeyword] = useState(
+    getObjecFormUrlParameters(router)?.keyword
+  );
 
   const { data, isFetching } = useQuery({
     queryKey: ["platform", keyword],
@@ -164,6 +173,16 @@ const Page: React.FC = () => {
       });
     }
   };
+  const [pageSize, setPageSize] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageSize))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageSize)
+      : 10
+  );
+  const [pageIndex, setpageIndex] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageIndex))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageIndex)
+      : 1
+  );
   const [openState, setOpenState] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const hideModal = () => {
@@ -279,6 +298,24 @@ const Page: React.FC = () => {
   const handleSearch = _.debounce((e: any) => {
     setKeyword(e.target.value);
   }, 300);
+  const handleTable = (
+    pagination: TablePaginationConfig,
+    filters: Record<string, FilterValue | null>,
+    sorter: SorterResult<any> | SorterResult<any>[],
+    extra: TableCurrentDataSource<any>
+  ) => {
+    setPageSize(pagination.pageSize || 10);
+    setpageIndex(pagination.current || 1);
+  };
+  useEffect(() => {
+    router.push(router, {
+      query: {
+        pageIndex: pageIndex,
+        pageSize: pageSize,
+        keyword: keyword,
+      },
+    });
+  }, [pageIndex, pageSize, keyword]);
   return (
     <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={onDragEnd}>
       <ToastContainer />
@@ -314,6 +351,7 @@ const Page: React.FC = () => {
         <div className="flex justify-between">
           <div id="filter">
             <Input
+              defaultValue={keyword}
               placeholder="Search..."
               className="!py-1"
               onChange={handleSearch}
@@ -339,11 +377,18 @@ const Page: React.FC = () => {
         strategy={verticalListSortingStrategy}
       >
         <Table
+          onChange={handleTable}
           className="border rounded-md shadow-md"
           rowKey="key"
           components={{ body: { row: Row } }}
           columns={columns}
           dataSource={dataSource}
+          pagination={{
+            pageSize: pageSize,
+            showSizeChanger: true,
+            current: pageIndex,
+            // position: ["bottomCenter"],
+          }}
           loading={isFetching}
         />
       </SortableContext>

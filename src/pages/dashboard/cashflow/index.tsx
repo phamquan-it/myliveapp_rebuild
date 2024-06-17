@@ -38,6 +38,7 @@ import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import TableAction from "@/components/admin/TableAction";
 import EditCashFlow from "@/components/admin/crudform/edit/EditCashFlow";
 import { toast } from "react-toastify";
+import Title from "antd/es/typography/Title";
 
 const Page = () => {
   const dispatch = useDispatch();
@@ -282,8 +283,12 @@ const Page = () => {
     console.log("Form values:", values);
     // Handle form submission logic here
   };
+  const d = useTranslations("DashboardMenu");
   return (
     <>
+      <Title level={2} className="text-center">
+        {d("cashflow")}
+      </Title>
       <div className="flex justify-between gap-1 items-center">
         <div id="filter">
           <Input
@@ -301,6 +306,7 @@ const Page = () => {
               search();
             }}
           />
+
           <Modal
             title={t("create")}
             open={showModal}
@@ -359,7 +365,7 @@ const Page = () => {
           </Modal>
         </div>
         <div>
-          <Button
+          {/* <Button
             type="primary"
             iconPosition="end"
             onClick={openModal}
@@ -367,7 +373,7 @@ const Page = () => {
             icon={<PlusCircleFilled />}
           >
             {t("create")}
-          </Button>
+          </Button> */}
         </div>
       </div>
 

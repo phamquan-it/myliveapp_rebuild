@@ -32,9 +32,10 @@ import { getCookie } from "cookies-next";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import _ from "lodash";
 import { toast } from "react-toastify";
+import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 const { Option } = Select;
 const Page = () => {
   const token = getCookie("token");
@@ -174,9 +175,19 @@ const Page = () => {
   // handle filter
   const [openState, setOpenState] = useState(false);
 
-  const [pageIndex, setPageIndex] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
-  const [keyword, setKeyword] = useState("");
+  const [pageIndex, setPageIndex] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageIndex))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageIndex)
+      : 1
+  );
+  const [pageSize, setPageSize] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageSize))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageSize)
+      : 20
+  );
+  const [keyword, setKeyword] = useState(
+    getObjecFormUrlParameters(router)?.keyword || ""
+  );
   const { data, isFetching, isError } = useQuery({
     queryKey: ["user", pageIndex, pageSize, router.locale, keyword],
     queryFn: () =>
@@ -202,6 +213,15 @@ const Page = () => {
   const handleSearch = _.debounce((e: any) => {
     setKeyword(e.target.value);
   }, 300);
+  useEffect(() => {
+    router.push(router, {
+      query: {
+        keyword: keyword,
+        pageIndex: pageIndex,
+        pageSize: pageSize,
+      },
+    });
+  }, [keyword, pageIndex, pageSize]);
   return (
     <>
       <Title level={2} className="text-center">
@@ -274,7 +294,11 @@ const Page = () => {
       </Modal>
       <div className="flex justify-between">
         <div>
-          <Input placeholder="Search..." onChange={handleSearch} />
+          <Input
+            placeholder="Search..."
+            onChange={handleSearch}
+            defaultValue={keyword}
+          />
         </div>
         <Button
           id="create"
@@ -297,6 +321,8 @@ const Page = () => {
         onChange={handleTableChange}
         pagination={{
           total: data?.data.total,
+          pageSize: pageSize,
+          current: pageIndex,
         }}
       />
     </>

@@ -22,8 +22,9 @@ import { getCookie } from "cookies-next";
 import dayjs from "dayjs";
 import { GetStaticPropsContext } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "use-intl";
+import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 
 const Page = () => {
   const d = useTranslations("DashboardMenu");
@@ -96,10 +97,20 @@ const Page = () => {
   ];
   const [openState, setOpenState] = useState(false);
   const router = useRouter();
-  const [pageIndex, setPageIndex] = useState(1);
+  const [pageIndex, setPageIndex] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageIndex))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageIndex)
+      : 1
+  );
   const token = getCookie("token");
-  const [keyword, setKeyword] = useState("");
-  const [pageSize, setPageSize] = useState(10);
+  const [keyword, setKeyword] = useState(
+    getObjecFormUrlParameters(router)?.keyword
+  );
+  const [pageSize, setPageSize] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageSize))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageSize)
+      : 20
+  );
   const { data, isFetching, isError } = useQuery({
     queryKey: ["orders", pageIndex, pageSize, router.locale, keyword],
     queryFn: () =>
@@ -125,6 +136,15 @@ const Page = () => {
     setKeyword(e.target.value);
   }, 300);
   const p = useTranslations("Placeholder");
+  useEffect(() => {
+    router.push(router, {
+      query: {
+        keyword: keyword,
+        pageSize: pageSize,
+        pageIndex: pageIndex,
+      },
+    });
+  }, [keyword, pageIndex, pageSize]);
   return (
     <>
       <Title level={2} className="text-center">
@@ -133,6 +153,7 @@ const Page = () => {
       <div className="my-3 flex gap-1">
         <div id="filter">
           <Input
+            defaultValue={keyword}
             placeholder={p("search")}
             className=""
             style={{ width: 200 }}
@@ -152,6 +173,9 @@ const Page = () => {
         pagination={{
           total: data?.data.total,
           pageSize: pageSize,
+          current: pageIndex,
+          showSizeChanger: true,
+          position: ["bottomCenter"],
         }}
       />
     </>

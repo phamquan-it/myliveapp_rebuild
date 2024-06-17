@@ -27,7 +27,7 @@ import { getCookie } from "cookies-next";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input, Select } from "antd";
 import DeleteForm from "@/components/admin/DeleteForm";
 import EditCategory from "@/components/admin/crudform/edit/EditCategory";
@@ -38,6 +38,7 @@ import Title from "antd/es/typography/Title";
 import dayjs from "dayjs";
 import { text } from "stream/consumers";
 import Link from "next/link";
+import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 
 const { Option } = Select;
 const statisticalOrder = [
@@ -78,6 +79,7 @@ const statisticalOrder = [
   },
 ];
 const Page = () => {
+  const router = useRouter();
   const d = useTranslations("DashboardMenu");
   const t = useTranslations("MyLanguage");
   const columns: any[] = [
@@ -269,15 +271,30 @@ const Page = () => {
       },
     },
   ];
-  const [pageIndex, setPageIndex] = useState(1);
+  const [pageIndex, setPageIndex] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageIndex))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageIndex)
+      : 1
+  );
   const token = getCookie("token");
-  const router = useRouter();
 
   const [openState, setOpenState] = useState(false);
-  const [status, setStatus] = useState();
-  const [provider, setProvider] = useState();
-  const [keyword, setIKeyword] = useState("");
-  const [pageSize, setPageSize] = useState(10);
+  const [status, setStatus] = useState(
+    getObjecFormUrlParameters(router)?.status
+  );
+  const [provider, setProvider] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.provider))
+      ? getObjecFormUrlParameters(router)?.provider
+      : null
+  );
+  const [keyword, setIKeyword] = useState(
+    getObjecFormUrlParameters(router)?.keyword
+  );
+  const [pageSize, setPageSize] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageSize))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageSize)
+      : 10
+  );
   const { data, isFetching, isError } = useQuery({
     queryKey: ["orders", pageIndex, pageSize, status, keyword, provider],
     queryFn: () =>
@@ -323,6 +340,17 @@ const Page = () => {
   const handleKeyword = (e: any) => {
     setIKeyword(e.target.value);
   };
+  useEffect(() => {
+    router.push(router, {
+      query: {
+        keyword: keyword,
+        status: status,
+        provider: provider,
+        pageIndex: pageIndex,
+        pageSize: pageSize,
+      },
+    });
+  }, [pageIndex, pageSize, keyword, provider, status]);
   return (
     <>
       <Title level={2} className="text-center">
@@ -417,37 +445,22 @@ const Page = () => {
       <div className="flex justify-between my-3 mt-10">
         <div style={{ display: "flex", gap: 5 }} id="filter">
           <Input
+            defaultValue={keyword}
             placeholder="Search"
             style={{ flex: 1 }}
             allowClear
             onChange={handleKeyword}
           />
           <Select
+            defaultValue={status}
             placeholder="Select status"
             allowClear
             style={{ width: 150 }}
             onChange={handleStatus}
-          >
-            <Option value="In progress">
-              <span className="text-sm">In progress</span>
-            </Option>
-            <Option value="Completed">
-              <span className="text-sm">Completed</span>
-            </Option>
-            <Option value="Partial">
-              <span className="text-sm">Partial</span>
-            </Option>
-            <Option value="Canceled">
-              <span className="text-sm">Canceled</span>
-            </Option>
-            <Option value="Processing">
-              <span className="text-sm">Processing</span>
-            </Option>
-            <Option value="Pending">
-              <span className="text-sm">Pending</span>
-            </Option>
-          </Select>
+            options={statusOptions}
+          />
           <Select
+            defaultValue={provider}
             placeholder="Select provider"
             allowClear
             style={{ width: 150 }}
@@ -485,6 +498,8 @@ const Page = () => {
         onChange={handleTableChange}
         pagination={{
           total: data?.data.total,
+          pageSize: pageSize,
+          current: pageIndex,
         }}
       />
     </>
@@ -499,3 +514,11 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
     },
   };
 }
+const statusOptions = [
+  { value: "In progress", label: "In progress" },
+  { value: "Completed", label: "Completed" },
+  { value: "Partial", label: "Partial" },
+  { value: "Canceled", label: "Canceled" },
+  { value: "Processing", label: "Processing" },
+  { value: "Pending", label: "Pending" },
+];

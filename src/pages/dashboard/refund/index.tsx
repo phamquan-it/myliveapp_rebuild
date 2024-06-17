@@ -32,10 +32,11 @@ import dayjs from "dayjs";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Title from "antd/es/typography/Title";
 import Link from "next/link";
+import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 const { Option } = Select;
 
 const Page = () => {
@@ -204,8 +205,16 @@ const Page = () => {
   };
 
   //handle filter
-  const [pageIndex, setPageIndex] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageIndex, setPageIndex] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageIndex))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageIndex)
+      : 1
+  );
+  const [pageSize, setPageSize] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageSize))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageSize)
+      : 20
+  );
   const [keyword, setKeyword] = useState("");
   const { data, isFetching, isError } = useQuery({
     queryKey: ["orders", router.locale, pageSize, pageIndex, keyword],
@@ -233,13 +242,22 @@ const Page = () => {
   }, 300);
   const d = useTranslations("DashboardMenu");
   const p = useTranslations("Placeholder");
+  useEffect(() => {
+    router.push(router, {
+      query: {
+        keyword: keyword,
+        pageIndex: pageIndex,
+        pageSize: pageSize,
+      },
+    });
+  }, [keyword, pageSize, pageIndex]);
   return (
     <>
       <Title level={2} className="text-center">
         {d("refund")}
       </Title>
       <div className="flex justify-between my-3">
-        <Modal
+        {/* <Modal
           title={t("create")}
           open={showModal}
           onCancel={hideModal}
@@ -296,7 +314,7 @@ const Page = () => {
               </Form.Item>
             </Form>
           </div>
-        </Modal>
+        </Modal> */}
 
         <div className="flex" id="filter">
           <Input
@@ -306,7 +324,7 @@ const Page = () => {
             onChange={handleSearch}
           />
         </div>
-        <Button
+        {/* <Button
           id="create"
           type="primary"
           icon={<PlusCircleFilled />}
@@ -314,7 +332,7 @@ const Page = () => {
           onClick={openModal}
         >
           {t("create")}
-        </Button>
+        </Button> */}
       </div>
       <Table
         className="border rounded shadow-md"
@@ -329,6 +347,9 @@ const Page = () => {
         onChange={handleTableChange}
         pagination={{
           total: data?.data.total,
+          pageSize: pageSize,
+          current: pageIndex,
+          showSizeChanger: true,
         }}
       />
     </>

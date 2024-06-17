@@ -3,6 +3,7 @@ import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
 import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import { Button, Form, Input, Table } from "antd";
+import Title from "antd/lib/typography/Title";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -118,10 +119,12 @@ const Page = () => {
     },
   ];
   const [openState, setOpenState] = useState(false);
-
   return (
     <>
       <div>
+        <Title level={2} className="text-center">
+          {d("cron")}
+        </Title>
         <Input
           placeholder="Search..."
           style={{

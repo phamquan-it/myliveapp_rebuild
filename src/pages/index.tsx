@@ -28,9 +28,8 @@ import TextArea from "antd/lib/input/TextArea";
 import { Content } from "antd/lib/layout/layout";
 import Title from "antd/es/typography/Title";
 import OrderForm from "@/components/client/OrderForm";
-import { format } from "path";
-import { revalidatePath } from "next/cache";
 import PageLayout from "@/components/PageLayout";
+import { platform } from "os";
 
 const Home = ({
   locale,
@@ -119,19 +118,42 @@ const Home = ({
       ),
     },
   ];
-  const [platformValue, setPlatformValue] = useState("2#Instagram");
+  const getObjecFormUrlParameters = () => {
+    const queryString = router.asPath.split("?").slice(1).join("?");
+    // Extract query parameters using URLSearchParams
+    const params: any = new URLSearchParams(queryString);
+    // Convert URLSearchParams to object
+    const queryObject: any = {};
+    for (const [key, value] of params) {
+      queryObject[key] = value;
+    }
+    return queryObject;
+  };
+  const [platformValue, setPlatformValue] = useState(
+    getObjecFormUrlParameters()?.platform
+  );
+
+  const [current, setCurrent] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters()?.current))
+      ? parseInt(getObjecFormUrlParameters()?.current)
+      : 1
+  );
   //multiple locale
+
   const d = useTranslations("PageLayout");
   const handleTable = (pagination: any) => {
     setPageSize(pagination.pageSize);
+    setCurrent(pagination.current);
   };
   useEffect(() => {
     const initialQueryObject = {
       ...serviceDataTable,
       ...router.query,
     };
+    // alert(getObjecFormUrlParameters()?.platform != "");
+
     filter(getObjecFormUrlParameters()?.search, platformValue);
-  }, [platformValue]);
+  }, [router.asPath, platformValue, current]);
   //profess list
   const professList = [
     {
@@ -166,19 +188,21 @@ const Home = ({
 
   //reload page and push data to url
   const filter = (keyword: string, platformVal: string) => {
-    let id = "";
-    for (let i = 0; i < platformVal.length; i++) {
-      const element = platformValue[i];
-      if (element == "#") break;
-      id += element;
-    }
+    const queries = isNaN(parseInt(platformVal))
+      ? {
+          search: keyword,
+        }
+      : {
+          search: keyword,
+          platform: platformVal,
+        };
 
     router.push(
       router,
       {
         query: {
-          platform: id,
-          search: keyword,
+          ...queries,
+          current: current,
         },
       },
       {
@@ -217,17 +241,7 @@ const Home = ({
           ?.includes(txtSearch?.toLocaleLowerCase()))
     );
   });
-  const getObjecFormUrlParameters = () => {
-    const queryString = router.asPath.split("?").slice(1).join("?");
-    // Extract query parameters using URLSearchParams
-    const params: any = new URLSearchParams(queryString);
-    // Convert URLSearchParams to object
-    const queryObject: any = {};
-    for (const [key, value] of params) {
-      queryObject[key] = value;
-    }
-    return queryObject;
-  };
+
   console.log(getObjecFormUrlParameters());
 
   return (
@@ -270,7 +284,6 @@ const Home = ({
               />
               <div className="flex gap-1 items-center">
                 <LocaleSwitcher
-                  className="!h-10"
                   onChange={(value: string) => {
                     router.push(router, "", { locale: value });
                     router.events.on("routeChangeComplete", () => {
@@ -280,7 +293,7 @@ const Home = ({
                 />
                 <Button
                   type="default"
-                  className="!bg-sky-600 !text-white"
+                  style={{ backgroundColor: "#1677ff", color: "white" }}
                   onClick={() => {
                     router.push("/login");
                   }}
@@ -320,11 +333,9 @@ const Home = ({
                       <div key={index} className="text-center px-2 custom_icon">
                         <h1 className="flex gap-1 justify-center text-xl">
                           <span className="">{item.icon}</span>
-                          <span className="text-2xl -translate-y-1">
-                            {item.title}
-                          </span>
+                          <span className="text-xl">{item.title}</span>
                         </h1>
-                        <p className="text-base">{item.description}</p>
+                        <p className="text-sm">{item.description}</p>
                       </div>
                     );
                   })}
@@ -350,7 +361,7 @@ const Home = ({
                   options={platformdata.map((item: any, index: number) => ({
                     ...item,
                     key: index,
-                    value: `${item.id}#${item.name}`,
+                    value: `${item.id}`,
                     label: (
                       <div className="flex items-center gap-2">
                         <Image
@@ -392,6 +403,7 @@ const Home = ({
                 columns={columns}
                 pagination={{
                   pageSize: pageSize,
+                  current: current,
                 }}
                 expandable={{
                   expandedRowRender: (record) => (

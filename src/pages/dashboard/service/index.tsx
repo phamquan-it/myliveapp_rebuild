@@ -16,21 +16,37 @@ import Title from "antd/es/typography/Title";
 import { useRouter } from "next/router";
 import _ from "lodash";
 import PlatformSelectForFilter from "@/components/admin/PlatformSelectForFilter";
-const { Option } = Select;
+import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 export default function Index() {
+  const router = useRouter();
   const token = getCookie("token");
-  const format = useFormatter();
+
   const [seriveData, setSeriveData] = useState({
     data: [],
     total: 0,
   });
 
   const t = useTranslations("MyLanguage");
-  const d = useTranslations("MyLanguage");
-  const [pageIndex, setPageIndex] = useState(1);
-  const [pageSize, setPageSize] = useState(50);
-  const [provider, setProvider] = useState();
-  const [status, setStatus] = useState();
+  const [pageIndex, setPageIndex] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageIndex))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageIndex)
+      : 1
+  );
+  const [pageSize, setPageSize] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageSize))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageSize)
+      : 50
+  );
+  const [provider, setProvider] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.provider))
+      ? parseInt(getObjecFormUrlParameters(router)?.provider)
+      : null
+  );
+  const [status, setStatus] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.provider))
+      ? parseInt(getObjecFormUrlParameters(router)?.provider)
+      : null
+  );
   const columns: any[] = [
     // {
     //   title: t("entryno"),
@@ -207,14 +223,24 @@ export default function Index() {
   const openModal = () => {
     setShowModal(true);
   };
-  const router = useRouter();
+
   const onFinish = (values: any) => {
     console.log("Form values:", values);
     // Handle form submission logic here
   };
-  const [platformId, setPlatformId] = useState(2);
-  const [category, setCategory] = useState();
-  const [keyword, setKeyword] = useState("");
+  const [platformId, setPlatformId] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.platformId))
+      ? parseInt(getObjecFormUrlParameters(router)?.platformId)
+      : null
+  );
+  const [category, setCategory] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.category))
+      ? parseInt(getObjecFormUrlParameters(router)?.category)
+      : null
+  );
+  const [keyword, setKeyword] = useState(
+    getObjecFormUrlParameters(router)?.keyword
+  );
   const { data, isFetching, isError } = useQuery({
     queryKey: [
       "service",
@@ -266,7 +292,7 @@ export default function Index() {
   }, [data, isFetching]);
   const handePlatform = (value: any) => {
     setPlatformId(value);
-    setCategory(undefined);
+    setCategory(null);
   };
   const handleSearch = _.debounce((e: any) => {
     setKeyword(e.target.value);
@@ -293,6 +319,30 @@ export default function Index() {
     setStatus(value);
   };
   const p = useTranslations("Placeholder");
+  useEffect(() => {
+    //getObjecFormUrlParameters(router);
+    router.push(router, {
+      query: {
+        pageSize: pageSize,
+        pageIndex: pageIndex,
+        keyword: keyword,
+        platformId: platformId,
+        provider: provider,
+        status: status,
+        category: category,
+      },
+    });
+  }, [
+    pageIndex,
+    keyword,
+    platformId,
+    provider,
+    status,
+    category,
+    router.asPath,
+    pageSize,
+  ]);
+
   return (
     <div className="">
       <Head>
@@ -326,6 +376,7 @@ export default function Index() {
             <div className="flex gap-2">
               <div className="">
                 <Input
+                  defaultValue={keyword}
                   placeholder={p("search")}
                   onChange={handleSearch}
                   className="h-full"
@@ -341,6 +392,7 @@ export default function Index() {
                   showSearch
                   style={{ width: 220 }}
                   value={category}
+                  defaultValue={category}
                   placeholder={p("selectcategory")}
                   onChange={hanleCategory}
                   allowClear
@@ -362,6 +414,7 @@ export default function Index() {
                 />
                 <Select
                   showSearch
+                  defaultValue={provider}
                   style={{ width: 170 }}
                   placeholder={p("selectprovider")}
                   onChange={handleProvider}
@@ -376,6 +429,7 @@ export default function Index() {
                   style={{ width: 170 }}
                   placeholder={p("select status")}
                   onChange={handleStatus}
+                  defaultValue={status}
                   allowClear
                   options={[
                     { value: 1, label: "Active" },
@@ -420,7 +474,7 @@ export default function Index() {
             }}
             pagination={{
               position: ["bottomCenter"],
-              defaultCurrent: 1,
+              defaultCurrent: pageIndex,
               showSizeChanger: true,
               // showQuickJumper: true,
               pageSize: pageSize,

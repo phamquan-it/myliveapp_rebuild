@@ -21,8 +21,9 @@ import dayjs from "dayjs";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Select } from "antd/lib";
+import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 
 const Page = () => {
   const router = useRouter();
@@ -191,11 +192,25 @@ const Page = () => {
       },
     },
   ];
-  const [status, setStatus] = useState();
+  const [status, setStatus] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.status))
+      ? parseInt(getObjecFormUrlParameters(router)?.status)
+      : null
+  );
   const [openState, setOpenState] = useState(false);
-  const [pageIndex, setPageIndex] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [keyword, setKeyword] = useState("");
+  const [pageIndex, setPageIndex] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageIndex))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageIndex)
+      : 1
+  );
+  const [pageSize, setPageSize] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageSize))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageSize)
+      : 10
+  );
+  const [keyword, setKeyword] = useState(
+    getObjecFormUrlParameters(router)?.keyword
+  );
   const handleTableChange = (pagination: TablePaginationConfig) => {
     const current = pagination.current || 1;
     setPageIndex(current);
@@ -223,6 +238,17 @@ const Page = () => {
   const handleStatus = (value: any) => {
     setStatus(value);
   };
+  useEffect(() => {
+    router.push(router, {
+      query: {
+        pageIndex: pageIndex,
+        pageSize: pageSize,
+        keyword: keyword,
+        status: status,
+      },
+    });
+  }, [pageIndex, pageSize, keyword, status]);
+  const p = useTranslations("Placeholder");
   return (
     <>
       <Title level={2} className="text-center">
@@ -230,13 +256,15 @@ const Page = () => {
       </Title>
       <div className="flex gap-1 my-3" id="filter">
         <Input
-          placeholder="Search..."
+          defaultValue={keyword}
+          placeholder={p("search")}
           style={{ width: 200 }}
           onChange={handleSearch}
         />
         <Select
           style={{ width: 200 }}
-          placeholder="Select status"
+          placeholder={p("select status")}
+          defaultValue={status}
           allowClear
           onChange={handleStatus}
           options={[
@@ -283,6 +311,9 @@ const Page = () => {
         }))}
         pagination={{
           total: data?.data?.total,
+          pageSize: pageSize,
+          current: pageIndex,
+          showSizeChanger: true,
         }}
         columns={columns}
         className="border rounded-md shadow-md"

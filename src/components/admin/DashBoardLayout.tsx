@@ -43,9 +43,9 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       setRole(data?.role);
     } catch (error) {}
   }, []);
-  console.log(role);
 
   const t = useTranslations("DashboardMenu");
+
   const items_menu = [
     {
       key: "1",
@@ -181,10 +181,21 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
   useEffect(() => {
     console.log(collapsed);
   }, [collapsed]);
+  useEffect(() => {
+    setActiveKey([""]);
+    let path = router.asPath;
+    if (path.includes("?")) path = path.split("?")[0];
+    items_menu.map((item) => {
+      if (item.page == path) {
+        setActiveKey([item.key]);
+        return;
+      }
+    });
+  }, [router]);
   return (
     <Layout style={{ height: "100vh" }} className="!bg-white">
       <ToastContainer />
-      <div className="">
+      <div className="border-r">
         <div
           style={{ width: 250 }}
           className={`px-6 py-3 pt-5 text-gray-600 absolute z-30 bg-white ${
@@ -203,6 +214,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
           style={collapsed ? {} : {}}
         >
           <Sider
+            id="right_menu_border"
             width={250}
             theme="light"
             trigger
@@ -232,6 +244,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
               <div className="mx-3 grid gap-2">
                 <Button
                   type="primary"
+                  className="!py-3"
                   style={{ fontSize: "small" }}
                   icon={<PlusCircleFilled />}
                   onClick={() => {
@@ -246,7 +259,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                     router.push("/dashboard/deposit");
                   }}
                   type="primary"
-                  className="!bg-green-600"
+                  className="!bg-green-600 !py-3"
                   icon={<PlusCircleFilled />}
                 >
                   {t("deposit")}

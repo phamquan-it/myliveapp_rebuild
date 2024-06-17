@@ -67,8 +67,8 @@ textarea.ant-input{
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  padding-top: 8px !important;
-  padding-bottom: 8px !important;
+  /* padding-top: 8px !important;
+  padding-bottom: 8px !important; */
 }
 
 #buy{
@@ -159,4 +159,7 @@ form *:not(h3){
   width: 97% !important;
   margin-left: auto !important;
   margin-right: auto !important;
+}
+#right_menu_border .ant-menu-light.ant-menu-root.ant-menu-inline, .ant-menu-light>.ant-menu.ant-menu-root.ant-menu-inline, .ant-menu-light.ant-menu-root.ant-menu-vertical, .ant-menu-light>.ant-menu.ant-menu-root.ant-menu-vertical{
+  border-inline-end: transparent !important;
 }

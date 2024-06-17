@@ -1,6 +1,7 @@
 import axiosClient from "@/apiClient/axiosClient";
 import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
+import { debounce } from "lodash";
 import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import EditVoucher from "@/components/admin/crudform/edit/EditVoucher";
 import { PlusCircleFilled } from "@ant-design/icons";
@@ -22,15 +23,28 @@ import dayjs from "dayjs";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 
 const Page = () => {
   const t = useTranslations("MyLanguage");
-  const [pageIndex, setPageIndex] = useState(1);
-  const token = getCookie("token");
+  const p = useTranslations("Placeholder");
   const router = useRouter();
-  const [keyword, setKeyword] = useState("");
-  const [pageSize, setPageSize] = useState(10);
+  const [pageIndex, setPageIndex] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageIndex))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageIndex)
+      : 1
+  );
+  const token = getCookie("token");
+
+  const [keyword, setKeyword] = useState(
+    getObjecFormUrlParameters(router)?.keyword || ""
+  );
+  const [pageSize, setPageSize] = useState(
+    !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageSize))
+      ? parseInt(getObjecFormUrlParameters(router)?.pageSize)
+      : 10
+  );
   const { data, isFetching, isError } = useQuery({
     queryKey: ["orders", pageIndex, pageSize, keyword, router.locale],
     queryFn: () =>
@@ -170,10 +184,19 @@ const Page = () => {
     const pageSize = pagination.pageSize || 10;
     setPageSize(pageSize);
   };
-  const handleKeyword = (e: any) => {
+  const handleKeyword = debounce((e: any) => {
     setKeyword(e.target.value);
-  };
+  }, 300);
   const d = useTranslations("DashboardMenu");
+  useEffect(() => {
+    router.push(router, {
+      query: {
+        keyword: keyword,
+        pageIndex: pageIndex,
+        pageSize: pageSize,
+      },
+    });
+  }, [keyword, pageIndex, pageSize]);
   return (
     <>
       <Title className="text-center" level={2}>
@@ -253,7 +276,8 @@ const Page = () => {
       <div className="flex justify-between items-center my-3">
         <div id="filter">
           <Input
-            placeholder="Search..."
+            defaultValue={keyword}
+            placeholder={p("search")}
             style={{ width: 200 }}
             onChange={handleKeyword}
           />
@@ -280,6 +304,9 @@ const Page = () => {
         onChange={handleTableChange}
         pagination={{
           total: data?.data.total,
+          pageSize: pageSize,
+          current: pageIndex,
+          showSizeChanger: true,
         }}
       />
     </>

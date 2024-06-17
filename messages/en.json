@@ -10,7 +10,7 @@
     "forgot": "Forgot password?",
     "fullname": "Full name",
     "requiredFullname": "Fullname is required!",
-    "requiredEmail": "Please enter your email!",
+    "requiredEmail": "Email is required!",
     "email": "Email",
     "requiredpassword": "Password is required!",
     "confirmpassword": "Confirm password is required!",
