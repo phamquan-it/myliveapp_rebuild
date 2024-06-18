@@ -102,7 +102,7 @@ const Page: React.FC = () => {
   );
 
   const { data, isFetching } = useQuery({
-    queryKey: ["platform", keyword],
+    queryKey: ["platform", router.asPath],
     queryFn: () =>
       axiosClient.get(`/platform/list?language=${router.locale}`, {
         params: {
@@ -308,6 +308,13 @@ const Page: React.FC = () => {
     setpageIndex(pagination.current || 1);
   };
   useEffect(() => {
+    if (
+      keyword == null &&
+      pageSize == 10 &&
+      pageIndex == 1 &&
+      router.asPath == "/dashboard/platform"
+    )
+      return;
     router.push(router, {
       query: {
         pageIndex: pageIndex,

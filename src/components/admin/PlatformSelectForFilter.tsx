@@ -1,4 +1,5 @@
 import axiosClient from "@/apiClient/axiosClient";
+import filterOption from "@/hooks/filterOption";
 import { useQuery } from "@tanstack/react-query";
 import { Form, Image, Select } from "antd";
 import { SelectProps } from "antd/lib";
@@ -29,24 +30,27 @@ const PlatformSelectForFilter: React.FC<PlatformSelectProps> = ({
     queryFn: () => axiosClient.get(`/platform/list?language=${router.locale}`),
   });
   const p = useTranslations("Placeholder");
+  const platforms: any = data?.data?.data.map((item: any) => ({
+    ...item,
+    value: item.id,
+    key: item.name,
+    label: (
+      <div className="flex items-center gap-1">
+        <Image src={item.icon} alt="" preview={false} width={25} />
+        {item.name}
+      </div>
+    ),
+  }));
   return (
     <Select
       style={{ width: 200 }}
       className={className}
       showSearch
+      filterOption={filterOption}
       value={value}
       placeholder={p("selectplatform")}
       allowClear
-      options={data?.data?.data.map((item: any) => ({
-        ...item,
-        value: item.id,
-        label: (
-          <div className="flex items-center gap-1">
-            <Image src={item.icon} alt="" preview={false} width={25} />
-            {item.name}
-          </div>
-        ),
-      }))}
+      options={platforms}
       onChange={onChange}
       {...props} // Spread additional props to the Select component
     />

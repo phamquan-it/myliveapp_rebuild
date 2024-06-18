@@ -112,7 +112,7 @@ const Page = () => {
       : 20
   );
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["orders", pageIndex, pageSize, router.locale, keyword],
+    queryKey: ["orders", router.asPath],
     queryFn: () =>
       axiosClient.get("/log/list?language=" + router.locale, {
         params: {
@@ -137,6 +137,13 @@ const Page = () => {
   }, 300);
   const p = useTranslations("Placeholder");
   useEffect(() => {
+    if (
+      keyword == null &&
+      pageSize == 20 &&
+      pageIndex == 1 &&
+      router.asPath == "/dashboard/log"
+    )
+      return;
     router.push(router, {
       query: {
         keyword: keyword,

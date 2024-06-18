@@ -39,6 +39,7 @@ import dayjs from "dayjs";
 import { text } from "stream/consumers";
 import Link from "next/link";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
+import filterOptionByLabel from "@/hooks/filterOptionByLabel";
 
 const { Option } = Select;
 const statisticalOrder = [
@@ -296,7 +297,7 @@ const Page = () => {
       : 10
   );
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["orders", pageIndex, pageSize, status, keyword, provider],
+    queryKey: ["orders", router.asPath],
     queryFn: () =>
       axiosClient.get("/order/list?language=en", {
         params: {
@@ -341,6 +342,15 @@ const Page = () => {
     setIKeyword(e.target.value);
   };
   useEffect(() => {
+    if (
+      status == null &&
+      provider == null &&
+      keyword == null &&
+      pageSize == 10 &&
+      pageIndex == 1 &&
+      router.asPath == "/dashboard/order"
+    )
+      return;
     router.push(router, {
       query: {
         keyword: keyword,
@@ -458,6 +468,8 @@ const Page = () => {
             style={{ width: 150 }}
             onChange={handleStatus}
             options={statusOptions}
+            showSearch
+            filterOption={filterOptionByLabel}
           />
           <Select
             defaultValue={provider}

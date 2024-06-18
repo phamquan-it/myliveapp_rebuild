@@ -46,7 +46,7 @@ const Page = () => {
       : 10
   );
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["orders", pageIndex, pageSize, keyword, router.locale],
+    queryKey: ["orders", router.asPath],
     queryFn: () =>
       axiosClient.get("/discount/list?language=" + router.locale, {
         params: {
@@ -189,6 +189,13 @@ const Page = () => {
   }, 300);
   const d = useTranslations("DashboardMenu");
   useEffect(() => {
+    if (
+      keyword == "" &&
+      pageSize == 10 &&
+      pageIndex == 1 &&
+      router.asPath == "/dashboard/voucher"
+    )
+      return;
     router.push(router, {
       query: {
         keyword: keyword,

@@ -36,6 +36,7 @@ import { useEffect, useState } from "react";
 import _ from "lodash";
 import { toast } from "react-toastify";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
+import { error } from "console";
 const { Option } = Select;
 const Page = () => {
   const token = getCookie("token");
@@ -65,7 +66,12 @@ const Page = () => {
       dataIndex: "isActive",
       key: "isActive",
       render: (text: string, record: any) => (
-        <Switch defaultChecked={record?.isActive == "1" ? true : false} />
+        <Switch
+          defaultChecked={record?.isActive == "1" ? true : false}
+          onChange={(value) => {
+            handleActiveUser(value, record);
+          }}
+        />
       ),
     },
     {
@@ -160,6 +166,27 @@ const Page = () => {
       },
     },
   ];
+  const handleActiveUser = (value: any, user: any) => {
+    axiosClient
+      .patch(
+        "https://devbe.azseo.net/user/update-status?language=en",
+        {
+          status: value ? 0 : 1,
+          data: [user.id],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        toast.success(res.data.data.message);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const hideModal = () => {
@@ -189,7 +216,7 @@ const Page = () => {
     getObjecFormUrlParameters(router)?.keyword || ""
   );
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["user", pageIndex, pageSize, router.locale, keyword],
+    queryKey: ["user", router.asPath],
     queryFn: () =>
       axiosClient.get("/user/list?language=en", {
         params: {
@@ -214,13 +241,19 @@ const Page = () => {
     setKeyword(e.target.value);
   }, 300);
   useEffect(() => {
-    router.push(router, {
-      query: {
-        keyword: keyword,
-        pageIndex: pageIndex,
-        pageSize: pageSize,
-      },
-    });
+    if (
+      keyword == null &&
+      pageSize == 20 &&
+      pageIndex == 1 &&
+      router.asPath == "/dashboard/user"
+    )
+      router.push(router, {
+        query: {
+          keyword: keyword,
+          pageIndex: pageIndex,
+          pageSize: pageSize,
+        },
+      });
   }, [keyword, pageIndex, pageSize]);
   return (
     <>

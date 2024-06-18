@@ -39,6 +39,7 @@ import CategoryDetail from "@/components/admin/crudform/details/CategoryDetail";
 import { toast } from "react-toastify";
 import Title from "antd/es/typography/Title";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
+import filterOption from "@/hooks/filterOption";
 const { Option } = Select;
 const Page = () => {
   const router = useRouter();
@@ -186,14 +187,7 @@ const Page = () => {
   );
   const [pageSize, setPageSize] = useState(10);
   const { data, isFetching, isError } = useQuery({
-    queryKey: [
-      "category",
-      pageIndex,
-      pageSize,
-      router.locale,
-      keyword,
-      platformValue,
-    ],
+    queryKey: ["category", router.asPath],
     queryFn: () =>
       axiosClient.get("/categories/list?language=" + router.locale, {
         params: {
@@ -227,6 +221,14 @@ const Page = () => {
   };
   const p = useTranslations("Placeholder");
   useEffect(() => {
+    if (
+      keyword == null &&
+      platformValue == null &&
+      pageIndex == 1 &&
+      pageSize == 10 &&
+      router.asPath == "/dashboard/category"
+    )
+      return;
     router.push(router, {
       query: {
         keyword: keyword,
@@ -258,7 +260,7 @@ const Page = () => {
             <Form.Item
               label="Platform"
               name="platform"
-              rules={[{ required: true, message: "Please select a platform" }]}
+              rules={[{ required: true, message: "Select platform" }]}
             >
               <Select placeholder="Select platform">
                 <Option value="web">Web</Option>
@@ -285,6 +287,7 @@ const Page = () => {
             defaultValue={platformValue}
             allowClear
             showSearch
+            filterOption={filterOption}
             options={platforms.map((platform) => ({
               label: (
                 <>
@@ -300,6 +303,7 @@ const Page = () => {
                 </>
               ),
               value: platform.id,
+              key: platform.name,
             }))}
             style={{ width: 200 }}
             placeholder={p("selectplatform")}

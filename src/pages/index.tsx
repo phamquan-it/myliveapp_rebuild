@@ -102,11 +102,11 @@ const Home = ({
             <Button
               size="small"
               type="primary"
-              className="!bg-blue-500 hover:!shadow-md hover:!bg-blue-400 !py-0"
+              className=" hover:!shadow-md hover:!bg-blue-400 !py-0"
               id="buy"
               onClick={() => {
                 // setShowModal(true);
-                router.push(`/order/${record.platformId}/${record.id}`);
+                router.push(`/dashboard/order/new-order?id=${text}`);
               }}
             >
               {t("buy")}
@@ -143,7 +143,12 @@ const Home = ({
   const d = useTranslations("PageLayout");
   const handleTable = (pagination: any) => {
     setPageSize(pagination.pageSize);
-    setCurrent(pagination.current);
+    // setCurrent(pagination.current);
+    router.push(router, {
+      query: {
+        current: pagination.current,
+      },
+    });
   };
   useEffect(() => {
     const initialQueryObject = {
@@ -153,7 +158,7 @@ const Home = ({
     // alert(getObjecFormUrlParameters()?.platform != "");
 
     filter(getObjecFormUrlParameters()?.search, platformValue);
-  }, [router.asPath, platformValue, current]);
+  }, [router.asPath, platformValue]);
   //profess list
   const professList = [
     {
@@ -202,7 +207,9 @@ const Home = ({
       {
         query: {
           ...queries,
-          current: current,
+          current: isNaN(parseInt(getObjecFormUrlParameters()?.current))
+            ? 1
+            : parseInt(getObjecFormUrlParameters()?.current),
         },
       },
       {
@@ -272,166 +279,199 @@ const Home = ({
       </Modal>
 
       <Layout className="">
-        <div className="container m-auto" style={{ maxWidth: 1300 }}>
-          <Header className="!bg-transparent mb-10 py-3">
-            <div className="flex justify-between items-center">
-              <Image
-                preview={false}
-                width={200}
-                height={50}
-                src={`/assets/logo.png`}
-                alt=""
-              />
-              <div className="flex gap-1 items-center">
-                <LocaleSwitcher
-                  onChange={(value: string) => {
-                    router.push(router, "", { locale: value });
-                    router.events.on("routeChangeComplete", () => {
-                      setserviceDataTable(serviceData);
-                    });
-                  }}
+        <Header
+          style={{
+            backgroundColor: "transparent",
+            display: "flex-row",
+            justifyItems: "space-between",
+          }}
+        >
+          <Content className="container m-auto" style={{ maxWidth: 1200 }}>
+            <Header className="!bg-transparent mb-10 py-3">
+              <div className="flex justify-between items-center">
+                <Image
+                  preview={false}
+                  height={50}
+                  src={`/assets/logo.webp`}
+                  alt=""
                 />
-                <Button
-                  type="default"
-                  style={{ backgroundColor: "#1677ff", color: "white" }}
-                  onClick={() => {
-                    router.push("/login");
-                  }}
-                >
-                  {d("login")}
-                </Button>
-                <Button
-                  type="default"
-                  className=""
-                  onClick={() => {
-                    router.push("/register");
-                  }}
-                >
-                  {d("register")}
-                </Button>
+                <div className="flex gap-1 items-center">
+                  <LocaleSwitcher
+                    onChange={(value: string) => {
+                      router.push(
+                        router,
+                        {
+                          query: router.query,
+                        },
+                        { locale: value }
+                      );
+                    }}
+                  />
+                  <Button
+                    type="primary"
+                    className=""
+                    onClick={() => {
+                      router.push("/login");
+                    }}
+                  >
+                    {d("login")}
+                  </Button>
+                  <Button
+                    type="default"
+                    className=""
+                    onClick={() => {
+                      router.push("/register");
+                    }}
+                  >
+                    {d("register")}
+                  </Button>
+                </div>
               </div>
+            </Header>
+            <div className="mb-5">
+              <div className="container m-auto"></div>
             </div>
-          </Header>
-          <Layout>
-            <Content>
-              <div className="mb-5">
-                <div className="flex justify-center">
-                  <div className="">
-                    <Title
-                      className="!font-medium text-center !text-gray-700 !pb-0 !my-2"
-                      level={3}
-                    >
-                      {d("professtitle")}
-                    </Title>
-                    <div className="pb-3 pr_decoration my-3 ms-5"></div>
-                  </div>
-                </div>
-                <div className="grid grid-cols-6 gap-2">
-                  <div></div>
-                  {professList.map((item, index) => {
-                    return (
-                      <div key={index} className="text-center px-2 custom_icon">
-                        <h1 className="flex gap-1 justify-center text-xl">
-                          <span className="">{item.icon}</span>
-                          <span className="text-xl">{item.title}</span>
-                        </h1>
-                        <p className="text-sm">{item.description}</p>
-                      </div>
-                    );
-                  })}
-
-                  <div></div>
-                </div>
-              </div>
-              <div
-                style={{ maxWidth: 1200, margin: "auto" }}
-                className="flex gap-2 py-3"
+          </Content>
+        </Header>
+        <Content>
+          <div className="flex justify-center">
+            <div className="mt-10">
+              <Title
+                className="!font-medium text-center !text-gray-700 !pb-0 !my-2"
+                level={3}
               >
-                <Input
-                  placeholder={p("search")}
-                  style={{
-                    width: 200,
-                    fontSize: 12,
-                  }}
-                  onChange={search}
-                  defaultValue={getObjecFormUrlParameters().search || ""}
-                />
-                <Select
-                  value={platformValue}
-                  options={platformdata.map((item: any, index: number) => ({
-                    ...item,
-                    key: index,
-                    value: `${item.id}`,
-                    label: (
-                      <div className="flex items-center gap-2">
-                        <Image
-                          src={item.icon}
-                          width={20}
-                          alt=""
-                          preview={false}
-                        />
-                        {item.name}
-                      </div>
-                    ),
-                  }))}
-                  showSearch
-                  style={{ width: 200 }}
-                  placeholder="Select platform"
-                  onChange={(value) => {
-                    console.log(value);
+                {d("professtitle")}
+              </Title>
+              <div className="pb-3 pr_decoration my-3 ms-5"></div>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 lg:flex gap-2 justify-center ">
+            {professList.map((item, index) => {
+              return (
+                <div
+                  style={{ width: 240 }}
+                  key={index}
+                  className=" px-4 custom_icon
+                        "
+                >
+                  <h1 className="flex gap-1 justify-center text-xl">
+                    <span className="">{item.icon}</span>
+                    <span
+                      className="text-xl"
+                      style={{
+                        backgroundImage:
+                          "linear-gradient(90deg, rgba(9,121,10,1) 0%, rgba(3,62,182,1) 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }}
+                    >
+                      {item.title}
+                    </span>
+                  </h1>
+                  <p
+                    className="text-sm text-center mt-1"
+                    style={{
+                      fontSize: 15,
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {item.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+          <Title level={3} className="!text-gray-700 !text-center mt-7">
+            Bảng giá dịch vụ
+          </Title>
+          <div
+            style={{ maxWidth: 1200, margin: "auto" }}
+            className="flex gap-2 py-3"
+          >
+            <Input
+              placeholder={p("search")}
+              style={{
+                width: 200,
+                fontSize: 12,
+              }}
+              onChange={search}
+              defaultValue={getObjecFormUrlParameters().search || ""}
+            />
+            <Select
+              value={platformValue}
+              options={platformdata.map((item: any, index: number) => ({
+                ...item,
+                key: index,
+                value: `${item.id}`,
+                label: (
+                  <div className="flex items-center gap-2">
+                    <Image src={item.icon} width={20} alt="" preview={false} />
+                    {item.name}
+                  </div>
+                ),
+              }))}
+              showSearch
+              style={{ width: 200 }}
+              placeholder="Select platform"
+              onChange={(value) => {
+                console.log(value);
 
-                    setPlatformValue(value);
-                  }}
-                />
-              </div>
-              <Table
-                style={{ maxWidth: 1200, margin: "auto" }}
-                className="customIndexTable !text-sm"
-                rowClassName={"custom_row_height"}
-                onChange={handleTable}
-                dataSource={DataHasChange.map((item, index) => {
-                  var name;
-                  if (item?.icon == undefined) {
-                    name = locale == "en" ? item.name : item?.name_vi;
-                  } else {
-                    name = item.name;
-                  }
-                  const convertedItem = { ...item, name: name, key: index };
+                setPlatformValue(value);
+              }}
+            />
+          </div>
+          <div className="container mx-auto" style={{ maxWidth: 1200 }}>
+            <Table
+              style={{
+                width: "100%",
+              }}
+              className="customIndexTable !text-sm"
+              rowClassName={"custom_row_height"}
+              onChange={handleTable}
+              dataSource={DataHasChange.map((item, index) => {
+                var name;
+                if (item?.icon == undefined) {
+                  name = locale == "en" ? item.name : item?.name_vi;
+                } else {
+                  name = item.name;
+                }
+                const convertedItem = { ...item, name: name, key: index };
 
-                  return convertedItem;
-                })}
-                columns={columns}
-                pagination={{
-                  pageSize: pageSize,
-                  current: current,
-                }}
-                expandable={{
-                  expandedRowRender: (record) => (
-                    <>
-                      <div className="px-5 py-2">
-                        <TextArea
-                          className="!bg-transparent"
-                          value={
-                            locale == "en"
-                              ? record.description_en
-                              : record.description_vi
-                          }
-                          autoSize
-                          readOnly
-                        />
-                      </div>
-                    </>
-                  ),
-                  rowExpandable: (record) => {
-                    if (locale == "en")
-                      return record.description_en != undefined;
-                    else return record.description_vi != undefined;
-                  },
-                }}
-              />
-            </Content>
-          </Layout>
-        </div>
+                return convertedItem;
+              })}
+              columns={columns}
+              pagination={{
+                pageSize: pageSize,
+                current: isNaN(parseInt(getObjecFormUrlParameters()?.current))
+                  ? 1
+                  : parseInt(getObjecFormUrlParameters()?.current),
+              }}
+              expandable={{
+                expandedRowRender: (record) => (
+                  <>
+                    <div className="px-5 py-2">
+                      <TextArea
+                        className="!bg-transparent"
+                        value={
+                          locale == "en"
+                            ? record.description_en
+                            : record.description_vi
+                        }
+                        autoSize
+                        readOnly
+                      />
+                    </div>
+                  </>
+                ),
+                rowExpandable: (record) => {
+                  if (locale == "en") return record.description_en != undefined;
+                  else return record.description_vi != undefined;
+                },
+              }}
+            />
+          </div>
+        </Content>
         <Footer className="!bg-gray-800 !rounded-t-2xl !text-slate-50">
           <div
             className="container mx-auto grid grid-cols-3 gap-4"

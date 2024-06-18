@@ -32,7 +32,7 @@ import axiosClient from "@/apiClient/axiosClient";
 const { Header, Sider, Content } = Layout;
 
 interface DashBoardLayoutLayout {
-  children: ReactNode;
+  children?: ReactNode;
 }
 const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
   console.log("re-render");
@@ -292,7 +292,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
           </Sider>
           <div className={`grid pb-8 ${collapsed ? "!hidden" : "px-3"}`}>
             <Button
-              className="!text-sm"
+              className="!text-sm !py-2"
               onClick={() => {
                 deleteCookie("token");
                 router.push("/login");

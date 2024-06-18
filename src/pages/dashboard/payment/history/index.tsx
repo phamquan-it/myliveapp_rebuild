@@ -24,6 +24,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Select } from "antd/lib";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
+import filterOptionByLabel from "@/hooks/filterOptionByLabel";
 
 const Page = () => {
   const router = useRouter();
@@ -218,7 +219,7 @@ const Page = () => {
     setPageSize(pageSize);
   };
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["paymentHistory", pageIndex, pageSize, keyword, status],
+    queryKey: ["paymentHistory", router.asPath],
     queryFn: () =>
       axiosClient.get(`/payment/history?language=${router.locale}`, {
         params: {
@@ -239,6 +240,14 @@ const Page = () => {
     setStatus(value);
   };
   useEffect(() => {
+    if (
+      status == null &&
+      keyword == null &&
+      pageSize == 10 &&
+      pageIndex == 1 &&
+      router.asPath == "/dashboard/payment/history"
+    )
+      return;
     router.push(router, {
       query: {
         pageIndex: pageIndex,
@@ -265,6 +274,8 @@ const Page = () => {
           style={{ width: 200 }}
           placeholder={p("select status")}
           defaultValue={status}
+          showSearch
+          filterOption={filterOptionByLabel}
           allowClear
           onChange={handleStatus}
           options={[

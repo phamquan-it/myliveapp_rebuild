@@ -57,6 +57,7 @@ textarea.ant-input{
 .custom_icon * svg{
   width: 20px;
   height: 20px;
+  color: rgb(0, 119, 0);
 }
 .ant-table-content{
   background-color: transparent !important;
@@ -97,7 +98,7 @@ textarea.ant-input{
 }
 
 .ant-table-thead{
-  background-color: #f3f3f3 !important;
+  background-color: #fafafa !important;
   padding: 30px 5px !important;
 }
 .order_btn.ant-btn{

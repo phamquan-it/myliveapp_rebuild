@@ -217,7 +217,7 @@ const Page = () => {
   );
   const [keyword, setKeyword] = useState("");
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["orders", router.locale, pageSize, pageIndex, keyword],
+    queryKey: ["orders", router.asPath],
     queryFn: () =>
       axiosClient.get(`/refund-money/list?language=${router.locale}`, {
         params: {
@@ -243,6 +243,13 @@ const Page = () => {
   const d = useTranslations("DashboardMenu");
   const p = useTranslations("Placeholder");
   useEffect(() => {
+    if (
+      keyword == "" &&
+      pageIndex == 1 &&
+      pageSize == 20 &&
+      router.asPath == "/dashboard/refund"
+    )
+      return;
     router.push(router, {
       query: {
         keyword: keyword,

@@ -17,6 +17,9 @@ import { useRouter } from "next/router";
 import _ from "lodash";
 import PlatformSelectForFilter from "@/components/admin/PlatformSelectForFilter";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
+import UpdateService from "@/components/admin/crudform/update/UpdateService";
+import filterOption from "@/hooks/filterOption";
+import filterOptionByLabel from "@/hooks/filterOptionByLabel";
 export default function Index() {
   const router = useRouter();
   const token = getCookie("token");
@@ -203,6 +206,9 @@ export default function Index() {
                   type="primary"
                   size="small"
                   className="!pb-0 order_btn !text-sm"
+                  onClick={() => {
+                    router.push(`/dashboard/order/new-order?id=${text}`);
+                  }}
                 >
                   {t("order")}
                 </Button>
@@ -242,16 +248,7 @@ export default function Index() {
     getObjecFormUrlParameters(router)?.keyword
   );
   const { data, isFetching, isError } = useQuery({
-    queryKey: [
-      "service",
-      router.locale,
-      platformId,
-      keyword,
-      category,
-      pageIndex,
-      provider,
-      status,
-    ],
+    queryKey: ["service", router.asPath],
     queryFn: (querykey: any) => {
       console.log(querykey);
 
@@ -320,7 +317,17 @@ export default function Index() {
   };
   const p = useTranslations("Placeholder");
   useEffect(() => {
-    //getObjecFormUrlParameters(router);
+    if (
+      keyword == null &&
+      platformId == null &&
+      category == null &&
+      pageIndex == 1 &&
+      provider == null &&
+      status == null &&
+      pageSize == 50 &&
+      router.asPath == "/dashboard/service"
+    )
+      return;
     router.push(router, {
       query: {
         pageSize: pageSize,
@@ -332,16 +339,7 @@ export default function Index() {
         category: category,
       },
     });
-  }, [
-    pageIndex,
-    keyword,
-    platformId,
-    provider,
-    status,
-    category,
-    router.asPath,
-    pageSize,
-  ]);
+  }, [pageIndex, keyword, platformId, provider, status, category, pageSize]);
 
   return (
     <div className="">
@@ -357,12 +355,13 @@ export default function Index() {
           <Modal
             title={t("create")}
             open={showModal}
+            width={1000}
             onCancel={hideModal}
             footer={null}
           >
             <div>
               <Form layout="vertical" onFinish={onFinish}>
-                <CreateService />
+                <UpdateService />
                 <Form.Item>
                   <Button type="primary" htmlType="submit">
                     Submit
@@ -392,6 +391,7 @@ export default function Index() {
                   showSearch
                   style={{ width: 220 }}
                   value={category}
+                  filterOption={filterOption}
                   defaultValue={category}
                   placeholder={p("selectcategory")}
                   onChange={hanleCategory}
@@ -409,6 +409,7 @@ export default function Index() {
                         <span style={{ fontSize: 14 }}>{item.name}</span>
                       </div>
                     ),
+                    key: item.name,
                     value: item.id,
                   }))}
                 />
@@ -416,12 +417,13 @@ export default function Index() {
                   showSearch
                   defaultValue={provider}
                   style={{ width: 170 }}
+                  filterOption={filterOption}
                   placeholder={p("selectprovider")}
                   onChange={handleProvider}
                   allowClear
                   options={[
-                    { value: 1, label: "Gainsmm" },
-                    { value: 2, label: "Viralsmm" },
+                    { value: 1, label: "Gainsmm", key: "Gainsmm" },
+                    { value: 2, label: "Viralsmm", key: "Gainsmm" },
                   ]}
                 />
                 <Select
@@ -430,6 +432,7 @@ export default function Index() {
                   placeholder={p("select status")}
                   onChange={handleStatus}
                   defaultValue={status}
+                  filterOption={filterOptionByLabel}
                   allowClear
                   options={[
                     { value: 1, label: "Active" },
