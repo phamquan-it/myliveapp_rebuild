@@ -370,7 +370,7 @@ const Page = () => {
         <Title className="p-3 border-b bg-gray-100" level={5}>
           All orders
         </Title>
-        <ul className="grid grid-cols-7 gap-3 p-3">
+        <ul className="grid sm:grid-cols-2 md:grid-cols-7 gap-3 p-3">
           {statisticalOrder.map((item) => {
             return (
               <>
@@ -508,6 +508,7 @@ const Page = () => {
         columns={columns}
         loading={isFetching}
         onChange={handleTableChange}
+        scroll={{ x: 1200 }}
         pagination={{
           total: data?.data.total,
           pageSize: pageSize,

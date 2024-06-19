@@ -349,6 +349,7 @@ const Page = () => {
             key: pageIndex * pageSize + (index + 1) - pageSize,
           })) ?? []
         }
+        scroll={{ x: 1500 }}
         columns={columns}
         loading={isFetching}
         onChange={handleTableChange}

@@ -396,6 +396,7 @@ const Page: React.FC = () => {
             current: pageIndex,
             // position: ["bottomCenter"],
           }}
+          scroll={{ x: 600 }}
           loading={isFetching}
         />
       </SortableContext>

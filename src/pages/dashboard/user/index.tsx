@@ -247,13 +247,14 @@ const Page = () => {
       pageIndex == 1 &&
       router.asPath == "/dashboard/user"
     )
-      router.push(router, {
-        query: {
-          keyword: keyword,
-          pageIndex: pageIndex,
-          pageSize: pageSize,
-        },
-      });
+      return;
+    router.push(router, {
+      query: {
+        keyword: keyword,
+        pageIndex: pageIndex,
+        pageSize: pageSize,
+      },
+    });
   }, [keyword, pageIndex, pageSize]);
   return (
     <>
@@ -261,7 +262,7 @@ const Page = () => {
         {d("user")}
       </Title>
       <Modal
-        title={t("create")}
+        title={d("addfund")}
         open={showModal}
         onCancel={hideModal}
         footer={null}
@@ -272,51 +273,16 @@ const Page = () => {
             name="name"
             rules={[{ required: true, message: "Please enter your name" }]}
           >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              {
-                required: true,
-                type: "email",
-                message: "Please enter a valid email address",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: "Please enter your password" }]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Form.Item label="Phone" name="phone">
-            <Input />
-          </Form.Item>
-          <div className="grid grid-cols-3 gap-2">
-            <Form.Item label="Fund Number" name="fundNumber">
-              <Input type="number" />
-            </Form.Item>
-            <Form.Item label="Total Money" name="totalMoney">
-              <Input type="number" />
-            </Form.Item>
-            <Form.Item
-              label="Is Active"
-              name="isActive"
-              valuePropName="checked"
-            >
-              <Switch />
-            </Form.Item>
-          </div>
-          <Form.Item label="Role" name="role">
-            <Select>
-              <Option value="admin">Admin</Option>
-              <Option value="user">User</Option>
-            </Select>
+            <Select
+              mode="multiple"
+              allowClear
+              options={data?.data.data.user}
+              style={{ width: "100%" }}
+              placeholder="Please select"
+              defaultValue={["a10", "c12"]}
+              // onChange={handleChange}
+              // options={options}
+            />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
@@ -340,18 +306,19 @@ const Page = () => {
           iconPosition="end"
           onClick={openModal}
         >
-          {t("create")}
+          {d("addfund")}
         </Button>
       </div>
       <Table
         className="rounded-md shadow-md border mt-3"
         dataSource={data?.data.data.map((item: any, index: number) => ({
           ...item,
-          key: pageIndex * 10 + (index + 1) - 10,
+          key: pageIndex * pageSize + (index + 1) - pageSize,
         }))}
         columns={columns}
         loading={isFetching}
         onChange={handleTableChange}
+        scroll={{ x: 900 }}
         pagination={{
           total: data?.data.total,
           pageSize: pageSize,

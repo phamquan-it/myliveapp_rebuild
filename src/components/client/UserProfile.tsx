@@ -9,7 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import { isError } from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { useTranslations } from "use-intl";
 
 interface userProfileProps {
@@ -72,6 +72,7 @@ const UserProfile: React.FC<userProfileProps> = (props) => {
       </Title>
       <div className="w-10/12 grid md:grid-cols-2 m-auto gap-9 shadow-md p-4 rounded-md border min-w-80">
         <div>
+          <ToastContainer />
           {isSuccess ? (
             <Form
               name="basic"

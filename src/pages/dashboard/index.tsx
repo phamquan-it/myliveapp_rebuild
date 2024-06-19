@@ -36,6 +36,7 @@ import { useTranslations } from "use-intl";
 import PlatformSelectForFilter from "@/components/admin/PlatformSelectForFilter";
 import Title from "antd/es/typography/Title";
 import CategorySelect from "@/components/admin/CategorySelect";
+import DashBoardStatical from "@/components/admin/crudform/statistical/DashboardStatiticcal";
 
 const Page = () => {
   const t = useTranslations("MyLanguage");
@@ -53,13 +54,13 @@ const Page = () => {
       address: "10 Downing Street",
     },
     {
-      key: "2",
+      key: "3",
       name: "John",
       age: 42,
       address: "10 Downing Street",
     },
     {
-      key: "2",
+      key: "4",
       name: "John",
       age: 42,
       address: "10 Downing Street",
@@ -108,8 +109,8 @@ const Page = () => {
   return (
     <>
       <div>
-        <FastInfoList />
-        <div className="flex">
+        <DashBoardStatical />
+        <div className=" hidden">
           <div className="w-2/3">
             <Line
               data={data}

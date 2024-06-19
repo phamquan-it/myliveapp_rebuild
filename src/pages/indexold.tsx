@@ -280,25 +280,22 @@ const Home = ({
 
       <Layout className="">
         <Header
-          className="!shadow-sm"
           style={{
-            backgroundColor: "white",
+            backgroundColor: "transparent",
             display: "flex-row",
             justifyItems: "space-between",
           }}
         >
-          <Content className="container m-auto mt-1" style={{ maxWidth: 1200 }}>
+          <Content className="container m-auto" style={{ maxWidth: 1200 }}>
             <Header className="!bg-transparent mb-10 py-3">
               <div className="flex justify-between items-center">
-                <div>
-                  <Image
-                    preview={false}
-                    height={50}
-                    src={`/assets/logo.webp`}
-                    alt=""
-                  />
-                </div>
-                <div className="flex gap-1 items-center -translate-y-3">
+                <Image
+                  preview={false}
+                  height={50}
+                  src={`/assets/logo.webp`}
+                  alt=""
+                />
+                <div className="flex gap-1 items-center">
                   <LocaleSwitcher
                     onChange={(value: string) => {
                       router.push(
@@ -352,11 +349,9 @@ const Home = ({
             {professList.map((item, index) => {
               return (
                 <div
-                  style={{
-                    width: 240,
-                  }}
+                  style={{ width: 240 }}
                   key={index}
-                  className=" px-4 custom_icon bg-gray-100 py-2 rounded-r-3xl border-r-2 border-r-blue-400 
+                  className=" px-4 custom_icon
                         "
                 >
                   <h1 className="flex gap-1 justify-center text-xl">

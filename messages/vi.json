@@ -63,7 +63,8 @@
     "log":"Nhật ký",
     "logout":"Đăng xuất",
     "voucher":"Mã giảm giá",
-    "cron":"Lên lịch"
+    "cron":"Lên lịch",
+    "addfund":"Cộng tiền"
   },
   "MyLanguage": {
     "order":"Đặt hàng",
@@ -126,6 +127,7 @@
     "startdate":"Thời gian chạy",
     "charge":"Chi phí",
     "creator":"Người tạo"
+    
   },
   "Placeholder":{
     "search":"Tìm kiếm...",

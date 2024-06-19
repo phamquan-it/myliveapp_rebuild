@@ -40,6 +40,7 @@ import { toast } from "react-toastify";
 import Title from "antd/es/typography/Title";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 import filterOption from "@/hooks/filterOption";
+import PlatformSelect from "@/components/admin/PlatformSelect";
 const { Option } = Select;
 const Page = () => {
   const router = useRouter();
@@ -173,8 +174,7 @@ const Page = () => {
     setShowModal(true);
   };
   const onFinish = (values: any) => {
-    // console.log("Form values:", values);
-    // Handle form submission logic here
+    console.log(values);
   };
   const [openState, setOpenState] = useState(false);
   const [keyword, setKeyword] = useState(
@@ -257,15 +257,7 @@ const Page = () => {
             >
               <Input placeholder="Enter title..," />
             </Form.Item>
-            <Form.Item
-              label="Platform"
-              name="platform"
-              rules={[{ required: true, message: "Select platform" }]}
-            >
-              <Select placeholder="Select platform">
-                <Option value="web">Web</Option>
-              </Select>
-            </Form.Item>
+            <PlatformSelect required={true} />
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 {t("create")}
@@ -327,6 +319,7 @@ const Page = () => {
           ...item,
           key: pageIndex * pageSize + (index + 1) - pageSize,
         }))}
+        scroll={{ x: 700 }}
         columns={columns}
         loading={isFetching}
         onChange={handleTableChange}

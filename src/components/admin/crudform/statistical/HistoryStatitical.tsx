@@ -13,7 +13,7 @@ const HistoryStatitical: React.FC<HistoryStatiticalProps> = ({
   return (
     <>
       <div
-        className=" rounded-md p-4 py-6 gap-1 flex"
+        className=" rounded-md p-4 py-6 gap-1 flex min-w-42"
         style={{
           backgroundColor: color,
         }}
@@ -24,7 +24,7 @@ const HistoryStatitical: React.FC<HistoryStatiticalProps> = ({
             color: color,
           }}
         >
-          <span className="text-2xl">$</span>
+          <span className="text-2xl min-w-12 text-center">$</span>
         </div>
         <ul>
           <li>

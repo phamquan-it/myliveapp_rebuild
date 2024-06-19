@@ -475,6 +475,7 @@ export default function Index() {
               rowExpandable: (record) =>
                 record?.service?.description_en !== undefined,
             }}
+            scroll={{ x: 1000 }}
             pagination={{
               position: ["bottomCenter"],
               defaultCurrent: pageIndex,

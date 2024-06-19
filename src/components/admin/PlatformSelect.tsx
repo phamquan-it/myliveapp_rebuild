@@ -41,6 +41,7 @@ const PlatformSelect: React.FC<PlatformSelectProps> = ({
       {...props} // Spread additional props here
     >
       <Select
+        allowClear
         style={{ width: 200 }}
         className={className}
         showSearch

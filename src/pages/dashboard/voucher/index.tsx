@@ -304,11 +304,12 @@ const Page = () => {
         className="border rounded-md shadow-md"
         dataSource={data?.data.data.map((item: any, index: number) => ({
           ...item,
-          key: pageIndex * 10 + (index + 1) - 10,
+          key: pageIndex * pageSize + (index + 1) - pageSize,
         }))}
         columns={columns}
         loading={isFetching}
         onChange={handleTableChange}
+        scroll={{ x: 1000 }}
         pagination={{
           total: data?.data.total,
           pageSize: pageSize,

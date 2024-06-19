@@ -9,7 +9,7 @@ const FormLayout: React.FC<formLayoutProps> = ({ children }) => {
   return (
     <>
       <div className="  rounded-md border relative bg-gray-50 h-screen flex">
-        <div className="md:w-1/4 border-none md:border rounded md:shadow-md grid m-auto">
+        <div className="md:min-w-96 md:w-1/4 border-none md:border rounded md:shadow-md grid m-auto">
           <ToastContainer />
           <Affix className="absolute top-3 right-10">
             <LocaleSwitcher />

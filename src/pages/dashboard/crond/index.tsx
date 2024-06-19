@@ -137,6 +137,7 @@ const Page = () => {
         dataSource={fakeData}
         columns={columns}
         className="border shadow-md rounded-md mt-3"
+        scroll={{ x: 800 }}
       />
     </>
   );

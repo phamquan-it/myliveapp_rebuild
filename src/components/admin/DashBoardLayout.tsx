@@ -10,6 +10,8 @@ import {
   SettingOutlined,
   TeamOutlined,
   UserOutlined,
+  WindowsFilled,
+  WindowsOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, MenuProps, theme } from "antd";
 import { useRouter } from "next/router";
@@ -99,7 +101,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
     },
     {
       key: "15",
-      icon: <CalendarFilled />,
+      icon: <WindowsFilled />,
       role: "admin",
       label: t("platform"),
       page: "/dashboard/platform",

@@ -389,6 +389,7 @@ const Page = () => {
         pagination={{
           total: 20,
         }}
+        scroll={{ x: 600 }}
       />
     </>
   );

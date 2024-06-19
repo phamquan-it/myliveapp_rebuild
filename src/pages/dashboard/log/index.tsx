@@ -176,6 +176,7 @@ const Page = () => {
           ...item,
           key: pageIndex * pageSize + (index + 1) - pageSize,
         }))}
+        scroll={{ x: 800 }}
         columns={columns}
         pagination={{
           total: data?.data.total,

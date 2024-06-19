@@ -63,7 +63,8 @@
     "log":"Log",
     "logout":"Logout",
     "voucher":"Voucher",
-    "cron":"Crond"
+    "cron":"Cron",
+    "addfund":"Add fund"
   },
   "MyLanguage": {
     "order":"Order",
