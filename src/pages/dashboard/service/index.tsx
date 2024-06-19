@@ -371,8 +371,11 @@ export default function Index() {
             </div>
           </Modal>
 
-          <div className="flex justify-between items-center my-3" id="filter">
-            <div className="flex gap-2">
+          <div
+            className="grid md:flex justify-between items-center my-3"
+            id="filter"
+          >
+            <div className="grid md:flex gap-2">
               <div className="">
                 <Input
                   defaultValue={keyword}
@@ -381,7 +384,7 @@ export default function Index() {
                   className="h-full"
                 />
               </div>
-              <div className="flex gap-1">
+              <div className="grid md:flex gap-1">
                 <PlatformSelectForFilter
                   noLabel={true}
                   onChange={handePlatform}

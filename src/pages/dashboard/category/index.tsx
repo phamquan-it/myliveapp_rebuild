@@ -268,7 +268,7 @@ const Page = () => {
       </Modal>
 
       <div className="flex justify-between mt-10">
-        <div className="flex justify-start gap-1 " id="filter">
+        <div className="grid md:flex justify-start gap-1 " id="filter">
           <Input
             style={{ width: 200 }}
             placeholder={p("search")}

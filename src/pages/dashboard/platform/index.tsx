@@ -30,7 +30,7 @@ import TableAction from "@/components/admin/TableAction";
 import format from "@/hooks/dayjsformatter";
 import { useRouter } from "next/router";
 import { GetStaticPropsContext } from "next";
-import _ from "lodash";
+import _, { debounce } from "lodash";
 import { TablePaginationConfig } from "antd/lib";
 import {
   FilterValue,
@@ -295,7 +295,7 @@ const Page: React.FC = () => {
       },
     },
   ];
-  const handleSearch = _.debounce((e: any) => {
+  const handleSearch = debounce((e: any) => {
     setKeyword(e.target.value);
   }, 300);
   const handleTable = (
