@@ -58,17 +58,19 @@ const UpdateService: React.FC = () => {
   };
   return (
     <div className="grid">
-      <Transfer
-        dataSource={mockData}
-        showSearch
-        targetKeys={targetKeys}
-        onChange={handleChange}
-        render={(item) => item.title}
-        style={{ width: "100%" }} // Set width to 100%
-        listStyle={{
-          width: "50%",
-        }}
-      />
+      <Form.Item label="Transfer" name="transfer">
+        <Transfer
+          dataSource={mockData}
+          showSearch
+          targetKeys={targetKeys}
+          onChange={handleChange}
+          render={(item) => item.title}
+          style={{ width: "100%" }} // Set width to 100%
+          listStyle={{
+            width: "50%",
+          }}
+        />
+      </Form.Item>
     </div>
   );
 };

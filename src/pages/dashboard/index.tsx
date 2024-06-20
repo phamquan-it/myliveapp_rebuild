@@ -27,19 +27,31 @@ const data = {
 };
 
 import { GetStaticPropsContext } from "next";
-import { Pie } from "react-chartjs-2";
-import FastInfo from "@/components/admin/FastInfo";
-import { FilterFilled, YoutubeFilled } from "@ant-design/icons";
-import FastInfoList from "@/components/admin/FastInfoList";
-import { Input, Switch, Table } from "antd";
+import { Avatar, Input, List, Skeleton, Switch, Table } from "antd";
 import { useTranslations } from "use-intl";
-import PlatformSelectForFilter from "@/components/admin/PlatformSelectForFilter";
-import Title from "antd/es/typography/Title";
-import CategorySelect from "@/components/admin/CategorySelect";
 import DashBoardStatical from "@/components/admin/crudform/statistical/DashboardStatiticcal";
+import Title from "antd/es/typography/Title";
 
 const Page = () => {
   const t = useTranslations("MyLanguage");
+  const data = [
+    {
+      title: "Deposit from Bank",
+      description: "5 march, 18:33 ",
+    },
+    {
+      title: "Ant Design Title 2",
+      description: "5 march, 18:33 ",
+    },
+    {
+      title: "Ant Design Title 3",
+      description: "5 march, 18:33 ",
+    },
+    {
+      title: "Ant Design Title 4",
+      description: "5 march, 18:33 ",
+    },
+  ];
   const dataSource = [
     {
       key: "1",
@@ -53,55 +65,22 @@ const Page = () => {
       age: 42,
       address: "10 Downing Street",
     },
-    {
-      key: "3",
-      name: "John",
-      age: 42,
-      address: "10 Downing Street",
-    },
-    {
-      key: "4",
-      name: "John",
-      age: 42,
-      address: "10 Downing Street",
-    },
-    {
-      key: "2",
-      name: "John",
-      age: 42,
-      address: "10 Downing Street",
-    },
   ];
 
   const columns = [
     {
-      title: t("entryno"),
-      dataIndex: "key",
-      key: "key",
-    },
-    {
-      title: t("account"),
+      title: "Name",
       dataIndex: "name",
       key: "name",
+      render: (text: string) => <div className="p-2">{text}</div>,
     },
     {
-      title: t("service"),
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: t("amount"),
+      title: "Age",
       dataIndex: "age",
       key: "age",
     },
     {
-      title: t("status"),
-      dataIndex: "key",
-      key: "key",
-      render: (text: any, record: any) => <Switch defaultChecked={text == 1} />,
-    },
-    {
-      title: t("createAt"),
+      title: "Address",
       dataIndex: "address",
       key: "address",
     },
@@ -110,63 +89,53 @@ const Page = () => {
     <>
       <div>
         <DashBoardStatical />
-        <div className=" hidden">
-          <div className="w-2/3">
-            <Line
-              data={data}
-              options={{
-                plugins: {
-                  legend: {
-                    display: false,
-                  },
-                },
-              }}
-            />
-          </div>
-          <div className="w-80">
-            <Pie
-              data={dataPie}
-              options={{
-                plugins: {
-                  legend: {
-                    display: true,
-                    position: "right",
-                  },
-                },
-              }}
-            />
-          </div>
-        </div>
       </div>
-      <div className="mt-4">
-        <Title level={3} className="text-center">
-          Orders
-        </Title>
-      </div>
-      <div className="border shadow-sm rounded-md overflow-hidden my-2 hidden">
-        <div className="bg-gray-100  px-2 py-1 pt-2 ">
-          <Title level={5} className="!font-semibold">
-            <FilterFilled /> Filter
-          </Title>
-        </div>
-        <div className="p-3  flex gap-2">
-          <Input
-            placeholder={t("searchplh")}
-            style={{
-              width: 200,
-            }}
+      <div className=" grid grid-cols-2 gap-3">
+        <div className="Payment rounded-xl border overflow-hidden shadow">
+          <div
+            className="py-3 font-medium ps-3 border-b text-gray-600"
+            style={{ fontSize: 16 }}
+          >
+            Payment history
+          </div>
+          <List
+            itemLayout="horizontal"
+            dataSource={data}
+            renderItem={(item) => (
+              <List.Item
+                actions={[
+                  <div key="" className="text-right pe-4">
+                    <span className="font-medium text-gray-600 block text-lg">
+                      +2000
+                    </span>
+                    <span>USD</span>
+                  </div>,
+                ]}
+              >
+                <List.Item.Meta
+                  className="customavatar"
+                  avatar={
+                    <Avatar
+                      size={"large"}
+                      src={`https://demo.dashboardpack.com/marketing-html/img/Payment/3.png`}
+                    />
+                  }
+                  title={<a className="font-normal text-lg">{item.title}</a>}
+                  description={item.description}
+                />
+                <div></div>
+              </List.Item>
+            )}
           />
-
-          <PlatformSelectForFilter />
-          <PlatformSelectForFilter />
         </div>
       </div>
+      <Title className="text-center !text-gray-600" level={3}>
+        Recent orders
+      </Title>
       <Table
-        className="border rounded-md"
-        pagination={false}
-        scroll={{ y: 150 }}
         dataSource={dataSource}
         columns={columns}
+        className="border rounded-md overflow-hidden"
       />
     </>
   );
@@ -180,30 +149,3 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
     },
   };
 }
-
-const dataPie = {
-  labels: ["Youtube", "Facebook", "Slack", "Green", "Purple", "Orange"],
-  datasets: [
-    {
-      label: "# of Votes",
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-        "rgba(153, 102, 255, 0.2)",
-        "rgba(255, 159, 64, 0.2)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)",
-      ],
-      borderWidth: 1,
-    },
-  ],
-};

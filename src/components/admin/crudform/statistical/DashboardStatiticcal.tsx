@@ -9,7 +9,10 @@ const DashBoardStatical = () => {
         <Title level={3} className="text-center">
           Trang chủ
         </Title>
-        <div className="my-3 gap-3 grid grid-cols-5">
+        <div
+          className="my-3 gap-3 grid lg:grid-cols-5 md:grid-cols-2
+        "
+        >
           <HistoryStatitical
             color="rgb(10, 143, 220)"
             monney={0.207}

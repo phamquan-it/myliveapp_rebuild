@@ -164,3 +164,14 @@ form *:not(h3){
 #right_menu_border .ant-menu-light.ant-menu-root.ant-menu-inline, .ant-menu-light>.ant-menu.ant-menu-root.ant-menu-inline, .ant-menu-light.ant-menu-root.ant-menu-vertical, .ant-menu-light>.ant-menu.ant-menu-root.ant-menu-vertical{
   border-inline-end: transparent !important;
 }
+
+.customavatar img, .customavatar span{
+  height: 80px !important;
+  width: 80px !important;
+}
+.customavatar span{
+  margin-left: 20px;
+}
+.ant-list-item-meta-content{
+  margin-top: 15px;
+}
