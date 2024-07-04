@@ -1,6 +1,6 @@
 import { Platform } from "@/@type";
 import axiosClient from "./axiosClient";
-import { platform } from "os";
+
 export interface PlatformParams{
     language:string,
     keyword: string,

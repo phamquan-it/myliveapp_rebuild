@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import {
   CalendarFilled,
+  CloudServerOutlined,
   DiffOutlined,
   FundOutlined,
   HistoryOutlined,
@@ -147,6 +148,13 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       label: t("voucher"),
       role: "admin",
       page: "/dashboard/voucher",
+    },
+    {
+      key: "15",
+      icon: <CloudServerOutlined />,
+      label: t("cloudserver"),
+      role: "admin",
+      page: "/dashboard/vps",
     },
     {
       key: "14",

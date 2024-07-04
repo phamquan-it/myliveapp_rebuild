@@ -43,6 +43,7 @@
     "terms":"Terms"
   },
   "DashboardMenu": {
+    "cloudserver": "Cloud server",
     "home": "Home",
     "services": "Services",
     "contact": "Contact",

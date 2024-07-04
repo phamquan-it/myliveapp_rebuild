@@ -43,6 +43,7 @@
     "terms":"Điểu khoản & chính sách"
   },
   "DashboardMenu": {
+    "cloudserver": "Máy chủ đám mây",
     "home": "Trang chủ",
     "services": "Dịch vụ",
     "contact": "Liên hệ",
