@@ -68,6 +68,17 @@
     "addfund":"Cộng tiền"
   },
   "MyLanguage": {
+    "ipv4":"IPv4",
+    "port":"Cổng",
+    "manufacturer":"Nhà sản xuất",
+    "vendor":"Nhà cung cấp",
+    "core":"Lõi",
+    "virtualization":"Ảo hóa",
+    "processor":"Bộ xử lý",
+    "distro":"Bản phân phối",
+    "release":"Phát hành",
+    "kernel":"Nhân",
+    "arch":"Kiến trúc",
     "order":"Đặt hàng",
     "minorder":"Nhỏ nhất",
     "maxorder":"Lớn nhất",

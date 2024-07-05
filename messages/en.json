@@ -68,6 +68,17 @@
     "addfund":"Add fund"
   },
   "MyLanguage": {
+    "ipv4": "IPv4",
+    "port": "Port",
+    "manufacturer": "Manufacturer",
+    "vendor": "Vendor",
+    "core": "Core",
+    "virtualization": "Virtualization",
+    "processor": "Processor",
+    "distro": "Distribution",
+    "release": "Release",
+    "kernel": "Kernel",
+    "arch": "Architecture",
     "order":"Order",
     "minorder":"Min order",
     "maxorder":"Max order",

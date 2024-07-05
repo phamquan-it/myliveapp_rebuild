@@ -150,7 +150,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       page: "/dashboard/voucher",
     },
     {
-      key: "15",
+      key: "16",
       icon: <CloudServerOutlined />,
       label: t("cloudserver"),
       role: "admin",
