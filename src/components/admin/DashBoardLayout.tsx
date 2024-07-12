@@ -6,6 +6,7 @@ import {
   FundOutlined,
   HistoryOutlined,
   HomeFilled,
+  KeyOutlined,
   MenuOutlined,
   PlusCircleFilled,
   SettingOutlined,
@@ -155,6 +156,20 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       label: t("cloudserver"),
       role: "admin",
       page: "/dashboard/vps",
+    },
+    {
+      key: "17",
+      icon: <CloudServerOutlined />,
+      label: "Webdock",
+      role: "admin",
+      page: "/dashboard/webdock",
+    },
+    {
+      key: "18",
+      icon: <KeyOutlined />,
+      label: "Public key",
+      role: "admin",
+      page: "/dashboard/publickey",
     },
     {
       key: "14",

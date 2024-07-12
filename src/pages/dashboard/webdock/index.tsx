@@ -5,7 +5,7 @@ import TableAction from "@/components/admin/TableAction";
 import { debounce } from "lodash";
 import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import EditVoucher from "@/components/admin/crudform/edit/EditVoucher";
-import { DeleteFilled, DisconnectOutlined, LoadingOutlined, MessageFilled, PlusCircleFilled } from "@ant-design/icons";
+import { CaretRightOutlined, DeleteFilled, DisconnectOutlined, FileOutlined, LoadingOutlined, MessageFilled, PlusCircleFilled } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import _ from "lodash";
 import {
@@ -34,6 +34,8 @@ import axios from "axios";
 import VpsStatus, { VpsStatusEnum } from "@/components/vps/status";
 import TerminalController from "@/components/vps/Terminal";
 import { toast } from "react-toastify";
+import { FaRunning, FaSquare } from "react-icons/fa";
+import { WEBDOCK_TOKEN } from "../../../../constant/Token";
 
 const Page = () => {
   const t = useTranslations("MyLanguage");
@@ -55,16 +57,16 @@ const Page = () => {
       : 10
   );
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["orders", router.asPath],
+    queryKey: ["webdock", router.asPath],
     queryFn: () =>
-      axios.get("http://localhost:3031/list", {
+      axios.get("https://api.webdock.io/v1/servers", {
         params: {
           keyword: keyword,
           offset: (pageIndex - 1) * pageSize,
           limit: pageIndex * pageSize,
         },
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${WEBDOCK_TOKEN}`,
         },
       }),
     placeholderData: (previousData) => previousData,
@@ -131,37 +133,11 @@ const Page = () => {
      
     </div>
   })
-  // columns.push({
-  //   title: t('action'),
-  //   key: "ipv4",
-  //   dataIndex: "ipv4",
-  //   render: (_text: string, record:any)=><div className="flex gap-1">
-  //    <Tooltip title="Access command">
-  //     <Button size="small" className="!bg-black !text-white" onClick={showModalTerminal}>&gt;_</Button>
-  //    </Tooltip>
-  //    <Tooltip title="Disconnect">
-  //        <Button type="default" size="small">
-  //         <span className="text-red-600">
-  //         <DisconnectOutlined/>
-  //         </span>
-  //        </Button> 
-  //    </Tooltip>
-  //    <Tooltip title="Send message">
-  //    <Button type="default" size="small" style={{color: "burlywood"}} onClick={()=>{
-  //       axios.get('http://localhost:3031/send-message').then((data)=>{
-  //         alert(data.data)
-  //       })
-  //    }}><MessageFilled/></Button>
-  //    </Tooltip>
-     
-  //    {/* <TableAction deleteForm={<></>} openState={showModal} /> */}
-     
-  //   </div>
-  // })
   const [showModal, setShowModal] = useState<boolean>(false);
   const hideModal = () => {
     setShowModal(false);
   };
+  const [openState,setOpenState] = useState(false)
   const openModal = () => {
     setShowModal(true);
   };
@@ -201,7 +177,7 @@ const Page = () => {
   return (
     <>
       <Title className="text-center" level={2}>
-        {d("cloudserver")}
+        Webdock
       </Title>
       <Modal title="Terminal" open={showTerminal} footer={null} onCancel={hideTerninal}>
           <TerminalController />
@@ -269,13 +245,143 @@ const Page = () => {
           {t("create")}
         </Button>
       </div>
+      <Modal title="Script" open={false} footer={null}>
+          <p></p>
+      </Modal>
+      
       <Table
         className="border rounded-md shadow-md"
-        dataSource={data?.data.data.map((item: any, index: number) => ({
+        dataSource={data?.data.map((item: any, index: number) => ({
           ...item,
           key: pageIndex * pageSize + (index + 1) - pageSize,
         }))}
-        columns={columns}
+        columns={[
+          {
+            title: t('entryno'),
+            dataIndex: "key"
+          },
+          {
+            title: "Slug",
+            dataIndex:"slug",
+          },
+          {
+            title: t('name'),
+            dataIndex:"name",
+          },
+          {
+            title: t('createAt'),
+            dataIndex:"data",
+          },
+          {
+            title: t('location'),
+            dataIndex:"location",
+          },
+          {
+            title: "Image",
+            dataIndex:"image",
+          },
+          {
+            title: "Profile",
+            dataIndex:"profile",
+          },
+          {
+            title: t('ipv4'),
+            dataIndex:"ipv4",
+          },
+          {
+            title: "ipv6",
+            dataIndex:"ipv6",
+          },
+          {
+            title: t('virtualization'),
+            dataIndex:"virtualization",
+          },
+          {
+            title: "Desc",
+            dataIndex:"description",
+          },
+          {
+            title: t('action'),
+            dataIndex: ('slug'),
+            render:(text, record)=>(<>
+           <div className="flex gap-1">
+            <Button type="default"><FileOutlined /></Button>
+            
+           {(record.status == 'running')?(<Button type="primary" className={(record.status == 'stopped'?"!hidden":"")} danger onClick={()=>{
+             async function stopServer() {
+              const url = 'https://api.webdock.io/v1/servers/'+text+'/actions/stop';
+              const headers = {
+                  Authorization: 'Bearer '+WEBDOCK_TOKEN,
+                  Cookie: 'CONCRETE5=vsf9dgjlpvses6vojntcqhc4tr',
+              };
+          
+              try {
+                  const response = await axios.post(url, null, { headers });
+                  // alert('ok')
+              } catch (error:any) {
+                  alert('nook')
+              }
+              router.push(router)
+          }
+          
+          // Call the function to stop the server
+          stopServer();
+            }}><FaSquare/></Button>):<Button type="primary" className={(record.status == 'running'?"hidden":"")} onClick={()=>{
+              async function stopServer() {
+               const url = 'https://api.webdock.io/v1/servers/'+text+'/actions/start';
+               const headers = {
+                   Authorization: 'Bearer '+WEBDOCK_TOKEN,
+                   Cookie: 'CONCRETE5=vsf9dgjlpvses6vojntcqhc4tr',
+               };
+           
+               try {
+                   const response = await axios.post(url, null, { headers });
+                  //  alert('ok')
+               } catch (error:any) {
+                   alert('nook')
+               }
+               router.push(router)
+           }
+           
+           // Call the function to stop the server
+           stopServer();
+           router.push(router)
+             }} ><CaretRightOutlined /></Button>}
+           
+           <TableAction deleteForm={<>
+            <Title level={5}>{t('areyousure')}</Title>
+           <div className="flex justify-end gap-1">
+            <Button type="primary" onClick={()=>{
+              setOpenState(!openState)
+            }}>{t('cancel')}</Button>
+           <Button type="primary" danger onClick={()=>{
+            async function deleteServer() {
+              const url = 'https://api.webdock.io/v1/servers/'+text;
+              const headers = {
+                  Authorization: 'Bearer '+WEBDOCK_TOKEN,
+                  Cookie: 'CONCRETE5=vsf9dgjlpvses6vojntcqhc4tr',
+              };
+          
+              try {
+                  await axios.delete(url, { headers });
+                  alert('ok')
+              } catch (error:any) {
+                  alert('nook')
+              }
+              setOpenState(!openState)
+          }
+          
+          // Call the function to stop the server
+          deleteServer();
+          router.push(router)
+           }}>{t('accept')}</Button>
+           </div>
+            </>} openState={openState}/>
+           </div>
+            
+            </>)
+          }
+        ]}
         loading={isFetching}
         onChange={handleTableChange}
         scroll={{ x: 1000 }}
@@ -286,6 +392,7 @@ const Page = () => {
           showSizeChanger: true,
         }}
       />
+      
     </>
   );
 };
