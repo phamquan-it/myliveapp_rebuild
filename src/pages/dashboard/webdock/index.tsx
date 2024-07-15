@@ -15,6 +15,7 @@ import {
   Input,
   List,
   Modal,
+  Select,
   Spin,
   Switch,
   Table,
@@ -35,7 +36,7 @@ import VpsStatus, { VpsStatusEnum } from "@/components/vps/status";
 import TerminalController from "@/components/vps/Terminal";
 import { toast } from "react-toastify";
 import { FaRunning, FaSquare } from "react-icons/fa";
-import { WEBDOCK_TOKEN } from "../../../../constant/Token";
+import { WEBDOCK_TOKEN } from "../../../../WEBDOCK_PROVIDER/constant/Token";
 
 const Page = () => {
   const t = useTranslations("MyLanguage");
@@ -72,67 +73,11 @@ const Page = () => {
     placeholderData: (previousData) => previousData,
   });
 
-  const columns = cloudServerColumns(t);
-  columns.push({
-    title: t('status'),
-    key: "status",
-    dataIndex: "status",
-    render:(text:string, record: any)=>{
-      return(
-        <>
-        <VpsStatus record={record}/>
-        </>
-      )
-    }
-  })
   const [showTerminal,setShowTerminal] = useState(false)
   const hideTerninal = ()=>{ 
    setShowTerminal(false)
   }
-  const showModalTerminal = ()=>{ 
-    setShowTerminal(true)
-   }
-  columns.push({
-    title: t('status'),
-    key: "ipv4",
-    dataIndex: "ipv4",
-    render: (_text: string, record:any)=><div className="flex gap-1">
-     <Tooltip title="Access command">
-      <Button size="small" className="!bg-black !text-white" onClick={showModalTerminal}>&gt;_</Button>
-     </Tooltip>
-     <Tooltip title="Disconnect">
-         <Button type="default" size="small">
-          <span className="text-red-600">
-          <DisconnectOutlined/>
-          </span>
-         </Button> 
-     </Tooltip>
-     <Tooltip title="Send message">
-     <Button type="default" size="small" style={{color: "burlywood"}} onClick={()=>{
-      console.log(record.ipv4+":"+record.port);
-       axios.get('http://localhost:3031/check-health', {
-        params: {
-          port: record.port,
-          ipv4: record.ipv4
-        },
-        headers: {
-          'accept': '*/*'
-        },
-        timeout: 3000
-      })
-      .then((response) => {
-        toast.success(response.data)
-      })
-      .catch((error) => {
-        toast.error(error.message)
-      });
-     }}><MessageFilled/></Button>
-     </Tooltip>
-     
-     {/* <TableAction deleteForm={<></>} openState={showModal} /> */}
-     
-    </div>
-  })
+
   const [showModal, setShowModal] = useState<boolean>(false);
   const hideModal = () => {
     setShowModal(false);
@@ -191,33 +136,81 @@ const Page = () => {
       >
         <Form onFinish={onFinish} layout="vertical">
           <Form.Item
-            label={t('ipv4')}
-            name="ipv4"
+            label={t('name')}
+            name="name"
             rules={[{ required: true, message: "Please enter a name" }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="SSH user:"
-            name="user"
-            rules={[{ required: true, message: "Please enter a code" }]}
+            label={"Slug"}
+            name="slug"
+            rules={[{ required: true, message: "Please enter a slug" }]}
           >
             <Input />
           </Form.Item>
+          <div className="grid grid-cols-2 gap-2">
           <Form.Item
-            label="SSH password "
-            name="password"
-            rules={[
-              {
-                required: true,
-                type: "number",
-                message: "Please enter a valid min price",
-              },
-            ]}
+            label={t('location')}
+            name="locationId"
+            rules={[{ required: true, message: "Please select an location" }]}
           >
-            <Input type="number" />
+              <Select
+                showSearch
+                placeholder="Select location"
+                options={[]}
+              />
+              
           </Form.Item>
-      
+          
+          <Form.Item
+            label={t('virtualization')}
+            name="virtualization"
+            initialValue={"container"}
+            rules={[{ required: true, message: "Please select an virtualization" }]}
+          >
+              <Select
+                showSearch
+                placeholder="Select location"
+                options={[
+                  {
+                  label:"container",
+                  value:"container"
+                  },
+                  {
+                    label:"kvm",
+                    value:"kvm"
+                  }
+                ]}
+              />
+              
+          </Form.Item>
+          </div>
+
+          <Form.Item
+            label={'Profile slug'}
+            name="profileSlug"
+            rules={[{ required: true, message: "Select profileSlug" }]}
+          >
+              <Select
+                showSearch
+                placeholder="Select location"
+                options={[]}
+              />
+              
+          </Form.Item>
+          <Form.Item
+            label={('Image slug')}
+            name="imageSlug"
+            rules={[{ required: true, message: "Please select an image slug" }]}
+          >
+              <Select
+                showSearch
+                placeholder="Select ImageSlug"
+                options={[]}
+              />
+              
+          </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
               Add vps
