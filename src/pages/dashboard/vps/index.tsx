@@ -203,7 +203,7 @@ const Page = () => {
       <Title className="text-center" level={2}>
         {d("cloudserver")}
       </Title>
-      <Modal title="Terminal" open={showTerminal} footer={null} onCancel={hideTerninal}>
+      <Modal title="Terminal" open={showTerminal} width={1500} footer={null} onCancel={hideTerninal}>
           <TerminalController />
       </Modal>
       

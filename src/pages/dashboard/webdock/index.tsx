@@ -57,8 +57,9 @@ const Page = () => {
       ? parseInt(getObjecFormUrlParameters(router)?.pageSize)
       : 10
   );
+  const [sync,setSync] = useState(false)
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["webdock", router.asPath],
+    queryKey: ["webdock", router.asPath, sync],
     queryFn: () =>
       axios.get("https://api.webdock.io/v1/servers", {
         params: {
@@ -314,7 +315,7 @@ const Page = () => {
               } catch (error:any) {
                   alert('nook')
               }
-              router.push(router)
+              setSync(!sync)
           }
           
           // Call the function to stop the server
@@ -333,7 +334,7 @@ const Page = () => {
                } catch (error:any) {
                    alert('nook')
                }
-               router.push(router)
+               setSync(!sync)
            }
            
            // Call the function to stop the server
@@ -362,11 +363,11 @@ const Page = () => {
                   alert('nook')
               }
               setOpenState(!openState)
+              setSync(!sync)
           }
           
           // Call the function to stop the server
           deleteServer();
-          router.push(router)
            }}>{t('accept')}</Button>
            </div>
             </>} openState={openState}/>
