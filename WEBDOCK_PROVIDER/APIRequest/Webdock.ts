@@ -41,3 +41,10 @@ export interface CreateShellUser{
     shell: CreateShellUser,
     publicKeys: any
 }
+
+export interface CreateAServerScript{
+    scriptId: number,
+    path: string,
+    makeScriptExecutable: boolean,
+    executeImmediately: boolean
+}
