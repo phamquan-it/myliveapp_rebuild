@@ -2,7 +2,9 @@
 import { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import store from './store';
-
+import { setupListeners } from '@reduxjs/toolkit/query';
+import { logApi } from '@/services/logApi';
+setupListeners(store.dispatch);
 interface Props {
   children: ReactNode;
 }

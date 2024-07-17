@@ -15,7 +15,6 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import { useEffect, useState } from "react";
-import { setInterval } from "timers/promises";
 import PageLayout from "@/components/PageLayout";
 config.autoAddCss = false;
 
