@@ -26,9 +26,10 @@ const LoginForm = () => {
     mutationFn: (body) => axiosClient.post("/auth/login?language=en", body),
     onSuccess: (data) => {
       toast.success("Success");
-      setCookie("token", data.data.token);
-      setCookie("refresh_token", data.data.refresh_token);
-      router.push("/dashboard");
+      console.log(data.data);
+      setCookie("token", data.data.accessToken);
+      setCookie("refresh_token", data.data.refreshToken);
+       router.push("/dashboard");
     },
     onError: (err) => {
       console.log(err);

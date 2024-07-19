@@ -171,5 +171,8 @@
     "timecancelqueueorderday": "Time cancel queue order (day)",
     "provider": "Provider",
     "update": "Update"
+  },
+  "result": {
+    "active": "Successfully, your account is activated!"
   }
 }

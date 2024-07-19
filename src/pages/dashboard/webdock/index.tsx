@@ -311,11 +311,12 @@ const Page = () => {
           
               try {
                   const response = await axios.post(url, null, { headers });
-                  // alert('ok')
+                  console.log("ok");
               } catch (error:any) {
-                  alert('nook')
+                  console.log('nook')
               }
               setSync(!sync)
+              
           }
           
           // Call the function to stop the server

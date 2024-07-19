@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import Tailwind's base styles */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
 
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {
@@ -63,14 +59,6 @@ textarea.ant-input{
   background-color: transparent !important;
 }
 
-.ant-btn{
-  height: auto !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  /* padding-top: 8px !important;
-  padding-bottom: 8px !important; */
-}
 
 #buy{
   padding-top: 1px !important;
@@ -175,3 +163,5 @@ form *:not(h3){
 .ant-list-item-meta-content{
   margin-top: 15px;
 }
+
+

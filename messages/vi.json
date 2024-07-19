@@ -171,5 +171,8 @@
     "timecancelqueueorderday": "Thời gian huỷ đơn hàng đang chờ (ngày)",
     "provider": "Nhà cung cấp",
     "update": "Cập nhật"
+  },
+  "result": {
+    "active": "Thành công, tài khoản của bạn đã được kích hoạt!"
   }
 }

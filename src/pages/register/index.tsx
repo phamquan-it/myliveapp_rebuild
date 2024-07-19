@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Modal } from "antd";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,35 +11,22 @@ import FormLayout from "@/components/client/FormLayout";
 import axiosClient from "@/apiClient/axiosClient";
 import { useMutation } from "@tanstack/react-query";
 import { setCookie } from "cookies-next";
-import PageLayout from "@/components/PageLayout";
+import { AuthApi } from "@/apiClient/providers/auth";
 
 const RegiterForm = () => {
+  const [openSuccessModal,setOpenSuccessModal] = useState(false)
   const t = useTranslations("Authenlication");
   const router = useRouter();
-  const [info, setInfo] = useState();
   const layout = {
     labelCol: { span: 24 }, // Set the label width to take up the full width
     wrapperCol: { span: 24 }, // Set the input width to take up the full width
   };
-  const mutationLogin = useMutation({
-    mutationKey: ["/register"],
-    mutationFn: (value) => axiosClient.post("/auth/login?language=en", value),
-    onSuccess: (data) => {
-      setCookie("token", data.data.token);
-      setCookie("refresh_token", data.data.refresh_token);
-      router.push("/");
-    },
-    onError: () => {
-      router.push("/login");
-    },
-  });
   const { isPending, mutate } = useMutation({
     mutationKey: ["/register"],
     mutationFn: (value) =>
-      axiosClient.post("/auth/register?language=en", value),
+      axiosClient.post(AuthApi.register, value),
     onSuccess: (data) => {
-      toast.success("Success");
-      mutationLogin.mutate(info);
+      setOpenSuccessModal(true)
     },
     onError: (err) => {
       console.log(err);
@@ -51,17 +38,24 @@ const RegiterForm = () => {
       toast.error(t("confirmpasswordError"));
       return;
     }
-    setInfo(values);
     mutate(values);
   };
+
   return (
     <>
       <FormLayout>
-        <ToastContainer />
+       
         <div className="w-fullrounded px-5 py-5">
           <Title level={3} className="text-center">
             {t("register")}
           </Title>
+          <Modal title="Notification" open={openSuccessModal} footer={<Button type="primary" onClick={()=>{
+            setOpenSuccessModal(false)
+            router.push("/login")
+          }}>Okay</Button>}>
+              <p>Account created successfully, please check your email and activate account!</p>
+          </Modal>
+          
           <Form
             className="w-full"
             name="basic"
@@ -102,8 +96,8 @@ const RegiterForm = () => {
               rules={[
                 { required: true, message: t("confirmpassword") },
                 {
-                  min: 5,
-                  message: "Password should have at least 5 characters",
+                  min: 8,
+                  message: "Password should have at least 8 characters",
                 },
               ]}
             >

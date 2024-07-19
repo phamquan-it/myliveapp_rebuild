@@ -1,8 +1,8 @@
 const AuthApi = {
     login: "/auth/login",
     register:"/auth/register",
-    refresh_token:"/auth/refresh_token",
-    forgot: "/auth/forgot"
+    profile:"/auth/profile",
+    activate:"/users/activate-account"
 }
 export {
     AuthApi

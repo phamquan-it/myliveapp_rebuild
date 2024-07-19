@@ -158,6 +158,7 @@ const Home = ({
     // alert(getObjecFormUrlParameters()?.platform != "");
 
     filter(getObjecFormUrlParameters()?.search, platformValue);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath, platformValue]);
   //profess list
   const professList = [
