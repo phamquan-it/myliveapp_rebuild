@@ -1,25 +1,50 @@
-import React from 'react';
-import { Line } from '@ant-design/charts';
+import dynamic from 'next/dynamic';
+const Pie = dynamic(() => import('@ant-design/charts').then(({ Pie }) => Pie),
+    { ssr: false }
+);
+const DemoPie = () => {
+    const config = {
+      data: [
+        { type: '分类一', value: 27 },
+        { type: '分类二', value: 25 },
+        { type: '分类三', value: 18 },
+        { type: '分类四', value: 15 },
+        { type: '分类五', value: 10 },
+        { type: '其他', value: 5 },
+      ],
+      angleField: 'value',
+      colorField: 'type',
+      paddingRight: 80,
+      innerRadius: 0.6,
+      label: {
+        text: 'value',
+        style: {
+          fontWeight: 'bold',
+        },
+      },
+      legend: {
+        color: {
+          title: false,
+          position: 'right',
+          rowPadding: 5,
+        },
+      },
+      annotations: [
+        {
+          type: 'text',
+          style: {
+            text: 'AntV\nCharts',
+            x: '50%',
+            y: '50%',
+            textAlign: 'center',
+            fontSize: 40,
+            fontStyle: 'bold',
+          },
+        },
+      ],
+    };
+    return <Pie {...config} />
 
-const Page: React.FC = () => {
-  const data = [
-    { year: '1991', value: 3 },
-    { year: '1992', value: 4 },
-    { year: '1993', value: 3.5 },
-    { year: '1994', value: 5 },
-    { year: '1995', value: 4.9 },
-    { year: '1996', value: 6 },
-    { year: '1997', value: 7 },
-    { year: '1998', value: 9 },
-    { year: '1999', value: 13 },
-  ];
+}
 
-  const props = {
-    data,
-    xField: 'year',
-    yField: 'value',
-  };
-
-  return <Line {...props} />
-};
-export default Page;
+export default DemoPie;

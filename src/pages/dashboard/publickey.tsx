@@ -1,6 +1,6 @@
 import axios from "axios";
 import { GetStaticPropsContext } from "next";
-import { WEBDOCK_TOKEN } from "../../../../WEBDOCK_PROVIDER/constant/Token";
+import { WEBDOCK_TOKEN } from "../../../WEBDOCK_PROVIDER/constant/Token";
 import { Button, Form, Input, Modal, Table } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import Title from "antd/es/typography/Title";
