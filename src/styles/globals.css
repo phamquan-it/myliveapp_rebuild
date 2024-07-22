@@ -3,15 +3,177 @@
 @tailwind utilities;
 
 
-#reverse_tabs.custom-tabs {
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d6d6d6;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #adadad;
+}
+
+/* For Firefox */
+ .ant-table-cell {
+  padding:0px 10px !important;
+}
+.custom_row_height .ant-table-cell .ant-btn span{
+  font-size: 15px !important;
+  
+}
+/* *{
+  font-size: small;
+} */
+/* .ant-menu .ant-menu-item .ant-menu-item-icon svg, .ant-menu .ant-menu-submenu-title .ant-menu-item-icon svg{
+  font-size: small !important;
+}
+textarea.ant-input{
+  font-size: small;
+} */
+
+.customIndexTable table{
+  border: 1px solid rgb(218, 218, 218) !important;
+  padding-bottom: 10px;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  background-color: transparent !important;
+}
+
+.ant-table-wrapper .ant-table-thead >tr>th, .ant-table-wrapper .ant-table-thead >tr>td{
+  background-color: transparent !important;
+}
+.custom_icon * svg{
+  width: 20px;
+  height: 20px;
+  color: rgb(0, 119, 0);
+}
+.ant-table-content{
+  background-color: transparent !important;
+}
+
+
+#buy{
+  padding-top: 1px !important;
+  padding-bottom: 1px !important;
+}
+
+.ant-form-item .ant-form-item-label >label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before{
+  content: none !important;
+}
+
+.ant-form-item .ant-form-item-label >label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::after{
+  content: "*" !important;
+  font-weight: bold;
+  color: red;
+}
+.ant-form-vertical .ant-form-item-label >label::after, .ant-col-24.ant-form-item-label >label::after, .ant-col-xl-24.ant-form-item-label >label::after{
+  visibility: visible !important;
+}
+
+.ant-table-wrapper .ant-table-cell, .ant-table-wrapper .ant-table-thead>tr>th, .ant-table-wrapper .ant-table-tbody>tr>th, .ant-table-wrapper .ant-table-tbody>tr>td, .ant-table-wrapper tfoot>tr>th, .ant-table-wrapper tfoot>tr>td{
+  padding: 10px 8px !important;
+}
+.ant-layout-sider-children{
+  font-size: medium !important;
+}
+
+.ant-table-thead{
+  background-color: #fafafa !important;
+  padding: 30px 5px !important;
+}
+.order_btn.ant-btn{
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+.ant-layout-content{
+  background-color: transparent !important;
+}
+
+.ant-layout-content, table{
+  font-size: small;
+}
+
+.ant-table-wrapper .ant-table-tbody >tr >th, .ant-table-wrapper .ant-table-tbody >tr >td{
+  padding: 5px 10px !important;
+}
+
+.ant-layout{
+  background-color: transparent !important;
+}
+
+.ant-form-item{
+  margin-bottom: 10px !important;
+}
+
+#create{
+  padding: 5px 8px !important;
+  font-size: 12px !important;
+}
+
+#btn_action *, #actionTableButton{
+  font-size: small;
+}
+table{
+  font-size: small !important;
+}
+button, input, ant-select-selection-placeholder{
+  font-size: 14px !important;
+}
+
+.ant-select-single.ant-select-show-arrow .ant-select-selection-item, .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder{
+  font-size: 14px !important;
+}
+#filter *,#filter select{
+  font-size: 14px !important;
+}
+form *:not(h3){
+  font-size: 14px !important;
+}
+.ant-pagination a, .ant-pagination .ant-pagination-options-size-changer *, .ant-select-item-option-content{
+  font-size: 14px !important;
+}
+
+.ant-table-wrapper .ant-table-container table>thead>tr>th{
+  border-radius: 0px !important;
+}
+.ant-table-wrapper .ant-table-pagination.ant-pagination{
+  width: 97% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+#right_menu_border .ant-menu-light.ant-menu-root.ant-menu-inline, .ant-menu-light>.ant-menu.ant-menu-root.ant-menu-inline, .ant-menu-light.ant-menu-root.ant-menu-vertical, .ant-menu-light>.ant-menu.ant-menu-root.ant-menu-vertical{
+  border-inline-end: transparent !important;
+}
+
+.customavatar img, .customavatar span{
+  height: 80px !important;
+  width: 80px !important;
+}
+.customavatar span{
+  margin-left: 20px;
+}
+.ant-list-item-meta-content{
+  margin-top: 15px;
+}
+
+
+.custom-tabs {
   display: flex;
   flex-direction: column-reverse;
 }
 
-#reverse_tabs.custom-tabs .ant-tabs-content-holder {
+.custom-tabs .ant-tabs-content-holder {
   order: 1;
 }
 
-#reverse_tabs.custom-tabs .ant-tabs-nav {
+.custom-tabs .ant-tabs-nav {
   order: 2;
 }

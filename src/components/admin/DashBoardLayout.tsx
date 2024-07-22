@@ -61,27 +61,27 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       page: "/dashboard",
     },
 
-    {
-      key: "3",
-      icon: <FaListUl />,
-      label: t("services"),
-      role: "user",
-      page: "/dashboard/service",
-    },
-    {
-      key: "5",
-      icon: <TbCategoryFilled />,
-      label: t("category"),
-      role: "admin",
-      page: "/dashboard/category",
-    },
-    {
-      key: "6",
-      icon: <FundOutlined />,
-      role: "admin",
-      label: t("refund"),
-      page: "/dashboard/refund",
-    },
+    // {
+    //   key: "3",
+    //   icon: <FaListUl />,
+    //   label: t("services"),
+    //   role: "user",
+    //   page: "/dashboard/service",
+    // },
+    // {
+    //   key: "5",
+    //   icon: <TbCategoryFilled />,
+    //   label: t("category"),
+    //   role: "admin",
+    //   page: "/dashboard/category",
+    // },
+    // {
+    //   key: "6",
+    //   icon: <FundOutlined />,
+    //   role: "admin",
+    //   label: t("refund"),
+    //   page: "/dashboard/refund",
+    // },
     {
       key: "4",
       icon: <FaMoneyBill />,
@@ -96,33 +96,33 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       role: "user",
       page: "/dashboard/myautolive",
     },
-    {
-      key: "7",
-      icon: <HistoryOutlined />,
-      role: "admin",
-      label: t("paymenthistory"),
-      page: "/dashboard/payment/history",
-    },
-    {
-      key: "15",
-      icon: <WindowsFilled />,
-      role: "admin",
-      label: t("platform"),
-      page: "/dashboard/platform",
-    },
-    {
-      key: "8",
-      icon: <CalendarFilled />,
-      label: t("cron"),
-      page: "/dashboard/crond",
-    },
-    {
-      key: "9",
-      icon: <FaBuyNLarge />,
-      label: t("order"),
-      role: "user",
-      page: "/dashboard/order",
-    },
+    // {
+    //   key: "7",
+    //   icon: <HistoryOutlined />,
+    //   role: "admin",
+    //   label: t("paymenthistory"),
+    //   page: "/dashboard/payment/history",
+    // },
+    // {
+    //   key: "15",
+    //   icon: <WindowsFilled />,
+    //   role: "admin",
+    //   label: t("platform"),
+    //   page: "/dashboard/platform",
+    // },
+    // {
+    //   key: "8",
+    //   icon: <CalendarFilled />,
+    //   label: t("cron"),
+    //   page: "/dashboard/crond",
+    // },
+    // {
+    //   key: "9",
+    //   icon: <FaBuyNLarge />,
+    //   label: t("order"),
+    //   role: "user",
+    //   page: "/dashboard/order",
+    // },
     {
       key: "10",
       icon: <TeamOutlined />,
@@ -145,13 +145,13 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       label: t("Settings"),
       page: "/dashboard/settings",
     },
-    {
-      key: "13",
-      icon: <FaVolumeOff />,
-      label: t("voucher"),
-      role: "admin",
-      page: "/dashboard/voucher",
-    },
+    // {
+    //   key: "13",
+    //   icon: <FaVolumeOff />,
+    //   label: t("voucher"),
+    //   role: "admin",
+    //   page: "/dashboard/voucher",
+    // },
     {
       key: "16",
       icon: <CloudServerOutlined />,
@@ -173,13 +173,13 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       role: "admin",
       page: "/dashboard/publickey",
     },
-    {
-      key: "14",
-      icon: <DiffOutlined />,
-      label: t("log"),
-      role: "admin",
-      page: "/dashboard/log",
-    },
+    // {
+    //   key: "14",
+    //   icon: <DiffOutlined />,
+    //   label: t("log"),
+    //   role: "admin",
+    //   page: "/dashboard/log",
+    // },
   ];
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -271,7 +271,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
               <div className="mx-3 grid gap-2">
                 <Button
                   type="primary"
-                  className="!py-3"
+                  className="!h-10"
                   style={{ fontSize: "small" }}
                   icon={<PlusCircleFilled />}
                   onClick={() => {
@@ -281,12 +281,12 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                   {t("neworder")}
                 </Button>
                 <Button
-                  style={{ fontSize: "small" }}
+                  style={{ fontSize: "small" }} 
                   onClick={() => {
                     router.push("/dashboard/deposit");
                   }}
                   type="primary"
-                  className="!bg-green-600 !py-3"
+                  className="!bg-green-600 !h-10"
                   icon={<PlusCircleFilled />}
                 >
                   {t("deposit")}
@@ -359,11 +359,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
         </Header>
         <Content
           style={{
-            padding: 24,
-            paddingTop: 50,
-            minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
+           
             overflowY: "scroll",
           }}
         >

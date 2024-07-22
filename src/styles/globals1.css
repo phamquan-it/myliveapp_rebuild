@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+#reverse_tabs.custom-tabs {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+#reverse_tabs.custom-tabs .ant-tabs-content-holder {
+  order: 1;
+}
+
+#reverse_tabs.custom-tabs .ant-tabs-nav {
+  order: 2;
+}
