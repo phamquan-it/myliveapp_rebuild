@@ -30,7 +30,7 @@ const PlatformSelectForFilter: React.FC<PlatformSelectProps> = ({
     queryFn: () => axiosClient.get(`/platform/list?language=${router.locale}`),
   });
   const p = useTranslations("Placeholder");
-  const platforms: any = data?.data?.data.map((item: any) => ({
+  const platforms: any = data?.data?.data?.map((item: any) => ({
     ...item,
     value: item.id,
     key: item.name,

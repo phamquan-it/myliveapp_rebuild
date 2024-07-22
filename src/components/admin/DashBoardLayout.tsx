@@ -17,7 +17,7 @@ import {
   WindowsFilled,
   WindowsOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu, MenuProps, theme } from "antd";
+import { Button, Layout, Menu, MenuProps, Modal, theme } from "antd";
 import { useRouter } from "next/router";
 import { TbCategoryFilled } from "react-icons/tb";
 import {
@@ -34,6 +34,7 @@ import LocaleSwitcher from "@/LocaleSwitcher";
 import { jwtDecode } from "jwt-decode";
 import { useQuery } from "@tanstack/react-query";
 import axiosClient from "@/apiClient/axiosClient";
+import { UserSetting } from "../UserSettings";
 
 const { Header, Sider, Content } = Layout;
 
@@ -41,6 +42,7 @@ interface DashBoardLayoutLayout {
   children?: ReactNode;
 }
 const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
+  const [showModal,setShowModal] = useState(false)
   console.log("re-render");
   const [role, setRole] = useState("user");
   useEffect(() => {
@@ -349,9 +351,22 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                 height: 64,
               }}
             />
+            
+            
             <div className="w-full flex justify-between pe-10">
               <span style={{ color: "" }}>LiveLogo</span>
               <div className="flex items-center gap-2">
+                <Modal title="" open={showModal} width={1000} footer={null} onCancel={()=>{
+                  setShowModal(false)
+                }} style={{
+                  padding: 0
+                }}>
+                    <UserSetting/>
+                </Modal>
+                
+              <Button type="default" icon={<UserOutlined/>} onClick={()=>{
+                setShowModal(true)
+              }}></Button>
                 <LocaleSwitcher />
               </div>
             </div>

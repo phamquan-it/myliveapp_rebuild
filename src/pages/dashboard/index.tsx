@@ -27,10 +27,12 @@ const data = {
 };
 
 import { GetStaticPropsContext } from "next";
-import { Avatar, Input, List, Skeleton, Switch, Table } from "antd";
+import { Avatar, ConfigProvider, Input, List, Skeleton, Switch, Table } from "antd";
 import { useTranslations } from "use-intl";
 import DashBoardStatical from "@/components/admin/crudform/statistical/DashboardStatiticcal";
 import Title from "antd/es/typography/Title";
+import { TableToken } from "antd/es/table/style";
+import AbstractCalculator from "antd/es/theme/util/calc/calculator";
 
 const Page = () => {
   const t = useTranslations("MyLanguage");
@@ -132,13 +134,28 @@ const Page = () => {
       <Title className="text-center !text-gray-600" level={3}>
         Recent orders
       </Title>
+      <ConfigProvider theme={{ token: customTokens}}>
       <Table
         dataSource={dataSource}
         columns={columns}
         className="border rounded-md overflow-hidden"
       />
+      </ConfigProvider>
     </>
   );
+};
+
+const customTokens = {
+  fontSize: 11, // Example of a valid token name for font size
+  colorTextHeading: '#FFF',
+  padding: 15,
+  paddingContentVertical: 0,
+  paddingContentHorizontal: 1,
+  zIndexBase: 0,
+  zIndexTableFixed:0,
+  zIndexPopupBase: 0,
+  zIndexTableSticky: 0
+ 
 };
 export default Page;
 

@@ -1,5 +1,6 @@
 import notround from "@/assets/notfound.svg";
 import PageLayout from "@/components/PageLayout";
+import { ClockCircleFilled } from "@ant-design/icons";
 import { Button, Image, Result } from "antd";
 const Page = () => {
   return (
@@ -7,14 +8,21 @@ const Page = () => {
       <Result
         status="404"
         title="Not found!"
+        icon={<ClockCircleFilled/>}
         subTitle="Sorry, the page you visited does not exist."
         extra={[
-           <Button type="primary" className="m-auto" href="/" key="console">
+          <Button type="primary" className="m-auto" href="/" key="console">
            Back Home
-         </Button>
-
+         </Button>,
+         <Button type="primary" className="m-auto" href="/" key="console">
+         Back Home
+       </Button>
+        
         ]}
-      />
+      >
+
+        <p>12345</p>
+      </Result>
     </div>
   );
 };

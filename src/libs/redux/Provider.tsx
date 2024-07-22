@@ -1,9 +1,9 @@
 // store/Provider.tsx
 import { ReactNode } from 'react';
 import { Provider } from 'react-redux';
-import store from './store';
+
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { logApi } from '@/services/logApi';
+import { store } from './store/store';
 setupListeners(store.dispatch);
 interface Props {
   children: ReactNode;

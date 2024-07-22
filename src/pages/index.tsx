@@ -280,64 +280,8 @@ const Home = ({
       </Modal>
 
       <Layout className="">
-        <Header
-          className="!shadow-sm"
-          style={{
-            backgroundColor: "white",
-            display: "flex-row",
-            justifyItems: "space-between",
-          }}
-        >
-          <Content className="container m-auto mt-1" style={{ maxWidth: 1200 }}>
-            <Header className="!bg-transparent mb-10 py-3">
-              <div className="flex justify-between items-center">
-                <div>
-                  <Image
-                    preview={false}
-                    height={50}
-                    src={`/assets/logo.webp`}
-                    alt=""
-                  />
-                </div>
-                <div className="flex gap-1 items-center -translate-y-3">
-                  <LocaleSwitcher
-                    onChange={(value: string) => {
-                      router.push(
-                        router,
-                        {
-                          query: router.query,
-                        },
-                        { locale: value }
-                      );
-                    }}
-                  />
-                  <Button
-                    type="primary"
-                    className=""
-                    onClick={() => {
-                      router.push("/login");
-                    }}
-                  >
-                    {d("login")}
-                  </Button>
-                  <Button
-                    type="default"
-                    className=""
-                    onClick={() => {
-                      router.push("/register");
-                    }}
-                  >
-                    {d("register")}
-                  </Button>
-                </div>
-              </div>
-            </Header>
-            <div className="mb-5">
-              <div className="container m-auto"></div>
-            </div>
-          </Content>
-        </Header>
-        <Content>
+
+        <Content style={{ backgroundColor: "white"}}>
           <div className="flex justify-center">
             <div className="mt-10">
               <Title

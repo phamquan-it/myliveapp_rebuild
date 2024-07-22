@@ -29,8 +29,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Platform } from "@/@type";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPlatform } from "@/libs/redux/slices/platformSlice";
-import { RootState } from "@/libs/redux/store";
+import { RootState } from "@/libs/redux/store/store";
 import { MenuOutlined, PlusCircleFilled } from "@ant-design/icons";
 import TableAction from "@/components/admin/TableAction";
 import DeleteForm from "@/components/admin/DeleteForm";
@@ -41,18 +40,10 @@ import Title from "antd/es/typography/Title";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 import filterOption from "@/hooks/filterOption";
 import PlatformSelect from "@/components/admin/PlatformSelect";
-import axios from "axios";
-import dayjs from "dayjs";
 const { Option } = Select;
 const Page = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { platforms, isPending, isSuccess } = useSelector(
-    (state: RootState) => state.platformSlice
-  );
-  useEffect(() => {
-    dispatch(fetchPlatform());
-  }, [dispatch]);
   const [pageIndex, setPageIndex] = useState(
     !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageIndex))
       ? parseInt(getObjecFormUrlParameters(router)?.pageIndex)
@@ -64,102 +55,109 @@ const Page = () => {
   const d = useTranslations("DashboardMenu");
   const columns: any[] = [
     {
+      title: "",
+      dataIndex: "key",
+      key: "key",
+      width: 10,
+      render: () => <MenuOutlined className="ms-3 me-2" />,
+    },
+    {
       title: t("entryno"),
       dataIndex: "key",
       key: "key",
-      width: "6%",
       align: "center",
+      width: 100,
     },
     {
-      title: t("email"),
-      dataIndex: "email",
-      key: "email",
+      title: t("name"),
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: t("action"),
-      dataIndex: "action",
-      key: "action",
-      width: "13%",
-      align: "center",
+      title: "Icon",
+      dataIndex: "name",
+      key: "name",
+      render: (text: string, record: Category) => (
+        <div className="flex items-center gap-2">
+          <Image width={25} src={record.icon} alt="image" />
+        </div>
+      ),
     },
     {
-      title: t("amount"),
-      dataIndex: "money",
-      key: "money",
-      width: "10%",
-      align: "center",
-    },
-    {
-      title: t("fund"),
-      dataIndex: "fund",
-      key: "fund",
-      width: "10%",
-      align: "right",
+      title: d("platform"),
+      dataIndex: "createdAt",
+      width: "20%",
+      key: "createdAt",
+      render: (text: string, record: any) => {
+        return record?.platform?.name;
+      },
     },
     {
       title: t("createat"),
       dataIndex: "createdAt",
+      width: "150px",
       key: "createdAt",
-      width: "15%",
-      align: "center",
-      render: (text: string) => dayjs(text).format("YYYY-MM-DD HH:mm:ss"),
+      render: (text: string) => format(text, router.locale || "en"),
     },
 
-    // {
-    //   align: "center",
-    //   title: t("action"),
-    //   dataIndex: "id",
-    //   key: "id",
-    //   width: 200,
-    //   render: (text: string, record: any) => {
-    //     return (
-    //       <TableAction
-    //         openState={openState}
-    //         viewDetail={<>view detail</>}
-    //         syncFunc={() => {
-    //           //synchonized data here
-    //         }}
-    //         editForm={
-    //           <>
-    //             <Form
-    //               name="basic"
-    //               layout="vertical"
-    //               initialValues={{ remember: true }}
-    //               // onFinish={onFinish}
-    //               // onFinishFailed={onFinishFailed}
-    //             >
-    //               <EditCashFlow value={record} />
+    {
+      align: "center",
+      width: 200,
+      title: t("action"),
+      dataIndex: "id",
+      key: "id",
+      render: (text: string, record: any) => {
+        return (
+          <div className="flex justify-center">
+            <TableAction
+              openState={openState}
+              // viewDetail={<CategoryDetail />}
+              // syncFunc={() => {
+              //   //synchonized data here
+              // }}
+              editForm={
+                <>
+                  <Form
+                    name="basic"
+                    layout="vertical"
+                    initialValues={{ remember: true }}
 
-    //               <Form.Item>
-    //                 <Button type="primary" htmlType="submit">
-    //                   Update
-    //                 </Button>
-    //               </Form.Item>
-    //             </Form>
-    //           </>
-    //         }
-    //         deleteForm={
-    //           <DeleteForm
-    //             onCancel={() => {
-    //               setOpenState(!openState);
-    //             }}
-    //             onDelete={() => {
-    //               axiosClient
-    //                 .delete(`/cashflow/delete/${text}`)
-    //                 .then(() => {
-    //                   toast.success("success");
-    //                 })
-    //                 .catch((err) => {
-    //                   toast.error(err.message);
-    //                 });
-    //               setOpenState(!openState);
-    //             }}
-    //           />
-    //         }
-    //       />
-    //     );
-    //   },
-    // },
+                    // onFinish={onFinish}
+                    // onFinishFailed={onFinishFailed}
+                  >
+                    <EditCategory value={record} />
+
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit" id="create">
+                        Update
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </>
+              }
+              deleteForm={
+                <DeleteForm
+                  onCancel={() => {
+                    setOpenState(!openState);
+                  }}
+                  onDelete={() => {
+                    axiosClient
+                      .delete(`/category/delete/${text}`)
+                      .then(() => {
+                        toast.success("success");
+                      })
+                      .catch((err) => {
+                        toast.error(err.message);
+                      });
+                    setOpenState(!openState);
+                  }}
+                />
+              }
+            />
+          </div>
+        );
+      },
+    },
   ];
   const [showModal, setShowModal] = useState<boolean>(false);
   const hideModal = () => {
@@ -180,11 +178,11 @@ const Page = () => {
       ? parseInt(getObjecFormUrlParameters(router)?.platform)
       : null
   );
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(10);
   const { data, isFetching, isError } = useQuery({
     queryKey: ["category", router.asPath],
     queryFn: () =>
-      axios.get(`/api/cashflow`, {
+      axiosClient.get("/categories/list?language=" + router.locale, {
         params: {
           keyword: keyword,
           platformId: platformValue,
@@ -205,7 +203,7 @@ const Page = () => {
   ) => {
     const current = pagination.current || 1;
     setPageIndex(current);
-    const pageSize = pagination.pageSize || 20;
+    const pageSize = pagination.pageSize || 10;
     setPageSize(pageSize);
   };
   const handleSearch = _.debounce((e: any) => {
@@ -221,7 +219,7 @@ const Page = () => {
       platformValue == null &&
       pageIndex == 1 &&
       pageSize == 10 &&
-      router.asPath == "/dashboard/cashflow"
+      router.asPath == "/dashboard/category"
     )
       return;
     router.push(router, {
@@ -235,18 +233,61 @@ const Page = () => {
   return (
     <>
       <Title level={2} className="text-center !mb-8">
-        {d("cashflow")}
+        {d("category")}
       </Title>
+      <Modal
+        title={t("create")}
+        open={showModal}
+        onCancel={hideModal}
+        footer={null}
+      >
+        <div>
+          <Form layout="vertical" onFinish={onFinish}>
+            <Form.Item
+              label="Title"
+              name="title"
+              rules={[{ required: true, message: "Please enter title" }]}
+            >
+              <Input placeholder="Enter title..," />
+            </Form.Item>
+            <PlatformSelect required={true} />
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                {t("create")}
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      </Modal>
 
       <div className="flex justify-between mt-10">
-        <div className="flex justify-start gap-1 " id="filter">
+        <div className="grid md:flex justify-start gap-1 " id="filter">
           <Input
             style={{ width: 200 }}
             placeholder={p("search")}
             onChange={handleSearch}
             defaultValue={keyword}
           />
+          <Select
+            defaultValue={platformValue}
+            allowClear
+            showSearch
+            filterOption={filterOption}
+            options={[]}
+            style={{ width: 200 }}
+            placeholder={p("selectplatform")}
+            onChange={handlePlatform}
+          />
         </div>
+        <Button
+          type="primary"
+          id="create"
+          icon={<PlusCircleFilled />}
+          iconPosition="end"
+          onClick={openModal}
+        >
+          {t("create")}
+        </Button>
       </div>
 
       <Table
@@ -273,7 +314,7 @@ export default Page;
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
-      messages: (await import(`../../../../messages/${locale}.json`)).default,
+      messages: (await import(`../../../messages/${locale}.json`)).default,
     },
   };
 }

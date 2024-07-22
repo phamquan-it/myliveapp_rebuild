@@ -10,8 +10,6 @@ import axiosClient from "@/apiClient/axiosClient";
 import { getCookie } from "cookies-next";
 import TableAction from "@/components/admin/TableAction";
 import EditService from "@/components/admin/crudform/edit/EditService";
-import CreateService from "@/components/admin/crudform/create/CreateService";
-import PlatformSelect from "@/components/admin/PlatformSelect";
 import Title from "antd/es/typography/Title";
 import { useRouter } from "next/router";
 import _ from "lodash";
@@ -51,12 +49,6 @@ export default function Index() {
       : null
   );
   const columns: any[] = [
-    // {
-    //   title: t("entryno"),
-    //   dataIndex: "key",
-    //   key: "key",
-    //   align: "center",
-    // },
     {
       title: t("name"),
       dataIndex: "service",
@@ -500,7 +492,7 @@ export default function Index() {
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
-      messages: (await import(`../../../../messages/${locale}.json`)).default,
+      messages: (await import(`../../../messages/${locale}.json`)).default,
     },
   };
 }

@@ -1,6 +1,6 @@
 import { Platform } from "@/@type";
 import { fetchPlatform } from "@/libs/redux/slices/platformSlice";
-import { RootState } from "@/libs/redux/store";
+import { RootState } from "@/libs/redux/store/store";
 import { Image, Select } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

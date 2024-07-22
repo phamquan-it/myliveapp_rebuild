@@ -134,32 +134,6 @@ const Page = () => {
                   </Form>
                 </>
               }
-              // deleteForm={
-              //   <DeleteForm
-              //     onCancel={() => {
-              //       setOpenState(!openState);
-              //     }}
-              //     onDelete={() => {
-              //       axiosClient
-              //         .delete(`/user/delete/${text}/?language=en`, {
-              //           headers: {
-              //             Authorization: `Bearer ${token}`,
-              //           },
-              //         })
-              //         .then(() => {
-              //           console.log("ok");
-
-              //           toast.success("success");
-              //         })
-              //         .catch((err) => {
-              //           console.log(err);
-
-              //           toast.error(err.message);
-              //         });
-              //       setOpenState(!openState);
-              //     }}
-              //   />
-              // }
             />
           </div>
         );

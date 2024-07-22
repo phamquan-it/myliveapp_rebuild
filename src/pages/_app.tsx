@@ -4,7 +4,7 @@ import "@/styles/globals.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "react-toastify/dist/ReactToastify.css";
 import theme from "@/theme/themeConfig";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, Layout } from "antd";
 import { NextIntlClientProvider } from "next-intl";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
@@ -16,14 +16,14 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import { useEffect, useState } from "react";
 import PageLayout from "@/components/PageLayout";
+import AppLayout from "@/components/admin/Layout";
 config.autoAddCss = false;
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const path: string = router.asPath;
   console.log(path);
-
-  const Layout = !path.includes("/dashboard") ? PageLayout : DashBoardLayout;
+  const Layout =  AppLayout;
 
   const [key, setKey] = useState(Math.random());
 

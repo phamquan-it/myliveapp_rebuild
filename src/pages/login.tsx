@@ -1,55 +1,50 @@
 import React, { PropsWithChildren, useEffect } from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, message } from "antd";
 import Title from "antd/es/typography/Title";
 import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from "next/router";
 import Link from "next/link";
-import FormLayout from "@/components/client/FormLayout";
-import { useTranslations } from "next-intl";
 import { GetStaticPropsContext } from "next";
-import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import axiosClient from "@/apiClient/axiosClient";
-import { setCookie } from "cookies-next";
+import { useLoginMutation } from "@/libs/redux/api/auth.api";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/router";
 const LoginForm = () => {
-  const t = useTranslations("Authenlication");
-
-  const layout = {
-    labelCol: { span: 24 }, // Set the label width to take up the full width
-    wrapperCol: { span: 24 }, // Set the input width to take up the full width
+  const [login, { isLoading, error }] = useLoginMutation();
+  const handleLogin = async (values: { email: string; password: string }) => {
+    
+    try {
+      const result:any = await login(values).unwrap();
+      // Store the token in localStorage
+      localStorage.setItem('authToken', result.accessToken);
+      // Optionally redirect or update UI
+      message.success('Login successful!').then(()=>{
+        router.push('/dashboard/')
+      });
+    } catch (err) {
+      console.error('Login failed:', err);
+      message.error('Login failed. Please try again.');
+    }
   };
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const { isPending, mutate } = useMutation({
-    mutationKey: ["login"],
-    mutationFn: (body) => axiosClient.post("/auth/login?language=en", body),
-    onSuccess: (data) => {
-      toast.success("Success");
-      console.log(data.data);
-      setCookie("token", data.data.accessToken);
-      setCookie("refresh_token", data.data.refreshToken);
-       router.push("/dashboard");
-    },
-    onError: (err) => {
-      console.log(err);
 
-      toast.error("Email  or password is not valid!");
-    },
-  });
-  async function onFinish(values: any) {
-    mutate(values);
-  }
+  const onFinish = (values: { email: string; password: string }) => {
+    handleLogin(values);
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
+    message.error('Failed to submit form.');
+  };
+  const t = useTranslations("Authenlication")
+  const router = useRouter()
 
   return (
-    <>
-      <FormLayout>
-        <Form
-          className="w-full py-5 pe-3"
+    <div className="w-full flex justify-center items-center h-full">
+     <Form 
+          className=" py-5 pe-3 w-1/3 min-w-80"
+          layout="vertical"
           name="basic"
           initialValues={{ remember: true }}
-          {...layout}
           onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
         >
           <Title level={3} className="text-center !pt-4">
             {t("login")}
@@ -60,7 +55,10 @@ const LoginForm = () => {
               name="email"
               rules={[{ required: true, message: t("requiredEmail") }]}
             >
-              <Input />
+              <Input style={{
+                paddingBottom:8,
+                paddingTop:8
+              }}/>
             </Form.Item>
 
             <Form.Item
@@ -74,7 +72,10 @@ const LoginForm = () => {
                 },
               ]}
             >
-              <Input.Password />
+              <Input.Password style={{
+                paddingBottom:8,
+                paddingTop:8
+              }}/>
             </Form.Item>
 
             <Form.Item className="!mt-5">
@@ -82,7 +83,10 @@ const LoginForm = () => {
                 type="primary"
                 block
                 htmlType="submit"
-                loading={isPending}
+                loading={isLoading}
+                style={{
+                  height:40
+                }}
               >
                 {t("login")}
               </Button>
@@ -104,15 +108,14 @@ const LoginForm = () => {
             </Form.Item>
           </div>
         </Form>
-      </FormLayout>
-    </>
+    </div>
   );
 };
 export default LoginForm;
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
-      messages: (await import(`../../../messages/${locale}.json`)).default,
+      messages: (await import(`../../messages/${locale}.json`)).default,
     },
   };
 }

@@ -5,6 +5,8 @@ const nextConfig = {
     // antd & deps
     "@ant-design",
     "@rc-component",
+    "@ant-design/plots",
+    "@ant-design/charts",
     "antd",
     "rc-cascader",
     "rc-checkbox",
