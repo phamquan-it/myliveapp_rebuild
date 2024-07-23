@@ -27,8 +27,8 @@ const LoginForm = () => {
     onSuccess: (data) => {
       toast.success("Success");
       console.log(data.data);
-      setCookie("token", data.data.accessToken);
-      setCookie("refresh_token", data.data.refreshToken);
+      setCookie("token", data.data.token);
+      setCookie("refresh_token", data.data.token);
        router.push("/dashboard");
     },
     onError: (err) => {
