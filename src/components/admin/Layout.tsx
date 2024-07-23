@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import {
   AppstoreOutlined,
   BellFilled,
@@ -21,7 +21,7 @@ import {
   UserOutlined,
   WindowsFilled,
 } from '@ant-design/icons';
-import { Button, Dropdown, Image, Layout, Menu, MenuProps, Modal, theme, Tooltip } from 'antd';
+import { Button, Dropdown, Image, Layout, Menu, MenuProps, message, Modal, theme, Tooltip } from 'antd';
 import Head from 'next/head';
 import { useTranslations } from 'next-intl';
 import styles from '@/styles/app.module.css';
@@ -29,6 +29,7 @@ import { FaJs, FaSpaceShuttle } from 'react-icons/fa';
 import { UserSetting } from '../UserSettings';
 import LocaleSwitcher from '@/LocaleSwitcher';
 import { useRouter } from 'next/router';
+import { useGetUserInfoQuery } from '@/libs/redux/api/auth.api';
 type MenuItem = Required<MenuProps>['items'][number];
 const items: MenuItem[] = [
   { key: '/dashboard', icon: <PieChartOutlined />, label: 'Statistic' },
@@ -55,14 +56,14 @@ const items: MenuItem[] = [
       { key: '/dashboard/vps/autolive', label: 'Auto live', icon: <SignalFilled/> },
       { key: '/dashboard/vps/other', label: 'Other' , icon: <OneToOneOutlined/>},
       {
-        key: '/dashboard/webdock',
-        label: 'Webdock',
+        key: 'provider',
+        label: 'Provider',
         icon: <CodeSandboxCircleFilled />,
         children: [
-          { key: '11', label: 'Public key', icon: <KeyOutlined/> },
-          { key: '12', label: 'Shell Terminal', icon: <>&gt;_ &nbsp;</> },
-          { key: '13', label: 'Scripts library', icon: <FaJs/> },
-          { key: '14', label: 'Option 14' },
+          { key: '/dashboard/provider/publickey', label: 'Public key', icon: <KeyOutlined/> },
+          { key: '/dashboard/provider/shell-terminal', label: 'Shell Terminal', icon: <>&gt;_ &nbsp;</> },
+          { key: '/dashboard/provider/script-library', label: 'Scripts library', icon: <FaJs/> },
+          { key: '/chart', label: 'testchart' },
         ],
       },
     ],
@@ -74,13 +75,17 @@ interface AppProps {
   children: ReactNode
 }
 const AppLayout: React.FC<AppProps> = ({ children }) => {
+
   const router = useRouter()
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState((router.pathname.includes("/dashboard")?false:true));
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const [showModal,setShowModal] = useState(false)
   const t = useTranslations('PageLayout');
+  useEffect(()=>{
+    setShowModal(false)
+  }, [router])
   return (
     <>
       <Head>
@@ -103,7 +108,7 @@ const AppLayout: React.FC<AppProps> = ({ children }) => {
             mode="inline"
             defaultSelectedKeys={[`${router.pathname}`]}
             items={items}
-            defaultOpenKeys={['sub1','vps']}
+            defaultOpenKeys={['sub1','vps'].concat(router.pathname.includes('provider')?['provider']:[])}
             onClick={(e)=>{
               router.push(`${e.key}`)
             }}
@@ -136,7 +141,7 @@ const AppLayout: React.FC<AppProps> = ({ children }) => {
                   setShowModal(false)
                 }} style={{
                   padding: 0
-                }}>
+                }} >
                     <UserSetting/>
                 </Modal>
                 

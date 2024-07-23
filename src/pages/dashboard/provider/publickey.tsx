@@ -1,7 +1,7 @@
 import axios from "axios";
 import { GetStaticPropsContext } from "next";
-import { WEBDOCK_TOKEN } from "../../../WEBDOCK_PROVIDER/constant/Token";
-import { Button, Form, Input, Modal, Table } from "antd";
+import { WEBDOCK_TOKEN } from "../../../../WEBDOCK_PROVIDER/constant/Token";
+import { Button, Form, Input, message, Modal, Table } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import Title from "antd/es/typography/Title";
 import { PlusCircleFilled } from "@ant-design/icons";
@@ -10,6 +10,16 @@ import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
 const Page = ()=>{
+  const handleCopyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(
+      () => {
+        message.success("Copied to clipboard");
+      },
+      (err) => {
+        message.error("Failed to copy");
+      }
+    );
+  };
     const [openState,setOpenState] = useState(false)
     const { data, isFetching, isError } = useQuery({ queryKey: ['queryKey'], queryFn: ()=>axios.get("https://api.webdock.io/v1/account/publicKeys", {
         headers: {
@@ -27,6 +37,7 @@ const Page = ()=>{
             dataIndex: 'created',
             key: 'create',
         },
+        
         {
             title: "Action",
             dataIndex: "id",
@@ -62,6 +73,7 @@ const Page = ()=>{
             </>
         }
       ];
+      console.log(data);
       const [openModal,setOpenModal] = useState(false) 
       const showModal = ()=>{ 
         //show create modal
@@ -134,7 +146,10 @@ const Page = ()=>{
         </Button>
     </div>
     
-    <Table dataSource={data?.data} columns={columns} className="border rounded overflow-hidden"/>
+    <Table dataSource={data?.data} columns={columns} className="border rounded overflow-hidden"expandable={{
+      expandedRowRender: (record) => <Input.TextArea value={record.key} readOnly onClick={() => handleCopyToClipboard(record.key)} autoSize={true}/>,
+      rowExpandable: (record) => record.key !== undefined,
+    }}/>
     </>
 );
 } 
@@ -143,7 +158,7 @@ const Page = ()=>{
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
-      messages: (await import(`../../../messages/${locale}.json`)).default,
+      messages: (await import(`../../../../messages/${locale}.json`)).default,
     },
   };
 }

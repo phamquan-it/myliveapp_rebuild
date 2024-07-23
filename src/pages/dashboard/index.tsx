@@ -1,40 +1,14 @@
-"use client";
-import dynamic from "next/dynamic";
+"use client";;
 import "chart.js/auto";
-const Line = dynamic(() => import("react-chartjs-2").then((mod) => mod.Line), {
-  ssr: false,
-});
-import DashBoardLayout from "@/components/admin/DashBoardLayout";
-const data = {
-  labels: [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ],
-  datasets: [
-    {
-      label: "Revenue",
-      data: [65000, 59000, 80000, 81000, 56000, 75000, 60000],
-      fill: false,
-      borderColor: "rgb(75, 192, 192)",
-      tension: 0.1,
-    },
-  ],
-};
 
 import { GetStaticPropsContext } from "next";
 import { Avatar, ConfigProvider, Input, List, Skeleton, Switch, Table } from "antd";
 import { useTranslations } from "use-intl";
 import DashBoardStatical from "@/components/admin/crudform/statistical/DashboardStatiticcal";
 import Title from "antd/es/typography/Title";
-import { TableToken } from "antd/es/table/style";
-import AbstractCalculator from "antd/es/theme/util/calc/calculator";
-
+import { customTokens } from "@/components/configProviders/customToken";
 const Page = () => {
+
   const t = useTranslations("MyLanguage");
   const data = [
     {
@@ -145,18 +119,7 @@ const Page = () => {
   );
 };
 
-const customTokens = {
-  fontSize: 11, // Example of a valid token name for font size
-  colorTextHeading: '#FFF',
-  padding: 15,
-  paddingContentVertical: 0,
-  paddingContentHorizontal: 1,
-  zIndexBase: 0,
-  zIndexTableFixed:0,
-  zIndexPopupBase: 0,
-  zIndexTableSticky: 0
- 
-};
+
 export default Page;
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {

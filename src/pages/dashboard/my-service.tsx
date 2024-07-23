@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
 import {
   Button,
+  ConfigProvider,
   DatePicker,
   Form,
   Input,
@@ -24,6 +25,7 @@ import { useTranslations } from "use-intl";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 import { CaretRightFilled, PlayCircleFilled, StopFilled, StopOutlined } from "@ant-design/icons";
 import LiveState from "@/components/client/LiveState";
+import { customTokens } from "@/components/configProviders/customToken";
 
 const Page = () => {
     const [liveActive,setLiveActive] = useState(false)
@@ -141,6 +143,7 @@ const Page = () => {
           />
         </div>
       </div>
+      <ConfigProvider theme={{ token: customTokens}}>
       <Table
         className="border rounded shadow-md"
         loading={isFetching}
@@ -159,6 +162,7 @@ const Page = () => {
           position: ["bottomCenter"],
         }}
       />
+      </ConfigProvider>
     </>
   );
 };

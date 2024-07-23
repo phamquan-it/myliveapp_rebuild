@@ -16,9 +16,8 @@ const LoginForm = () => {
       // Store the token in localStorage
       localStorage.setItem('authToken', result.accessToken);
       // Optionally redirect or update UI
-      message.success('Login successful!').then(()=>{
-        router.push('/dashboard/')
-      });
+      message.success('Login successful!')
+      router.push('/dashboard/')
     } catch (err) {
       console.error('Login failed:', err);
       message.error('Login failed. Please try again.');

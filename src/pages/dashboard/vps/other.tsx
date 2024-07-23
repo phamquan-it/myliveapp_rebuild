@@ -1,5 +1,5 @@
 
-  import axiosClient from "@/apiClient/axiosClient";
+import axiosClient from "@/apiClient/axiosClient";
 import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
 import { debounce } from "lodash";
@@ -131,33 +131,6 @@ const Page = () => {
      
     </div>
   })
-  // columns.push({
-  //   title: t('action'),
-  //   key: "ipv4",
-  //   dataIndex: "ipv4",
-  //   render: (_text: string, record:any)=><div className="flex gap-1">
-  //    <Tooltip title="Access command">
-  //     <Button size="small" className="!bg-black !text-white" onClick={showModalTerminal}>&gt;_</Button>
-  //    </Tooltip>
-  //    <Tooltip title="Disconnect">
-  //        <Button type="default" size="small">
-  //         <span className="text-red-600">
-  //         <DisconnectOutlined/>
-  //         </span>
-  //        </Button> 
-  //    </Tooltip>
-  //    <Tooltip title="Send message">
-  //    <Button type="default" size="small" style={{color: "burlywood"}} onClick={()=>{
-  //       axios.get('http://localhost:3031/send-message').then((data)=>{
-  //         alert(data.data)
-  //       })
-  //    }}><MessageFilled/></Button>
-  //    </Tooltip>
-     
-  //    {/* <TableAction deleteForm={<></>} openState={showModal} /> */}
-     
-  //   </div>
-  // })
   const [showModal, setShowModal] = useState<boolean>(false);
   const hideModal = () => {
     setShowModal(false);

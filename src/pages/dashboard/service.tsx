@@ -174,25 +174,6 @@ export default function Index() {
                       </Form>
                     </>
                   }
-                  // deleteForm={
-                  //   <DeleteForm
-                  //     onCancel={() => {
-                  //       setOpenState(!openState);
-                  //     }}
-                  //     onDelete={() => {
-                  //       axiosClient
-                  //         .delete(`/service/delete/${text}`)
-                  //         .then(() => {
-                  //           toast.success("success");
-                  //         })
-                  //         .catch((err) => {
-                  //           toast.error(err.message);
-                  //         });
-
-                  //       setOpenState(!openState);
-                  //     }}
-                  //   />
-                  // }
                 />
                 <Button
                   type="primary"
@@ -317,7 +298,7 @@ export default function Index() {
       provider == null &&
       status == null &&
       pageSize == 50 &&
-      router.asPath == "/dashboard/service"
+      router.asPath == router.pathname
     )
       return;
     router.push(router, {

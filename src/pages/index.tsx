@@ -294,7 +294,7 @@ const Home = ({
             </div>
           </div>
           <div className="grid grid-cols-2 lg:flex gap-2 justify-center ">
-            {professList.map((item, index) => {
+            {professList?.map((item, index) => {
               return (
                 <div
                   style={{
@@ -350,7 +350,7 @@ const Home = ({
             />
             <Select
               value={platformValue}
-              options={platformdata.map((item: any, index: number) => ({
+              options={platformdata?.map((item: any, index: number) => ({
                 ...item,
                 key: index,
                 value: `${item.id}`,
@@ -379,7 +379,7 @@ const Home = ({
               className="customIndexTable !text-sm"
               rowClassName={"custom_row_height"}
               onChange={handleTable}
-              dataSource={DataHasChange.map((item, index) => {
+              dataSource={DataHasChange?.map((item, index) => {
                 var name;
                 if (item?.icon == undefined) {
                   name = locale == "en" ? item.name : item?.name_vi;
@@ -460,15 +460,15 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
     const dataResponse = await axiosClient.get(
       `/platform/list?language=${locale}`
     );
-    dataResponse.data.data.map((item: any) => {
+    dataResponse?.data?.data?.map((item: any) => {
       platformdata.push(item);
     });
     const response = await axiosClient.get(
       "/service/list-public?language=" + locale
     );
-    response.data.data.map((item: any) => {
+    response?.data?.data?.map((item: any) => {
       serviceData.push(item);
-      item.serviceCategories.map((serviceCategory: any) => {
+      item?.serviceCategories?.map((serviceCategory: any) => {
         serviceCategory.service.platformId = item.platformId;
         serviceData.push(serviceCategory.service);
       });

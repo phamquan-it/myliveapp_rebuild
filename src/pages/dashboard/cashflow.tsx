@@ -158,7 +158,7 @@ const Page = () => {
       platformValue == null &&
       pageIndex == 1 &&
       pageSize == 10 &&
-      router.asPath == "/dashboard/cashflow"
+      router.asPath == router.pathname
     )
       return;
     router.push(router, {

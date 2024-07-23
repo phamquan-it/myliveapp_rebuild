@@ -21,8 +21,7 @@ config.autoAddCss = false;
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const path: string = router.asPath;
-  console.log(path);
+  const path: string = router.asPath;;
   const Layout =  AppLayout;
 
   const [key, setKey] = useState(Math.random());

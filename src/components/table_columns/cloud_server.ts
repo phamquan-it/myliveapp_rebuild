@@ -11,61 +11,50 @@ const cloudServerColumns = (t:any)=>{
           key: 'ipv4',
         },
         {
-          title: t('port'),
-          dataIndex: 'port',
-          key: 'port',
+          title: t('name'),
+          dataIndex: 'name',
+          key: 'name',
         },
         {
-          title: t('manufacturer'),
-          dataIndex: 'manufacturer',
-          key: 'manufacturer',
+          title: t('date'),
+          dataIndex: 'date',
+          key: 'date',
         },
         {
-          title: t('vendor'),
-          dataIndex: 'vendor',
-          key: 'vendor',
+          title: t('location'),
+          dataIndex: 'location',
+          key: 'location',
         },
         {
-          title: t('core'),
-          dataIndex: 'cores',
-          key: 'cores',
+          title: 'Image',
+          dataIndex: 'image',
+          key: 'image',
         },
         {
-          title: t('processor'),
-          dataIndex: 'processors',
-          key: 'processors',
+          title: 'SSHPasswordAuthEnabled',
+          dataIndex: 'SSHPasswordAuthEnabled',
+          key: 'SSHPasswordAuthEnabled',
+          render:(value:boolean)=>((value)?"true":"false"),
+          align:'center',
         },
         {
-          title: t('virtualization'),
+          title: 'Virtualization',
           dataIndex: 'virtualization',
+          align:'center',
           key: 'virtualization',
           render: (virtualization:any) => virtualization ? 'Yes' : 'No',
         },
         {
-          title: 'Platform',
-          dataIndex: 'platform',
-          key: 'platform',
+          title: 'SnapshotRunTime',
+          dataIndex: 'snapshotRunTime',
+          key: 'snapshotRunTime',
+          align: "center"
         },
         {
-          title: t('distro'),
-          dataIndex: 'distro',
-          key: 'distro',
+          title: 'Profile',
+          dataIndex: 'profile',
+          key: 'profile',
         },
-        {
-          title: t('release'),
-          dataIndex: 'release',
-          key: 'release',
-        },
-        {
-          title: t('kernel'),
-          dataIndex: 'kernel',
-          key: 'kernel',
-        },
-        {
-          title: t('arch'),
-          dataIndex: 'arch',
-          key: 'arch',
-        } 
     ];
 }
 export default cloudServerColumns;
