@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, Modal, Table, message } from 'antd';
+import { Button, ConfigProvider, Form, Input, Modal, Table, message } from 'antd';
 import { PlusCircleFilled } from '@ant-design/icons';
 import { PlatformModel } from '@/libs/redux/api/models/platform.model';
 import { useCreatePlatformMutation, useDeletePlatformMutation, useGetPlatformListQuery, useUpdatePlatformMutation } from '@/libs/redux/api/platform.api';
+import { useTranslations } from 'use-intl';
+import { GetStaticPropsContext } from 'next';
+import { customTokens } from '@/components/configProviders/customToken';
+import Title from 'antd/es/typography/Title';
 
 
 const PlatformList = () => {
+    const t = useTranslations('MyLanguage')
   const { data, error, isLoading } = useGetPlatformListQuery();
   const [createPlatform] = useCreatePlatformMutation();
   const [updatePlatform] = useUpdatePlatformMutation();
@@ -15,7 +20,12 @@ const PlatformList = () => {
 
   const columns = [
     {
-      title: 'Name',
+        title: t('entryno'),
+        dataIndex: 'key',
+        key: 'key',
+    },
+    {
+      title: t('name'),
       dataIndex: 'name',
       key: 'name',
     },
@@ -49,7 +59,7 @@ const PlatformList = () => {
   const handleUpdate = async (values: { name: string, rmtp: string }) => {
     if (!editingPlatform) return;
     try {
-      await updatePlatform({ id: editingPlatform.id, ...values }).unwrap();
+      await updatePlatform({ id: editingPlatform.id.toString(), ...values }).unwrap();
       message.success('Platform updated successfully');
       setEditingPlatform(null);
       setIsModalOpen(false);
@@ -74,8 +84,18 @@ const PlatformList = () => {
 
   return (
     <>
-      <Button type="primary" icon={<PlusCircleFilled />} onClick={() => setIsModalOpen(true)}>Create Platform</Button>
-      <Table dataSource={data} columns={columns} loading={isLoading} />
+        <Title className='text-center' level={2}>Platform</Title>
+      <div className='mb-2 flex justify-between'>
+        <div>
+        <Input placeholder="Search.." />
+        </div>
+        <Button type="primary" icon={<PlusCircleFilled />} onClick={() => setIsModalOpen(true)}>Create Platform</Button>
+      </div>
+      <ConfigProvider theme={{
+        token: customTokens
+      }}>
+        <Table dataSource={data?.map((value: any, index: number)=>({...value, key: index}))} columns={columns} loading={isLoading} />
+      </ConfigProvider>
 
       <Modal
         title={editingPlatform ? "Edit Platform" : "Create Platform"}
@@ -113,3 +133,12 @@ const PlatformList = () => {
 };
 
 export default PlatformList;
+
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+    return {
+      props: {
+        messages: (await import(`../../../messages/${locale}.json`)).default,
+      },
+    };
+  }
+  

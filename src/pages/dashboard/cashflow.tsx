@@ -42,6 +42,7 @@ import filterOption from "@/hooks/filterOption";
 import PlatformSelect from "@/components/admin/PlatformSelect";
 import axios from "axios";
 import dayjs from "dayjs";
+import GenericTable from "@/components/app/GenericTable";
 const { Option } = Select;
 const Page = () => {
   const router = useRouter();
@@ -186,7 +187,7 @@ const Page = () => {
         </div>
       </div>
 
-      <Table
+      <GenericTable<any> rowKey="key"
         className="border shadow-md rounded-md mt-4"
         dataSource={data?.data.data.map((item: any, index: number) => ({
           ...item,

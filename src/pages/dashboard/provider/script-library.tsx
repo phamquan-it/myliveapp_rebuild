@@ -1,40 +1,50 @@
-import { Table } from "antd";
+import GenericTable from "@/components/app/GenericTable";
+import { useGetPublicScriptListQuery } from "@/libs/redux/api/script-library.api";
+import { Input, Table } from "antd";
+import { GetStaticPropsContext } from "next";
+import { useTranslations } from "next-intl";
+import { handleCopyToClipboard } from "./publickey";
 
 const Page = ()=>{
-  const dataSource = [
-    {
-      key: '1',
-      name: 'Mike',
-      age: 32,
-      address: '10 Downing Street',
-    },
-    {
-      key: '2',
-      name: 'John',
-      age: 42,
-      address: '10 Downing Street',
-    },
-  ];
-  
+  const t = useTranslations("MyLanguage")
+  const {data, isFetching ,isError} = useGetPublicScriptListQuery()
+  console.log(data);
   const columns = [
     {
-      title: 'Name',
+      title: t('entryno'),
+      dataIndex: 'key',
+      key: 'key',
+    },
+    {
+      title: t('name'),
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
+      title: 'File name',
+      dataIndex: 'filename',
+      key: 'filename',
     },
   ];
   
-  return <Table dataSource={dataSource} columns={columns} />
+  return <GenericTable rowKey="id" dataSource={data?.map((value:any, index: number)=>({...value, key: index+1}))} columns={columns} expandable={{
+    expandedRowRender: (record) => <Input.TextArea placeholder="" allowClear value={record.content} autoSize={true} readOnly onClick={()=> handleCopyToClipboard(record.content)}/>,
+    rowExpandable: (record) => record.content !== undefined,
+  }}/>
 
 } 
  export default Page
+
+ export async function getStaticProps({ locale }: GetStaticPropsContext) {
+    return {
+      props: {
+        messages: (await import(`../../../../messages/${locale}.json`)).default,
+      },
+    };
+  }
+  

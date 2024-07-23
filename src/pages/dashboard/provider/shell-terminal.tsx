@@ -1,4 +1,6 @@
+import GenericTable from "@/components/app/GenericTable";
 import { Table } from "antd";
+import { GetStaticPropsContext } from "next";
 
 const Page = ()=>{
   const dataSource = [
@@ -34,7 +36,16 @@ const Page = ()=>{
     },
   ];
   
-  return <Table dataSource={dataSource} columns={columns} />
+  return <GenericTable<any> rowKey="key" dataSource={dataSource} columns={columns} />
 
 } 
  export default Page
+
+ export async function getStaticProps({ locale }: GetStaticPropsContext) {
+    return {
+      props: {
+        messages: (await import(`../../../../messages/${locale}.json`)).default,
+      },
+    };
+  }
+  

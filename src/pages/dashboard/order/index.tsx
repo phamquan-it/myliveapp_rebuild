@@ -36,6 +36,7 @@ import { text } from "stream/consumers";
 import Link from "next/link";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 import filterOptionByLabel from "@/hooks/filterOptionByLabel";
+import GenericTable from "@/components/app/GenericTable";
 
 const { Option } = Select;
 const statisticalOrder = [
@@ -495,7 +496,7 @@ const Page = () => {
           </Button>
         </div>
       </div>
-      <Table
+      <GenericTable<any> rowKey={'key'}
         className="border rounded-md shadow-md"
         dataSource={data?.data.data.map((item: any, index: number) => ({
           ...item,

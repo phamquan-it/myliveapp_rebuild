@@ -8,18 +8,19 @@ import { PlusCircleFilled } from "@ant-design/icons";
 import TableAction from "@/components/admin/TableAction";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-
+import GenericTable from "@/components/app/GenericTable";
+export const handleCopyToClipboard = (text: string) => {
+  navigator.clipboard.writeText(text).then(
+    () => {
+      message.success("Copied to clipboard");
+    },
+    (err) => {
+      message.error("Failed to copy");
+    }
+  );
+};
 const Page = ()=>{
-  const handleCopyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(
-      () => {
-        message.success("Copied to clipboard");
-      },
-      (err) => {
-        message.error("Failed to copy");
-      }
-    );
-  };
+  
     const [openState,setOpenState] = useState(false)
     const { data, isFetching, isError } = useQuery({ queryKey: ['queryKey'], queryFn: ()=>axios.get("https://api.webdock.io/v1/account/publicKeys", {
         headers: {
@@ -146,10 +147,10 @@ const Page = ()=>{
         </Button>
     </div>
     
-    <Table dataSource={data?.data} columns={columns} className="border rounded overflow-hidden"expandable={{
-      expandedRowRender: (record) => <Input.TextArea value={record.key} readOnly onClick={() => handleCopyToClipboard(record.key)} autoSize={true}/>,
-      rowExpandable: (record) => record.key !== undefined,
-    }}/>
+    <GenericTable<any> dataSource={data?.data} columns={columns} className="border rounded overflow-hidden" expandable={{
+        expandedRowRender: (record) => <Input.TextArea value={record.key} readOnly onClick={() => handleCopyToClipboard(record.key)} autoSize={true} />,
+        rowExpandable: (record) => record.key !== undefined,
+      }} rowKey={"key"}/>
     </>
 );
 } 

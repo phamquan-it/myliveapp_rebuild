@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Alert, Button, Form, Image, Input, message, Result, Tabs, Upload } from 'antd';
+import { Alert, Button, Form, Image, Input, message, Result, Space, Tabs, Upload } from 'antd';
 import { InfoCircleOutlined, KeyOutlined, LockFilled, LockOutlined, UserOutlined } from '@ant-design/icons';
 import Title from 'antd/es/typography/Title';
 import { TbLogout } from 'react-icons/tb';
@@ -19,7 +19,7 @@ export const UserSetting: React.FC = () => {
         role: data.role,
         email: data.email,
         address: data.address,
-        remains: data.remains,
+        remains: "$"+data.remains,
         isActive: data.isActive ? 'Active' : 'Inactive',
       });
     }
@@ -97,6 +97,8 @@ export const UserSetting: React.FC = () => {
                     <Form.Item label="" name="address">
                       <Input placeholder="Address" size="middle" style={{ paddingBottom: 8, paddingTop: 8 }} />
                     </Form.Item>
+                    
+                    <Space.Compact style={{ width: '100%' }}>
                     <Form.Item label="" name="remains">
                       <Input
                         readOnly
@@ -105,6 +107,9 @@ export const UserSetting: React.FC = () => {
                         style={{ paddingBottom: 8, paddingTop: 8 }}
                       />
                     </Form.Item>
+                    <Button type="primary" style={{ height:40 }}>Deposit</Button>
+                    
+                    </Space.Compact>
                     <Form.Item label="" name="isActive">
                       <Input
                         placeholder="Is active"

@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 import { Select } from "antd/lib";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 import filterOptionByLabel from "@/hooks/filterOptionByLabel";
+import GenericTable from "@/components/app/GenericTable";
 
 const Page = () => {
   const router = useRouter();
@@ -313,7 +314,9 @@ const Page = () => {
           info="Current Viral SMM balance"
         />
       </div>
-      <Table
+      <GenericTable
+        rowKey="key
+        "
         loading={isFetching}
         onChange={handleTableChange}
         dataSource={data?.data?.data?.map((item: any, index: number) => ({
