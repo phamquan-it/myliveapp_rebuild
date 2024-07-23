@@ -1,19 +1,22 @@
 import { configureStore,  combineReducers } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { authApi } from '../api/auth.api';
+import { commonPlatformApi } from '../api/platform.api';
 
 
 const preloadedState = {};
 
 const rootReducer = combineReducers({
-    [authApi.reducerPath]: authApi.reducer
+    [authApi.reducerPath]: authApi.reducer,
+    [commonPlatformApi.reducerPath]: commonPlatformApi.reducer
 })
 //configuration store
 export const store = configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleWare)=> 
         getDefaultMiddleWare().concat(
-            authApi.middleware
+            authApi.middleware,
+            commonPlatformApi.middleware
         ),
     preloadedState,
     devTools: process.env.NODE_ENV !== 'production',
