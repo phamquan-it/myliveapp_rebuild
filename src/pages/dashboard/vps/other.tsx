@@ -174,7 +174,7 @@ const Page = () => {
   return (
     <>
       <Title className="text-center" level={2}>
-        {d("cloudserver")}
+        Vps list
       </Title>
       <Modal title="Terminal" open={showTerminal} width={1500} footer={null} onCancel={hideTerninal}>
           <TerminalController />
