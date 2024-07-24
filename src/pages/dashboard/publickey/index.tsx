@@ -1,22 +1,29 @@
 import axios from "axios";
 import { GetStaticPropsContext } from "next";
 import { WEBDOCK_TOKEN } from "../../../../WEBDOCK_PROVIDER/constant/Token";
-import { Button, Form, Input, Modal, Table } from "antd";
-import { useQuery } from "@tanstack/react-query";
+import { Button, Form, Input, message, Modal, Table } from "antd";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Title from "antd/es/typography/Title";
 import { PlusCircleFilled } from "@ant-design/icons";
 import TableAction from "@/components/admin/TableAction";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import { headers } from "next/headers";
+import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
 
 const Page = ()=>{
     const [openState,setOpenState] = useState(false)
-    const { data, isFetching, isError } = useQuery({ queryKey: ['queryKey'], queryFn: ()=>axios.get("https://api.webdock.io/v1/account/publicKeys", {
+    const { data, isFetching, isError } = useQuery({ queryKey: ['queryKey', openState], queryFn: ()=>axios.get("https://api.webdock.io/v1/account/publicKeys", {
         headers: {
           Authorization: `Bearer ${WEBDOCK_TOKEN}`,
         },
       }) });
       const columns = [
+        {
+          title: 'No.',
+          dataIndex: 'entryno',
+          key: 'entryno',
+        },
         {
           title: 'Name',
           dataIndex: 'name',
@@ -30,29 +37,12 @@ const Page = ()=>{
         {
             title: "Action",
             dataIndex: "id",
-            render: (text: string, record: any)=><>
+            render: (text:any, record: any)=><>
                 <TableAction deleteForm={<>
                     <div className="flex justify-end gap-1">
                         <Button type="primary">Cancel</Button>
                         <Button type="primary" danger onClick={()=>{
-                            async function deleteServer() {
-                                const url = 'https://api.webdock.io/v1/account/publicKeys/'+text;
-                                const headers = {
-                                    Authorization: 'Bearer '+WEBDOCK_TOKEN,
-                                    Cookie: 'CONCRETE5=vsf9dgjlpvses6vojntcqhc4tr',
-                                };
-                            
-                                try {
-                                    await axios.delete(url, { headers });
-                                    toast.success(data?.data.message)
-                                } catch (error:any) {
-                                    toast.error(error.message)
-                                }
-                                setOpenState(!openState)
-                            }
-                            
-                            // Call the function to stop the server
-                            deleteServer();
+                            deletePublicKeyMutation.mutate(text)
                         }}>
                             Accept
                         </Button>
@@ -71,21 +61,39 @@ const Page = ()=>{
         //hide create modal
        setOpenModal(false)
       }
+      const deletePublicKeyMutation = useMutation({
+        mutationFn:(id)=>{
+          return axios.delete(`https://api.webdock.io/v1/account/publicKeys/${id}`, webdockConfig)
+        },
+        onSuccess: ()=>{
+          message.success('Delete ok')
+          setOpenState(!openState)
+        },
+        onError:()=>{
+          setOpenState(!openState)
+          message.error('Delete no ok')
+        }
+      })
+      const createPublickeyMutation = useMutation({
+        mutationFn: (newPublickey) => {
+          return axios.post(
+            'https://api.webdock.io/v1/account/publicKeys',
+            newPublickey, webdockConfig
+          )
+        },
+        onSuccess:()=>{
+          setOpenState(!openState)
+          message.success("Create publickey ok");
+        },
+        onError: (e)=>{
+          setOpenState(!openState)
+          message.error("Create publickey no ok");
+        }
+      })
 
       const onFinish = async (values: any) => {
-        console.log('Success:', values);
-        const url = 'https://api.webdock.io/v1/account/publicKeys';
-              const headers = {
-                  Authorization: 'Bearer '+WEBDOCK_TOKEN,
-                  Cookie: 'CONCRETE5=vsf9dgjlpvses6vojntcqhc4tr',
-              };
-          
-              try {
-                  const response = await axios.post(url, null, { headers });
-                   alert('ok')
-              } catch (error:any) {
-                  alert('nook')
-              }
+        console.log(values);
+        createPublickeyMutation.mutate(values)
       };
     
       const onFinishFailed = (errorInfo: any) => {
@@ -134,7 +142,12 @@ const Page = ()=>{
         </Button>
     </div>
     
-    <Table dataSource={data?.data} columns={columns} className="border rounded overflow-hidden"/>
+    <Table dataSource={data?.data.map((pkey: any, index: number)=>({...pkey, entryno: index+1}))} columns={columns} className="border rounded overflow-hidden"
+      expandable={{
+        expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.key}</p>,
+        rowExpandable: (record) => record.key !== undefined,
+      }}
+    />
     </>
 );
 } 

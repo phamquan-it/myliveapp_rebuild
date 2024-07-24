@@ -6,6 +6,7 @@ import {
   FundOutlined,
   HistoryOutlined,
   HomeFilled,
+  JavaScriptOutlined,
   KeyOutlined,
   MenuOutlined,
   PlusCircleFilled,
@@ -54,132 +55,119 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
 
   const items_menu = [
     {
-      key: "1",
+      key: "/dashboard",
       icon: <HomeFilled className="!text-lg" />,
       label: t("home"),
       role: "admin",
-      page: "/dashboard",
     },
 
     {
-      key: "3",
+      key: "/dashboard/service",
       icon: <FaListUl />,
       label: t("services"),
       role: "user",
-      page: "/dashboard/service",
     },
     {
-      key: "5",
+      key: "/dashboard/category",
       icon: <TbCategoryFilled />,
       label: t("category"),
       role: "admin",
-      page: "/dashboard/category",
     },
     {
-      key: "6",
+      key: "/dashboard/refund",
       icon: <FundOutlined />,
       role: "admin",
       label: t("refund"),
-      page: "/dashboard/refund",
     },
     {
-      key: "4",
+      key: "/dashboard/casflow",
       icon: <FaMoneyBill />,
       label: t("cashflow"),
       role: "admin",
-      page: "/dashboard/myautolive",
     },
     {
-      key: "2",
+      key: "/dashboard/myautolive",
       icon: <SignalFilled />,
       label: t('myautolive'),
       role: "user",
-      page: "/dashboard/myautolive",
     },
     {
-      key: "7",
+      key: "/dashboard/payment/history",
       icon: <HistoryOutlined />,
       role: "admin",
       label: t("paymenthistory"),
-      page: "/dashboard/payment/history",
     },
     {
-      key: "15",
+      key: "/dashboard/platform",
       icon: <WindowsFilled />,
       role: "admin",
       label: t("platform"),
-      page: "/dashboard/platform",
     },
     {
-      key: "8",
+      key: "/dashboard/crond",
       icon: <CalendarFilled />,
       label: t("cron"),
-      page: "/dashboard/crond",
     },
     {
-      key: "9",
+      key: "/dashboard/order",
       icon: <FaBuyNLarge />,
       label: t("order"),
       role: "user",
-      page: "/dashboard/order",
     },
     {
-      key: "10",
+      key: "/dashboard/user",
       icon: <TeamOutlined />,
       label: t("user"),
       role: "user",
-      page: "/dashboard/user",
     },
     {
-      key: "11",
+      key: "/dashboard/user/info",
       icon: <UserOutlined />,
       label: t("userprofile"),
-      role: "user",
-      page: "/dashboard/user/info",
+      role: "user"
     },
-
     {
-      key: "12",
+      key: "/dashboard/settings",
       icon: <SettingOutlined />,
       role: "admin",
       label: t("Settings"),
-      page: "/dashboard/settings",
     },
-    // {
-    //   key: "13",
-    //   icon: <FaVolumeOff />,
-    //   label: t("voucher"),
-    //   role: "admin",
-    //   page: "/dashboard/voucher",
-    // },
     {
       key: "16",
       icon: <CloudServerOutlined />,
-      label: t("cloudserver"),
+      label: "Vps",
       role: "admin",
-      page: "/dashboard/vps",
+      children: [
+        {
+          key: "/dashboard/webdock",
+          icon: <CloudServerOutlined />,
+          label: "Webdock",
+          role: "admin",
+        },
+        {
+          key: "/dashboard/publickey",
+          icon: <KeyOutlined />,
+          label: "Public key",
+          role: "admin",
+        },
+        {
+          key: "/dashboard/account-script",
+          icon: <JavaScriptOutlined />,
+          label: "Account script",
+          role: "admin",
+        },
+        {
+          key: "/dashboard/script_library",
+          icon: <>&gt;_&nbsp; &nbsp;</>,
+          label: " Script library",
+          role: "admin",
+        },
+
+      ]
+
     },
-    {
-      key: "17",
-      icon: <CloudServerOutlined />,
-      label: "Webdock",
-      role: "admin",
-      page: "/dashboard/webdock",
-    },
-    {
-      key: "18",
-      icon: <KeyOutlined />,
-      label: "Public key",
-      role: "admin",
-      page: "/dashboard/publickey",
-    },
-    // {
-    //   key: "14",
-    //   icon: <DiffOutlined />,
-    //   label: t("log"),
-    //   role: "admin",
-    //   page: "/dashboard/log",
-    // },
+    
+
   ];
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -188,12 +176,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
   const [defaultMenuActive, setDefaultMenuActive] = useState<string[]>([]);
   const [activeKey, setActiveKey] = useState(["1"]);
   const router = useRouter();
-  useEffect(() => {
-    console.log(router.pathname);
-    items_menu.map((item) => {
-      if (item.page == router.asPath) setDefaultMenuActive([item.key]);
-    });
-  }, []);
   const token = getCookie("token");
 
   const { data } = useQuery({
@@ -208,17 +190,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
   useEffect(() => {
     console.log(collapsed);
   }, [collapsed]);
-  useEffect(() => {
-    setActiveKey([""]);
-    let path = router.asPath;
-    if (path.includes("?")) path = path.split("?")[0];
-    items_menu.map((item) => {
-      if (item.page == path) {
-        setActiveKey([item.key]);
-        return;
-      }
-    });
-  }, [router]);
   return (
     <Layout style={{ height: "100vh" }} className="!bg-white">
       <ToastContainer />
@@ -297,20 +268,11 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
               className="!text-sm !font-medium"
               theme="light"
               mode="inline"
-              selectedKeys={activeKey}
-              defaultSelectedKeys={defaultMenuActive}
+
+              defaultSelectedKeys={[router.pathname]}
               onClick={(e) => {
-                items_menu.map((item: any) => {
-                  if (e.key == item.key) {
-                    setActiveKey(item.key);
-                    router.push(item.page);
-                  }
-                });
+               router.push(e.key)
               }}
-              // data?.data.data.map((item: any, index: number) => ({
-              //   ...item,
-              //   key: pageIndex * 10 + (index + 1) - 10,
-              // }))}
               items={items_menu.filter((item: any) => {
                 if (role != "admin") return role == item.role;
                 else return true;

@@ -1,11 +1,4 @@
-import { Category } from "@/@type/Category";
 import axiosClient from "@/apiClient/axiosClient";
-import DashBoardLayout from "@/components/admin/DashBoardLayout";
-import DeleteForm from "@/components/admin/DeleteForm";
-import TableAction from "@/components/admin/TableAction";
-import UpdateRefund from "@/components/admin/crudform/edit/EditRefund";
-import format from "@/hooks/dayjsformatter";
-import { PlusCircleFilled } from "@ant-design/icons";
 import _ from "lodash";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -21,12 +14,6 @@ import {
   TablePaginationConfig,
   Tag,
 } from "antd";
-import { AnyObject } from "antd/es/_util/type";
-import {
-  FilterValue,
-  SorterResult,
-  TableCurrentDataSource,
-} from "antd/es/table/interface";
 import { getCookie } from "cookies-next";
 import dayjs from "dayjs";
 import { GetStaticPropsContext } from "next";
@@ -136,60 +123,6 @@ const Page = () => {
         return parseFloat(number.toFixed(5));
       },
     },
-    // {
-    //   title: t("action"),
-    //   dataIndex: "id",
-    //   key: "id",
-    //   width: 200,
-    //   render: (text: string, record: any) => {
-    //     return (
-    //       <TableAction
-    //         openState={openState}
-    //         viewDetail={<>view detail</>}
-    //         syncFunc={() => {
-    //           //synchonized data here
-    //         }}
-    //         editForm={
-    //           <>
-    //             <Form
-    //               name="basic"
-    //               layout="vertical"
-    //               initialValues={{ remember: true }}
-    //               // onFinish={onFinish}
-    //               // onFinishFailed={onFinishFailed}
-    //             >
-    //               <UpdateRefund />
-
-    //               <Form.Item>
-    //                 <Button type="primary" htmlType="submit">
-    //                   Update
-    //                 </Button>
-    //               </Form.Item>
-    //             </Form>
-    //           </>
-    //         }
-    //         deleteForm={
-    //           <DeleteForm
-    //             onCancel={() => {
-    //               setOpenState(!openState);
-    //             }}
-    //             onDelete={() => {
-    //               axiosClient
-    //                 .delete(`/refund/delete/${text}`)
-    //                 .then(() => {
-    //                   toast.success("success");
-    //                 })
-    //                 .catch((err) => {
-    //                   toast.error(err.message);
-    //                 });
-    //               setOpenState(!openState);
-    //             }}
-    //           />
-    //         }
-    //       />
-    //     );
-    //   },
-    // },
   ];
   const [openState, setOpenState] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -264,65 +197,7 @@ const Page = () => {
         {d("refund")}
       </Title>
       <div className="flex justify-between my-3">
-        {/* <Modal
-          title={t("create")}
-          open={showModal}
-          onCancel={hideModal}
-          footer={null}
-        >
-          <div>
-            <Form layout="vertical" onFinish={onFinish}>
-              <Form.Item
-                label="Email"
-                name="email"
-                rules={[{ required: true, message: "Please enter an email" }]}
-              >
-                <Input placeholder="Enter email" />
-              </Form.Item>
-              <Form.Item
-                label="Service"
-                name="service"
-                rules={[{ required: true, message: "Please select a service" }]}
-              >
-                <Select placeholder="Select service">
-                  <Option value="service1">Service 1</Option>
-                  <Option value="service2">Service 2</Option>
-                  <Option value="service3">Service 3</Option>
-                </Select>
-              </Form.Item>
-              <Form.Item label="Status" name="status" valuePropName="checked">
-                <Switch />
-              </Form.Item>
-              <Form.Item
-                label="Amount Paid"
-                name="amountPaid"
-                rules={[
-                  { required: true, message: "Please enter amount paid" },
-                ]}
-              >
-                <Input type="number" placeholder="Enter amount paid" />
-              </Form.Item>
-              <Form.Item
-                label="Refund Amount"
-                name="refundAmount"
-                rules={[
-                  { required: true, message: "Please enter refund amount" },
-                ]}
-              >
-                <Input type="number" placeholder="Enter refund amount" />
-              </Form.Item>
-              <Form.Item label="Create At" name="createAt">
-                <DatePicker />
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  {t("create")}
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </Modal> */}
-
+    
         <div className="flex" id="filter">
           <Input
             className="!py-1"
@@ -331,23 +206,11 @@ const Page = () => {
             onChange={handleSearch}
           />
         </div>
-        {/* <Button
-          id="create"
-          type="primary"
-          icon={<PlusCircleFilled />}
-          iconPosition="end"
-          onClick={openModal}
-        >
-          {t("create")}
-        </Button> */}
       </div>
       <Table
         className="border rounded shadow-md"
         dataSource={
-          data?.data?.data?.map((item: any, index: number) => ({
-            ...item,
-            key: pageIndex * pageSize + (index + 1) - pageSize,
-          })) ?? []
+         []
         }
         scroll={{ x: 1500 }}
         columns={columns}
