@@ -13,11 +13,7 @@ import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
 
 const Page = ()=>{
     const [openState,setOpenState] = useState(false)
-    const { data, isFetching, isError } = useQuery({ queryKey: ['queryKey', openState], queryFn: ()=>axios.get("https://api.webdock.io/v1/account/publicKeys", {
-        headers: {
-          Authorization: `Bearer ${WEBDOCK_TOKEN}`,
-        },
-      }) });
+    const { data, isFetching, isError } = useQuery({ queryKey: ['queryKey', openState], queryFn: ()=>axios.get("https://api.webdock.io/v1/account/publicKeys", webdockConfig) });
       const columns = [
         {
           title: 'No.',
@@ -142,7 +138,11 @@ const Page = ()=>{
         </Button>
     </div>
     
-    <Table dataSource={data?.data.map((pkey: any, index: number)=>({...pkey, entryno: index+1}))} columns={columns} className="border rounded overflow-hidden"
+    <Table dataSource={
+      data?.data.map((pkey: any, index: number)=>({...pkey, entryno: index+1}))} 
+      columns={columns} 
+      className="border rounded overflow-hidden" 
+      loading={isFetching}
       expandable={{
         expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.key}</p>,
         rowExpandable: (record) => record.key !== undefined,

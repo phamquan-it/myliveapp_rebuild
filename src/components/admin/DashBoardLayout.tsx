@@ -80,7 +80,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       label: t("refund"),
     },
     {
-      key: "/dashboard/casflow",
+      key: "/dashboard/cashflow",
       icon: <FaMoneyBill />,
       label: t("cashflow"),
       role: "admin",
@@ -139,9 +139,9 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       role: "admin",
       children: [
         {
-          key: "/dashboard/webdock",
+          key: "/dashboard/vps",
           icon: <CloudServerOutlined />,
-          label: "Webdock",
+          label: "Vps",
           role: "admin",
         },
         {

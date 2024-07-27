@@ -5,26 +5,35 @@ import TableAction from "@/components/admin/TableAction";
 import { debounce } from "lodash";
 import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import EditVoucher from "@/components/admin/crudform/edit/EditVoucher";
-import { CaretRightOutlined, DeleteFilled, DisconnectOutlined, FileOutlined, LoadingOutlined, MessageFilled, PlusCircleFilled } from "@ant-design/icons";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { DeleteFilled, DisconnectOutlined, LoadingOutlined, MessageFilled, PlusCircleFilled } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
 import _ from "lodash";
 import {
   Button,
+  DatePicker,
+  Form,
   Input,
+  List,
   Modal,
+  Spin,
+  Switch,
   Table,
   TablePaginationConfig,
+  Tooltip,
 } from "antd";
 import Title from "antd/es/typography/Title";
+import { getCookie } from "cookies-next";
+import dayjs from "dayjs";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
+import cloudServerColumns from "@/components/table_columns/cloud_server";
 import axios from "axios";
-import VpsForm from "@/components/admin/vps/VpsForm";
-import VpsButtonState from "@/components/admin/vps/VpsButtonState";
-import XtermUI, { SSHInfo } from "@/components/app/Xterm.component";
+import VpsStatus, { VpsStatusEnum } from "@/components/vps/status";
+import TerminalController from "@/components/vps/Terminal";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const t = useTranslations("MyLanguage");
@@ -35,6 +44,7 @@ const Page = () => {
       ? parseInt(getObjecFormUrlParameters(router)?.pageIndex)
       : 1
   );
+  const token = getCookie("token");
 
   const [keyword, setKeyword] = useState(
     getObjecFormUrlParameters(router)?.keyword || ""
@@ -44,27 +54,87 @@ const Page = () => {
       ? parseInt(getObjecFormUrlParameters(router)?.pageSize)
       : 10
   );
-  const [sync,setSync] = useState(false)
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["webdock", router.asPath, sync],
+    queryKey: ["orders", router.asPath],
     queryFn: () =>
-      axios.get("https://api.golive365.top/", {
+      axios.get("http://localhost:3031/list", {
         params: {
           keyword: keyword,
           offset: (pageIndex - 1) * pageSize,
           limit: pageIndex * pageSize,
         },
-       
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }),
     placeholderData: (previousData) => previousData,
   });
 
-
+  const columns = cloudServerColumns(t);
+  columns.push({
+    title: t('status'),
+    key: "status",
+    dataIndex: "status",
+    render:(text:string, record: any)=>{
+      return(
+        <>
+        <VpsStatus record={record}/>
+        </>
+      )
+    }
+  })
+  const [showTerminal,setShowTerminal] = useState(false)
+  const hideTerninal = ()=>{ 
+   setShowTerminal(false)
+  }
+  const showModalTerminal = ()=>{ 
+    setShowTerminal(true)
+   }
+  columns.push({
+    title: t('status'),
+    key: "ipv4",
+    dataIndex: "ipv4",
+    render: (_text: string, record:any)=><div className="flex gap-1">
+     <Tooltip title="Access command">
+      <Button size="small" className="!bg-black !text-white" onClick={showModalTerminal}>&gt;_</Button>
+     </Tooltip>
+     <Tooltip title="Send message">
+     <Button type="default" size="small" style={{color: "burlywood"}} onClick={()=>{
+      console.log(record.ipv4+":"+record.port);
+       axios.get('http://localhost:3031/check-health', {
+        params: {
+          port: record.port,
+          ipv4: record.ipv4
+        },
+        headers: {
+          'accept': '*/*'
+        },
+        timeout: 3000
+      })
+      .then((response) => {
+        toast.success(response.data)
+      })
+      .catch((error) => {
+        toast.error(error.message)
+      });
+     }}><MessageFilled/></Button>
+     </Tooltip>
+     
+     {/* <TableAction deleteForm={<></>} openState={showModal} /> */}
+     
+    </div>
+  })
   const [showModal, setShowModal] = useState<boolean>(false);
   const hideModal = () => {
     setShowModal(false);
   };
-
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const onFinish = (values: any) => {
+    console.log("Form values:", values);
+    // Handle form submission logic here
+  };
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
     const current = pagination.current || 1;
@@ -93,90 +163,57 @@ const Page = () => {
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyword, pageIndex, pageSize]);
- 
-  
-  const columns = [
-    {
-      title: t('entryno'),
-      dataIndex: "key"
-    },
-    {
-      title: "Slug",
-      dataIndex:"slug",
-    },
-    {
-      title: t('name'),
-      dataIndex:"name",
-    },
-    {
-      title: t('location'),
-      dataIndex:"location",
-    },
-    {
-      title: t('ipv4'),
-      dataIndex:"ipv4",
-    },
-    {
-      title: "ipv6",
-      dataIndex:"ipv6",
-    },
-    
-    {
-      title: t('status'),
-      width: 100,
-      dataIndex: ('slug'),
-      render:(text: any, record: any)=>(<div className="grid grid-cols-2">
-      <Button type="default" icon={<>&gt;_</>} onClick={()=>{
-        openModal()
-      }}></Button>
-      
-      <VpsButtonState record={record}/>
-      </div>)
-    }
-  ]
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [connectionState, setConnectionState] = useState(false);
-
-  const sshInfo: SSHInfo = {
-    ipv4OrHost: "sysliveserve.vps.webdock.cloud",
-    sshUser: "phamquan"
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true);
-    setConnectionState(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setConnectionState(false);
-  };
   return (
     <>
       <Title className="text-center" level={2}>
-        Vps
+        {d("cloudserver")}
       </Title>
-      <Modal
-        title="Terminal"
-        open={isModalOpen}
-        onOk={closeModal}
-        onCancel={closeModal}
-        width={850}
-        footer={[
-         
-        ]}
-      >
-        <XtermUI connectionState={connectionState} SSHInfo={sshInfo} />
+      <Modal title="Terminal" open={showTerminal} width={1500} footer={null} onCancel={hideTerninal}>
+          <TerminalController />
       </Modal>
       
-      <Modal width={1000}
+      <Modal
         title={t("create")}
         open={showModal}
         onCancel={hideModal}
         footer={null}
       >
-        <VpsForm/>
+        <Form onFinish={onFinish} layout="vertical">
+          <Form.Item
+            label={t('ipv4')}
+            name="ipv4"
+            rules={[{ required: true, message: "Please enter a name" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="SSH user:"
+            name="user"
+            rules={[{ required: true, message: "Please enter a code" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="SSH password "
+            name="password"
+            rules={[
+              {
+                required: true,
+                type: "number",
+                message: "Please enter a valid min price",
+              },
+            ]}
+          >
+            <Input type="number" />
+          </Form.Item>
+      
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Add vps
+            </Button>
+          </Form.Item>
+        </Form>
       </Modal>
       <div className="flex justify-between items-center my-3">
         <div id="filter">
@@ -193,17 +230,14 @@ const Page = () => {
           id="create"
           icon={<PlusCircleFilled />}
           iconPosition="end"
-          onClick={()=>{
-            setShowModal(true)
-          }}
+          onClick={openModal}
         >
           {t("create")}
         </Button>
       </div>
-      
       <Table
         className="border rounded-md shadow-md"
-        dataSource={data?.data.map((item: any, index: number) => ({
+        dataSource={data?.data.data.map((item: any, index: number) => ({
           ...item,
           key: pageIndex * pageSize + (index + 1) - pageSize,
         }))}
@@ -218,7 +252,6 @@ const Page = () => {
           showSizeChanger: true,
         }}
       />
-      
     </>
   );
 };
