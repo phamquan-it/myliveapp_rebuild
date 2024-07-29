@@ -41,10 +41,10 @@ const XtermUI: React.FC<XtermUIProps> = ({ connectionState, SSHInfo }) => {
         terminal.write(data);
       });
 
-      socket.emit("input", `ssh ${SSHInfo.sshUser}@${SSHInfo.ipv4OrHost}\n`);
+     // socket.emit("input", `ssh ${SSHInfo.sshUser}@${SSHInfo.ipv4OrHost}\n`);
 
       return () => {
-        socket.disconnect();
+       // socket.disconnect();
       };
     }
   }, [SSHInfo, reconnect]); // Add reconnect as a dependency
@@ -55,18 +55,17 @@ const XtermUI: React.FC<XtermUIProps> = ({ connectionState, SSHInfo }) => {
 
   const handleRunJavaVersion = () => {
     if (socketRef.current) {
-      socketRef.current.emit("input", "exit\n");
-      socketRef.current.emit("input", "ssh phamquan@sysliveserve.vps.webdock.cloud\n")
+     // socketRef.current.emit("input", "exit\n");
+    //  socketRef.current.emit("input", "ssh phamquan@sysliveserve.vps.webdock.cloud\n")
     }
   };
 
   return (
     <>
       <div ref={terminalRef} style={{ width: "800px", height: "410px", overflow: "hidden" }}></div>
-      <Button onClick={handleRunJavaVersion}>Exit</Button>
-      <Button type="default" onClick={()=>{
+      {/* <Button type="default" onClick={()=>{
         socketRef.current.emit("input", "ssh phamquan@sysliveserve.vps.webdock.cloud\n")
-      }}>Connect</Button>
+      }}>Connect</Button> */}
       
     </>
   );
