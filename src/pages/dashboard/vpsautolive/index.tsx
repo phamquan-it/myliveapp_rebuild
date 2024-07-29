@@ -57,7 +57,7 @@ const Page = () => {
   const { data, isFetching, isError } = useQuery({
     queryKey: ["orders", router.asPath],
     queryFn: () =>
-      axios.get("http://localhost:3031/list", {
+      axios.get("https://api.golive365.top//list", {
         params: {
           keyword: keyword,
           offset: (pageIndex - 1) * pageSize,
@@ -101,7 +101,7 @@ const Page = () => {
      <Tooltip title="Send message">
      <Button type="default" size="small" style={{color: "burlywood"}} onClick={()=>{
       console.log(record.ipv4+":"+record.port);
-       axios.get('http://localhost:3031/check-health', {
+       axios.get('https://api.golive365.top/check-health', {
         params: {
           port: record.port,
           ipv4: record.ipv4

@@ -3,10 +3,9 @@
 import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
 import { debounce } from "lodash";
-import EditCategory from "@/components/admin/crudform/edit/EditCategory";
-import EditVoucher from "@/components/admin/crudform/edit/EditVoucher";
 import { CaretRightOutlined, DeleteFilled, DisconnectOutlined, FileOutlined, LoadingOutlined, MessageFilled, PlusCircleFilled } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
 import _ from "lodash";
 import {
   Button,
@@ -45,19 +44,7 @@ const Page = () => {
       : 10
   );
   const [sync,setSync] = useState(false)
-  const { data, isFetching, isError } = useQuery({
-    queryKey: ["webdock", router.asPath, sync],
-    queryFn: () =>
-      axios.get("https://api.golive365.top/", {
-        params: {
-          keyword: keyword,
-          offset: (pageIndex - 1) * pageSize,
-          limit: pageIndex * pageSize,
-        },
-       
-      }),
-    placeholderData: (previousData) => previousData,
-  });
+  const { data, isFetching, isError } = useQuery({ queryKey: ['queryKey'], queryFn: ()=>axios.get("https://api.webdock.io/v1/servers", webdockConfig) });
 
 
   const [showModal, setShowModal] = useState<boolean>(false);
