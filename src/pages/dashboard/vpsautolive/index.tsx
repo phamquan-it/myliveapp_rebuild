@@ -167,7 +167,7 @@ const Page = () => {
   return (
     <>
       <Title className="text-center" level={2}>
-        {d("cloudserver")}
+        Autolive vps
       </Title>
       <Modal title="Terminal" open={showTerminal} width={1500} footer={null} onCancel={hideTerninal}>
           <TerminalController />
@@ -237,10 +237,7 @@ const Page = () => {
       </div>
       <Table
         className="border rounded-md shadow-md"
-        dataSource={data?.data.data.map((item: any, index: number) => ({
-          ...item,
-          key: pageIndex * pageSize + (index + 1) - pageSize,
-        }))}
+        dataSource={[{}]}
         columns={columns}
         loading={isFetching}
         onChange={handleTableChange}

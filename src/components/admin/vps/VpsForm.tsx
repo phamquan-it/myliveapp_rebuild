@@ -10,11 +10,12 @@ const VpsForm = ()=>{
   const depentVpsdata = useQuery({ queryKey: ['depent'], queryFn: ()=> axios.get("https://api.golive365.top/vps-provider/get-depens-vps-data")});
 
   const [location,setLocation] = useState()
+  //get list profile to create vps
   const profilesSlug = useQuery({ queryKey: ['ProfileSlug', location], queryFn: ()=> axios.get(
     "https://api.golive365.top/vps-provider/get-profile-for-create-vps?locationId=dk") 
   });
+  //function create vps
   const createVpsMutation = useMutation({
-
     mutationFn: (vpsdata)=>axios.post("https://api.webdock.io/v1/servers",vpsdata , webdockConfig),
     onSuccess:()=>{
      message.success("Create vps success")
@@ -79,11 +80,11 @@ const VpsForm = ()=>{
                 placeholder="Select location"
                 options={[
                   {
-                  label:"container",
+                  label:"Container",
                   value:"container"
                   },
                   {
-                    label:"kvm",
+                    label:"KVM",
                     value:"kvm"
                   }
                 ]}

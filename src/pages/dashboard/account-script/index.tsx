@@ -4,13 +4,22 @@ import axios from "axios";
 import { GetStaticPropsContext } from "next";
 import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
 import Title from "antd/es/typography/Title";
-import { PlusCircleFilled } from "@ant-design/icons";
+import { DeleteFilled, DeleteOutlined, EditFilled, PlusCircleFilled } from "@ant-design/icons";
 import { useState } from "react";
-const columns = [
+
+  
+const Page = ()=>{
+
+  const columns = [
     {
         title: 'No.',
         dataIndex: 'key',
         key: 'key',
+      },
+      {
+        title: 'ID',
+        dataIndex: 'id',
+        key: 'id',
       },
     {
       title: 'Name',
@@ -22,17 +31,32 @@ const columns = [
       dataIndex: 'filename',
       key: 'filename',
     },
+    {
+      title: 'Action',
+      dataIndex: 'id',
+      key: 'id',
+      render: (text:any)=>(<div className="flex gap-1">
+      <Button type="primary" icon={<EditFilled/>}></Button>
+      
+      <Button icon={<DeleteFilled/>} danger onClick={()=>{
+        delteteAccountScriptMutation.mutate(text)
+      }}></Button>
+      
+      </div>),
+    },
     
   ];
-  
-const Page = ()=>{
-    const { data, isFetching, isError } = useQuery({ queryKey: ['publicScript'], queryFn: ()=>
+  const [openModal,setOpenModal] = useState(false)
+    const { data, isFetching, isError } = useQuery({ queryKey: ['publicScript', openModal], queryFn: ()=>
         axios.get('https://api.webdock.io/v1/account/scripts', webdockConfig)
      });
-  const [openModal,setOpenModal] = useState(false)
+ 
 
   const showCreatePopup = ()=>{
     setOpenModal(true)
+}
+const hideCreatePopup = ()=>{
+  setOpenModal(false)
 }
 
 const onFinish = (values: any) => {
@@ -44,13 +68,24 @@ const onFinish = (values: any) => {
     console.log('Failed:', errorInfo);
   };
   const createAccountScriptMutaion = useMutation({
-     mutationFn:()=> axios.post("https://api.webdock.io/v1/account/scripts", webdockConfig),
+     mutationFn:(data)=> axios.post("https://api.webdock.io/v1/account/scripts",data ,webdockConfig),
     onSuccess:()=>{
+      hideCreatePopup()
         message.success("Create account script ok")
     },
     onError:()=>{
+      hideCreatePopup()
         message.error("Create account script no ok")
     }
+  });
+  const delteteAccountScriptMutation = useMutation({
+    mutationFn:(data)=> axios.delete(`https://api.webdock.io/v1/account/scripts/${data}`, webdockConfig),
+   onSuccess:()=>{
+       message.success("Delete account script ok")
+   },
+   onError:()=>{
+       message.error("Delete account script no ok")
+   }
   });
   return(
     <>
@@ -104,6 +139,8 @@ const onFinish = (values: any) => {
               </Form.Item>
             </Form>
     </Modal>
+    
+    
     
     <Table 
     pagination={{
