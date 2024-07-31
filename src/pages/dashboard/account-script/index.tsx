@@ -15,6 +15,12 @@ const Page = ()=>{
         title: 'No.',
         dataIndex: 'key',
         key: 'key',
+        render: (cell:string, record:any, index:number) => {
+          console.log('cell', cell)
+          console.log('record', record)
+          console.log('index', index)
+          return index +1
+        }
       },
       {
         title: 'ID',
@@ -150,7 +156,7 @@ const onFinish = (values: any) => {
         expandedRowRender: (record: any) =><Input.TextArea placeholder="" allowClear value={record.content} readOnly autoSize/>,
         rowExpandable: (record) => record.content !== undefined,
       }}
-    dataSource={data?.data.map((script:any, index:number)=>({...script,key:index }))} columns={columns} loading={isFetching} />
+    dataSource={data?.data.map((script:any, index:number)=>({...script,key:index+1 }))} columns={columns} loading={isFetching} />
     </>
 );
 } 

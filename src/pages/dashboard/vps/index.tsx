@@ -24,8 +24,10 @@ import axios from "axios";
 import VpsForm from "@/components/admin/vps/VpsForm";
 import VpsButtonState from "@/components/admin/vps/VpsButtonState";
 import XtermUI, { SSHInfo } from "@/components/app/Xterm.component";
+import VpsDetail from "@/components/admin/vps/VpsDetail";
 
 const Page = () => {
+  const [openState,setOpenState] = useState(false)
   const t = useTranslations("MyLanguage");
   const p = useTranslations("Placeholder");
   const router = useRouter();
@@ -110,9 +112,10 @@ const Page = () => {
     
     {
       title: t('status'),
-      width: 100,
+      width: 130,
       dataIndex: ('slug'),
-      render:(text: any, record: any)=>(<div className="grid grid-cols-2">
+      render:(text: any, record: any)=>(<div className="grid grid-cols-3">
+      <TableAction openState={openState} viewDetail={<VpsDetail/>}/>
       <Button type="default" icon={<>&gt;_</>} onClick={()=>{
         openModal()
       }}></Button>

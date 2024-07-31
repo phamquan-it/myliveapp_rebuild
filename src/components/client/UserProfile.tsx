@@ -120,9 +120,7 @@ const UserProfile: React.FC<userProfileProps> = (props) => {
                 <Button
                   type="primary"
                   htmlType="submit"
-                  id="create"
-                  size="small"
-                  className="me-7"
+                  className="me-11"
                 >
                   {t("update")}
                 </Button>
@@ -171,8 +169,7 @@ const UserProfile: React.FC<userProfileProps> = (props) => {
             <Button
               type="primary"
               htmlType="submit"
-              className="me-8"
-              id="create"
+              className="me-10"
             >
               {t("changepassword")}
             </Button>

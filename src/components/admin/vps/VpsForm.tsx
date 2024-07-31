@@ -4,15 +4,18 @@ import { useTranslations } from "use-intl";
 import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
 import axios from "axios";
 import { useState } from "react";
+import axiosInstance from "@/apiClient/axiosConfig";
 
 const VpsForm = ()=>{
   const t = useTranslations("MyLanguage")
-  const depentVpsdata = useQuery({ queryKey: ['depent'], queryFn: ()=> axios.get("https://api.golive365.top/vps-provider/get-depens-vps-data")});
+  const depentVpsdata = useQuery({ queryKey: ['depent'], queryFn: ()=> axiosInstance.get("/vps-provider/get-depens-vps-data")});
 
   const [location,setLocation] = useState()
   //get list profile to create vps
-  const profilesSlug = useQuery({ queryKey: ['ProfileSlug', location], queryFn: ()=> axios.get(
-    "https://api.golive365.top/vps-provider/get-profile-for-create-vps?locationId=dk") 
+  const profilesSlug = useQuery({ queryKey: ['ProfileSlug', location], queryFn: ()=> axiosInstance.get(
+    "/vps-provider/get-profile-for-create-vps", {params: {
+      locationId: 'dk'
+    }}) 
   });
   //function create vps
   const createVpsMutation = useMutation({
@@ -92,7 +95,16 @@ const VpsForm = ()=>{
               
           </Form.Item>
           </div>
-          <Form.Item
+         <div className="grid grid-cols-2 gap-1">
+         <Form.Item label="Vps for" name="" rules={[{required: true}]}>
+              <Select
+                showSearch
+                style={{ width: 200 }}
+                placeholder="Vps for.."
+                options={vpsForOption}
+                />
+          </Form.Item>
+         <Form.Item
             label={('Image slug')}
             name="imageSlug"
             rules={[{ required: true, message: "Please select an image slug" }]}
@@ -107,18 +119,9 @@ const VpsForm = ()=>{
               />
               
           </Form.Item>
-          <Form.Item
-            label={'Profile slug'}
-            name="profileSlug"
-            rules={[{ required: true, message: "Select profileSlug" }]}
-          >
-              <Select
-                showSearch
-                placeholder="Select location"
-                options={profilesSlug.data?.data?.profiles?.map((val:any)=>({value: val.slug, label: val.name}))}
-              />
-              
-          </Form.Item>
+          
+         </div>
+         
           
           <Form.Item>
             <Button type="primary" htmlType="submit">
@@ -130,3 +133,14 @@ const VpsForm = ()=>{
 );
 } 
  export default VpsForm
+
+ const vpsForOption = [
+  {
+    label: "Autolive",
+    value: '1'
+  },
+  {
+    label: "Other",
+    value: '2'
+  }
+ ]
