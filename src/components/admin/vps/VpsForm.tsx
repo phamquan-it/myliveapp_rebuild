@@ -73,7 +73,7 @@ const VpsForm = ()=>{
           </Form.Item>
           
           <Form.Item
-            label={t('virtualization')}
+            label={'Virtualization'}
             name="virtualization"
             initialValue={"container"}
             rules={[{ required: true, message: "Please select an virtualization" }]}
