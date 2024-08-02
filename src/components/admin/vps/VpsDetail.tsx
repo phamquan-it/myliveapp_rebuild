@@ -47,28 +47,38 @@ interface VpsDetailProps{
       ];
   return(
     <>
-     
-      <Form
-            name="basic"
-            layout="vertical" className="grid grid-cols-3 gap-2"
-          >
-            <Form.Item label="CPU">
-              <Input readOnly/>
-            </Form.Item>
-            <Form.Item label="RAM">
-              <Input readOnly/>
-            </Form.Item>
-            <Form.Item label="CORE">
-              <Input readOnly/>
-            </Form.Item>
-            <Form.Item label="CPU">
-              <Input readOnly/>
-            </Form.Item>
-            <Form.Item label="CPU">
-              <Input readOnly/>
-            </Form.Item>
-          </Form>
-        <Title level={4} className="!text-slate-700">Queue</Title>
+
+        <Title level={4} className="text-center">Vps infomation</Title>
+        <Table dataSource={[{
+          id: 1,
+          name: 'RAM',
+          value: '7.94GB'
+        },
+        {
+          id: 2,
+          name: 'Image',
+          value: 'Ubuntu22.04 jammyflish'
+        },
+        {
+          id: 3,
+          name: 'CPU',
+          value: 'Intel'
+        }
+      ]} columns={[
+          {
+            title:"Id",
+            dataIndex: 'id'
+          },
+          {
+            title:"Name",
+            dataIndex: 'name'
+          },
+          {
+            title:"Value",
+            dataIndex: 'value'
+          }
+        ]} pagination={false}/>
+        <Title level={4} className="text-center">Queue</Title>
         <Table dataSource={dataSource} columns={columns} />
     </>
 );

@@ -19,7 +19,7 @@ const VpsForm = ()=>{
   });
   //function create vps
   const createVpsMutation = useMutation({
-    mutationFn: (vpsdata)=>axios.post("https://api.webdock.io/v1/servers",vpsdata , webdockConfig),
+    mutationFn: (vpsdata)=>axios.post("https://api.golive365.top/vps-provider/create-vps",vpsdata),
     onSuccess:()=>{
      message.success("Create vps success")
     },
@@ -28,9 +28,9 @@ const VpsForm = ()=>{
     },
  });
  const onFinish = (values: any) => {
-   console.log("Form values:", values);
-   // Handle form submission logic here
-   createVpsMutation.mutate({...values, snapshotId:0})
+  //  console.log("Form values:", values);
+ 
+   createVpsMutation.mutate(values)
  };
 
   return(
@@ -96,14 +96,6 @@ const VpsForm = ()=>{
           </Form.Item>
           </div>
          <div className="grid grid-cols-2 gap-1">
-         <Form.Item label="Vps for" name="" rules={[{required: true}]}>
-              <Select
-                showSearch
-                style={{ width: 200 }}
-                placeholder="Vps for.."
-                options={vpsForOption}
-                />
-          </Form.Item>
          <Form.Item
             label={('Image slug')}
             name="imageSlug"
@@ -119,6 +111,19 @@ const VpsForm = ()=>{
               />
               
           </Form.Item>
+            <Form.Item label="Profile slug" name="profileSlug" rules={[
+              {
+                required: true
+              }
+            ]}>
+            <Select
+              showSearch
+              placeholder="Profile slug"
+              options={profilesSlug?.data?.data?.profiles.map((value:any)=>({
+                value: value.slug,
+                label: value.name
+              }))}/>
+            </Form.Item>
           
          </div>
          
@@ -133,14 +138,3 @@ const VpsForm = ()=>{
 );
 } 
  export default VpsForm
-
- const vpsForOption = [
-  {
-    label: "Autolive",
-    value: '1'
-  },
-  {
-    label: "Other",
-    value: '2'
-  }
- ]

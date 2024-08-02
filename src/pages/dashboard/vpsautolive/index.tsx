@@ -34,6 +34,8 @@ import axios from "axios";
 import VpsStatus, { VpsStatusEnum } from "@/components/vps/status";
 import TerminalController from "@/components/vps/Terminal";
 import { toast } from "react-toastify";
+import XtermUI from "@/components/app/Xterm.component";
+import { SSHInfo } from "@/pages/terminal";
 
 const Page = () => {
   const t = useTranslations("MyLanguage");
@@ -57,7 +59,7 @@ const Page = () => {
   const { data, isFetching, isError } = useQuery({
     queryKey: ["orders", router.asPath],
     queryFn: () =>
-      axios.get("https://api.golive365.top//list", {
+      axios.get("https://api.golive365.top/list", {
         params: {
           keyword: keyword,
           offset: (pageIndex - 1) * pageSize,
@@ -163,14 +165,17 @@ const Page = () => {
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyword, pageIndex, pageSize]);
-
+  const sshInfo: SSHInfo = {
+    ipv4OrHost: "sysliveserve.vps.webdock.cloud",
+    sshUser: "phamquan"
+  };
   return (
     <>
       <Title className="text-center" level={2}>
         Autolive vps
       </Title>
-      <Modal title="Terminal" open={showTerminal} width={1500} footer={null} onCancel={hideTerninal}>
-          <TerminalController />
+      <Modal title="Terminal" open={showTerminal} width={850} footer={null} onCancel={hideTerninal}>
+          <XtermUI SSHInfo={sshInfo} connectionState={false}/>
       </Modal>
       
       <Modal

@@ -120,24 +120,20 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       label: t("user"),
       role: "user",
     },
-    {
-      key: "/dashboard/user/info",
-      icon: <UserOutlined />,
-      label: t("userprofile"),
-      role: "user"
-    },
-    {
-      key: "/dashboard/settings",
-      icon: <SettingOutlined />,
-      role: "admin",
-      label: t("Settings"),
-    },
+   
+    
     {
       key: "16",
       icon: <CloudServerOutlined />,
       label: "Vps",
       role: "admin",
       children: [
+        {
+          key: "/dashboard/vpsautolive",
+          icon: <CloudServerOutlined />,
+          label: "Vps autolive",
+          role: "admin",
+        },
         {
           key: "/dashboard/vps",
           icon: <CloudServerOutlined />,
@@ -166,7 +162,19 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
       ]
 
     },
+    {
+      key: "/dashboard/user/info",
+      icon: <UserOutlined />,
+      label: t("userprofile"),
+      role: "user"
+    },
     
+    {
+      key: "/dashboard/settings",
+      icon: <SettingOutlined />,
+      role: "admin",
+      label: t("Settings"),
+    },
 
   ];
   const [collapsed, setCollapsed] = useState(false);
