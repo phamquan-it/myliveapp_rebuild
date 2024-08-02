@@ -41,7 +41,7 @@ const XtermUI: React.FC<XtermUIProps> = ({ connectionState, SSHInfo }) => {
         terminal.write(data);
       });
 
-     // socket.emit("input", `ssh ${SSHInfo.sshUser}@${SSHInfo.ipv4OrHost}\n`);
+     socket.emit("input", `ssh ${SSHInfo.sshUser}@${SSHInfo.ipv4OrHost}\n`);
 
       return () => {
        // socket.disconnect();
