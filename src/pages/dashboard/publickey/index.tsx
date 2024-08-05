@@ -18,17 +18,16 @@ const Page = ()=>{
         {
           title: 'No.',
           dataIndex: 'entryno',
-          key: 'entryno',
+
         },
         {
           title: 'Name',
           dataIndex: 'name',
-          key: 'name',
+  
         },
         {
             title: 'Created',
             dataIndex: 'created',
-            key: 'create',
         },
         {
             title: "Action",

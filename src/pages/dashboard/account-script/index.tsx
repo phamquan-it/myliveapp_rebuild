@@ -4,8 +4,9 @@ import axios from "axios";
 import { GetStaticPropsContext } from "next";
 import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
 import Title from "antd/es/typography/Title";
-import { DeleteFilled, DeleteOutlined, EditFilled, PlusCircleFilled } from "@ant-design/icons";
-import { useState } from "react";
+import { DeleteFilled, EditFilled, PlusCircleFilled } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import UpdateAccountScript from "@/components/admin/vps/update-account-script";
 
   
 const Page = ()=>{
@@ -41,8 +42,10 @@ const Page = ()=>{
       title: 'Action',
       dataIndex: 'id',
       key: 'id',
-      render: (text:any)=>(<div className="flex gap-1">
-      <Button type="primary" icon={<EditFilled/>}></Button>
+      render: (text:any, record: any)=>(<div className="flex gap-1">
+      <Button type="primary" icon={<EditFilled/>} onClick={()=>{
+        setAccountScript(record);
+      }}></Button>
       
       <Button icon={<DeleteFilled/>} danger onClick={()=>{
         delteteAccountScriptMutation.mutate(text)
@@ -52,6 +55,16 @@ const Page = ()=>{
     },
     
   ];
+  const [isModalUpdateOpen,setIsModalUpdateOpen] = useState(false);
+  const hideModalUpdate = ()=>{ 
+   setIsModalUpdateOpen(false);
+  }
+  const [accountScript,setAccountScript] = useState<any>(undefined)
+  useEffect(()=>{
+   if(accountScript != undefined)
+    setIsModalUpdateOpen(true)
+  }, [accountScript])
+
   const [openModal,setOpenModal] = useState(false)
     const { data, isFetching, isError } = useQuery({ queryKey: ['publicScript', openModal], queryFn: ()=>
         axios.get('https://api.webdock.io/v1/account/scripts', webdockConfig)
@@ -106,6 +119,11 @@ const onFinish = (values: any) => {
             Create
         </Button>
     </div>
+
+    <Modal title="Update" open={isModalUpdateOpen} footer={[]} onCancel={hideModalUpdate} destroyOnClose={true}>
+        <UpdateAccountScript accountScript={accountScript}/>
+    </Modal>
+    
     <Modal title="Create" open={openModal} footer={null} onCancel={()=>{
         setOpenModal(false)
     }}>

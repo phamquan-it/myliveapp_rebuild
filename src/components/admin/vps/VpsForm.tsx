@@ -1,12 +1,15 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button, Form, Input, message, Select } from "antd";
 import { useTranslations } from "use-intl";
-import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
 import axios from "axios";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axiosInstance from "@/apiClient/axiosConfig";
-
-const VpsForm = ()=>{
+import SelectProfile from "./select-profile";
+interface VpsFormProps{
+  closeModal: any,
+  setSlug: Function
+}
+const VpsForm:React.FC<VpsFormProps> = ({closeModal, setSlug})=>{
   const t = useTranslations("MyLanguage")
   const depentVpsdata = useQuery({ queryKey: ['depent'], queryFn: ()=> axiosInstance.get("/vps-provider/get-depens-vps-data")});
 
@@ -20,17 +23,29 @@ const VpsForm = ()=>{
   //function create vps
   const createVpsMutation = useMutation({
     mutationFn: (vpsdata)=>axios.post("https://api.golive365.top/vps-provider/create-vps",vpsdata),
-    onSuccess:()=>{
+    onSuccess:(data)=>{
      message.success("Create vps success")
+     console.log(data.data.vps.slug);
+     setSlug(data.data.vps.slug)
+     closeModal()
     },
     onError(error, variables, context) {
      message.error("Create vps error")
     },
  });
+
+ const [profile,setProfile] = useState()
+
  const onFinish = (values: any) => {
-  //  console.log("Form values:", values);
- 
-   createVpsMutation.mutate(values)
+ // console.log();
+   console.log("Form values:", {...values, profileSlug: profile, locationId:"dk"});
+   // console.log(profile);
+   createVpsMutation.mutate(
+    {
+      ...values,
+     profileSlug: profile?? profilesSlug?.data?.data?.profiles[0].slug, 
+     locationId:"dk"
+    })
  };
 
   return(
@@ -38,39 +53,8 @@ const VpsForm = ()=>{
     <Form onFinish={onFinish} layout="vertical">
           
           <div className="grid grid-cols-2 gap-2">
-          <Form.Item
-            label={t('name')}
-            name="name"
-            rules={[{ required: true, message: "Please enter a name" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label={"Slug"}
-            name="slug"
-            rules={[{ required: true, message: "Please enter a slug" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label={t('location')}
-            name="locationId"
-            rules={[{ required: true, message: "Please select an location" }]}
-          >
-              <Select
-                showSearch
-                placeholder="Select location"
-                options={depentVpsdata?.data?.data.locations.map((value:any)=>({
-                  value: value.id,
-                  label: value.name
-                }))}
-                value={location}
-                onChange={(location:any)=>{
-                  setLocation(location.id)
-                }}
-              />
-              
-          </Form.Item>
+          
+         
           
           <Form.Item
             label={'Virtualization'}
@@ -80,7 +64,7 @@ const VpsForm = ()=>{
           >
               <Select
                 showSearch
-                placeholder="Select location"
+                placeholder="Select location" defaultValue={'container'}
                 options={[
                   {
                   label:"Container",
@@ -94,9 +78,7 @@ const VpsForm = ()=>{
               />
               
           </Form.Item>
-          </div>
-         <div className="grid grid-cols-2 gap-1">
-         <Form.Item
+          <Form.Item
             label={('Image slug')}
             name="imageSlug"
             rules={[{ required: true, message: "Please select an image slug" }]}
@@ -111,25 +93,27 @@ const VpsForm = ()=>{
               />
               
           </Form.Item>
-            <Form.Item label="Profile slug" name="profileSlug" rules={[
-              {
-                required: true
-              }
-            ]}>
-            <Select
-              showSearch
-              placeholder="Profile slug"
-              options={profilesSlug?.data?.data?.profiles.map((value:any)=>({
-                value: value.slug,
-                label: value.name
-              }))}/>
-            </Form.Item>
-          
-         </div>
+          </div>
+         <SelectProfile profiles={profilesSlug?.data?.data?.profiles} onSelectProfileChange={(value:any)=>{
+            setProfile(value)
+         }}/>
          
-          
+          <div className="grid grid-cols-2 gap-2 my-3">
+          <Form.Item
+            name="name"
+            rules={[{ required: true, message: "Please enter vps name" }]}
+          >
+            <Input placeholder="Enter vps name"/>
+          </Form.Item>
+          <Form.Item
+            name="slug"
+            rules={[{ required: true, message: "Please enter slug name" }]}
+          >
+            <Input placeholder="Enter slug name"/>
+          </Form.Item>
+          </div>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={createVpsMutation.isPending}>
               Add vps
             </Button>
           </Form.Item>

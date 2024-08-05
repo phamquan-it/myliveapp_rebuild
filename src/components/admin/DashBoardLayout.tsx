@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import {
   CalendarFilled,
   CloudServerOutlined,
@@ -35,6 +35,8 @@ import LocaleSwitcher from "@/LocaleSwitcher";
 import { jwtDecode } from "jwt-decode";
 import { useQuery } from "@tanstack/react-query";
 import axiosClient from "@/apiClient/axiosClient";
+import { SSHInfo } from "../app/Xterm.component";
+import { io } from "socket.io-client";
 
 const { Header, Sider, Content } = Layout;
 
@@ -43,6 +45,7 @@ interface DashBoardLayoutLayout {
 }
 const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
   console.log("re-render");
+  const socketRef = useRef<any>(null);
   const [role, setRole] = useState("user");
   useEffect(() => {
     try {
@@ -195,9 +198,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
         },
       }),
   });
-  useEffect(() => {
-    console.log(collapsed);
-  }, [collapsed]);
   return (
     <Layout style={{ height: "100vh" }} className="!bg-white">
       <ToastContainer />
@@ -289,7 +289,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
           </Sider>
           <div className={`grid pb-8 ${collapsed ? "!hidden" : "px-3"}`}>
             <Button
-              className="!text-sm !py-2"
               onClick={() => {
                 deleteCookie("token");
                 router.push("/login");

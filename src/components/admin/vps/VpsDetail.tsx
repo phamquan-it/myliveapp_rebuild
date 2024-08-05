@@ -1,11 +1,12 @@
-import { DeleteFilled, DeleteOutlined } from "@ant-design/icons";
+import { DeleteFilled, DeleteOutlined, EyeFilled } from "@ant-design/icons";
 import { Button, Form, Input, Table, Tag, Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
 import React from "react";
 interface VpsDetailProps{
-  
+  slug: string,
+  closeModal: Function
 } 
- const VpsDetail:React.FC<VpsDetailProps> = ({})=>{
+ const VpsDetail:React.FC<VpsDetailProps> = ({slug, closeModal})=>{
     const dataSource = [
         {
           key: '1',
@@ -36,12 +37,15 @@ interface VpsDetailProps{
           dataIndex: 'action',
           key: 'action',
           render: (id: string)=>(
-            <>
+            <div className="flex gap-1">
+            <Tooltip title="View detail">
+              <Button type="default" size="small" icon={<EyeFilled/>}></Button>
+            </Tooltip>
             <Tooltip title="Remove from queue">
               <Button type="default" size="small" icon={<DeleteFilled/>} danger></Button>
             </Tooltip>
             
-            </>
+            </div>
           )
         },
       ];
@@ -80,6 +84,9 @@ interface VpsDetailProps{
         ]} pagination={false}/>
         <Title level={4} className="text-center">Queue</Title>
         <Table dataSource={dataSource} columns={columns} />
+        <Input.TextArea placeholder="" readOnly rows={5} style={{
+          backgroundColor: "black"
+        }}/>
     </>
 );
 } 

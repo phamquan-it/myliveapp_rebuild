@@ -1,9 +1,7 @@
 
-  import axiosClient from "@/apiClient/axiosClient";
-import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
 import { debounce } from "lodash";
-import { CaretRightOutlined, DeleteFilled, DisconnectOutlined, FileOutlined, LoadingOutlined, MessageFilled, PlusCircleFilled } from "@ant-design/icons";
+import { MessageFilled, PlusCircleFilled } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
 import _ from "lodash";
@@ -25,6 +23,7 @@ import VpsForm from "@/components/admin/vps/VpsForm";
 import VpsButtonState from "@/components/admin/vps/VpsButtonState";
 import XtermUI, { SSHInfo } from "@/components/app/Xterm.component";
 import VpsDetail from "@/components/admin/vps/VpsDetail";
+import VpsHideOption from "@/components/admin/vps/VpsHideOption";
 
 const Page = () => {
   const [openState,setOpenState] = useState(false)
@@ -45,8 +44,9 @@ const Page = () => {
       ? parseInt(getObjecFormUrlParameters(router)?.pageSize)
       : 10
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [sync,setSync] = useState(false)
-  const { data, isFetching, isError } = useQuery({ queryKey: ['queryKey'], queryFn: ()=>axios.get("https://api.webdock.io/v1/servers", webdockConfig) });
+  const { data, isFetching, isError } = useQuery({ queryKey: ['queryKey', isModalOpen], queryFn: ()=>axios.get("https://api.webdock.io/v1/servers", webdockConfig) });
 
 
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -83,19 +83,26 @@ const Page = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyword, pageIndex, pageSize]);
  
-  
+  const [sshInfo, setSSHInfo] = useState(
+    {
+      ipv4OrHost: "",
+      sshUser: ""
+    }
+  )
+
   const columns = [
     {
       title: t('entryno'),
       dataIndex: "key"
     },
-    {
-      title: "Slug",
-      dataIndex:"slug",
-    },
+   
     {
       title: t('name'),
       dataIndex:"name",
+    },
+    {
+      title: "Slug",
+      dataIndex:"slug",
     },
     {
       title: t('location'),
@@ -112,26 +119,36 @@ const Page = () => {
     
     {
       title: t('status'),
-      width: 130,
+      width: 190,
       dataIndex: ('slug'),
-      render:(text: any, record: any)=>(<div className="grid grid-cols-3">
-      <TableAction openState={openState} viewDetail={<VpsDetail/>}/>
+      render:(text: any, record: any)=>(<div className="grid grid-cols-4">
+        
+        
       <Button type="default" icon={<>&gt;_</>} onClick={()=>{
-        openModal()
+        setSSHInfo({
+          ipv4OrHost: record.ipv4,
+          sshUser: 'root'
+        })
       }}></Button>
       
       <VpsButtonState record={record}/>
+      <VpsHideOption/>
       </div>)
     }
   ]
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [connectionState, setConnectionState] = useState(false);
+  const [isViewDetailOpen,setIsViewDetailOpen] = useState(false)
+  const [slug,setSlug] = useState('')
+  const hideModalViewDetail = ()=>{ 
+    setSlug('')
+    setIsViewDetailOpen(false)
+  }
+  const openModalViewDetail = ()=>{ 
+    setIsViewDetailOpen(true)
+  }
 
-  const sshInfo: SSHInfo = {
-    ipv4OrHost: "sysliveserve.vps.webdock.cloud",
-    sshUser: "phamquan"
-  };
+  
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -142,20 +159,37 @@ const Page = () => {
     setIsModalOpen(false);
     setConnectionState(false);
   };
+  useEffect(()=>{
+    //open modal when sshInfo change
+    if(sshInfo.sshUser != "" && sshInfo.sshUser !== "")
+    openModal()
+  }, [sshInfo])
+
+  useEffect(()=>{
+    //open modal view detail
+    if(slug != "")
+    openModalViewDetail()
+  }, [slug])
+
+  const setSlugData = (slug: string)=>{ 
+   setSlug(slug)
+  }
   return (
     <>
       <Title className="text-center" level={2}>
         Vps
       </Title>
+
+      <Modal title="View detail" open={isViewDetailOpen} width={1000} onCancel={hideModalViewDetail} footer={[]}>
+          <VpsDetail slug={''} closeModal={hideModalViewDetail}/>
+      </Modal>
       <Modal
-        title="Terminal"
+        title={`Terminal ${sshInfo.sshUser}@${sshInfo.ipv4OrHost}`}
         open={isModalOpen}
         onOk={closeModal}
         onCancel={closeModal}
         width={850}
-        footer={[
-         
-        ]}
+        destroyOnClose={true} footer={null}
       >
         <XtermUI connectionState={connectionState} SSHInfo={sshInfo} />
       </Modal>
@@ -166,7 +200,7 @@ const Page = () => {
         onCancel={hideModal}
         footer={null}
       >
-        <VpsForm/>
+        <VpsForm closeModal={hideModal}  setSlug={setSlugData}/>
       </Modal>
       <div className="flex justify-between items-center my-3">
         <div id="filter">
