@@ -128,6 +128,10 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
     console.log('click', e);
     switch (e.key) {
       case 'start':
+        if(vpsState == 'running') {
+          message.info("This server is runing");
+          return;
+        }
         console.log('Start clicked');
         startVps.mutate()
         // Add your logic for 'Start' here
@@ -135,6 +139,10 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
       case 'stop':
         console.log('Stop clicked');
         if (vps.slug == "sysliveserve") return;
+        if(vpsState == 'stopped') {
+          message.info("This server is stopped");
+          return;
+        }
         mutate()
         break;
       case 'stopAllStream':
