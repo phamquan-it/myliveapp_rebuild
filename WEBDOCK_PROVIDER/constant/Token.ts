@@ -1,1 +1,1 @@
-export const WEBDOCK_TOKEN = '0b3f51e6c09bfde3e0bcdd44f6d32a7f67ceb75d2cf18582fa00f385c4333f04'
+export const WEBDOCK_TOKEN = '1a57b0e43239c259d287776e7ebaeb670606a6c4f9add5feecb74296260d684f'

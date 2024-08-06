@@ -69,7 +69,7 @@ const XtermUI: React.FC<XtermUIProps> = ({ connectionState, SSHInfo,  }) => {
 
   return (
     <>
-      <div ref={terminalRef} style={{ width: "800px", height: "428px", overflow: "hidden" }}></div>
+      <div ref={terminalRef} style={{ width: "800px", height: "410px", overflow: "hidden" }}></div>
     </>
   );
 };

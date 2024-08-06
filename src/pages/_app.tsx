@@ -8,7 +8,7 @@ import { ConfigProvider } from "antd";
 import { NextIntlClientProvider } from "next-intl";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
-import NextProgress from "next-progress";
+import NextNProgress from 'nextjs-progressbar';
 import vi from "antd/locale/vi_VN";
 import en from "antd/locale/en_US";
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -16,6 +16,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import { useEffect, useState } from "react";
 import PageLayout from "@/components/PageLayout";
+
 config.autoAddCss = false;
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -24,8 +25,6 @@ export default function App({ Component, pageProps }: AppProps) {
   console.log(path);
 
   const Layout = !path.includes("/dashboard") ? PageLayout : DashBoardLayout;
-
-  const [key, setKey] = useState(Math.random());
 
   return (
     <NextIntlClientProvider
@@ -43,7 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
             locale={router.locale == "vi" ? vi : en}
           >
             <Layout>
-              <NextProgress delay={300} options={{ showSpinner: false }} />
+            <NextNProgress color="#29D" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} options={{ showSpinner: false}}/>
               <Component {...pageProps} />
             </Layout>
           </ConfigProvider>

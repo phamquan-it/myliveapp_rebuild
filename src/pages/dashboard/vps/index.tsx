@@ -1,7 +1,7 @@
 
 import TableAction from "@/components/admin/TableAction";
 import { debounce } from "lodash";
-import { MessageFilled, PlusCircleFilled } from "@ant-design/icons";
+import { EyeFilled, MessageFilled, PlusCircleFilled } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
 import _ from "lodash";
@@ -89,7 +89,9 @@ const Page = () => {
       sshUser: ""
     }
   )
-
+  const setSlugData = (slug: string)=>{ 
+    setSlug(slug)
+   }
   const columns = [
     {
       title: t('entryno'),
@@ -123,16 +125,22 @@ const Page = () => {
       dataIndex: ('slug'),
       render:(text: any, record: any)=>(<div className="grid grid-cols-4">
         
+      <Button type="default" icon={<EyeFilled/>} onClick={()=>{
+        console.log(record);
         
-      <Button type="default" icon={<>&gt;_</>} onClick={()=>{
+        setSlugData(record.slug)
+        
+      }}></Button>
+      <Button type="default" disabled={record.status != "running"} icon={<>&gt;_</>} onClick={()=>{
         setSSHInfo({
           ipv4OrHost: record.ipv4,
           sshUser: 'root'
         })
       }}></Button>
+     
       
-      <VpsButtonState record={record}/>
-      <VpsHideOption/>
+      {/* <VpsButtonState record={record}/> */}
+      <VpsHideOption vps={record}/>
       </div>)
     }
   ]
@@ -171,17 +179,15 @@ const Page = () => {
     openModalViewDetail()
   }, [slug])
 
-  const setSlugData = (slug: string)=>{ 
-   setSlug(slug)
-  }
+
   return (
     <>
       <Title className="text-center" level={2}>
         Vps
       </Title>
 
-      <Modal title="View detail" open={isViewDetailOpen} width={1000} onCancel={hideModalViewDetail} footer={[]}>
-          <VpsDetail slug={''} closeModal={hideModalViewDetail}/>
+      <Modal title="View detail" open={isViewDetailOpen} width={1000} onCancel={hideModalViewDetail} footer={[]} destroyOnClose={true}>
+          <VpsDetail slug={slug} closeModal={hideModalViewDetail}/>
       </Modal>
       <Modal
         title={`Terminal ${sshInfo.sshUser}@${sshInfo.ipv4OrHost}`}
