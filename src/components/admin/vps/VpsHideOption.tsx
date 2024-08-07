@@ -20,7 +20,7 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
         if(vpsState != 'stopped' || 'running'){
           getVpsInfo.mutate()
         }
-    }, 3000)
+    }, 8000)
   }, [])
 
   //get vps info 
@@ -29,10 +29,7 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
     webdockConfig),
     onSuccess: (data)=>{
       if(data.data.status != 'stopped' || data.data.status != 'running')
-        setTimeout(()=>{
-          getVpsInfo.mutate()
-          setVpsState(data.data.status)
-        },8000)
+        setVpsState(data.data.status);
     }
   });
 

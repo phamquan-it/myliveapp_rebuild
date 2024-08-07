@@ -48,7 +48,7 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
     },
   ];
   const { data, isFetching, isError } = useQuery({
-    queryKey: ['Queues'], queryFn: () => axios.get('http://89.28.236.89:3031/queue/get-queue-from-vps/', {
+    queryKey: ['Queues'], queryFn: () => axios.get('https://api.golive365.top/queue/get-queue-from-vps/', {
       params: {
         slug: slug
       }
@@ -94,7 +94,7 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
         }
       ]} pagination={false} />
       <Title level={4} className="text-center">Queue</Title>
-      <Table dataSource={data?.data} columns={columns} />
+      <Table dataSource={data?.data} loading={isFetching} columns={columns} />
       <Input.TextArea placeholder="" readOnly rows={5} style={{
         backgroundColor: "black",
         display: (false)?"block":"none"
