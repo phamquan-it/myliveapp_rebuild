@@ -106,6 +106,8 @@ const onFinish = (values: any) => {
        message.error("Delete account script no ok")
    }
   });
+  const vpsList = useQuery({ queryKey: ['queryKey'], queryFn: ()=>axios.get("https://api.webdock.io/v1/servers", webdockConfig) });
+
   return(
     <>
    
