@@ -182,30 +182,10 @@ export default function Index() {
                       </Form>
                     </>
                   }
-                  // deleteForm={
-                  //   <DeleteForm
-                  //     onCancel={() => {
-                  //       setOpenState(!openState);
-                  //     }}
-                  //     onDelete={() => {
-                  //       axiosClient
-                  //         .delete(`/service/delete/${text}`)
-                  //         .then(() => {
-                  //           toast.success("success");
-                  //         })
-                  //         .catch((err) => {
-                  //           toast.error(err.message);
-                  //         });
-
-                  //       setOpenState(!openState);
-                  //     }}
-                  //   />
-                  // }
+                
                 />
                 <Button
                   type="primary"
-                  size="small"
-                  className="!pb-0 order_btn !text-sm"
                   onClick={() => {
                     router.push(`/dashboard/order/new-order?id=${text}`);
                   }}

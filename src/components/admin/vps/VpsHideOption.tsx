@@ -15,13 +15,7 @@ interface VpsHideOptionProps {
 const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
   const [vpsState, setVpsState] = useState(vps.status)
   
-  useEffect(()=>{
-     const updateState = setTimeout(()=>{
-        if(vpsState != 'stopped' || 'running'){
-          getVpsInfo.mutate()
-        }
-    }, 8000)
-  }, [])
+
 
   //get vps info 
   const getVpsInfo = useMutation({ 
@@ -34,7 +28,7 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
   });
 
   //stop vps mutation
-  const { mutate, isPending, isError } = useMutation({
+  const { mutate, isPending, isError, data } = useMutation({
     mutationFn: () =>
       axios.post(`https://api.webdock.io/v1/servers/${vps.slug}/actions/stop`, null, webdockConfig),
     onSuccess: () => {
@@ -58,6 +52,14 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
     }
   });
 
+  useEffect(()=>{
+    const updateState = setTimeout(()=>{
+      
+       if(vpsState != 'stopped' || 'running'){
+         getVpsInfo.mutate()
+       }
+   }, 8000)
+ }, [data, startVps.data])
   //delete vps mutation
   const deleteVps = useMutation({
     mutationFn: () =>
@@ -168,7 +170,7 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
   return (
     <>
 
-      <Dropdown menu={{ items, onClick: handleMenuClick }}>
+      <Dropdown trigger={['click']} menu={{ items, onClick: handleMenuClick }}>
         <Tooltip title={vps.status}>
           <Button type="primary" danger={(vpsState?.includes("stop"))} 
           loading={vpsState == "stopping" 

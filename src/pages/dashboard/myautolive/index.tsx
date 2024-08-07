@@ -1,6 +1,6 @@
 import axiosClient from "@/apiClient/axiosClient";
 import _ from "lodash";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
@@ -9,6 +9,8 @@ import {
   DatePicker,
   Form,
   Input,
+  message,
+  Modal,
   Select,
   Table,
   TablePaginationConfig,
@@ -22,11 +24,11 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useTranslations } from "use-intl";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
-import { CaretRightFilled, PlayCircleFilled, StopFilled, StopOutlined } from "@ant-design/icons";
+import { CaretRightFilled, PlayCircleFilled, PlusCircleFilled, StopFilled, StopOutlined } from "@ant-design/icons";
 import LiveState from "@/components/client/LiveState";
+import axiosInstance from "@/apiClient/axiosConfig";
 
 const Page = () => {
-    const [liveActive,setLiveActive] = useState(false)
   const d = useTranslations("DashboardMenu");
   const t = useTranslations("MyLanguage");
   const columns: any = [
@@ -85,6 +87,8 @@ const Page = () => {
       ? parseInt(getObjecFormUrlParameters(router)?.pageSize)
       : 10
   );
+
+  
   const { data, isFetching, isError } = useQuery({
     queryKey: ["orders", router.asPath],
     queryFn: () =>
@@ -125,12 +129,90 @@ const Page = () => {
       },
     });
   }, [keyword, pageIndex, pageSize]);
+
+  const createNewStreamMutation = useMutation({ 
+    mutationFn:(data:any)=> axiosInstance.post("/autolive-control/create-new-stream",
+        {
+          user_id: '1',
+          link: data.link
+      }
+    ),
+    onError: (error)=>{
+      message.error("Error")
+    },
+    onSuccess:(res)=>{
+      message.success("success")
+      hideModal();
+    }
+  });
+  const onFinish = (values: any) => {
+    console.log('Success:', );
+    const streamlink = values.platform+"/"+values.streamkey
+    createNewStreamMutation.mutate({
+      link: streamlink
+    })
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
+  };
+
+  const [openModal,setOpenModal] = useState(false);
+  const showModal = ()=>{ 
+    setOpenModal(true)
+  }
+  const hideModal = ()=>{ 
+    setOpenModal(false)
+  }
+  const platforms = useQuery({ queryKey: ['platform'], queryFn: ()=>axiosInstance.get("/platform/list")});
+
   return (
     <>
       <Title level={2} className="text-center">
         {'Autolive'}
       </Title>
-      <div className="my-3 flex gap-1">
+      <Modal title="Create new stream" open={openModal} footer={[]} onCancel={hideModal}>  
+          <Form
+                name="basic"
+                layout="vertical"
+                initialValues={{ remember: true }}
+                onFinish={onFinish}
+                
+                onFinishFailed={onFinishFailed}
+              >
+                <Form.Item
+                  label="Platform"
+                  name="platform"
+                  rules={[{ required: true, message: 'Please select platform!' }]}
+                >
+                    <Select
+                      showSearch
+                      placeholder="Select platform" options={platforms.data?.data.map((value:any, index: number)=>({
+                        label: value.name,
+                        value: value.rmtp
+                      }))}
+                    />
+                </Form.Item>
+                <Form.Item
+                  label="Stream key"
+                  name="streamkey" initialValue={'k1wk-bjka-9ht6-yvtt-17s5'}
+                  rules={[{ required: true, message: 'Please input your stream key!' }]}
+                >
+                  <Input placeholder="Stream key"/>
+                </Form.Item>
+          
+                
+          
+                <Form.Item>
+                  <Button type="primary" htmlType="submit" loading={createNewStreamMutation.isPending}>
+                    Create
+                  </Button>
+                </Form.Item>
+              </Form>
+      </Modal>
+      
+      
+      <div className="my-3 flex gap-1 justify-between">
         <div id="filter">
           <Input
             defaultValue={keyword}
@@ -140,6 +222,7 @@ const Page = () => {
             onChange={hanleKeyword}
           />
         </div>
+        <Button type="primary" icon={<PlusCircleFilled/>} iconPosition="end" onClick={showModal}>Create</Button>
       </div>
       <Table
         className="border rounded shadow-md"

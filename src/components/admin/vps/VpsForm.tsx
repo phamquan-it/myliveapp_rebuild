@@ -79,7 +79,7 @@ const VpsForm:React.FC<VpsFormProps> = ({closeModal, setSlug})=>{
               
           </Form.Item>
           <Form.Item
-            label={('Image slug')}
+            label={('OS')}
             name="imageSlug"
             rules={[{ required: true, message: "Please select an image slug" }]}
           >
