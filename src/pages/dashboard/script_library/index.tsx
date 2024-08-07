@@ -134,11 +134,10 @@ interface DataType {
     {
       title: "ipv6",
       dataIndex:"ipv6",
-      key:"id"
     },
     
     
-  ]} dataSource={vpsList.data?.data} />
+  ]} dataSource={vpsList.data?.data.map((script:any, index:number)=>({...script,key:index }))} />
     </Flex>
     </Modal>
     

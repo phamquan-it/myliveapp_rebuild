@@ -128,7 +128,7 @@ const Page = () => {
       <Button type="default" icon={<EyeFilled/>} onClick={()=>{
         console.log(record);
         
-        setSlugData(record.slug)
+        setSlugData(record)
         
       }}></Button>
       <Button type="default" disabled={record.status != "running"} icon={<>&gt;_</>} onClick={()=>{
@@ -147,7 +147,7 @@ const Page = () => {
 
   const [connectionState, setConnectionState] = useState(false);
   const [isViewDetailOpen,setIsViewDetailOpen] = useState(false)
-  const [slug,setSlug] = useState('')
+  const [slug,setSlug] = useState<any>('')
   const hideModalViewDetail = ()=>{ 
     setSlug('')
     setIsViewDetailOpen(false)
@@ -175,7 +175,7 @@ const Page = () => {
 
   useEffect(()=>{
     //open modal view detail
-    if(slug != "")
+    if(slug != '')
     openModalViewDetail()
   }, [slug])
 

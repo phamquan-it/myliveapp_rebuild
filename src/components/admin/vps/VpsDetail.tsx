@@ -3,13 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Button, Form, Input, Table, Tag, Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
 interface VpsDetailProps {
-  slug: string,
+  slug: any,
   closeModal: Function
 }
 const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
-  
+
 
   const columns = [
     {
@@ -21,7 +22,7 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
       title: 'Mission',
       dataIndex: 'name',
       key: 'name',
-      render: (text: string, record: any)=>(<>
+      render: (text: string, record: any) => (<>
         {record?.mission.name}
       </>)
     },
@@ -47,19 +48,30 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
       )
     },
   ];
+  const systeminfo = useQuery({
+    queryKey: ['vps_detail', slug], queryFn: () => axios.get("https://api.golive365.top/vps-provider/get-profile-for-create-vps?locationId=dk", webdockConfig)
+  });
+
   const { data, isFetching, isError } = useQuery({
     queryKey: ['Queues'], queryFn: () => axios.get('https://api.golive365.top/queue/get-queue-from-vps/', {
       params: {
-        slug: slug
+        slug: slug.slug
       }
     })
   });
-  useEffect(()=>{
-   console.log(data);
-   
-  },[])
-  
-  
+  const [vpsData,setVpsData] = useState<any>()
+  useEffect(() => {
+    console.log();
+    systeminfo.data?.data.profiles?.map((profile:any)=>{
+      if(profile.slug == slug.profile)
+        setVpsData(profile)
+      
+        
+    })
+
+  }, [slug])
+
+
   return (
     <>
 
@@ -67,7 +79,7 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
       <Table dataSource={[{
         id: 1,
         name: 'RAM',
-        value: '7.94GB'
+        value: vpsData?.ram
       },
       {
         id: 2,
@@ -82,22 +94,25 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
       ]} columns={[
         {
           title: "Id",
-          dataIndex: 'id'
+          dataIndex: 'id',
+          key:'id'
         },
         {
           title: "Name",
-          dataIndex: 'name'
+          dataIndex: 'name',
+          key:'name'
         },
         {
           title: "Value",
-          dataIndex: 'value'
+          dataIndex: 'value',
+          key:'value'
         }
       ]} pagination={false} />
       <Title level={4} className="text-center">Queue</Title>
       <Table dataSource={data?.data} loading={isFetching} columns={columns} />
       <Input.TextArea placeholder="" readOnly rows={5} style={{
         backgroundColor: "black",
-        display: (false)?"block":"none"
+        display: (false) ? "block" : "none"
       }} />
     </>
   );

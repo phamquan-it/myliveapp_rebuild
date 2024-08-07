@@ -16,7 +16,7 @@ interface VpsStatusProps{
   console.log(record.ipv4);
   const [status,setStatus] = useState(1)
   useEffect(()=>{
-    const res =  axios.get('http://localhost:3031/check-health', {
+    const res =  axios.get('https://api.golive365.top/check-health', {
       params: {
         port: record.port,
         ipv4: record.ipv4,
@@ -33,8 +33,8 @@ interface VpsStatusProps{
   },[record])
   return <>{(status==1)?
      <Spin indicator={<LoadingOutlined spin />} size="small" />:(status == 2)?
-     <Tag color="green">ACTIVE</Tag>:
-     <Tag color="red">DEATH</Tag>
+     <Tag color="green" style={{ width: 65, textAlign: "center"}}>ACTIVE</Tag>:
+     <Tag color="red">INACTIVE</Tag>
      }</>
   // if(isFetching) return  <Spin indicator={<LoadingOutlined spin />} size="small" />
   // if(isSuccess) return <>
