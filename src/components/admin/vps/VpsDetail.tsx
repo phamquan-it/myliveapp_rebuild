@@ -59,6 +59,7 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
    
   },[])
   
+  
   return (
     <>
 
