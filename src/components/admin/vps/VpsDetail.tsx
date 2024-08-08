@@ -1,15 +1,26 @@
 import { DeleteFilled, DeleteOutlined, EyeFilled } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Form, Input, Table, Tag, Tooltip } from "antd";
+import { Button, Checkbox, Form, Input, Modal, Table, Tag, Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
+import { text } from "stream/consumers";
+import ViewQueuesProcess from "@/components/app/View.queues.component";
+import XtermUI from "@/components/app/Xterm.component";
+import ViewQueuesComponent from "@/components/app/View.queues.component";
 interface VpsDetailProps {
   slug: any,
   closeModal: Function
 }
 const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
+  const [isModalOpen,setIsModalOpen] = useState(false)
+  const handleOpenModal = ()=>{ 
+   setIsModalOpen(true)
+  }
+  const handleCloseModal = ()=>{ 
+   setIsModalOpen(false)
+  }
 
 
   const columns = [
@@ -38,7 +49,7 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
       render: (id: string) => (
         <div className="flex gap-1">
           <Tooltip title="View detail">
-            <Button type="default" size="small" icon={<EyeFilled />}></Button>
+            <Button type="default" size="small" icon={<EyeFilled />} onClick={handleOpenModal}></Button>
           </Tooltip>
           <Tooltip title="Remove from queue">
             <Button type="default" size="small" icon={<DeleteFilled />} danger></Button>
@@ -68,34 +79,26 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
       
         
     })
-
   }, [slug])
 
 
   return (
     <>
-
       <Title level={4} className="text-center">Vps infomation</Title>
-      <Table dataSource={[{
-        id: 1,
-        name: 'RAM',
-        value: vpsData?.ram
-      },
-      {
-        id: 2,
-        name: 'Image',
-        value: 'Ubuntu22.04 jammyflish'
-      },
-      {
-        id: 3,
-        name: 'CPU',
-        value: 'Intel'
-      }
-      ]} columns={[
+      <Table dataSource={systeminfo.data?.data.profiles} columns={[
         {
-          title: "Id",
+          title: "",
           dataIndex: 'id',
-          key:'id'
+          key:'id',
+          align: "center",
+          render: (text: string, record:any, index: number)=>(
+            <>
+                  <Checkbox
+                    defaultChecked={record.slug == slug.profile}
+                    
+                  />
+            </>
+          )
         },
         {
           title: "Name",
@@ -103,9 +106,27 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
           key:'name'
         },
         {
-          title: "Value",
-          dataIndex: 'value',
-          key:'value'
+          title: "Disk",
+          dataIndex: 'disk',
+          key:'disk'
+        },
+        {
+          title: "Ram",
+          dataIndex: 'ram',
+          key:'ram',
+          render:(text)=>(text/1024).toFixed(1) + "GB"
+        },
+        {
+          title: "Cores",
+          dataIndex: 'cpu',
+          key:'cpu',
+          render: (text, record)=> record.cpu.cores
+        },
+        {
+          title: "Threads",
+          dataIndex: 'cpu',
+          key:'cpu',
+          render: (text, record)=> record.cpu.threads
         }
       ]} pagination={false} />
       <Title level={4} className="text-center">Queue</Title>
@@ -114,6 +135,7 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
         backgroundColor: "black",
         display: (false) ? "block" : "none"
       }} />
+      <ViewQueuesComponent />
     </>
   );
 }

@@ -197,7 +197,7 @@ const Page = () => {
         width={850}
         destroyOnClose={true} footer={null}
       >
-        <XtermUI connectionState={connectionState} SSHInfo={sshInfo} />
+        <XtermUI SSHInfo={sshInfo} />
       </Modal>
       
       <Modal width={1000}

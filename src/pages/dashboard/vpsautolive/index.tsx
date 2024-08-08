@@ -130,7 +130,7 @@ const Page = () => {
         Autolive vps
       </Title>
       <Modal title="Terminal" open={showTerminal} width={850} footer={null} onCancel={hideTerninal}>
-          <XtermUI SSHInfo={sshInfo} connectionState={false} />
+          <XtermUI SSHInfo={sshInfo} />
       </Modal>
       
       <div className="flex justify-between items-center my-3">

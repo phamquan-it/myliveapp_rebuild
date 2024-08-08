@@ -328,7 +328,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
         </Header>
         <Content
           style={{
-            padding:"30px 10px",
+            padding:"30px 20px",
             overflowY: "scroll",
           }}
         >

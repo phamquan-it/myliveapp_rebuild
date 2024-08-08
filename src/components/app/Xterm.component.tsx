@@ -3,6 +3,7 @@ import { Terminal } from "@xterm/xterm"; // Corrected import path
 import "@xterm/xterm/css/xterm.css";
 import { io } from "socket.io-client";
 import { Button } from "antd";
+import { FitAddon } from '@xterm/addon-fit';
 
 export interface SSHInfo {
   ipv4OrHost: string;
@@ -10,17 +11,12 @@ export interface SSHInfo {
 }
 
 interface XtermUIProps {
-  connectionState: boolean;
-  SSHInfo: SSHInfo;
+  SSHInfo?: SSHInfo;
 }
 
-const XtermUI: React.FC<XtermUIProps> = ({ connectionState, SSHInfo,  }) => {
+const XtermUI: React.FC<XtermUIProps> = ({ SSHInfo,  }) => {
   const terminalRef = useRef<HTMLDivElement | null>(null);
   const socketRef = useRef<any>(null);
-
-  useEffect(() => {
-    console.log("Connection state: " + connectionState);
-  }, [connectionState]);
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -38,14 +34,22 @@ const XtermUI: React.FC<XtermUIProps> = ({ connectionState, SSHInfo,  }) => {
         terminal.write(data);
       });
 
-     socket.emit("input", `ssh ${SSHInfo.sshUser}@${SSHInfo.ipv4OrHost}\n`);
+      if (SSHInfo) {
+        socket.emit("input", `ssh ${SSHInfo.sshUser}@${SSHInfo.ipv4OrHost}\n`);
+      }
     }
   }, []); // Add reconnect as a dependency
 
   useEffect(() => {
     if (terminalRef.current) {
       const terminal = new Terminal();
+      // const fitAddon = new FitAddon();
+
+      // terminal.loadAddon(fitAddon);
+
       terminal.open(terminalRef.current);
+      
+      // fitAddon.fit();
 
       const socket = io("https://api.golive365.top/");
       socketRef.current = socket;
@@ -58,7 +62,9 @@ const XtermUI: React.FC<XtermUIProps> = ({ connectionState, SSHInfo,  }) => {
         terminal.write(data);
       });
 
-     socket.emit("input", `ssh ${SSHInfo.sshUser}@${SSHInfo.ipv4OrHost}\n`);
+      if (SSHInfo) {
+        socket.emit("input", `ssh ${SSHInfo.sshUser}@${SSHInfo.ipv4OrHost}\n`);
+      }
 
       return () => {
        // socket.disconnect();
@@ -69,7 +75,7 @@ const XtermUI: React.FC<XtermUIProps> = ({ connectionState, SSHInfo,  }) => {
 
   return (
     <>
-      <div ref={terminalRef} style={{ width: "800px", height: "410px", overflow: "hidden" }}></div>
+      <div ref={terminalRef} style={{ width: "100%", height: "410px", overflow: "hidden" }}></div>
     </>
   );
 };
