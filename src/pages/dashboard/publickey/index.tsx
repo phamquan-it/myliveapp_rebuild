@@ -143,7 +143,7 @@ const Page = ()=>{
       className="border rounded overflow-hidden" 
       loading={isFetching}
       expandable={{
-        expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.key}</p>,
+        expandedRowRender: (record) => <Input.TextArea placeholder="" value={record.key} autoSize />,
         rowExpandable: (record) => record.key !== undefined,
       }}
     />
