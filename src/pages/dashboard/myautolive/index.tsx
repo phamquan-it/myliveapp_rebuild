@@ -187,7 +187,7 @@ const Page = () => {
                 >
                     <Select
                       showSearch
-                      placeholder="Select platform" options={platforms.data?.data.map((value:any, index: number)=>({
+                      placeholder="Select platform" options={platforms.data?.data?.platforms?.map((value:any, index: number)=>({
                         label: value.name,
                         value: value.rmtp
                       }))}

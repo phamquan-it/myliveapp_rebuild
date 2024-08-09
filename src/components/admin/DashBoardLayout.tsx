@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import {
   CalendarFilled,
+  CameraFilled,
   CloudServerOutlined,
   DiffOutlined,
   FundOutlined,
@@ -18,14 +19,14 @@ import {
   WindowsFilled,
   WindowsOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu, MenuProps, theme } from "antd";
+import { Button, Layout, Menu, MenuProps, theme, Tooltip } from "antd";
 import { useRouter } from "next/router";
 import { TbCategoryFilled } from "react-icons/tb";
 import {
   FaBuyNLarge,
+  FaCamera,
   FaListUl,
   FaMoneyBill,
-  FaVolumeOff,
 } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 import Title from "antd/es/typography/Title";
@@ -35,8 +36,6 @@ import LocaleSwitcher from "@/LocaleSwitcher";
 import { jwtDecode } from "jwt-decode";
 import { useQuery } from "@tanstack/react-query";
 import axiosClient from "@/apiClient/axiosClient";
-import { SSHInfo } from "../app/Xterm.component";
-import { io } from "socket.io-client";
 
 const { Header, Sider, Content } = Layout;
 
@@ -45,7 +44,6 @@ interface DashBoardLayoutLayout {
 }
 const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
   console.log("re-render");
-  const socketRef = useRef<any>(null);
   const [role, setRole] = useState("user");
   useEffect(() => {
     try {
@@ -321,6 +319,11 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             <div className="w-full flex justify-between pe-10">
               <span style={{ color: "" }}>LiveLogo</span>
               <div className="flex items-center gap-2">
+                <Tooltip title="Create new stream">
+                  <Button type="primary" icon={<PlusCircleFilled/>}></Button>
+                </Tooltip>
+                
+                
                 <LocaleSwitcher />
               </div>
             </div>

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { GetStaticPropsContext } from "next";
-import { WEBDOCK_TOKEN } from "../../../../WEBDOCK_PROVIDER/constant/Token";
 import { Button, Form, Input, message, Modal, Table } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Title from "antd/es/typography/Title";
@@ -8,7 +7,6 @@ import { PlusCircleFilled } from "@ant-design/icons";
 import TableAction from "@/components/admin/TableAction";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { headers } from "next/headers";
 import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
 
 const Page = ()=>{
@@ -94,6 +92,8 @@ const Page = ()=>{
       const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
       };
+
+      
   return(
     <>
     <ToastContainer/>
@@ -143,7 +143,7 @@ const Page = ()=>{
       className="border rounded overflow-hidden" 
       loading={isFetching}
       expandable={{
-        expandedRowRender: (record) => <Input.TextArea placeholder="" value={record.key} autoSize />,
+        expandedRowRender: (record) => <Input.TextArea placeholder="" readOnly value={record.key} autoSize />,
         rowExpandable: (record) => record.key !== undefined,
       }}
     />
