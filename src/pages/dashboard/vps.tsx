@@ -3,7 +3,7 @@ import TableAction from "@/components/admin/TableAction";
 import { debounce } from "lodash";
 import { EyeFilled, MessageFilled, PlusCircleFilled } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
+import { webdockConfig } from "../../../WEBDOCK_PROVIDER/APIRequest/config";
 import _ from "lodash";
 import {
   Button,
@@ -256,7 +256,7 @@ export default Page;
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
-      messages: (await import(`../../../../messages/${locale}.json`)).default,
+      messages: (await import(`../../../messages/${locale}.json`)).default,
     },
   };
 }

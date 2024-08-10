@@ -12,6 +12,7 @@ import axiosClient from "@/apiClient/axiosClient";
 import { useMutation } from "@tanstack/react-query";
 import { setCookie } from "cookies-next";
 import { AuthApi } from "@/apiClient/providers/auth";
+import axiosInstance from "@/apiClient/axiosConfig";
 
 const RegiterForm = () => {
   const [openSuccessModal,setOpenSuccessModal] = useState(false)
@@ -24,7 +25,7 @@ const RegiterForm = () => {
   const { isPending, mutate } = useMutation({
     mutationKey: ["/register"],
     mutationFn: (value) =>
-      axiosClient.post(AuthApi.register, value),
+      axiosInstance.post(AuthApi.register, value),
     onSuccess: (data) => {
       setOpenSuccessModal(true)
     },
@@ -143,7 +144,7 @@ export default RegiterForm;
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
-      messages: (await import(`../../../messages/${locale}.json`)).default,
+      messages: (await import(`../../messages/${locale}.json`)).default,
     },
   };
 }

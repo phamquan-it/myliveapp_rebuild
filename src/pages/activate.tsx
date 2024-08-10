@@ -3,16 +3,16 @@ import { Button, Result } from 'antd';
 import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
 import { useQuery } from "@tanstack/react-query";
-import axiosClient from "@/apiClient/axiosClient";
 import { AuthApi } from "@/apiClient/providers/auth";
 import { useEffect } from "react";
+import axiosInstance from "@/apiClient/axiosConfig";
 const Page = () => {
   const router = useRouter()
   const t = useTranslations("Authenlication")
   const n = useTranslations("result")
   console.log("Your key" + router.query.key);
   const { data, isFetching, isError } = useQuery({
-    queryKey: ['activate'], queryFn: () => axiosClient.patch(AuthApi.activate, {
+    queryKey: ['activate'], queryFn: () => axiosInstance.patch(AuthApi.activate, {
       key: router.query.key
     })
   });
@@ -43,7 +43,7 @@ export default Page
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
-      messages: (await import(`../../../messages/${locale}.json`)).default,
+      messages: (await import(`../../messages/${locale}.json`)).default,
     },
   };
 }

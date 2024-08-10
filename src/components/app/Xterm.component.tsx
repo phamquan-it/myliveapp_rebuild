@@ -17,7 +17,7 @@ interface XtermUIProps {
 const XtermUI: React.FC<XtermUIProps> = ({ SSHInfo,  }) => {
   const terminalRef = useRef<HTMLDivElement | null>(null);
   const socketRef = useRef<any>(null);
-
+  const [key, setKey] = useState(0)
   useEffect(() => {
     if (terminalRef.current) {
       const terminal = new Terminal();
@@ -38,44 +38,16 @@ const XtermUI: React.FC<XtermUIProps> = ({ SSHInfo,  }) => {
         socket.emit("input", `ssh ${SSHInfo.sshUser}@${SSHInfo.ipv4OrHost}\n`);
       }
     }
-  }, []); // Add reconnect as a dependency
+    if(key<1)
+    setKey(key+1)
+  }, [key]); // Add reconnect as a dependency
 
-  useEffect(() => {
-    if (terminalRef.current) {
-      const terminal = new Terminal();
-      // const fitAddon = new FitAddon();
-
-      // terminal.loadAddon(fitAddon);
-
-      terminal.open(terminalRef.current);
-      
-      // fitAddon.fit();
-
-      const socket = io("https://api.golive365.top/");
-      socketRef.current = socket;
-
-      terminal.onData((data) => {
-        socket.emit("input", data);
-      });
-
-      socket.on("output", (data) => {
-        terminal.write(data);
-      });
-
-      if (SSHInfo) {
-        socket.emit("input", `ssh ${SSHInfo.sshUser}@${SSHInfo.ipv4OrHost}\n`);
-      }
-
-      return () => {
-       // socket.disconnect();
-      };
-    }
-  }, [SSHInfo]); // Add reconnect as a dependency
+ 
 
 
   return (
     <>
-      <div ref={terminalRef} style={{ width: "100%", height: "410px", overflow: "hidden" }}></div>
+      <div key={key} ref={terminalRef} style={{ width: "100%", height: "410px", overflow: "hidden" }}></div>
     </>
   );
 };

@@ -38,6 +38,7 @@ import {
   TableCurrentDataSource,
 } from "antd/lib/table/interface";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
+import axiosInstance from "@/apiClient/axiosConfig";
 
 interface RowContextProps {
   setActivatorNodeRef?: (element: HTMLElement | null) => void;
@@ -104,7 +105,7 @@ const Page: React.FC = () => {
   const { data, isFetching } = useQuery({
     queryKey: ["platform", router.asPath],
     queryFn: () =>
-      axiosClient.get(`/platform/list?language=${router.locale}`, {
+      axiosInstance.get(`/platform/list?language=${router.locale}`, {
         params: {
           keyword: keyword,
         },
@@ -409,7 +410,7 @@ export default Page;
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
-      messages: (await import(`../../../../messages/${locale}.json`)).default,
+      messages: (await import(`../../../messages/${locale}.json`)).default,
     },
   };
 }

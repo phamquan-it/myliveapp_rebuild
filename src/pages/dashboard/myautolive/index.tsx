@@ -164,7 +164,11 @@ const Page = () => {
   const hideModal = ()=>{ 
     setOpenModal(false)
   }
-  const platforms = useQuery({ queryKey: ['platform'], queryFn: ()=>axiosInstance.get("/platform/list")});
+  const platforms = useQuery({ queryKey: ['platform'], queryFn: ()=>axiosInstance.get("/platform/list",{
+      params: {
+          language: "en"
+      }
+  })});
 
   return (
     <>
