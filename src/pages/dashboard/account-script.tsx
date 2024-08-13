@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button, Form, Input, message, Modal, Table } from "antd";
 import axios from "axios";
 import { GetStaticPropsContext } from "next";
-import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
+import { webdockConfig } from "../../../WEBDOCK_PROVIDER/APIRequest/config";
 import Title from "antd/es/typography/Title";
 import { DeleteFilled, EditFilled, PlusCircleFilled } from "@ant-design/icons";
 import { useEffect, useState } from "react";
@@ -185,7 +185,7 @@ const onFinish = (values: any) => {
  export async function getStaticProps({ locale }: GetStaticPropsContext) {
     return {
       props: {
-        messages: (await import(`../../../../messages/${locale}.json`)).default,
+        messages: (await import(`../../../messages/${locale}.json`)).default,
       },
     };
   }

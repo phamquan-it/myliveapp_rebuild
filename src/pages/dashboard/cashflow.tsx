@@ -104,62 +104,6 @@ const Page = () => {
       align: "center",
       render: (text: string) => dayjs(text).format("YYYY-MM-DD HH:mm:ss"),
     },
-
-    // {
-    //   align: "center",
-    //   title: t("action"),
-    //   dataIndex: "id",
-    //   key: "id",
-    //   width: 200,
-    //   render: (text: string, record: any) => {
-    //     return (
-    //       <TableAction
-    //         openState={openState}
-    //         viewDetail={<>view detail</>}
-    //         syncFunc={() => {
-    //           //synchonized data here
-    //         }}
-    //         editForm={
-    //           <>
-    //             <Form
-    //               name="basic"
-    //               layout="vertical"
-    //               initialValues={{ remember: true }}
-    //               // onFinish={onFinish}
-    //               // onFinishFailed={onFinishFailed}
-    //             >
-    //               <EditCashFlow value={record} />
-
-    //               <Form.Item>
-    //                 <Button type="primary" htmlType="submit">
-    //                   Update
-    //                 </Button>
-    //               </Form.Item>
-    //             </Form>
-    //           </>
-    //         }
-    //         deleteForm={
-    //           <DeleteForm
-    //             onCancel={() => {
-    //               setOpenState(!openState);
-    //             }}
-    //             onDelete={() => {
-    //               axiosClient
-    //                 .delete(`/cashflow/delete/${text}`)
-    //                 .then(() => {
-    //                   toast.success("success");
-    //                 })
-    //                 .catch((err) => {
-    //                   toast.error(err.message);
-    //                 });
-    //               setOpenState(!openState);
-    //             }}
-    //           />
-    //         }
-    //       />
-    //     );
-    //   },
-    // },
   ];
   const [showModal, setShowModal] = useState<boolean>(false);
   const hideModal = () => {
@@ -273,7 +217,7 @@ export default Page;
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
-      messages: (await import(`../../../../messages/${locale}.json`)).default,
+      messages: (await import(`../../../messages/${locale}.json`)).default,
     },
   };
 }

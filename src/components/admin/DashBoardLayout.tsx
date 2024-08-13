@@ -45,7 +45,6 @@ interface DashBoardLayoutLayout {
     children?: ReactNode;
 }
 const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
-    console.log("re-render");
     const [role, setRole] = useState("user");
     useEffect(() => {
         try {

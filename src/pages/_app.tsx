@@ -20,34 +20,46 @@ import PageLayout from "@/components/PageLayout";
 config.autoAddCss = false;
 
 export default function App({ Component, pageProps }: AppProps) {
-  const router = useRouter();
-  const path: string = router.asPath;
-  console.log(path);
+    const router = useRouter();
+    const path: string = router.asPath;
 
-  const Layout = !path.includes("/dashboard") ? PageLayout : DashBoardLayout;
+    const syncObjectToUrl = (object: any, urlPath: string) => {
 
-  return (
-    <NextIntlClientProvider
-      locale={router.locale}
-      messages={pageProps.messages}
-      timeZone="Europe/Vienna"
-    >
-      {/* addRedux */}
-      <ReduxProvider>
-        {/* add react  query */}
-        <ReactQueryProvider>
-          {/* add ant design */}
-          <ConfigProvider
-            theme={theme}
-            locale={router.locale == "vi" ? vi : en}
-          >
-            <Layout>
-            <NextNProgress color="#29D" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} options={{ showSpinner: false}}/>
-              <Component {...pageProps} />
-            </Layout>
-          </ConfigProvider>
-        </ReactQueryProvider>
-      </ReduxProvider>
-    </NextIntlClientProvider>
-  );
+        router.query = object;
+        router.push(router, {
+            pathname: urlPath,
+            query: object,
+        } );
+    }
+    const [pageIndex, setPageIndex] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [keyword, setKeyword] = useState('');
+    
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const Layout = !path.includes("/dashboard") ? PageLayout : DashBoardLayout;
+
+        return (
+        <NextIntlClientProvider
+            locale={router.locale}
+            messages={pageProps.messages}
+            timeZone="Europe/Vienna"
+        >
+            {/* addRedux */}
+            <ReduxProvider>
+                {/* add react  query */}
+                <ReactQueryProvider>
+                    {/* add ant design */}
+                    <ConfigProvider
+                        theme={theme}
+                        locale={router.locale == "vi" ? vi : en}
+                    >
+                        <Layout>
+                            <NextNProgress color="#29D" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} options={{ showSpinner: false }} />
+                            <Component {...pageProps} modal={[isModalOpen ?? false, setIsModalOpen, syncObjectToUrl]}  />
+                        </Layout>
+                    </ConfigProvider>
+                </ReactQueryProvider>
+            </ReduxProvider>
+        </NextIntlClientProvider>
+    );
 }

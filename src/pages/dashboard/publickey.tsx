@@ -7,7 +7,7 @@ import { PlusCircleFilled } from "@ant-design/icons";
 import TableAction from "@/components/admin/TableAction";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
+import { webdockConfig } from "../../../WEBDOCK_PROVIDER/APIRequest/config";
 
 const Page = ()=>{
     const [openState,setOpenState] = useState(false)
@@ -155,7 +155,7 @@ const Page = ()=>{
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
-      messages: (await import(`../../../../messages/${locale}.json`)).default,
+      messages: (await import(`../../../messages/${locale}.json`)).default,
     },
   };
 }
