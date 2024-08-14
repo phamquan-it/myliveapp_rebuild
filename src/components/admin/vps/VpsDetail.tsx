@@ -108,7 +108,8 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
         {
           title: "Disk",
           dataIndex: 'disk',
-          key:'disk'
+          key:'disk',
+          render:(text)=>(text/1024).toFixed(1) + "GB"
         },
         {
           title: "Ram",

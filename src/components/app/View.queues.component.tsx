@@ -64,7 +64,7 @@ const ViewQueuesProcess: React.FC = () => {
         <div key={key}>
       <Button type="primary" onClick={refreshComponent} icon={<EyeFilled/>}></Button>
       
-      <div ref={terminalRef} style={{ width: "100%", height: "150px", overflow: "hidden"}}></div>
+      <div ref={terminalRef} style={{ width: "100%", height: "250px", overflow: "hidden"}}></div>
       {/* Component content */}
     </div>
         

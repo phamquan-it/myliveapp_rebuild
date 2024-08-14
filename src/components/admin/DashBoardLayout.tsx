@@ -130,6 +130,12 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             label: "Vps",
             role: "admin",
             children: [
+                 {
+                    key: "/dashboard/live-management",
+                    icon: <FaListUl />,
+                    label: "Livestreams",
+                    role: "admin",
+                },
                
                 {
                     key: "/dashboard/vps",

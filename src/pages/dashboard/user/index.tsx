@@ -37,6 +37,7 @@ import _ from "lodash";
 import { toast } from "react-toastify";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 import { error } from "console";
+import { useUserData } from "@/pages/CreateStreamByAdmin";
 const { Option } = Select;
 const Page = () => {
   const token = getCookie("token");
@@ -134,32 +135,6 @@ const Page = () => {
                   </Form>
                 </>
               }
-              // deleteForm={
-              //   <DeleteForm
-              //     onCancel={() => {
-              //       setOpenState(!openState);
-              //     }}
-              //     onDelete={() => {
-              //       axiosClient
-              //         .delete(`/user/delete/${text}/?language=en`, {
-              //           headers: {
-              //             Authorization: `Bearer ${token}`,
-              //           },
-              //         })
-              //         .then(() => {
-              //           console.log("ok");
-
-              //           toast.success("success");
-              //         })
-              //         .catch((err) => {
-              //           console.log(err);
-
-              //           toast.error(err.message);
-              //         });
-              //       setOpenState(!openState);
-              //     }}
-              //   />
-              // }
             />
           </div>
         );
@@ -215,21 +190,8 @@ const Page = () => {
   const [keyword, setKeyword] = useState(
     getObjecFormUrlParameters(router)?.keyword || ""
   );
-  const { data, isFetching, isError } = useQuery({
-    queryKey: ["user", router.asPath],
-    queryFn: () =>
-      axiosClient.get("/user/list?language=en", {
-        params: {
-          keyword: keyword,
-          offset: (pageIndex - 1) * pageSize,
-          limit: pageIndex * pageSize,
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }),
-    placeholderData: (previousData) => previousData,
-  });
+  const { data, isFetching } = useUserData();
+  
   console.log(data);
   const handleTableChange = (pagination: TablePaginationConfig) => {
     const current = pagination.current || 1;
@@ -276,7 +238,7 @@ const Page = () => {
             <Select
               mode="multiple"
               allowClear
-              options={data?.data.data.user}
+              options={data?.data}
               style={{ width: "100%" }}
               placeholder="Please select"
               defaultValue={["a10", "c12"]}
@@ -311,7 +273,7 @@ const Page = () => {
       </div>
       <Table
         className="rounded-md shadow-md border mt-3"
-        dataSource={data?.data.data.map((item: any, index: number) => ({
+        dataSource={data?.data?.map((item: any, index: number) => ({
           ...item,
           key: pageIndex * pageSize + (index + 1) - pageSize,
         }))}
