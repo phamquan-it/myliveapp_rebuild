@@ -1,5 +1,6 @@
 import axiosInstance from '@/apiClient/axiosConfig';
-import { useQuery } from '@tanstack/react-query';
+import { AuthApi } from '@/apiClient/providers/auth';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Form, FormProps, Input, Modal, Select } from 'antd';
 import React, { useState } from 'react';
 
@@ -30,11 +31,20 @@ interface CreateStreamByAdminProps {
 }
 
 const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
-    
+
+
+    const { isPending, mutate } = useMutation({
+        mutationKey: ["/register"],
+        mutationFn: (value) =>
+            axiosInstance.post('CreateNewStream', value),
+        onSuccess: (data) => {
+        },
+        onError: (err) => {
+        },
+    });
     const platformData = usePlatformData();
     const vpsdata = useVpsData()
     const userData = useUserData()
-    console.log("api user",userData?.data?.data);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showModal = () => {
@@ -43,18 +53,24 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     }
-
-
+    const [rmtp, setRmtp] = useState('');
+    const [ipv4, setIpv4] = useState('')
 
     type FieldType = {
         key?: string;
+        source_link?: string;
         platformId?: number;
+        port?: number;
+        ipv4?: string;
         vpsId?: number;
         userId?: string;
         link?: string;
     };
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+        values.port = 3002;
+        values.ipv4 = ipv4;
+        values.link = rmtp + '/' + values.key;
         console.log('Success:', values);
     };
 
@@ -77,18 +93,20 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
                 autoComplete="off"
             >
                 <Form.Item<FieldType>
-                    label="Stream key"
-                    name="key"
+                    label="Google driver link"
+                    name="source_link"
+                    initialValue="1pRxAAQHEvelx4jgldOr9Sfwhp4ED20fA"
                     rules={[{ required: true }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item<FieldType>
-                    label="Link"
-                    name="link"
+                    label="Stream key"
+                    name="key"
+                    initialValue="k1wk-bjka-9ht6-yvtt-17s5"
                     rules={[{ required: true }]}
                 >
-                    <Input/>
+                    <Input />
                 </Form.Item>
                 <Form.Item<FieldType>
                     label="User"
@@ -103,15 +121,31 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
                     rules={[{ required: true }]}
                 >
 
-                    <Select options={vpsdata?.data?.data?.data.map((vps: any) => ({ label: vps.hostname, value: vps.vpsProvider }))} />
+                    <Select options={vpsdata?.data?.data?.data.map((vps: any) => ({ label: vps.hostname, value: vps.vpsProvider }))}
+                        onChange={(value) => {
+                            vpsdata?.data?.data?.data?.forEach((vps: any) => {
+                                if (vps.vpsProvider == value) setIpv4(vps.ipv4);
+                            })
+                        }}
+                    />
 
                 </Form.Item>
                 <Form.Item<FieldType>
                     label="Platform"
                     name="platformId"
                     rules={[{ required: true }]}
+
                 >
-                    <Select options={platformData?.data?.data?.platforms.map((platform: any) => ({ label: platform.name, value: platform.id }))} />
+                    <Select options={platformData?.data?.data?.platforms.map((platform: any) => ({
+                        label: platform.name,
+                        value: platform.id,
+                        rmtp: platform.rmtp
+                    }))}
+                        onChange={(value) => {
+                            platformData?.data?.data?.platforms?.forEach((platform: any) => {
+                                if (platform.id == value) setRmtp(platform.rmtp)
+                            })
+                        }} />
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit">

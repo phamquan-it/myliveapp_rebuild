@@ -38,6 +38,7 @@ import { useQuery } from "@tanstack/react-query";
 import axiosClient from "@/apiClient/axiosClient";
 import axiosInstance from "@/apiClient/axiosConfig";
 import CreateAutolive from "../autolive/CreateAutolive";
+import CreateStreamByAdmin from "../live-streams/CreateStreamByAdmin";
 
 const { Header, Sider, Content } = Layout;
 
@@ -328,13 +329,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                         <div className="w-full flex justify-between pe-10">
                             <span style={{ color: "" }}>LiveLogo</span>
                             <div className="flex items-center gap-2">
-                                <Modal title="Create stream" open={isCreateStreamOpen} footer={[]} onCancel={hideCreateStream}>
-                                    <CreateAutolive/>   
-                                </Modal>
-                                <Tooltip title="Create new stream">
-                                    <Button type="primary" icon={<PlusCircleFilled />} onClick={showCreateStream}></Button>
-                                </Tooltip>
-
+                                <CreateStreamByAdmin/> 
 
                                 <LocaleSwitcher />
                             </div>
