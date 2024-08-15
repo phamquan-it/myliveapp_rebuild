@@ -1,6 +1,8 @@
 import axiosInstance from '@/apiClient/axiosConfig';
+import CreatePlatform from '@/components/general/create-platform';
 import { useQuery } from '@tanstack/react-query';
-import { Table } from 'antd';
+import { Input, Table } from 'antd';
+import Title from 'antd/es/typography/Title';
 import { GetStaticPropsContext } from 'next';
 import router from 'next/router';
 import React from 'react';
@@ -53,7 +55,13 @@ const Page = () => {
 
 
     return <>
-
+        <Title level={2} className="text-center">Platform</Title>
+        <div className="flex justify-between py-3">
+            <div>
+                <Input placeholder="Search..." />
+            </div>
+            <CreatePlatform />
+        </div>
         <Table loading={isFetching} dataSource={data?.data?.platforms.map((platform: any, index: number) => ({ ...platform, key: index + 1 }))} columns={columns} />;
     </>
 }
