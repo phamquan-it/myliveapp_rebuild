@@ -1,4 +1,5 @@
 import axiosInstance from '@/apiClient/axiosConfig';
+import EditLiveStreams from '@/components/live-streams/EditLiveStreams';
 import { useQuery } from '@tanstack/react-query';
 import { Table } from 'antd';
 import Title from 'antd/es/typography/Title';
@@ -50,6 +51,7 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug }) => {
             key: 'key',
             
         },
+       
     ];
 
     return <>

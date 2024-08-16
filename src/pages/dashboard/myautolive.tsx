@@ -27,6 +27,7 @@ import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 import { CaretRightFilled, PlayCircleFilled, PlusCircleFilled, StopFilled, StopOutlined } from "@ant-design/icons";
 import LiveState from "@/components/client/LiveState";
 import axiosInstance from "@/apiClient/axiosConfig";
+import EditLiveStreams from "@/components/live-streams/EditLiveStreams";
 
 const Page = () => {
     const d = useTranslations("DashboardMenu");
@@ -71,6 +72,9 @@ const Page = () => {
             title: t("action"),
             dataIndex: "action",
             key: "action",
+            render: ()=> (<>
+                <EditLiveStreams/>
+                          </>)
         },
 
     ];
