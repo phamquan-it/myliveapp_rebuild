@@ -37,7 +37,7 @@ import _ from "lodash";
 import { toast } from "react-toastify";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 import { error } from "console";
-import { useUserData } from "@/pages/CreateStreamByAdmin";
+import { useUserData } from "@/components/live-streams/CreateStreamByAdmin";
 const { Option } = Select;
 const Page = () => {
   const token = getCookie("token");

@@ -10,11 +10,12 @@ import ViewQueuesProcess from "@/components/app/View.queues.component";
 import XtermUI from "@/components/app/Xterm.component";
 import ViewQueuesComponent from "@/components/app/View.queues.component";
 import LiveStream from "@/components/vps/vps-details/live-stream";
+import VpsProfile from "@/components/vps/vps-details/vps-profiles";
 interface VpsDetailProps {
     slug: any,
     closeModal: Function
 }
-const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
+const VpsDetail: React.FC<VpsDetailProps> = ({ slug }) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const handleOpenModal = () => {
         setIsModalOpen(true)
@@ -60,9 +61,6 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
             )
         },
     ];
-    const systeminfo = useQuery({
-        queryKey: ['vps_detail', slug], queryFn: () => axios.get("https://api.golive365.top/vps-provider/get-profile-for-create-vps?locationId=dk", webdockConfig)
-    });
 
     const { data, isFetching, isError } = useQuery({
         queryKey: ['Queues'], queryFn: () => axios.get('https://api.golive365.top/queue/get-queue-from-vps/', {
@@ -77,45 +75,24 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
 
     return (
         <>
-            <div className="grid grid-cols-2 gap-2">
-                <div>
-                    <Title level={5} className="text-center border-b">Vps info</Title>
-                    <List
-                        grid={{
-                            gutter: 16,
-                            xs: 1,
-                            sm: 2,
-                            md: 4,
-                            lg: 4,
-                            xl: 6,
-                            xxl: 2,
-                        }}
-                        dataSource={[
-                            {
-                                title: 'RAM',
-                                value: '10.97GB'
-                            },
-                            {
-                                title: 'CPU',
-                                value: '8 core, 12 thread'
-                            },
-                        ]}
-                        renderItem={(item: any) => (
-                            <List.Item>
-                                <Card title={item.title}>{item.value}</Card>
-                            </List.Item>
-                        )}
-                    />
+            <Button type="default" onClick={()=>setIsModalOpen(true)} icon={<EyeFilled/>}></Button>
 
-
+            <Modal destroyOnClose={true} width={1000} title="Vps detail" open={isModalOpen} onCancel={()=> {
+                setIsModalOpen(false);
+            }}>
+                <div className="grid grid-cols-2 gap-2">
+                    <div>
+                        <Title level={5} className="text-center border-b">Vps info</Title>
+                        <VpsProfile vpsProvider={slug} /> 
+                    </div>
+                    <div>
+                        <LiveStream slug={slug.slug} />
+                    </div>
                 </div>
-                <div>
-                    <LiveStream/>
-                </div>
-            </div>
-            <Title level={4}>Queue</Title>
-            <Table dataSource={data?.data} loading={isFetching} columns={columns} />
-            <ViewQueuesComponent />
+                <Title level={4}>Queue</Title>
+                <Table dataSource={data?.data} loading={isFetching} columns={columns} />
+                <ViewQueuesComponent ipv4={slug.ipv4} />
+            </Modal>
         </>
     );
 }

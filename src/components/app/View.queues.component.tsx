@@ -4,8 +4,11 @@ import "@xterm/xterm/css/xterm.css";
 import { Button } from "antd";
 import { EyeFilled, SyncOutlined } from "@ant-design/icons";
 
+interface ViewQueuesProcessProps{
+    ipv4: string
+}
 // Dynamic import to disable SSR
-const ViewQueuesProcess: React.FC = () => {
+const ViewQueuesProcess: React.FC<ViewQueuesProcessProps> = ({ipv4}) => {
     const terminalRef = useRef<HTMLDivElement | null>(null);
     const socketRef = useRef<any>(null);
     const [key, setKey] = useState(0);
@@ -30,7 +33,7 @@ const ViewQueuesProcess: React.FC = () => {
             // Ensure the fit addon is loaded and the terminal is fitted
             //fitAddon.fit();
 
-            const socket = io("https://api.golive365.top/pty");
+            const socket = io(`https://api.golive365.top/pty?ipv4=${ipv4}&service=myservice`);
             socketRef.current = socket;
 
             terminal.onData((data: string) => {

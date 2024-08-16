@@ -1,28 +1,18 @@
+import axiosInstance from '@/apiClient/axiosConfig';
+import { useQuery } from '@tanstack/react-query';
 import { Table } from 'antd';
 import Title from 'antd/es/typography/Title';
-import React from 'react';
+import React, { useEffect } from 'react';
 interface LiveStreamProps {
-
+    slug: string;
 }
 
-const LiveStream: React.FC<LiveStreamProps> = () => {
-    const dataSource = [
-        {
-            key: '1',
-            email: 'quanqqq11@gmail.com',
-            name: 'qc1',
-            platform: 'Youtube',
-            source: 'driver.google.com'
-        },
-         {
-            key: '1',
-            email: 'c2202lm.pmquan@aptech.vn',
-            name: 'qc2',
-            platform: 'Youtube',
-            source: 'driver.google.com'
-        },
-    ];
+const LiveStream: React.FC<LiveStreamProps> = ({ slug }) => {
 
+    const { data, isFetching } = useQuery({
+        queryKey: ['livestream'],
+        queryFn: () => axiosInstance.get(`/activity-stream/find-by-slug?language=en&slug=${slug}`),
+    })
     const columns = [
         {
             title: 'No.',
@@ -35,27 +25,36 @@ const LiveStream: React.FC<LiveStreamProps> = () => {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
+            render: (text: string, record: any, index: number) => {
+                return record?.user?.email
+            }
         },
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            render: (text: string, record: any, index: number) => {
+                return record?.user?.name
+            }
+
         },
         {
             title: 'Platform',
             dataIndex: 'platform',
             key: 'platform',
+
         },
         {
-            title: 'Source',
-            dataIndex: 'source',
-            key: 'source',
+            title: 'Key',
+            dataIndex: 'key',
+            key: 'key',
+            
         },
     ];
 
     return <>
         <Title level={5} className="text-center border-b">Live stream</Title>
-        <Table dataSource={dataSource} columns={columns} className="border rounded" />
+        <Table dataSource={data?.data} loading={isFetching} columns={columns} className="border rounded" />
 
     </>
 }

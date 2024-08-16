@@ -1,7 +1,8 @@
 import axiosInstance from '@/apiClient/axiosConfig';
 import { AuthApi } from '@/apiClient/providers/auth';
+import { PlusCircleFilled } from '@ant-design/icons';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Button, Form, FormProps, Input, Modal, Select } from 'antd';
+import { Button, Form, FormProps, Input, Modal, Select, message } from 'antd';
 import React, { useState } from 'react';
 
 
@@ -33,15 +34,6 @@ interface CreateStreamByAdminProps {
 const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
 
 
-    const { isPending, mutate } = useMutation({
-        mutationKey: ["/register"],
-        mutationFn: (value) =>
-            axiosInstance.post('CreateNewStream', value),
-        onSuccess: (data) => {
-        },
-        onError: (err) => {
-        },
-    });
     const platformData = usePlatformData();
     const vpsdata = useVpsData()
     const userData = useUserData()
@@ -66,11 +58,23 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
         userId?: string;
         link?: string;
     };
+    const createStream = useMutation({
+        mutationKey: ['createStream'],
+        mutationFn: (data: any) => axiosInstance.post('/autolive-control/create-new-stream', data),
+        onSuccess: (res) => {
+            message.success("OK");
+            setIsModalOpen(false);
+        },
+        onError: (error) => {
+            message.error("No ok!")
+        }
+    })
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
         values.port = 3002;
         values.ipv4 = ipv4;
         values.link = rmtp + '/' + values.key;
+        createStream.mutate(values);
         console.log('Success:', values);
     };
 
@@ -80,7 +84,7 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
 
 
     return <>
-        <Button type="primary" onClick={showModal}>Create new stream</Button>
+        <Button type="primary" onClick={showModal} icon={<PlusCircleFilled />}></Button>
         <Modal title="Create" footer={[]} open={isModalOpen} onCancel={handleCancel}>
 
             <Form
@@ -113,7 +117,7 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
                     name="userId"
                     rules={[{ required: true }]}
                 >
-                    <Select options={userData?.data?.data.map((user: any) => ({ label: user.email, value: user.id }))} />
+                    <Select options={userData?.data?.data?.map((user: any) => ({ label: user.email, value: user.id }))} />
                 </Form.Item>
                 <Form.Item<FieldType>
                     label="Vps"
@@ -121,7 +125,7 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
                     rules={[{ required: true }]}
                 >
 
-                    <Select options={vpsdata?.data?.data?.data.map((vps: any) => ({ label: vps.hostname, value: vps.vpsProvider }))}
+                    <Select options={vpsdata?.data?.data?.data?.map((vps: any) => ({ label: vps.hostname, value: vps.vpsProvider }))}
                         onChange={(value) => {
                             vpsdata?.data?.data?.data?.forEach((vps: any) => {
                                 if (vps.vpsProvider == value) setIpv4(vps.ipv4);
@@ -136,7 +140,7 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
                     rules={[{ required: true }]}
 
                 >
-                    <Select options={platformData?.data?.data?.platforms.map((platform: any) => ({
+                    <Select options={platformData?.data?.data?.platforms?.map((platform: any) => ({
                         label: platform.name,
                         value: platform.id,
                         rmtp: platform.rmtp
@@ -148,7 +152,7 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
                         }} />
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary" htmlType="submit" loading={createStream.isPending}>
                         Create
                     </Button>
                 </Form.Item>
