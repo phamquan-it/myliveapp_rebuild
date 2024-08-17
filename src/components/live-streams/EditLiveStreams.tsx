@@ -1,7 +1,8 @@
-import { PlusCircleFilled } from '@ant-design/icons';
+import { DeleteFilled, EditFilled, PlusCircleFilled } from '@ant-design/icons';
 import { Button, Modal, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React, { useState } from 'react';
+import { AddCron } from '../autolive/AddCron';
 interface EditLiveStreamsProps {
 
 }
@@ -49,6 +50,16 @@ const EditLiveStreams: React.FC<EditLiveStreamsProps> = () => {
             dataIndex: 'rest_time',
             key: 'rest_time',
         },
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            key: 'action',
+            render: ()=>(
+                <>
+                    <Button type="primary" icon={<DeleteFilled/>} danger size="small"></Button>
+                </>
+            )
+        }
     ];
 
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -56,12 +67,13 @@ const EditLiveStreams: React.FC<EditLiveStreamsProps> = () => {
         setIsModalOpen(false);
     }
     return <>
-        <Button type="primary" icon={<PlusCircleFilled />} onClick={()=>{
+        <Button type="primary" icon={<EditFilled />} onClick={()=>{
             setIsModalOpen(true);
         }}></Button>
-        <Modal title="Edit" open={isModalOpen} onCancel={handleCancel}>
-            <Title level={2}>Cron</Title>
+        <Modal title="Cron" footer={[]} width={1000} open={isModalOpen} onCancel={handleCancel}>
+            <AddCron id={0}/>
             <Table dataSource={dataSource} columns={columns} />
+
         </Modal>
     </>
 

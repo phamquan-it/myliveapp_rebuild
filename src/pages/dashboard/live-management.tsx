@@ -1,10 +1,17 @@
 import { ActivityStream } from '@/@type/api_object';
 import axiosInstance from '@/apiClient/axiosConfig';
+import PlatformSelect from '@/components/admin/PlatformSelect';
+import PlatformSelectForFilter from '@/components/admin/PlatformSelectForFilter';
+import DeleteStream from '@/components/autolive/DeleteStream';
 import ViewAutoliveDetail from '@/components/autolive/ViewAutoliveDetail';
+import UserSelect from '@/components/general/user-select';
+import VpsSelect from '@/components/general/vps-select';
+import SelectDateForFilter from '@/components/live-streams/SelectDateForFilter';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Input, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { ColumnType } from 'antd/lib/table';
+import dayjs from 'dayjs';
 import { GetStaticPropsContext } from 'next';
 import { StringifiableRecord } from 'query-string';
 import React from 'react';
@@ -18,8 +25,6 @@ const Page = () => {
         queryFn: () => axiosInstance.get("/activity-stream?language=en")
 
     })
-
-    console.log(data)
 
     const columns: ColumnType<ActivityStream>[] = [
         {
@@ -51,17 +56,26 @@ const Page = () => {
             title: 'createAt',
             dataIndex: 'createAt',
             key: 'createAt',
+            render: (text: string) => dayjs(text).format('YYYY/MM/DD HH:mm:ss')
         },
         {
             title: 'UpdateAt',
             dataIndex: 'updateAt',
             key: 'updateAt',
+            render: (text: string) => dayjs(text).format('YYYY/MM/DD HH:mm:ss')
         },
         {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
-            render: (text, record, index) => <ViewAutoliveDetail activityStream={record} />
+            render: (text, record, index) => (
+                <>
+                    <div className="flex gap-1">
+                        <ViewAutoliveDetail activityStream={record} />
+                        <DeleteStream id={0} />
+                    </div>
+                </>
+            )
         }
 
     ];
@@ -69,11 +83,15 @@ const Page = () => {
 
 
     return <>
-        <Title level={2} className="text-center">Live management</Title>
-        <div className="flex py-3">
+        <Title level={2} className="text-center">LiveStreams</Title>
+        <div className="flex py-3 gap-2">
             <div>
-                <Input placeholder="Search..."/>
+                <Input placeholder="Search..." />
             </div>
+            <PlatformSelectForFilter />
+            <VpsSelect />
+            <UserSelect />
+            <SelectDateForFilter />
         </div>
         <Table dataSource={data?.data?.data} loading={isFetching} columns={columns} />;
     </>

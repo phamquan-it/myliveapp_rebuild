@@ -1,4 +1,5 @@
 import axiosClient from "@/apiClient/axiosClient";
+import axiosInstance from "@/apiClient/axiosConfig";
 import { useQuery } from "@tanstack/react-query";
 import { Form, Image, Select } from "antd";
 import { SelectProps } from "antd/lib";
@@ -26,7 +27,7 @@ const PlatformSelect: React.FC<PlatformSelectProps> = ({
   const router = useRouter();
   const { data } = useQuery({
     queryKey: ["platform"],
-    queryFn: () => axiosClient.get(`/platform/list?language=${router.locale}`),
+    queryFn: () => axiosInstance.get(`/platform/list?language=${router.locale}`),
   });
   const t = useTranslations("DashboardMenu");
 
@@ -47,7 +48,7 @@ const PlatformSelect: React.FC<PlatformSelectProps> = ({
         showSearch
         value={value}
         placeholder="Select platform"
-        options={data?.data?.data.map((item: any) => ({
+        options={data?.data?.data?.map((item: any) => ({
           ...item,
           value: item.id,
           label: (
