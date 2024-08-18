@@ -30,7 +30,7 @@ const DeleteStream: React.FC<DeleteStreamProps> = () => {
     return <>
         <Button type="primary" danger icon={<DeleteFilled />} onClick={showModal}></Button>
         <Modal title="Delete" open={isModalOpen} onCancel={handleCancel}>
-              <p>Delete this stream, you can't restore?</p>
+              <p>Delete this stream, you cant restore?</p>
         </Modal>
 
     </>;
