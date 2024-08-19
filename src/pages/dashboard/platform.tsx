@@ -1,8 +1,10 @@
 import axiosInstance from '@/apiClient/axiosConfig';
+import TableAction from '@/components/admin/TableAction';
 import CreatePlatform from '@/components/general/create-platform';
 import { useQuery } from '@tanstack/react-query';
-import { Input, Table } from 'antd';
+import { Button, Input, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
+import dayjs from 'dayjs';
 import { GetStaticPropsContext } from 'next';
 import router from 'next/router';
 import React from 'react';
@@ -44,11 +46,13 @@ const Page = () => {
             title: 'CreateAt',
             dataIndex: 'createAt',
             key: 'createAt',
+            render: (text: string)=> dayjs(text).format('YYYY/MM/DD HH:mm:ss')
         },
         {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
+            render: (text: string, record: any, index: number)=>(<TableAction openState={false} editForm={<Button/>}/>)
         },
 
     ];

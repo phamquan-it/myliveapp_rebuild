@@ -46,7 +46,10 @@ const Page = () => {
     );
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [sync, setSync] = useState(false)
-    const { data, isFetching, isError } = useQuery({ queryKey: ['queryKey', isModalOpen], queryFn: () => axios.get("https://api.webdock.io/v1/servers", webdockConfig) });
+    const { data, isFetching, isError } = useQuery({
+        queryKey: ['queryKey', isModalOpen],
+        queryFn: () => axios.get("https://api.webdock.io/v1/servers", webdockConfig)
+    });
 
 
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -124,7 +127,7 @@ const Page = () => {
             width: 190,
             dataIndex: ('slug'),
             render: (text: any, record: any) => (<div className="grid grid-cols-4">
-                <VpsDetail slug={record} closeModal={()=>{}}/>
+                <VpsDetail slug={record} closeModal={() => { }} />
                 <Button type="default" disabled={record.status != "running"} icon={<>&gt;_</>} onClick={() => {
                     setSSHInfo({
                         ipv4OrHost: record.ipv4,

@@ -30,6 +30,11 @@ const SelectProfile:React.FC<SelectProfileProps> = ({profiles, onSelectProfileCh
       title: 'Memory',
       dataIndex: 'ram',
       render: (text:any, record)=>(<>{(text / 1024).toFixed(2)} GB</>)
+    },
+    {
+        title:"Price",
+        dataIndex:'price',
+        render: (text: string, record: any)=> formatCurrency(record.price.amount)
     }
   ];
   
@@ -91,50 +96,7 @@ const SelectProfile:React.FC<SelectProfileProps> = ({profiles, onSelectProfileCh
               onSelectProfileChange(record.slug)
             }
           })}
-          expandable={{
-            expandedRowRender: (record:any) => (
-              <div className='grid grid-cols-4 '>
-
-                <Statistic
-                  title="CPU"
-                  value={`${record.cpu.cores} Core, ${record.cpu.threads} threads`}
-                  precision={1}
-                  valueStyle={{ color: '#4096ff', fontSize: 18 }}
-                  prefix={<TbCpu />}
-                  suffix=""
-                />
-                <Statistic
-                  title="Price"
-                  value={formatCurrency(record.price.amount)}
-                  precision={1}
-                  valueStyle={{ color: '#4096ff', fontSize: 18 }}
-                  prefix={<DollarCircleFilled />}
-                  suffix=""
-                />
-                <Statistic
-                  title="RAM"
-                  value={record.ram/1024}
-                  precision={1}
-                  valueStyle={{ color: '#4096ff', fontSize: 18 }}
-                  prefix={<TbSandbox />}
-                  suffix="GB"
-                />
-                <Statistic
-                  title="Disk"
-                  value={record.disk/1024}
-                  precision={1}
-                  valueStyle={{ color: '#4096ff', fontSize: 18 }}
-                  prefix={<HddOutlined />}
-                  suffix="GB"
-                />
-              </div>
-            ),
-            rowExpandable: (record) => record.id == selectedRowKey[0],
-            columnWidth: 60,
-            expandedRowKeys: [selectedRowKey[0]],
-            columnTitle: "ID",
-            expandIcon: customExpandIcon
-          }}
+       
         />
       </Space>
     </div>

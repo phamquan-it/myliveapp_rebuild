@@ -43,7 +43,7 @@ const TableAction: React.FC<TableActionProps> = ({
   const t = useTranslations("MyLanguage");
   return (
     <div style={{ display: "flex", justifyContent: "space-between" }}>
-      <Modal
+      <Modal destroyOnClose={true}
         title={`${activeButton}`}
         open={isModalVisible}
         onCancel={handleCancel}

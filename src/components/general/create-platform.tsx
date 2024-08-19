@@ -1,4 +1,4 @@
-import { UploadOutlined } from '@ant-design/icons';
+import { PlusCircleFilled, UploadOutlined } from '@ant-design/icons';
 import { Button, Form, FormProps, Input, Modal, Upload, UploadProps, message } from 'antd';
 import React, { useState } from 'react';
 type FieldType = {
@@ -46,7 +46,7 @@ const CreatePlatform = () => {
         setIsModalOpen(true);
     }
     return <>
-        <Button type="primary" onClick={showModal}>Create</Button>
+        <Button type="primary" onClick={showModal} icon={<PlusCircleFilled/>} iconPosition="end">Create</Button>
         <Modal title="Create" open={isModalOpen} onCancel={handleCancel} footer={[]}>
             <Form
                 layout="vertical"

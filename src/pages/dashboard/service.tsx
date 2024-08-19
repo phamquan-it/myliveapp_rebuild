@@ -249,7 +249,7 @@ export default function Index() {
             results.push({ service: { name: item.name, icon: item.icon } });
             item.serviceCategories.map((service: any) => {
 
-                results.push({ service: service});
+                results.push({ service: service });
             })
             setSeriveData({ data: results, total });
         });
@@ -382,33 +382,6 @@ export default function Index() {
                                         key: item.name,
                                         value: item.id,
                                     }))}
-                                />
-                                <Select
-                                    showSearch
-                                    defaultValue={provider}
-                                    style={{ width: 170 }}
-                                    filterOption={filterOption}
-                                    placeholder={p("selectprovider")}
-                                    onChange={handleProvider}
-                                    allowClear
-                                    options={[
-                                        { value: 1, label: "Gainsmm", key: "Gainsmm" },
-                                        { value: 2, label: "Viralsmm", key: "Gainsmm" },
-                                    ]}
-                                />
-                                <Select
-                                    showSearch
-                                    style={{ width: 170 }}
-                                    placeholder={p("select status")}
-                                    onChange={handleStatus}
-                                    defaultValue={status}
-                                    filterOption={filterOptionByLabel}
-                                    allowClear
-                                    options={[
-                                        { value: 1, label: "Active" },
-                                        { value: 2, label: "Blocked" },
-                                        { value: 3, label: "Removed" },
-                                    ]}
                                 />
                             </div>
                         </div>

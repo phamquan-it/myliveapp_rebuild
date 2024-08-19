@@ -39,6 +39,8 @@ import axiosClient from "@/apiClient/axiosClient";
 import axiosInstance from "@/apiClient/axiosConfig";
 import CreateAutolive from "../autolive/CreateAutolive";
 import CreateStreamByAdmin from "../live-streams/CreateStreamByAdmin";
+import Link from "next/link";
+import { DashboardRouter } from "@/enums/router/dashboard";
 
 const { Header, Sider, Content } = Layout;
 
@@ -58,69 +60,69 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
 
     const items_menu = [
         {
-            key: "/dashboard",
+            key: DashboardRouter.HOME,
             icon: <HomeFilled className="!text-lg" />,
-            label: t("home"),
+            label: <Link href={DashboardRouter.HOME}>{t('home')}</Link>,
             role: "admin",
         },
 
         {
-            key: "/dashboard/service",
+            key: DashboardRouter.SERVICE,
             icon: <FaListUl />,
-            label: t("services"),
+            label: <Link href={DashboardRouter.SERVICE}>{t('services')}</Link>,
             role: "user",
         },
         {
-            key: "/dashboard/category",
+            key: DashboardRouter.CATEGORY,
             icon: <TbCategoryFilled />,
-            label: t("category"),
+            label: <Link href={DashboardRouter.CATEGORY}>{t('category')}</Link>,
             role: "admin",
         },
         {
-            key: "/dashboard/refund",
+            key: DashboardRouter.REFUND,
             icon: <FundOutlined />,
             role: "admin",
-            label: t("refund"),
+            label: <Link href={DashboardRouter.REFUND}>{t('refund')}</Link>,
         },
         {
-            key: "/dashboard/cashflow",
+            key: DashboardRouter.CASHFLOW,
             icon: <FaMoneyBill />,
-            label: t("cashflow"),
+            label: <Link href={DashboardRouter.CASHFLOW}>{t('cashflow')}</Link>,
             role: "admin",
         },
         {
-            key: "/dashboard/myautolive",
+            key: DashboardRouter.MYAUTOLIVE,
             icon: <SignalFilled />,
-            label: t('myautolive'),
+            label: <Link href={DashboardRouter.MYAUTOLIVE}>{t('myautolive')}</Link>,
             role: "user",
         },
         {
-            key: "/dashboard/payment/history",
+            key: DashboardRouter.PAYMENT_HISTORY,
             icon: <HistoryOutlined />,
             role: "admin",
-            label: t("paymenthistory"),
+            label: <Link href={DashboardRouter.PAYMENT_HISTORY}>{t('paymenthistory')}</Link>,
         },
         {
-            key: "/dashboard/platform",
+            key: DashboardRouter.PLATFORM,
             icon: <WindowsFilled />,
             role: "admin",
-            label: t("platform"),
+            label: <Link href={DashboardRouter.PLATFORM}>{t('platform')}</Link>,
         },
         {
-            key: "/dashboard/crond",
+            key: DashboardRouter.CRON,
             icon: <CalendarFilled />,
-            label: t("cron"),
+            label: <Link href={DashboardRouter.CRON}>{t('cron')}</Link>,
         },
         {
-            key: "/dashboard/order",
+            key: DashboardRouter.ORDER,
             icon: <FaBuyNLarge />,
-            label: t("order"),
+            label: <Link href={DashboardRouter.ORDER}>{t('order')}</Link>,
             role: "user",
         },
         {
-            key: "/dashboard/user",
+            key: DashboardRouter.USER,
             icon: <TeamOutlined />,
-            label: t("user"),
+            label: <Link href={DashboardRouter.USER}>{t('user')}</Link>,
             role: "user",
         },
 
@@ -132,34 +134,34 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             role: "admin",
             children: [
                  {
-                    key: "/dashboard/live-management",
+                    key: DashboardRouter.LIVESTREAM,
                     icon: <FaListUl />,
-                    label: "Livestreams",
+                    label: <Link href={DashboardRouter.LIVESTREAM}>{('Live streams')}</Link>,
                     role: "admin",
                 },
                
                 {
-                    key: "/dashboard/vps",
+                    key: DashboardRouter.VPS,
                     icon: <CloudServerOutlined />,
-                    label: "Vps",
+                    label: <Link href={DashboardRouter.VPS}>{('Vps')}</Link>,
                     role: "admin",
                 },
                 {
-                    key: "/dashboard/publickey",
+                    key: DashboardRouter.PUBLICKEY,
                     icon: <KeyOutlined />,
-                    label: "Public key",
+                    label: <Link href={DashboardRouter.PUBLICKEY}>{('Public key')}</Link>,
                     role: "admin",
                 },
                 {
-                    key: "/dashboard/account-script",
+                    key: DashboardRouter.ACCOUNT_SCRIPT,
                     icon: <JavaScriptOutlined />,
-                    label: "Account script",
+                    label: <Link href={DashboardRouter.ACCOUNT_SCRIPT}>{('Account script')}</Link>,
                     role: "admin",
                 },
                 {
-                    key: "/dashboard/script_library",
+                    key: DashboardRouter.SCRIPT_LIBRARY,
                     icon: <>&gt;_&nbsp; &nbsp;</>,
-                    label: " Script library",
+                    label: <Link href={DashboardRouter.SCRIPT_LIBRARY}>{('Script library')}</Link>,
                     role: "admin",
                 },
 
@@ -167,17 +169,17 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
 
         },
         {
-            key: "/dashboard/user/info",
+            key: DashboardRouter.USER_PROFILE,
             icon: <UserOutlined />,
-            label: t("userprofile"),
+            label: <Link href={DashboardRouter.USER_PROFILE}>{t('userprofile')}</Link>,
             role: "user"
         },
 
         {
-            key: "/dashboard/settings",
+            key: DashboardRouter.SETTING,
             icon: <SettingOutlined />,
             role: "admin",
-            label: t("Settings"),
+            label: <Link href={DashboardRouter.SETTING}>{t('Settings')}</Link>,
         },
 
     ];
@@ -284,11 +286,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                             className="!text-sm !font-medium"
                             theme="light"
                             mode="inline"
-
                             defaultSelectedKeys={[router.pathname]}
-                            onClick={(e) => {
-                                router.push(e.key)
-                            }}
                             items={items_menu.filter((item: any) => {
                                 if (role != "admin") return role == item.role;
                                 else return true;

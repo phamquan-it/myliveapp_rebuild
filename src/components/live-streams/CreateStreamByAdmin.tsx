@@ -6,16 +6,18 @@ import { Button, Form, FormProps, Input, Modal, Select, message } from 'antd';
 import React, { useState } from 'react';
 
 
-export const usePlatformData = () => {
+export const usePlatformData = (filter:any = {}) => {
     return useQuery({
         queryKey: ['platform'],
         queryFn: () => axiosInstance.get('/platform/list?language=en')
     });
 };
-export const useUserData = () => {
+export const useUserData = (filter: any) => {
     return useQuery({
-        queryKey: ['user'],
-        queryFn: () => axiosInstance.get('/users?language=en')
+        queryKey: ['user', filter],
+        queryFn: () => axiosInstance.get('/users?language=en', {
+            params:filter
+        })
     });
 };
 
@@ -34,9 +36,9 @@ interface CreateStreamByAdminProps {
 const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
 
 
-    const platformData = usePlatformData();
+    const platformData = usePlatformData({ keyword: '' });
+    console.log(platformData)
     const vpsdata = useVpsData()
-    const userData = useUserData()
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showModal = () => {
@@ -82,6 +84,7 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
         console.log('Failed:', errorInfo);
     };
 
+    const userData = useUserData({})
 
     return <>
         <Button type="primary" onClick={showModal} icon={<PlusCircleFilled />}></Button>
@@ -117,7 +120,7 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
                     name="userId"
                     rules={[{ required: true }]}
                 >
-                    <Select options={userData?.data?.data?.map((user: any) => ({ label: user.email, value: user.id }))} />
+                    <Select options={userData?.data?.data?.data?.map((user: any) => ({ label: user.email, value: user.id }))} />
                 </Form.Item>
                 <Form.Item<FieldType>
                     label="Vps"

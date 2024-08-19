@@ -46,9 +46,7 @@ const { Option } = Select;
 const Page = () => {
     const router = useRouter();
     const dispatch = useDispatch();
-    const { platforms, isPending, isSuccess } = useSelector(
-        (state: RootState) => state.platformSlice
-    );
+    const platforms:any[] = [] 
     useEffect(() => {
         dispatch(fetchPlatform());
     }, [dispatch]);
