@@ -7,22 +7,32 @@ import ViewAutoliveDetail from '@/components/autolive/ViewAutoliveDetail';
 import UserSelect from '@/components/general/user-select';
 import VpsSelect from '@/components/general/vps-select';
 import SelectDateForFilter from '@/components/live-streams/SelectDateForFilter';
+import getObjecFormUrlParameters from '@/hooks/getObjectFormParameter';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Input, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { ColumnType } from 'antd/lib/table';
 import dayjs from 'dayjs';
-import { GetStaticPropsContext } from 'next';
+import { debounce } from 'lodash';
+import { GetStaticPropsContext, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { StringifiableRecord } from 'query-string';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
+interface PageProps {
+    modal?: any;
+}
 
-const Page = () => {
+const Page: NextPage<PageProps> = ({ modal }) => {
 
+    const [openModal, setOpenModal, syncObjectToUrl, getObjectFromUrl] = modal;
 
+    const router = useRouter()
     const { data, isFetching } = useQuery({
-        queryKey: ['ActivityStream'],
-        queryFn: () => axiosInstance.get("/activity-stream?language=en")
+        queryKey: ['ActivityStream', router.asPath],
+        queryFn: () => axiosInstance.get("/activity-stream?language=en", {
+            params: getObjectFromUrl
+        })
 
     })
 
@@ -81,14 +91,25 @@ const Page = () => {
     ];
 
 
-
-    return <>
+    const [keyword, setKeyword] = useState(getObjectFromUrl.keyword)
+    const handlekeyword = debounce((e:any)=>{
+        setKeyword(e.target.value);
+         syncObjectToUrl({
+             ...getObjectFromUrl,
+             keyword: e.target.value
+        })
+    }, 300)
+       return <>
         <Title level={2} className="text-center">LiveStreams</Title>
         <div className="flex py-3 gap-2">
             <div>
-                <Input placeholder="Search..." />
+                <Input placeholder="Search..." onChange={handlekeyword} defaultValue={getObjectFromUrl.keyword || ''}/>
             </div>
-            <PlatformSelectForFilter />
+            <PlatformSelectForFilter  onChange={(value)=>{
+                syncObjectToUrl({
+                    ...getObjectFromUrl, platform:value 
+                })
+            }}/>
             <VpsSelect />
             <UserSelect />
             <SelectDateForFilter />

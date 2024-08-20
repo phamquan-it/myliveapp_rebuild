@@ -16,6 +16,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import { useEffect, useState } from "react";
 import PageLayout from "@/components/PageLayout";
+import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 
 config.autoAddCss = false;
 
@@ -31,6 +32,8 @@ export default function App({ Component, pageProps }: AppProps) {
             query: object,
         } );
     }
+
+    const getObjectFromUrl = getObjecFormUrlParameters(router);
     const [pageIndex, setPageIndex] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [keyword, setKeyword] = useState('');
@@ -55,7 +58,7 @@ export default function App({ Component, pageProps }: AppProps) {
                     >
                         <Layout>
                             <NextNProgress color="#29D" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} options={{ showSpinner: false }} />
-                            <Component {...pageProps} modal={[isModalOpen ?? false, setIsModalOpen, syncObjectToUrl]}  />
+                            <Component {...pageProps} modal={[isModalOpen ?? false, setIsModalOpen, syncObjectToUrl, getObjectFromUrl]}  />
                         </Layout>
                     </ConfigProvider>
                 </ReactQueryProvider>

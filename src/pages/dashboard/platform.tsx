@@ -46,13 +46,13 @@ const Page = () => {
             title: 'CreateAt',
             dataIndex: 'createAt',
             key: 'createAt',
-            render: (text: string)=> dayjs(text).format('YYYY/MM/DD HH:mm:ss')
+            render: (text: string) => dayjs(text).format('YYYY/MM/DD HH:mm:ss')
         },
         {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
-            render: (text: string, record: any, index: number)=>(<TableAction openState={false} editForm={<Button/>}/>)
+            render: (text: string, record: any, index: number) => (<TableAction openState={false} editForm={<Button />} />)
         },
 
     ];

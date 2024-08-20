@@ -6,6 +6,7 @@ import { SelectProps } from "antd/lib";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
 import React from "react";
+import { usePlatformData } from "../live-streams/CreateStreamByAdmin";
 
 interface PlatformSelectProps {
   props?: SelectProps<any>;
@@ -25,12 +26,9 @@ const PlatformSelectForFilter: React.FC<PlatformSelectProps> = ({
   value,
 }) => {
   const router = useRouter();
-  const { data } = useQuery({
-    queryKey: ["platform"],
-    queryFn: () => axiosClient.get(`/platform/list?language=${router.locale}`),
-  });
+  const { data } = usePlatformData()
   const p = useTranslations("Placeholder");
-  const platforms: any = data?.data?.data?.map((item: any) => ({
+  const platforms: any = data?.data?.platforms?.map((item: any) => ({
     ...item,
     value: item.id,
     key: item.name,

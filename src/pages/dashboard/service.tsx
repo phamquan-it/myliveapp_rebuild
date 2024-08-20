@@ -264,7 +264,7 @@ export default function Index() {
     const categories = useQuery({
         queryKey: ["category", platformId],
         queryFn: () =>
-            axiosClient.get("/categories/list?language=en", {
+            axiosInstance.get("/categories/list?language=en", {
                 params: {
                     platformId: platformId,
                 },
@@ -366,7 +366,7 @@ export default function Index() {
                                     placeholder={p("selectcategory")}
                                     onChange={hanleCategory}
                                     allowClear
-                                    options={categories.data?.data?.data?.map((item: any) => ({
+                                    options={categories.data?.data?.categories?.map((item: any) => ({
                                         ...item,
                                         label: (
                                             <div className="flex items-center gap-1">

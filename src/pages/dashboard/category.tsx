@@ -42,11 +42,12 @@ import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 import filterOption from "@/hooks/filterOption";
 import PlatformSelect from "@/components/admin/PlatformSelect";
 import axiosInstance from "@/apiClient/axiosConfig";
+import { usePlatformData } from "@/components/live-streams/CreateStreamByAdmin";
 const { Option } = Select;
 const Page = () => {
     const router = useRouter();
     const dispatch = useDispatch();
-    const platforms:any[] = [] 
+    const platforms:any = usePlatformData(); 
     useEffect(() => {
         dispatch(fetchPlatform());
     }, [dispatch]);
@@ -275,7 +276,7 @@ const Page = () => {
                         allowClear
                         showSearch
                         filterOption={filterOption}
-                        options={platforms.map((platform) => ({
+                        options={platforms?.data?.data?.platforms.map((platform: any) => ({
                             label: (
                                 <>
                                     <div className="flex items-center gap-1">
