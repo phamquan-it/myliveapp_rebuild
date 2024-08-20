@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 
 export const usePlatformData = (filter:any = {}) => {
     return useQuery({
-        queryKey: ['platform'],
+        queryKey: ['platform', filter],
         queryFn: () => axiosInstance.get('/platform/list?language=en')
     });
 };
