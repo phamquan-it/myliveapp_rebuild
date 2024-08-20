@@ -61,7 +61,7 @@ export const AddCron: React.FC<AddCronProps> = () => {
 
                 <Form.Item<FieldType>
                     label="Rest time"
-                    name="restime"
+                    name="start_date"
                 >
                     <RangePicker
 

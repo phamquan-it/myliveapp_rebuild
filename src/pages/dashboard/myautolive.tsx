@@ -71,10 +71,10 @@ const Page = () => {
         {
             title: t("action"),
             dataIndex: "action",
-            key: "action",
-            render: ()=> (<>
-                <EditLiveStreams/>
-                          </>)
+            key: "id",
+            render: (id: number, record: any) => (<>
+                <EditLiveStreams activityStreamId={record.id} />
+            </>)
         },
 
     ];

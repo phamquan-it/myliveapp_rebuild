@@ -3,32 +3,23 @@ import { Button, Modal, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React, { useState } from 'react';
 import { AddCron } from '../autolive/AddCron';
+import { useQuery } from '@tanstack/react-query';
+import axiosInstance from '@/apiClient/axiosConfig';
+import dayjs from 'dayjs';
+import DeleteCron from '../autolive/DeleteCron';
 interface EditLiveStreamsProps {
-
+    activityStreamId: number
 }
 
-const EditLiveStreams: React.FC<EditLiveStreamsProps> = () => {
+const EditLiveStreams: React.FC<EditLiveStreamsProps> = ({ activityStreamId }) => {
 
-    const dataSource = [
-        {
-            key: '1',
-            name: 'Mike',
-            age: 32,
-            address: '10 Downing Street',
-        },
-        {
-            key: '2',
-            name: 'John',
-            age: 42,
-            address: '10 Downing Street',
-        },
-    ];
 
     const columns = [
         {
             title: 'No.',
             dataIndex: 'key',
             key: 'key',
+            render:(text: string, record:any, index: number)=> index+1
         },
         {
             title: 'Name',
@@ -37,13 +28,15 @@ const EditLiveStreams: React.FC<EditLiveStreamsProps> = () => {
         },
         {
             title: 'Start date',
-            dataIndex: 'start_date',
-            key: 'start_date',
+            dataIndex: 'start_at',
+            key: 'start_at',
+            render: (text:string)=> dayjs(text).format('YYYY/MM/DD HH:mm:ss')
         },
         {
             title: 'End date',
-            dataIndex: 'end_date',
+            dataIndex: 'end_at',
             key: 'end_date',
+            render: (text:string)=> dayjs(text).format('YYYY/MM/DD HH:mm:ss')
         },
         {
             title: 'Rest time',
@@ -54,25 +47,37 @@ const EditLiveStreams: React.FC<EditLiveStreamsProps> = () => {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
-            render: ()=>(
+            render: (text: string, record: any) => (
                 <>
-                    <Button type="primary" icon={<DeleteFilled/>} danger size="small"></Button>
+                    <DeleteCron activityStreamId={record.id}/>
                 </>
             )
         }
     ];
+
+    const { data, isFetching } = useQuery({
+        queryKey: ['cron', activityStreamId],
+        queryFn: () => axiosInstance.get('/cron-stream/get-cron-from-stream-id',
+            {
+                params: {
+                    language: 'en',
+                    stream_id: activityStreamId
+                }
+            }
+        )
+    });
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const handleCancel = () => {
         setIsModalOpen(false);
     }
     return <>
-        <Button type="primary" icon={<EditFilled />} onClick={()=>{
+        <Button type="primary" icon={<EditFilled />} onClick={() => {
             setIsModalOpen(true);
         }}></Button>
-        <Modal title="Cron" footer={[]} width={1000} open={isModalOpen} onCancel={handleCancel}>
-            <AddCron id={0}/>
-            <Table dataSource={dataSource} columns={columns} />
+        <Modal title="Cron" footer={[]} width={1000} open={isModalOpen} onCancel={handleCancel} destroyOnClose={true}>
+            <AddCron id={0} />
+            <Table dataSource={data?.data} loading={isFetching} columns={columns} />
 
         </Modal>
     </>
