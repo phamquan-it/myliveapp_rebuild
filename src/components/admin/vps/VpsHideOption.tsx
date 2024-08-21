@@ -10,13 +10,14 @@ import { TbSquare, TbTriangle, TbTriangleFilled } from "react-icons/tb";
 import { webdockConfig } from "../../../../WEBDOCK_PROVIDER/APIRequest/config";
 import axiosInstance from "@/apiClient/axiosConfig";
 import StopVps from "@/components/vps/action/StopVps";
+import StopAllLive from "@/components/vps/action/StopAllLive";
+import RestartVps from "@/components/vps/action/RestartVps";
+import DeleteVps from "@/components/vps/action/DeleteVps";
 interface VpsHideOptionProps {
     vps: any
 }
 const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
     const [vpsState, setVpsState] = useState(vps.status)
-
-
 
     //get vps info 
     const getVpsInfo = useMutation({
@@ -109,18 +110,18 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
         {
             icon: <SignalFilled style={{
                 color: "red"
-            }} />, label: 'Stop all live', key: 'stopAllStream'
+            }} />, label: <StopAllLive stopfunction={stopAllLive.mutate} />, key: 'stopAllStream'
         },
         {
             icon: <SyncOutlined style={{
                 color: "#1677ff"
-            }} />, label: 'Restart', key: 'restart'
+            }} />, label: <RestartVps restartfunction={restartVps.mutate} />, key: 'restart'
         },
         {
             //disabled: true,
             icon: <DeleteFilled style={{
                 color: "red"
-            }} />, label: 'Delete', key: 'delete'
+                }} />, label: <DeleteVps deletefunction={deleteVps.mutate} slug={vps.slug}/>, key: 'delete'
         }, // 菜单项务必填写 key
     ];
     // handle dropdown
@@ -136,25 +137,6 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
                 startVps.mutate()
                 // Add your logic for 'Start' here
                 break;
-            case 'stopAllStream':
-                console.log('Stop all live clicked');
-                stopAllLive.mutate();
-                // Add your logic for 'Stop all live' here
-                break;
-            case 'restart':
-                console.log('Stop all live clicked');
-                restartVps.mutate()
-                // Add your logic for 'Stop all live' here
-                break;
-            case 'delete':
-                console.log('Delete clicked');
-
-                if (vps.slug == "sysliveserve" || vps.slug == 't8') return;
-                console.log(' no ok');
-
-                deleteVps.mutate()
-                // Add your logic for 'delete vps' here
-                break;
             default:
                 break;
         }
@@ -164,7 +146,9 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
 
             <Dropdown trigger={['click']} menu={{ items, onClick: handleMenuClick }}>
                 <Tooltip title={vps.status}>
-                    <Button type="primary" danger={(vpsState?.includes("stop"))}
+                    <Button type="primary" danger={(vpsState?.includes("stop"))} onClick={() => {
+                        message.success(vps.slug)
+                    }}
                         loading={vpsState == "stopping"
                             || vpsState == "starting"
                             || vps.status == 'provisioning'}

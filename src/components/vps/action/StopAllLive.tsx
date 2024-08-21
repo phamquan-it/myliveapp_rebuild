@@ -1,10 +1,10 @@
 import { Button, Modal } from 'antd';
 import React, { useState } from 'react';
-interface StopVpsProps{
+interface StopAllLiveProps{
     stopfunction: any 
 }
 
-const StopVps:React.FC<StopVpsProps> = ({stopfunction}) => {
+const StopAllLive:React.FC<StopAllLiveProps> = ({stopfunction}) => {
     const [isModalOpen, setIsModalOpen] = useState( false )
     const handleCancel = ()=> {
         setIsModalOpen(false)
@@ -15,14 +15,14 @@ const StopVps:React.FC<StopVpsProps> = ({stopfunction}) => {
         setIsModalOpen(false);
     }
     return <>
-        <Modal title="Stop vps" okButtonProps={{
+        <Modal title="Stop all live" okButtonProps={{
             style:{
                 backgroundColor: 'red'
             }
             }} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-            <p>Are you sure?</p>
+            <p>Stop all live?</p>
         </Modal>
-        <Button size="small" type="link" style={{
+        <Button size='small' type="link" style={{
             margin: 0,
             padding: 0,
             display: "inline",
@@ -31,9 +31,9 @@ const StopVps:React.FC<StopVpsProps> = ({stopfunction}) => {
             color: "black"
             }} onClick={()=>{
             setIsModalOpen(true)
-        }}>Stop vps</Button>
+        }}>Stop all live</Button>
     </>
 
 }
 
-export default StopVps
+export default StopAllLive

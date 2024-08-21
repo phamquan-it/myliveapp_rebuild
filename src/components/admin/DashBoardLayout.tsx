@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import {
+    BellOutlined,
     CalendarFilled,
     CameraFilled,
     CloudServerOutlined,
@@ -133,13 +134,13 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             label: "Vps",
             role: "admin",
             children: [
-                 {
+                {
                     key: DashboardRouter.LIVESTREAM,
                     icon: <FaListUl />,
                     label: <Link href={DashboardRouter.LIVESTREAM}>{('Live streams')}</Link>,
                     role: "admin",
                 },
-               
+
                 {
                     key: DashboardRouter.VPS,
                     icon: <CloudServerOutlined />,
@@ -327,11 +328,12 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                         <div className="w-full flex justify-between pe-10">
                             <span style={{ color: "" }}>LiveLogo</span>
                             <div className="flex items-center gap-2">
-                                <CreateStreamByAdmin/> 
-
+                                <CreateStreamByAdmin />
                                 <LocaleSwitcher />
                             </div>
                         </div>
+
+
                     </div>
                 </Header>
                 <Content
