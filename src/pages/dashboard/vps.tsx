@@ -98,30 +98,23 @@ const Page = () => {
     const columns = [
         {
             title: t('entryno'),
-            dataIndex: "key"
+            dataIndex: "key",
+            width: 35
         },
 
         {
             title: t('name'),
             dataIndex: "name",
+            width: 150
         },
         {
             title: "Slug",
             dataIndex: "slug",
         },
         {
-            title: t('location'),
-            dataIndex: "location",
-        },
-        {
             title: t('ipv4'),
             dataIndex: "ipv4",
         },
-        {
-            title: "ipv6",
-            dataIndex: "ipv6",
-        },
-
         {
             title: t('status'),
             width: 190,
@@ -226,7 +219,7 @@ const Page = () => {
             </div>
 
             <Table
-                className="border rounded-md shadow-md"
+                className="border rounded-md shadow-md overflow-hidden"
                 dataSource={data?.data.map((item: any, index: number) => ({
                     ...item,
                     key: pageIndex * pageSize + (index + 1) - pageSize,
