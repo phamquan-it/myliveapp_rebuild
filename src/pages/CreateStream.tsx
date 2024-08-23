@@ -180,7 +180,6 @@ const App: React.FC = () => {
                                 ))}
                                 <Button type="dashed" onClick={() => {
                                     add()
-                                    scrollToBottom();
                                 }} block>
                                     + Add Stream
                                 </Button>
