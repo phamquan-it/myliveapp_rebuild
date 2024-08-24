@@ -165,8 +165,8 @@ const App: React.FC = () => {
                                     </Card>
                                 ))}
                                 <Form.Item
+                                    label="&nbsp;"
                                     name="btn-submit"
-                                    rules={[{ required: true }]}
                                 >
                                     <Button type="dashed" onClick={() =>{
                                         setScrollToBottomState(!scrollToBottomState)
