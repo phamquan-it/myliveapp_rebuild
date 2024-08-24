@@ -179,3 +179,11 @@ form *:not(h3){
 .custom-tabs .ant-tabs-nav {
   order: 2;
 }
+
+#card-stream .ant-form-item:first-child{
+    margin: 5px 5px !important;
+}
+
+.scrollable-div::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}

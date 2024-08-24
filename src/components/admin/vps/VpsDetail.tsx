@@ -1,6 +1,6 @@
 import { DeleteFilled, DeleteOutlined, EyeFilled } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Card, Checkbox, Form, Input, List, Modal, Table, Tag, Tooltip } from "antd";
+import { Button, Card, Checkbox, Form, Input, List, Modal, Table, Tabs, TabsProps, Tag, Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -73,25 +73,39 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug }) => {
 
 
 
+
+    const items: TabsProps['items'] = [
+        {
+            key: '1',
+            label: 'Vps log',
+            children: <ViewQueuesComponent ipv4={slug.ipv4} />,
+        },
+        {
+            key: '2',
+            label: 'Queues',
+            children: <Table dataSource={data?.data} loading={isFetching} columns={columns} />,
+        },
+    ];
+
+
     return (
         <>
-            <Button type="default" onClick={()=>setIsModalOpen(true)} icon={<EyeFilled/>}></Button>
+            <Button type="default" onClick={() => setIsModalOpen(true)} icon={<EyeFilled />}></Button>
 
-            <Modal destroyOnClose={true} width={1000} title="Vps detail" open={isModalOpen} onCancel={()=> {
+            <Modal destroyOnClose={true} width={1000} title="Vps detail" open={isModalOpen} onCancel={() => {
                 setIsModalOpen(false);
             }}>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-4 gap-2">
                     <div>
                         <Title level={5} className="text-center border-b">Vps info</Title>
-                        <VpsProfile vpsProvider={slug} /> 
+                        <VpsProfile vpsProvider={slug} />
                     </div>
-                    <div>
+                    <div className="col-span-3">
                         <LiveStream slug={slug.slug} />
                     </div>
                 </div>
-                <Title level={4}>Queue</Title>
-                <Table dataSource={data?.data} loading={isFetching} columns={columns} />
-                <ViewQueuesComponent ipv4={slug.ipv4} />
+
+                <Tabs defaultActiveKey="1" items={items} />
             </Modal>
         </>
     );

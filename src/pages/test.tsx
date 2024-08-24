@@ -188,7 +188,6 @@ const Page: NextPage<PageProps> = ({ modal }) => {
                     key: 'create',
                     component: <>
 
-
                         <Form
                             name="basic"
                         >
