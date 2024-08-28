@@ -11,7 +11,7 @@ const VpsProfile: React.FC<VpsProfileProps> = ({vpsProvider}) => {
         queryKey: ['Profile'],
         queryFn: ()=> axiosInstance.get('/vps-provider/get-info-from-profile', {
             params: {
-                languname:"en",
+                language:"en",
                 profile: vpsProvider.profile
             }
         })

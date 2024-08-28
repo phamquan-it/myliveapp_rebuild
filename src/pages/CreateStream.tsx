@@ -23,7 +23,7 @@ const App: React.FC = () => {
         }
     };
     useEffect(() => {
-       scrollToBottom() 
+        scrollToBottom()
     }, [scrollToBottomState])
 
     const [form] = Form.useForm();
@@ -41,12 +41,17 @@ const App: React.FC = () => {
     // Handle form submission
     const onFinish = (values: any) => {
         console.log('Form Values:', values);
+        values.items.map((item:any)=>{
+           console.log(item); 
+        })
+        
     };
 
     const { data } = usePlatformData();
 
     return (
         <>
+            
             <Button type="primary" onClick={() => setIsModalOpen(true)}>Show modal</Button>
             <Modal title="Create stream" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                 <Form
@@ -168,9 +173,9 @@ const App: React.FC = () => {
                                     label="&nbsp;"
                                     name="btn-submit"
                                 >
-                                    <Button type="dashed" onClick={() =>{
+                                    <Button type="dashed" onClick={() => {
                                         setScrollToBottomState(!scrollToBottomState)
-                                        return  add()
+                                        return add()
                                     }} block>
                                         + Add Stream
                                     </Button>

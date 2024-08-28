@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import Title from "antd/es/typography/Title";
 import Link from "next/link";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
+import axiosInstance from "@/apiClient/axiosConfig";
 const { Option } = Select;
 
 const Page = () => {
@@ -37,6 +38,7 @@ const Page = () => {
       key: "key",
       width: 80,
       align: "center",
+
     },
     {
       title: "ID",
@@ -51,7 +53,7 @@ const Page = () => {
       render: (text: string, record: any) => {
         console.log(record.order);
 
-        return record?.order?.user?.email;
+        return record?.user_refund?.email;
       },
       ellipsis: true,
     },
@@ -152,7 +154,7 @@ const Page = () => {
   const { data, isFetching, isError } = useQuery({
     queryKey: ["orders", router.asPath],
     queryFn: () =>
-      axiosClient.get(`/refund-money/list?language=${router.locale}`, {
+      axiosInstance.get(`/refund/list?language=en`, {
         params: {
           keyword: keyword,
           offset: (pageIndex - 1) * pageSize,
@@ -210,7 +212,7 @@ const Page = () => {
       <Table
         className="border rounded shadow-md"
         dataSource={
-         []
+         data?.data?.data
         }
         scroll={{ x: 1500 }}
         columns={columns}
@@ -235,3 +237,4 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
     },
   };
 }
+

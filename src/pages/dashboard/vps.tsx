@@ -1,4 +1,3 @@
-
 import TableAction from "@/components/admin/TableAction";
 import { debounce } from "lodash";
 import { EyeFilled, MessageFilled, PlusCircleFilled } from "@ant-design/icons";
@@ -11,6 +10,7 @@ import {
     Modal,
     Table,
     TablePaginationConfig,
+    Tag,
 } from "antd";
 import Title from "antd/es/typography/Title";
 import { GetStaticPropsContext } from "next";
@@ -24,6 +24,7 @@ import VpsButtonState from "@/components/admin/vps/VpsButtonState";
 import XtermUI, { SSHInfo } from "@/components/app/Xterm.component";
 import VpsDetail from "@/components/admin/vps/VpsDetail";
 import VpsHideOption from "@/components/admin/vps/VpsHideOption";
+import axiosInstance from "@/apiClient/axiosConfig";
 
 const Page = () => {
     const [openState, setOpenState] = useState(false)
@@ -48,7 +49,11 @@ const Page = () => {
     const [sync, setSync] = useState(false)
     const { data, isFetching, isError } = useQuery({
         queryKey: ['queryKey', isModalOpen],
-        queryFn: () => axios.get("https://api.webdock.io/v1/servers", webdockConfig)
+        queryFn: () => axiosInstance.get<any>('/vps-provider/getvps', {
+            params: {
+                language: "en"
+            }
+        })
     });
 
 
@@ -112,8 +117,35 @@ const Page = () => {
             dataIndex: "slug",
         },
         {
+            title: "Brand",
+            dataIndex: "brand",
+            key: 'brand',
+            render: (text: string, record: any) => record?.vps?.brand
+        },
+        {
             title: t('ipv4'),
             dataIndex: "ipv4",
+        },
+        {
+            title: ('Distro'),
+            dataIndex: "ipv4",
+            key: 'id',
+            render: (text: string, record: any) => `
+            ${record?.vps?.distro ?? ''} 
+            ${record?.vps?.release ??
+                'Not known'
+                }`
+        },
+        {
+            title: ('numoflive'),
+            dataIndex: "numberoflivestreams",
+            render: (text: string, record:any)=>{
+                return (
+                    <>
+                        <Tag color="success">0 streamings</Tag>
+                    </>
+                )
+            }
         },
         {
             title: t('status'),
@@ -247,3 +279,4 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
         },
     };
 }
+

@@ -101,7 +101,7 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
 
     // dropdown item
     const items = [
-        { icon: <TbTriangle style={{ color: "green" }} />, label: 'Start', key: 'start' }, // 菜单项务必填写 key
+        { icon: <CaretRightOutlined style={{ color: "#1677ff" }} />, label: 'Start', key: 'start' }, // 菜单项务必填写 key
         {
             icon: <TbSquare style={{
                 color: "red"
@@ -146,13 +146,11 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
 
             <Dropdown trigger={['click']} menu={{ items, onClick: handleMenuClick }}>
                 <Tooltip title={vps.status}>
-                    <Button type="primary" danger={(vpsState?.includes("stop"))} onClick={() => {
-                        message.success(vps.slug)
-                    }}
+                    <Button type="primary" danger={(vpsState?.includes("stop"))}
                         loading={vpsState == "stopping"
                             || vpsState == "starting"
                             || vps.status == 'provisioning'}
-                        icon={<CaretRightOutlined />}>
+                        icon={<MenuOutlined />}>
 
                     </Button>
                 </Tooltip>

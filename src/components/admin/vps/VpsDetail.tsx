@@ -11,6 +11,7 @@ import XtermUI from "@/components/app/Xterm.component";
 import ViewQueuesComponent from "@/components/app/View.queues.component";
 import LiveStream from "@/components/vps/vps-details/live-stream";
 import VpsProfile from "@/components/vps/vps-details/vps-profiles";
+import axiosInstance from "@/apiClient/axiosConfig";
 interface VpsDetailProps {
     slug: any,
     closeModal: Function
@@ -63,7 +64,7 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug }) => {
     ];
 
     const { data, isFetching, isError } = useQuery({
-        queryKey: ['Queues'], queryFn: () => axios.get('https://api.golive365.top/queue/get-queue-from-vps/', {
+        queryKey: ['Queues'], queryFn: () => axiosInstance.get('/queue/get-queue-from-vps/', {
             params: {
                 slug: slug.slug
             }

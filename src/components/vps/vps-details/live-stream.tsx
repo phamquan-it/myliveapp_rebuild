@@ -1,7 +1,7 @@
 import axiosInstance from '@/apiClient/axiosConfig';
 import EditLiveStreams from '@/components/live-streams/EditLiveStreams';
 import { useQuery } from '@tanstack/react-query';
-import { Table } from 'antd';
+import { Table, Image } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React, { useEffect } from 'react';
 interface LiveStreamProps {
@@ -12,14 +12,20 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug }) => {
 
     const { data, isFetching } = useQuery({
         queryKey: ['livestream'],
-        queryFn: () => axiosInstance.get(`/activity-stream/find-by-slug?language=en&slug=${slug}`),
+        queryFn: () => axiosInstance.get(`/activity-stream/find-by-slug`, {
+            params: {
+                language: "en",
+                slug: slug,
+                offset: 0,
+                limit: 5
+            }
+        }),
     })
     const columns = [
         {
             title: 'No.',
             dataIndex: 'key',
             key: 'key',
-            render: (text: string, record: any, index: number) => index + 1,
         },
 
         {
@@ -43,20 +49,29 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug }) => {
             title: 'Platform',
             dataIndex: 'platform',
             key: 'platform',
+            render: (text: string, record: any) => (
+                <Image src="https://cdn-icons-png.flaticon.com/128/174/174883.png" width={32}/>
+            )
 
         },
         {
             title: 'Key',
-            dataIndex: 'key',
-            key: 'key',
-            
+            dataIndex: 'stkey',
+            key: 'stkey',
+
         },
-       
+
     ];
 
     return <>
         <Title level={5} className="text-center border-b">Live stream</Title>
-        <Table dataSource={data?.data} loading={isFetching} columns={columns} className="border rounded" />
+        <Table dataSource={data?.data?.map((data: any, index: number) => ({
+            ...data, stkey: data.key, key: index + 1
+        }))} loading={isFetching} columns={columns} className="border rounded" onChange={() => {
+
+        }} pagination={{
+            pageSize: 5
+            }} />
 
     </>
 }

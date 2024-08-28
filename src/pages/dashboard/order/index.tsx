@@ -36,6 +36,7 @@ import { text } from "stream/consumers";
 import Link from "next/link";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 import filterOptionByLabel from "@/hooks/filterOptionByLabel";
+import axiosInstance from "@/apiClient/axiosConfig";
 
 const { Option } = Select;
 const statisticalOrder = [
@@ -93,23 +94,7 @@ const Page = () => {
       render: (text: any, record: any) => record?.service?.name,
       ellipsis: true,
     },
-    {
-      title: "ID Viralsmm/Gainsmm",
-      dataIndex: "order_id",
-      key: "order_id",
-      align: "center",
-    },
-    {
-      title: "Provider	",
-      dataIndex: "key",
-      key: "key",
-      align: "center",
-      render: (text: any, record: any) => (
-        <Link href={`https://${record?.service?.provider?.name}.com/`}>
-          {record?.service?.provider?.name}
-        </Link>
-      ),
-    },
+ 
     {
       title: "User	",
       dataIndex: "key",
@@ -131,17 +116,7 @@ const Page = () => {
         </>
       ),
     },
-    {
-      title: t("link"),
-      dataIndex: "link",
-      key: "link",
-      render: (text: any) => (
-        <Link href={text} target="_blank">
-          {text}
-        </Link>
-      ),
-      ellipsis: true,
-    },
+  
     {
       title: "Charge",
       dataIndex: "charge",
@@ -214,55 +189,7 @@ const Page = () => {
             <TableAction
               openState={openState}
               viewDetail={<>view detail</>}
-              // syncFunc={() => {
-              //   //synchonized data here
-              // }}
-              // editForm={
-              //   <>
-              //     <Form
-              //       name="basic"
-              //       layout="vertical"
-              //       initialValues={{ remember: true }}
-              //       // onFinish={onFinish}
-              //       // onFinishFailed={onFinishFailed}
-              //     >
-              //       <EditOrder initialValues={record} />
-
-              //       <Form.Item>
-              //         <Button type="primary" htmlType="submit">
-              //           Update
-              //         </Button>
-              //       </Form.Item>
-              //     </Form>
-              //   </>
-              // }
-              // deleteForm={
-              //   <DeleteForm
-              //     onCancel={() => {
-              //       setOpenState(!openState);
-              //     }}
-              //     onDelete={() => {
-              //       axiosClient
-              //         .delete(`/platform/delete/${text}/?language=en`, {
-              //           headers: {
-              //             Authorization: `Bearer ${token}`,
-              //           },
-              //         })
-              //         .then(() => {
-              //           console.log("ok");
-
-              //           toast.success("success");
-              //         })
-              //         .catch((err) => {
-              //           console.log(err);
-
-              //           toast.error(err.message);
-              //         });
-              //       setOpenState(!openState);
-              //     }}
-              //   />
-              // }
-            />
+                   />
           </div>
         );
       },
@@ -295,7 +222,7 @@ const Page = () => {
   const { data, isFetching, isError } = useQuery({
     queryKey: ["orders", router.asPath],
     queryFn: () =>
-      axiosClient.get("/order/list?language=en", {
+      axiosInstance.get("/order?language=en", {
         params: {
           providerId: provider,
           keyword: keyword,
