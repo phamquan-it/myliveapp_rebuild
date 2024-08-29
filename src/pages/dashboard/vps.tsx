@@ -137,7 +137,7 @@ const Page = () => {
                 }`
         },
         {
-            title: ('numoflive'),
+            title: ('Num of stream'),
             dataIndex: "numberoflivestreams",
             render: (text: string, record:any)=>{
                 return (
