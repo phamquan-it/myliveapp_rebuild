@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CloseOutlined } from '@ant-design/icons';
-import { Button, Card, DatePicker, Form, Input, Modal, Select, Tooltip, Space, Switch } from 'antd';
+import { CloseOutlined, PlusCircleFilled } from '@ant-design/icons';
+import { Button, Card, DatePicker, Form, Input, Modal, Select, Tooltip, Space, Switch, message } from 'antd';
 import { FormInstance } from 'antd/lib';
 import { usePlatformData } from '@/components/live-streams/CreateStreamByAdmin';
+import { useMutation } from '@tanstack/react-query';
+import axiosInstance from '@/apiClient/axiosConfig';
 
 const { RangePicker } = DatePicker;
 
@@ -37,22 +39,35 @@ const App: React.FC = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    const { mutate } = useMutation({
+        mutationKey: ['createStream'],
+        mutationFn: (data: any) => axiosInstance.post('/autolive-control/create-new-stream', data),
+        onSuccess: () => {
+            message.success("OK")
+        },
+        onError: () => {
+            message.error("no ok")
+        }
+    })
 
     // Handle form submission
     const onFinish = (values: any) => {
         console.log('Form Values:', values);
-        values.items.map((item:any)=>{
-           console.log(item); 
+        values.items.map((item: any) => {
+            mutate({
+                source_link: values.drive_link,
+                key: item.streamkey,
+                platformId: item.platform
+            })
         })
-        
+
     };
 
     const { data } = usePlatformData();
 
     return (
         <>
-            
-            <Button type="primary" onClick={() => setIsModalOpen(true)}>Show modal</Button>
+            <Button type="primary" onClick={() => setIsModalOpen(true)} icon={<PlusCircleFilled/>}></Button>
             <Modal title="Create stream" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                 <Form
                     labelCol={{ span: 6 }}
@@ -86,11 +101,8 @@ const App: React.FC = () => {
                                     <Card
                                         size="small"
                                         id="card-stream"
-                                        title={
-                                            <Form.Item initialValue={`Stream ${field.name + 1}`} name={[field.name, 'name']}>
-                                                <Input readOnly style={{ width: 300, border: 'none' }} />
-                                            </Form.Item>
-                                        }
+                                        title={`Stream ${field.name + 1}`
+                                                                                   }
                                         key={field.key}  // Added key prop here
                                         extra={
                                             <CloseOutlined onClick={() => { if (fields.length > 1) remove(field.name); }} />

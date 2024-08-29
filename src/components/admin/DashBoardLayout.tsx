@@ -42,6 +42,7 @@ import CreateAutolive from "../autolive/CreateAutolive";
 import CreateStreamByAdmin from "../live-streams/CreateStreamByAdmin";
 import Link from "next/link";
 import { DashboardRouter } from "@/enums/router/dashboard";
+import CreateStream from "@/pages/CreateStream";
 
 const { Header, Sider, Content } = Layout;
 
@@ -328,7 +329,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                         <div className="w-full flex justify-between pe-10">
                             <span style={{ color: "" }}>LiveLogo</span>
                             <div className="flex items-center gap-2">
-                                <CreateStreamByAdmin />
+                                <CreateStream />
                                 <LocaleSwitcher />
                             </div>
                         </div>
