@@ -23,20 +23,6 @@ config.autoAddCss = false;
 export default function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
     const path: string = router.asPath;
-
-    const syncObjectToUrl = (object: any, urlPath: string) => {
-
-        router.query = object;
-        router.push(router, {
-            pathname: urlPath,
-            query: object,
-        } );
-    }
-
-    const getObjectFromUrl = getObjecFormUrlParameters(router);
-    const [pageIndex, setPageIndex] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [keyword, setKeyword] = useState('');
     
     const [isModalOpen, setIsModalOpen] = useState(false);
     const Layout = !path.includes("/dashboard") ? PageLayout : DashBoardLayout;
@@ -58,7 +44,7 @@ export default function App({ Component, pageProps }: AppProps) {
                     >
                         <Layout>
                             <NextNProgress color="#29D" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} options={{ showSpinner: false }} />
-                            <Component {...pageProps} modal={[isModalOpen ?? false, setIsModalOpen, syncObjectToUrl, getObjectFromUrl]}  />
+                            <Component {...pageProps} />
                         </Layout>
                     </ConfigProvider>
                 </ReactQueryProvider>

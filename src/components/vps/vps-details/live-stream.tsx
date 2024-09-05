@@ -1,14 +1,18 @@
 import axiosInstance from '@/apiClient/axiosConfig';
+import { usePlatformData } from '@/components/live-streams/CreateStreamByAdmin';
 import EditLiveStreams from '@/components/live-streams/EditLiveStreams';
+import { FilterFilled, SlackSquareFilled, YoutubeFilled } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
-import { Table, Image } from 'antd';
+import { Table, Image, Select } from 'antd';
+import { ColumnType } from 'antd/es/table';
 import Title from 'antd/es/typography/Title';
-import React, { useEffect } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 interface LiveStreamProps {
     slug: string;
+    setService: Function
 }
 
-const LiveStream: React.FC<LiveStreamProps> = ({ slug }) => {
+const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
 
     const { data, isFetching } = useQuery({
         queryKey: ['livestream'],
@@ -21,11 +25,17 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug }) => {
             }
         }),
     })
-    const columns = [
+    const platforms = usePlatformData()
+    useEffect(() => {
+        console.log(platforms?.data?.data?.platforms)
+    }, [platforms])
+
+    const columns: ColumnType<any> = [
         {
             title: 'No.',
             dataIndex: 'key',
             key: 'key',
+            width: 50
         },
 
         {
@@ -34,7 +44,9 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug }) => {
             key: 'email',
             render: (text: string, record: any, index: number) => {
                 return record?.user?.email
-            }
+            },
+            ellipsis: true
+
         },
         {
             title: 'Name',
@@ -50,15 +62,30 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug }) => {
             dataIndex: 'platform',
             key: 'platform',
             render: (text: string, record: any) => (
-                <Image src="https://cdn-icons-png.flaticon.com/128/174/174883.png" width={32}/>
-            )
-
+                <Image alt="" src="https://cdn-icons-png.flaticon.com/128/174/174883.png" width={25} />
+            ),
+            filterIcon: (filtered: boolean) => (
+                <Image alt="" src="https://cdn-icons-png.flaticon.com/128/174/174883.png" width={15} preview={false} />
+            ),
+            filterMode: () => {
+                return "menu";
+            },
+            filters:[
+            { text: '>=35', value: 'gte35' },
+            { text: '<18', value: 'lt18' },
+          ],
+        },
+        {
+            title: 'Speed',
+            dataIndex: 'platform',
+            key: 'platform',
+            render: () => '1x'
         },
         {
             title: 'Key',
             dataIndex: 'stkey',
             key: 'stkey',
-
+            ellipsis: true
         },
 
     ];
@@ -69,9 +96,17 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug }) => {
             ...data, stkey: data.key, key: index + 1
         }))} loading={isFetching} columns={columns} className="border rounded" onChange={() => {
 
-        }} pagination={{
-            pageSize: 5
-            }} />
+        }} pagination={false}
+            scroll={{ y: 230 }}
+            onRow={(record) => {
+                return {
+                    onClick: () => {
+                        console.log(record)
+                        setService("vps-log" + record.id)
+                    }
+                }
+            }}
+        />
 
     </>
 }

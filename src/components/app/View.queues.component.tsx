@@ -4,16 +4,17 @@ import "@xterm/xterm/css/xterm.css";
 import { Button } from "antd";
 import { EyeFilled, SyncOutlined } from "@ant-design/icons";
 
-interface ViewQueuesProcessProps{
-    ipv4: string
+interface ViewQueuesProcessProps {
+    ipv4: string,
+    service?: string
 }
 // Dynamic import to disable SSR
-const ViewQueuesProcess: React.FC<ViewQueuesProcessProps> = ({ipv4}) => {
+const ViewQueuesProcess: React.FC<ViewQueuesProcessProps> = ({ ipv4,service }) => {
     const terminalRef = useRef<HTMLDivElement | null>(null);
     const socketRef = useRef<any>(null);
     const [key, setKey] = useState(0);
     useEffect(() => {
-     
+
         if (typeof window !== "undefined" && terminalRef.current) {
             const { Terminal } = require("@xterm/xterm");
             const { FitAddon } = require('@xterm/addon-fit');
@@ -33,16 +34,19 @@ const ViewQueuesProcess: React.FC<ViewQueuesProcessProps> = ({ipv4}) => {
             // Ensure the fit addon is loaded and the terminal is fitted
             //fitAddon.fit();
 
-            const socket = io(`https://api.golive365.top/pty?ipv4=${ipv4}&service=myservice`);
+            const socket = io(`http://localhost:3031/stream-log?ipv4=${ipv4}`);
             socketRef.current = socket;
 
-            terminal.onData((data: string) => {
-                socket.emit("input", data);
-            });
 
-            socket.on("output", (data: string) => {
+
+            socket.emit("input", service);
+
+            socket.on("message", (data: string) => {
+                console.log(data);
                 terminal.write(data);
             });
+
+            // Fit the terminal to the container whenever the window is resized
 
             // Fit the terminal to the container whenever the window is resized
             const handleResize = () => {
@@ -58,19 +62,27 @@ const ViewQueuesProcess: React.FC<ViewQueuesProcessProps> = ({ipv4}) => {
                 window.removeEventListener('resize', handleResize);
             };
         }
+        if (key == 0) {
+            setKey(1);
+        }
+
     }, [key]);
-   
+
+    useEffect(() => {
+       setKey(key+1); 
+    }, [service])
+
     const refreshComponent = () => {
         setKey(prevKey => prevKey + 1);
-      };
+    };
     return (
         <div key={key}>
-      <Button type="primary" onClick={refreshComponent} icon={<EyeFilled/>}></Button>
-      
-      <div ref={terminalRef} style={{ width: "100%", height: "250px", overflow: "hidden"}}></div>
-      {/* Component content */}
-    </div>
-        
+            <Button type="primary" onClick={refreshComponent} icon={<EyeFilled />}></Button>
+
+            <div ref={terminalRef} style={{ width: "100%", height: "250px", overflow: "hidden" }}></div>
+            {/* Component content */}
+        </div>
+
     );
 };
 

@@ -8,6 +8,7 @@ import UserSelect from '@/components/general/user-select';
 import VpsSelect from '@/components/general/vps-select';
 import SelectDateForFilter from '@/components/live-streams/SelectDateForFilter';
 import getObjecFormUrlParameters from '@/hooks/getObjectFormParameter';
+import { SearchOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Input, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
@@ -25,13 +26,14 @@ interface PageProps {
 
 const Page: NextPage<PageProps> = ({ modal }) => {
 
-    const [openModal, setOpenModal, syncObjectToUrl, getObjectFromUrl] = modal;
-
     const router = useRouter()
     const { data, isFetching } = useQuery({
         queryKey: ['ActivityStream', router.asPath],
         queryFn: () => axiosInstance.get("/activity-stream?language=en", {
-            params: getObjectFromUrl
+            params: {
+                offset: 0,
+                limit: 10
+            }
         })
 
     })
@@ -91,30 +93,22 @@ const Page: NextPage<PageProps> = ({ modal }) => {
     ];
 
 
-    const [keyword, setKeyword] = useState(getObjectFromUrl.keyword)
-    const handlekeyword = debounce((e:any)=>{
-        setKeyword(e.target.value);
-         syncObjectToUrl({
-             ...getObjectFromUrl,
-             keyword: e.target.value
-        })
-    }, 300)
-       return <>
+    return <>
         <Title level={2} className="text-center">LiveStreams</Title>
         <div className="flex py-3 gap-2">
             <div>
-                <Input placeholder="Search..." onChange={handlekeyword} defaultValue={getObjectFromUrl.keyword || ''}/>
+                <Input placeholder={'Search...'} />
             </div>
-            <PlatformSelectForFilter  onChange={(value)=>{
-                syncObjectToUrl({
-                    ...getObjectFromUrl, platform:value 
-                })
-            }}/>
             <VpsSelect />
             <UserSelect />
             <SelectDateForFilter />
         </div>
-        <Table dataSource={data?.data?.data} loading={isFetching} columns={columns} />;
+        <Table dataSource={data?.data?.data}
+            loading={isFetching}
+            columns={columns}
+            pagination={{
+                total: data?.data?.total
+            }} />;
     </>
 }
 

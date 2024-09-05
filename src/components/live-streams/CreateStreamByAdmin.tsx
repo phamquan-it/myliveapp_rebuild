@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 export const usePlatformData = (filter:any = {}) => {
     return useQuery({
         queryKey: ['platform', filter],
-        queryFn: () => axiosInstance.get('/platform/list?language=en')
+        queryFn: () => axiosInstance.get('/platform/list?language=en&offset=0&limit=100')
     });
 };
 export const useUserData = (filter: any) => {

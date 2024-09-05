@@ -75,12 +75,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             role: "user",
         },
         {
-            key: DashboardRouter.CATEGORY,
-            icon: <TbCategoryFilled />,
-            label: <Link href={DashboardRouter.CATEGORY}>{t('category')}</Link>,
-            role: "admin",
-        },
-        {
             key: DashboardRouter.REFUND,
             icon: <FundOutlined />,
             role: "admin",
@@ -127,21 +121,18 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             label: <Link href={DashboardRouter.USER}>{t('user')}</Link>,
             role: "user",
         },
-
-
+        {
+            key: DashboardRouter.LIVESTREAM,
+            icon: <FaListUl />,
+            label: <Link href={DashboardRouter.LIVESTREAM}>{('Live streams')}</Link>,
+            role: "admin",
+        },
         {
             key: "16",
             icon: <CloudServerOutlined />,
             label: "Vps",
             role: "admin",
             children: [
-                {
-                    key: DashboardRouter.LIVESTREAM,
-                    icon: <FaListUl />,
-                    label: <Link href={DashboardRouter.LIVESTREAM}>{('Live streams')}</Link>,
-                    role: "admin",
-                },
-
                 {
                     key: DashboardRouter.VPS,
                     icon: <CloudServerOutlined />,
@@ -168,7 +159,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                 },
 
             ]
-
         },
         {
             key: DashboardRouter.USER_PROFILE,

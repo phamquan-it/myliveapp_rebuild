@@ -12,6 +12,7 @@ import ViewQueuesComponent from "@/components/app/View.queues.component";
 import LiveStream from "@/components/vps/vps-details/live-stream";
 import VpsProfile from "@/components/vps/vps-details/vps-profiles";
 import axiosInstance from "@/apiClient/axiosConfig";
+import XtermLog from "@/components/vps/vps-details/xterm-log";
 interface VpsDetailProps {
     slug: any,
     closeModal: Function
@@ -74,12 +75,14 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug }) => {
 
 
 
-
+    const [serviceId, setServiceId] = useState('apache2')
     const items: TabsProps['items'] = [
         {
             key: '1',
             label: 'Vps log',
-            children: <ViewQueuesComponent ipv4={slug.ipv4} />,
+            children: (<>
+                <ViewQueuesComponent ipv4={slug.ipv4} service={serviceId} />
+            </>),
         },
         {
             key: '2',
@@ -88,11 +91,12 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug }) => {
         },
     ];
 
-
-    return (
+    useEffect(()=>{
+        setServiceId('apache2')
+    },[isModalOpen])
+       return (
         <>
             <Button type="default" onClick={() => setIsModalOpen(true)} icon={<EyeFilled />}></Button>
-
             <Modal destroyOnClose={true} width={1000} title="Vps detail" open={isModalOpen} onCancel={() => {
                 setIsModalOpen(false);
             }}>
@@ -102,10 +106,9 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug }) => {
                         <VpsProfile vpsProvider={slug} />
                     </div>
                     <div className="col-span-3">
-                        <LiveStream slug={slug.slug} />
+                        <LiveStream slug={slug.slug} setService={setServiceId} />
                     </div>
                 </div>
-
                 <Tabs defaultActiveKey="1" items={items} />
             </Modal>
         </>
