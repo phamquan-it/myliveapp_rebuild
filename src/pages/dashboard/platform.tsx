@@ -1,31 +1,35 @@
 import axiosInstance from '@/apiClient/axiosConfig';
 import TableAction from '@/components/admin/TableAction';
 import CreatePlatform from '@/components/general/create-platform';
+import { pagination } from '@/helpers/pagination';
+import getObjecFormUrlParameters from '@/hooks/getObjectFormParameter';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Input, Table } from 'antd';
+import { Button, Input, Spin, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
 import dayjs from 'dayjs';
 import { GetStaticPropsContext } from 'next';
-import router from 'next/router';
-import React from 'react';
+import router, { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 
 const Page = () => {
-
-
-    const { data, isFetching, isError } = useQuery({
-        queryKey: ["category"],
+    const router = useRouter() 
+    const  { limit, offset, pageIndex, pageSize } = pagination(router)
+    const [isReady, setIsReady] = useState(false)
+      const { data, isFetching, isError } = useQuery({
+        queryKey: ["category", router],
         queryFn: () =>
             axiosInstance.get("/platform/list", {
                 params: {
-                    language: "en"
+                    language: "en",
+                    offset: pagination(router).offset,
+                    limit: pagination(router).limit
                 },
                 headers: {
                 },
             }),
         placeholderData: (previousData) => previousData,
     });
-
-
+ 
     const columns = [
         {
             title: 'No.',
@@ -46,7 +50,7 @@ const Page = () => {
             title: 'CreateAt',
             dataIndex: 'createAt',
             key: 'createAt',
-            render: (text: string) => dayjs(text).format('YYYY/MM/DD HH:mm:ss')
+            render: (text: string) => dayjs(text).format('YYYY/MM/DD')
         },
         {
             title: 'Action',
@@ -57,16 +61,35 @@ const Page = () => {
 
     ];
 
-
+   
     return <>
         <Title level={2} className="text-center">Platform</Title>
         <div className="flex justify-between py-3">
             <div>
-                <Input placeholder="Search..." />
+                <Input placeholder="Search..." defaultValue={router.query.keyword??''}/>
             </div>
             <CreatePlatform />
         </div>
-        <Table loading={isFetching} dataSource={data?.data?.platforms.map((platform: any, index: number) => ({ ...platform, key: index + 1 }))} columns={columns} />;
+        <Table
+            loading={isFetching}
+            onChange={(pagination)=>{
+                router.push({
+                    query:{
+                        pageIndex:pagination.current,
+                    }
+                }) 
+            }}
+            pagination={{
+                total: data?.data.total,
+                pageSize: pageSize,
+                current: pageIndex
+            }}
+            dataSource={data?.data?.platforms
+                .map((platform: any, index: number) => ({
+                    ...platform,
+                    key: pageIndex * pageSize + (index + 1) - pageSize,
+                }))}
+            columns={columns} />
     </>
 }
 

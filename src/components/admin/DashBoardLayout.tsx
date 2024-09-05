@@ -317,7 +317,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                             }}
                         />
                         <div className="w-full flex justify-between pe-10">
-                            <span style={{ color: "" }}>LiveLogo</span>
+                            <div>Live stream</div>
                             <div className="flex items-center gap-2">
                                 <CreateStream />
                                 <LocaleSwitcher />
