@@ -30,7 +30,7 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
         console.log(platforms?.data?.data?.platforms)
     }, [platforms])
 
-    const columns: ColumnType<any> = [
+    const columns:any = [
         {
             title: 'No.',
             dataIndex: 'key',
