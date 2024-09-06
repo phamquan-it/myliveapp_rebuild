@@ -4,7 +4,7 @@ import "@/styles/globals.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "react-toastify/dist/ReactToastify.css";
 import theme from "@/theme/themeConfig";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, Spin } from "antd";
 import { NextIntlClientProvider } from "next-intl";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
@@ -21,13 +21,19 @@ import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 config.autoAddCss = false;
 
 export default function App({ Component, pageProps }: AppProps) {
+
     const router = useRouter();
+    const [isReady, setIsReady] = useState(false)
+    useEffect(() => {
+        setIsReady(router.isReady)
+    }, [router])
     const path: string = router.asPath;
-    
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const Layout = !path.includes("/dashboard") ? PageLayout : DashBoardLayout;
 
-        return (
+    if (!isReady) return (<div className="h-screen w-screen flex justify-center items-center"><Spin /> </div>)
+    return (
         <NextIntlClientProvider
             locale={router.locale}
             messages={pageProps.messages}

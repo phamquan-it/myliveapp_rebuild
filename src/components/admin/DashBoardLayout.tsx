@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import React, { ReactNode, Suspense, useEffect, useRef, useState } from "react";
 import {
     BellOutlined,
     CalendarFilled,
@@ -20,7 +20,7 @@ import {
     WindowsFilled,
     WindowsOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu, MenuProps, Modal, theme, Tooltip } from "antd";
+import { Button, Layout, Menu, MenuProps, Modal, Spin, theme, Tooltip } from "antd";
 import { useRouter } from "next/router";
 import { TbCategoryFilled } from "react-icons/tb";
 import {
@@ -31,7 +31,7 @@ import {
 } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 import Title from "antd/es/typography/Title";
-import { deleteCookie, getCookie } from "cookies-next";
+import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { ToastContainer } from "react-toastify";
 import LocaleSwitcher from "@/LocaleSwitcher";
 import { jwtDecode } from "jwt-decode";
@@ -50,6 +50,7 @@ interface DashBoardLayoutLayout {
     children?: ReactNode;
 }
 const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
+    setCookie("token",getCookie('token'))
     const [role, setRole] = useState("user");
     useEffect(() => {
         try {
@@ -183,8 +184,9 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
     const [activeKey, setActiveKey] = useState(["1"]);
     const router = useRouter();
     const token = getCookie("token");
+    const [isReady, setIsReady] = useState(false)
 
-    const { data } = useQuery({
+    const { data, isSuccess } = useQuery({
         queryKey: ["info"],
         queryFn: () =>
             axiosInstance.get(`/auth/profile`, {
@@ -193,7 +195,9 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                 },
             }),
     });
-
+    useEffect(()=>{
+        if(isSuccess)  setIsReady(true);
+    }, [isSuccess])
 
     const [isCreateStreamOpen, setIsCreateStreamOpen] = useState(false)
     const hideCreateStream = () => {
@@ -202,7 +206,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
     const showCreateStream = () => {
         setIsCreateStreamOpen(true);
     }
-    return (
+    return(
         <Layout style={{ height: "100vh" }} className="!bg-white">
             <ToastContainer />
             <div className="border-r">
@@ -332,8 +336,11 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                         padding: "30px 20px",
                         overflowY: "scroll",
                     }}
+
                 >
-                    {children}
+                    <Suspense fallback={<div>Loading...</div>}>
+                        {children}
+                    </Suspense>
                 </Content>
             </Layout>
         </Layout>

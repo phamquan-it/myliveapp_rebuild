@@ -1,3 +1,5 @@
+import axiosInstance from '@/apiClient/axiosConfig';
+import { usePlatformData } from '@/components/live-streams/CreateStreamByAdmin';
 import { convertGoogleDriveLinkToDownload } from '@/utils/driveLinkConverter';
 import { useMutation } from '@tanstack/react-query';
 import { Alert, Button, Checkbox, Form, FormProps, Input, Modal, Select, Table, message } from 'antd';
@@ -57,8 +59,8 @@ const CreateStream: React.FC<CreateStreamProps> = () => {
     const [linkState, setLinkState] = useState(false)
     const checkLink = useMutation({
         mutationKey: ['checklink'],
-        mutationFn: (data: string) => axios
-            .get("http://localhost:3031/autolive-control/get-video-metadata",
+        mutationFn: (data: string) => axiosInstance
+            .get("/autolive-control/get-video-metadata",
                 {
                     "params": {
                         "source_link": data
@@ -76,11 +78,7 @@ const CreateStream: React.FC<CreateStreamProps> = () => {
             message.error("No ok");
         }
     })
-    useEffect(() => {
-        console.log(videoData)
-    }, [videoData])
-
-
+    const platforms = usePlatformData()
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
         console.log(convertGoogleDriveLinkToDownload(values.source_link));
         return
@@ -103,7 +101,7 @@ const CreateStream: React.FC<CreateStreamProps> = () => {
         <Button type="primary" onClick={() => {
             setIsModalOpen(true)
         }}></Button>
-        <Modal title="Basic Modal" open={isModalOpen} onCancel={handleCancel} width={1000}>
+        <Modal title="Create stream" open={isModalOpen} onCancel={handleCancel} width={1000}>
             <div className="grid grid-cols-2 gap-3">
                 <Form
                     name="basic"
@@ -136,16 +134,16 @@ const CreateStream: React.FC<CreateStreamProps> = () => {
                         name="platformId"
                         rules={[{ required: true, message: 'Please input your username!' }]}
                     >
-                        <Select options={[{ value: 'sample', label: <span>sample</span> }]} />
+                        <Select options={platforms?.data?.data?.platforms.map((platform: any) => ({ ...platform, label: platform.name, value: platform.id }))} />
                     </Form.Item>
-                    <Form.Item wrapperCol={{offset: 8, span:16}} name='loop'
+                    <Form.Item wrapperCol={{ offset: 8, span: 16 }} name='loop'
                     >
-                       
+
                         <Checkbox>Loop</Checkbox>
                     </Form.Item>
 
                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" htmlType="submit" disabled={!linkState}>
                             Submit
                         </Button>
                     </Form.Item>

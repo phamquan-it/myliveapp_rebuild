@@ -22,7 +22,7 @@ const VpsForm:React.FC<VpsFormProps> = ({closeModal, setSlug})=>{
   });
   //function create vps
   const createVpsMutation = useMutation({
-    mutationFn: (vpsdata)=>axios.post("https://api.golive365.top/vps-provider/create-vps",vpsdata),
+    mutationFn: (vpsdata)=>axiosInstance.post("/vps-provider/create-vps",vpsdata),
     onSuccess:(data)=>{
      message.success("Create vps success")
      console.log(data.data.vps.slug);
@@ -64,7 +64,7 @@ const VpsForm:React.FC<VpsFormProps> = ({closeModal, setSlug})=>{
           >
               <Select
                 showSearch
-                placeholder="Select location" defaultValue={'container'}
+                placeholder="Select location"
                 options={[
                   {
                   label:"Container",

@@ -5,8 +5,7 @@ const TerminalController = (props = {}) => {
     const [inputValue, setInputValue] = useState('');
     const [ws,setWs] = useState<any>(null)
     const [terminalLineData, setTerminalLineData] = useState([
-        // eslint-disable-next-line react/jsx-key
-        <TerminalOutput>Welcome to the React Terminal UI Demo!</TerminalOutput>
+        <TerminalOutput key='1'>Welcome to the React Terminal UI Demo!</TerminalOutput>
     ]);
 
       const r = useRef<WebSocket | null>(null);

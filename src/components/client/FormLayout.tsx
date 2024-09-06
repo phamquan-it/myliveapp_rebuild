@@ -8,7 +8,7 @@ interface formLayoutProps {
 const FormLayout: React.FC<formLayoutProps> = ({ children }) => {
   return (
     <>
-      <div className="  rounded-md border relative md:bg-slate-100  h-screen flex">
+      <div className="  rounded-md border relative md:bg-slate-50  h-screen flex">
         <div className="md:min-w-96 md:w-1/4 border-none md:border rounded md:shadow-md grid m-auto">
           <ToastContainer />
           <Affix className="absolute top-3 right-10">

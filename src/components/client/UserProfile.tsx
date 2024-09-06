@@ -1,4 +1,5 @@
 import axiosClient from "@/apiClient/axiosClient";
+import axiosInstance from "@/apiClient/axiosConfig";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Form, Image, Input, Progress, Switch, Table } from "antd";
@@ -26,7 +27,7 @@ const UserProfile: React.FC<userProfileProps> = (props) => {
   const onFinish = (values: any) => {
     if (values.confirmpassword == values.newpassword) {
       const user = data?.data?.data;
-      axiosClient
+      axiosInstance
         .patch(
           `/user/update/${user.id}?language=en`,
           {
@@ -58,7 +59,7 @@ const UserProfile: React.FC<userProfileProps> = (props) => {
   const { data, isSuccess } = useQuery({
     queryKey: ["userinfo"],
     queryFn: () =>
-      axiosClient.get("/user/info?language=en", {
+      axiosInstance.get("/user/info?language=en", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

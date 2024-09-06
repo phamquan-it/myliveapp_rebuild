@@ -250,7 +250,6 @@ const Home = ({
     );
   });
 
-  console.log(getObjecFormUrlParameters());
 
   return (
     <main className="bg-gray-50">
@@ -289,7 +288,7 @@ const Home = ({
           }}
         >
           <Content className="container m-auto mt-1" style={{ maxWidth: 1200 }}>
-            <Header className="!bg-transparent mb-10 py-3">
+            <Header className="!bg-transparent mb-10 pb-3">
               <div className="flex justify-between items-center">
                 <div>
                   <Image
@@ -421,7 +420,6 @@ const Home = ({
               style={{ width: 200 }}
               placeholder="Select platform"
               onChange={(value) => {
-                console.log(value);
 
                 setPlatformValue(value);
               }}
