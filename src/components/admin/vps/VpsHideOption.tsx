@@ -19,7 +19,7 @@ interface VpsHideOptionProps {
 const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
     const [vpsState, setVpsState] = useState(vps.status)
 
-    //get vps info 
+    //get vps info
     const getVpsInfo = useMutation({
         mutationFn: () => axios.get(`https://api.webdock.io/v1/servers/${vps.slug}`,
             webdockConfig),

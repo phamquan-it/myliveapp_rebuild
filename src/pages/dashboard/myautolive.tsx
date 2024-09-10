@@ -121,8 +121,6 @@ const Page = () => {
                     }}>
                      Initalize
                 </Card>
-
-
                 <Card title="" className='bg-green-400'>
                     Running
                 </Card>
@@ -147,7 +145,10 @@ const Page = () => {
                         { value: 4, label: <span>Stopped</span> },
                     ]} style={{
                         width: 100
-                    }} />
+                    }} onChange={(e)=>{
+                        syncObj({...router.query, status:e})
+                    }}
+                />
             </div>
             <Table
                 loading={isFetching}

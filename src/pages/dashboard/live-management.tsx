@@ -7,6 +7,8 @@ import ViewAutoliveDetail from '@/components/autolive/ViewAutoliveDetail';
 import UserSelect from '@/components/general/user-select';
 import VpsSelect from '@/components/general/vps-select';
 import SelectDateForFilter from '@/components/live-streams/SelectDateForFilter';
+import { pagination } from '@/helpers/pagination';
+import syncObjectToUrl from '@/helpers/syncObjectToUrl';
 import getObjecFormUrlParameters from '@/hooks/getObjectFormParameter';
 import { SearchOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
@@ -16,6 +18,7 @@ import { ColumnType } from 'antd/lib/table';
 import dayjs from 'dayjs';
 import { debounce } from 'lodash';
 import { GetStaticPropsContext, NextPage } from 'next';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
 import { StringifiableRecord } from 'query-string';
 import React, { useEffect, useState } from 'react';
@@ -25,14 +28,18 @@ interface PageProps {
 }
 
 const Page: NextPage<PageProps> = ({ modal }) => {
-
+    const p = useTranslations("Placeholder")
     const router = useRouter()
+    const { limit, offset, pageIndex, pageSize } = pagination(router, 1, 20)
+    const [isReady, setIsReady] = useState(false)
+
     const { data, isFetching } = useQuery({
         queryKey: ['ActivityStream', router.asPath],
         queryFn: () => axiosInstance.get("/activity-stream?language=en", {
             params: {
-                offset: 0,
-                limit: 10
+                keyword: router.query.keyword ?? '',
+                offset,
+                limit
             }
         })
 
@@ -43,7 +50,6 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             title: 'No.',
             dataIndex: 'key',
             key: 'key',
-            render: (text, record, index) => index + 1
         },
         {
             title: 'Email',
@@ -71,12 +77,6 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             render: (text: string) => dayjs(text).format('YYYY/MM/DD HH:mm:ss')
         },
         {
-            title: 'UpdateAt',
-            dataIndex: 'updateAt',
-            key: 'updateAt',
-            render: (text: string) => dayjs(text).format('YYYY/MM/DD HH:mm:ss')
-        },
-        {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
@@ -84,31 +84,44 @@ const Page: NextPage<PageProps> = ({ modal }) => {
                 <>
                     <div className="flex gap-1">
                         <ViewAutoliveDetail activityStream={record} />
-                        <DeleteStream id={0} />
                     </div>
                 </>
             )
         }
 
     ];
-
-
+    const syncObj = syncObjectToUrl(router)
+    const handleInput = debounce((e) => {
+        syncObj({ keyword: e.target.value })
+    }, 300)
+   
     return <>
         <Title level={2} className="text-center">LiveStreams</Title>
         <div className="flex py-3 gap-2">
             <div>
-                <Input placeholder={'Search...'} />
+                <Input placeholder={'Search...'} onChange={handleInput}/>
             </div>
             <VpsSelect />
             <UserSelect />
             <SelectDateForFilter />
         </div>
-        <Table dataSource={data?.data?.data}
+        <Table dataSource={data?.data?.data.map((livestream:any, index: number)=>({
+            ...livestream,
+            key: pageIndex * pageSize + (index + 1) - pageSize,
+        }))}
             loading={isFetching}
             columns={columns}
             pagination={{
-                total: data?.data?.total
-            }} />;
+                total: data?.data?.total,
+                pageSize: pageSize,
+                current: pageIndex
+            }}
+            onChange={(pagination) => {
+                syncObj({
+                    pageIndex: pagination.current,
+                })
+            }}
+        />
     </>
 }
 

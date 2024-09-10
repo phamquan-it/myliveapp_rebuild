@@ -7,6 +7,7 @@ import getObjecFormUrlParameters from '@/hooks/getObjectFormParameter';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Input, Spin, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
+import { getCookie } from 'cookies-next';
 import dayjs from 'dayjs';
 import { debounce } from 'lodash';
 import { GetStaticPropsContext } from 'next';
@@ -15,8 +16,8 @@ import React, { useEffect, useState } from 'react';
 
 const Page = () => {
     const router = useRouter()
+    const token = getCookie("token");
     const { limit, offset, pageIndex, pageSize } = pagination(router)
-    const [isReady, setIsReady] = useState(false)
     const { data, isFetching, isError } = useQuery({
         queryKey: ["platform", router],
         queryFn: () =>
@@ -28,6 +29,7 @@ const Page = () => {
                     limit
                 },
                 headers: {
+                    "Authorization":`Bearer ${token}`
                 },
             }),
         placeholderData: (previousData) => previousData,
@@ -68,10 +70,7 @@ const Page = () => {
         syncObj({keyword: e.target.value})
     }, 300)
 
-    useEffect(() => {
-       setIsReady(router.isReady) 
-    }, [router])
-    return <>
+       return <>
         <Title level={2} className="text-center">Platform</Title>
         <div className="flex justify-between py-3">
             <div>
