@@ -1,41 +1,63 @@
 import { PlusCircleFilled, UploadOutlined } from '@ant-design/icons';
 import { Button, Form, FormProps, Input, Modal, Upload, UploadProps, message } from 'antd';
 import React, { useState } from 'react';
+import { handleUploadFile } from '../../../handleUploadFile';
+import axiosInstance from '@/apiClient/axiosConfig';
+import { useMutation } from '@tanstack/react-query';
+import { headers } from 'next/headers';
 type FieldType = {
     name?: string;
     rmtp?: string;
     image?: string;
 };
 
-const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values);
-};
-
-const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-};
-
-const props: UploadProps = {
-    name: 'file',
-    action: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
-    headers: {
-        authorization: 'authorization-text',
-    },
-    onChange(info) {
-        if (info.file.status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-            message.success("OK");
-        } else if (info.file.status === 'error') {
-            message.error("No ok");
-        }
-    },
-};
 
 
 
 const CreatePlatform = () => {
+    const createPlatform = useMutation({
+        mutationKey: ['platform'],
+        mutationFn: (platform:any) => axiosInstance
+            .post("platform/add",
+                platform,
+            ),
+            onSuccess: (res)=>{
+                message.success("Success")
+                setIsModalOpen(false)
+            },
+            onError: (err)=>{
+                message.error(err.message)
+            }
+    })
+
+
+    const [key, setKey] = useState('')
+    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+        if (key != '') {
+            const platform = { ...values, key }
+            createPlatform.mutate(platform)
+        } else message.error("File is empty!")
+    };
+
+
+    const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+
+    const customUpload = async (options: any) => {
+        const { file, onSuccess, onError } = options;
+
+        try {
+            // Call handleUploadFile with necessary parameters
+            const response = await handleUploadFile(file, __dirname);
+            setKey(response.key)
+            onSuccess && onSuccess(response);
+            message.success('File uploaded successfully');
+        } catch (error) {
+            onError && onError(error);
+            message.error('File upload failed');
+        }
+    };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleCancel = () => {
@@ -46,7 +68,7 @@ const CreatePlatform = () => {
         setIsModalOpen(true);
     }
     return <>
-        <Button type="primary" onClick={showModal} icon={<PlusCircleFilled/>} iconPosition="end">Create</Button>
+        <Button type="primary" onClick={showModal} icon={<PlusCircleFilled />} iconPosition="end">Create</Button>
         <Modal title="Create" open={isModalOpen} onCancel={handleCancel} footer={[]}>
             <Form
                 layout="vertical"
@@ -72,18 +94,13 @@ const CreatePlatform = () => {
                 >
                     <Input />
                 </Form.Item>
-
-                <Form.Item<FieldType>
-                    label="Icon"
-                    name="image"
-                >
-                    <Upload {...props}>
+                <div className="pb-3">
+                    <Upload customRequest={customUpload}>
                         <Button icon={<UploadOutlined />}>Click to Upload</Button>
                     </Upload>
-                </Form.Item>
-
+                </div>
                 <Form.Item >
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary" loading={createPlatform.isPending} htmlType="submit">
                         Create
                     </Button>
                 </Form.Item>

@@ -190,3 +190,12 @@ form *:not(h3){
 .scrollable-div::-webkit-scrollbar {
   width: 8px; /* Width of the scrollbar */
 }
+
+#live-table .ant-table-body{
+    min-height: 200px !important;
+    max-height: 230px !important;
+}
+
+#live-table .ant-table-body::-webkit-scrollbar {
+    width: 8px!important;
+}

@@ -7,7 +7,7 @@ import { handleUploadFile } from '../../handleUploadFile';
 // Import your handleUploadFile function
 
 const Page = () => {
-  const rootFolder = '/home/phamquan'; // Example root folder
+  const rootFolder = __dirname; // Example root folder
 
   const customUpload = async (options: any) => {
     const { file, onSuccess, onError } = options;
@@ -15,6 +15,7 @@ const Page = () => {
     try {
       // Call handleUploadFile with necessary parameters
       const response = await handleUploadFile(file, rootFolder);
+      console.log(response)
 
       onSuccess && onSuccess(response);
       message.success('File uploaded successfully');

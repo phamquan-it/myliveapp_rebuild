@@ -97,10 +97,10 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug }) => {
        return (
         <>
             <Button type="default" onClick={() => setIsModalOpen(true)} icon={<EyeFilled />}></Button>
-            <Modal destroyOnClose={true} width={1000} title="Vps detail" open={isModalOpen} onCancel={() => {
+            <Modal destroyOnClose={true} width={1300} title="Vps detail" open={isModalOpen} onCancel={() => {
                 setIsModalOpen(false);
             }}>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-4 gap-2 pb-8">
                     <div>
                         <Title level={5} className="text-center border-b">Vps info</Title>
                         <VpsProfile vpsProvider={slug} />

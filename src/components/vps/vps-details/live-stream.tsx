@@ -7,6 +7,7 @@ import { Table, Image, Select } from 'antd';
 import { ColumnType } from 'antd/es/table';
 import Title from 'antd/es/typography/Title';
 import React, { ReactNode, useEffect } from 'react';
+import LiveSpeed from './live-speed';
 interface LiveStreamProps {
     slug: string;
     setService: Function
@@ -30,7 +31,7 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
         console.log(platforms?.data?.data?.platforms)
     }, [platforms])
 
-    const columns:any = [
+    const columns: any = [
         {
             title: 'No.',
             dataIndex: 'key',
@@ -70,16 +71,16 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
             filterMode: () => {
                 return "menu";
             },
-            filters:[
-            { text: '>=35', value: 'gte35' },
-            { text: '<18', value: 'lt18' },
-          ],
+            filters: [
+                { text: '>=35', value: 'gte35' },
+                { text: '<18', value: 'lt18' },
+            ],
         },
         {
             title: 'Speed',
             dataIndex: 'platform',
             key: 'platform',
-            render: () => '1x'
+            render: () => <LiveSpeed stream_id={1} />
         },
         {
             title: 'Key',
@@ -92,11 +93,12 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
 
     return <>
         <Title level={5} className="text-center border-b">Live stream</Title>
-        <Table dataSource={data?.data?.map((data: any, index: number) => ({
+        <Table id="live-table" dataSource={data?.data?.map((data: any, index: number) => ({
             ...data, stkey: data.key, key: index + 1
-        }))} loading={isFetching} columns={columns} className="border rounded" onChange={() => {
-
-        }} pagination={false}
+        }))} loading={isFetching}
+            columns={columns}
+            className="border rounded"
+            pagination={false}
             scroll={{ y: 230 }}
             onRow={(record) => {
                 return {
