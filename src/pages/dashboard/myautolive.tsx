@@ -34,6 +34,7 @@ import EditLiveStreams from "@/components/live-streams/EditLiveStreams";
 import LiveState from "@/components/client/LiveState";
 import { useTranslations } from "next-intl";
 import { getCookie } from "cookies-next";
+import { ColumnType } from "antd/es/table";
 const Page = () => {
 
     const router = useRouter()
@@ -41,24 +42,29 @@ const Page = () => {
     const [isReady, setIsReady] = useState(false)
     const d = useTranslations("DashboardMenu");
     const t = useTranslations("MyLanguage");
-    const columns: any = [
+    const columns:any = [
         {
             title: t("entryno"),
             dataIndex: "key",
             key: "key",
             align: "center",
+            width: 70
         },
         {
             title: t("name"),
             dataIndex: "name",
             key: "name",
-            render: (text: string, record: any, index: number) => record?.user?.name
+            ellipsis: true
         },
         {
-            title: t("email"),
-            dataIndex: "email",
-            key: "email",
-            render: (text: string, record: any, index: number) => record?.user?.email
+            title: t("resolution"),
+            dataIndex: "resolution",
+            key: "resolution",
+        },
+        {
+            title: t("duration"),
+            dataIndex: "duration",
+            key: "duration",
         },
         {
             title: t("status"),
@@ -81,9 +87,6 @@ const Page = () => {
             title: t("action"),
             dataIndex: "action",
             key: "id",
-            render: (id: number, record: any) => (<>
-                <EditLiveStreams activityStreamId={record.id} />
-            </>)
         },
 
     ];

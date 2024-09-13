@@ -32,10 +32,10 @@ const CreatePlatform = () => {
 
 
     const [key, setKey] = useState('')
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+    const onFinish: FormProps<FieldType>['onFinish'] = (values:FieldType) => {
         if (key != '') {
-            const platform = { ...values, key }
-            createPlatform.mutate(platform)
+            values.image = key
+            createPlatform.mutate(values)
         } else message.error("File is empty!")
     };
 

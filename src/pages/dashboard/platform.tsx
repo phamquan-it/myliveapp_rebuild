@@ -5,7 +5,7 @@ import { pagination } from '@/helpers/pagination';
 import syncObjectToUrl from '@/helpers/syncObjectToUrl';
 import getObjecFormUrlParameters from '@/hooks/getObjectFormParameter';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Input, Spin, Table } from 'antd';
+import { Button, Input, Spin, Table, Image } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { getCookie } from 'cookies-next';
 import dayjs from 'dayjs';
@@ -29,7 +29,7 @@ const Page = () => {
                     limit
                 },
                 headers: {
-                    "Authorization":`Bearer ${token}`
+                    "Authorization": `Bearer ${token}`
                 },
             }),
         placeholderData: (previousData) => previousData,
@@ -48,8 +48,19 @@ const Page = () => {
         },
         {
             title: 'Icon',
-            dataIndex: 'icon',
-            key: 'icon',
+            dataIndex: 'image',
+            key: 'image',
+            render: (text: string) => {
+                return (
+                    <Image alt='icon' width={30} height={30} src={text} preview={false} />
+                )
+            }
+
+        },
+        {
+            title: 'Rmtp',
+            dataIndex: 'rmtp',
+            key: 'rmtp',
         },
         {
             title: 'CreateAt',
@@ -66,11 +77,11 @@ const Page = () => {
 
     ];
     const syncObj = syncObjectToUrl(router)
-    const handleInput =  debounce((e)=>{
-        syncObj({keyword: e.target.value})
+    const handleInput = debounce((e) => {
+        syncObj({ keyword: e.target.value })
     }, 300)
 
-       return <>
+    return <>
         <Title level={2} className="text-center">Platform</Title>
         <div className="flex justify-between py-3">
             <div>

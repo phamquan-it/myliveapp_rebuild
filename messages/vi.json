@@ -69,6 +69,8 @@
     "myautolive": "Luồng live của tôi"
   },
   "MyLanguage": {
+    "duration":"Thời lượng",
+    "resolution":"Độ phân giải",
     "ipv4": "IPv4",
     "port": "Cổng",
     "manufacturer": "Nhà sản xuất",

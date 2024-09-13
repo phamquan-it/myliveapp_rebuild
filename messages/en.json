@@ -69,6 +69,8 @@
     "myautolive": "My autolive"
   },
   "MyLanguage": {
+    "duration":"Duration",
+    "resolution":"Resolution",
     "ipv4": "IPv4",
     "port": "Port",
     "manufacturer": "Manufacturer",
