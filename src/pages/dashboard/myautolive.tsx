@@ -34,6 +34,7 @@ import { useTranslations } from "next-intl";
 import { getCookie } from "cookies-next";
 import { ColumnType } from "antd/es/table";
 import StreamState, { StreamType } from "@/components/autolive/StreamState";
+import StreamAction from "@/components/autolive/stream-action";
 const Page = () => {
 
     const router = useRouter()
@@ -98,9 +99,12 @@ const Page = () => {
 
         },
         {
-            title: t("action"),
+            title: "",
             dataIndex: "action",
             key: "id",
+            render: ()=>(
+                <StreamAction personStream={undefined}/>
+            )
         },
 
     ];
