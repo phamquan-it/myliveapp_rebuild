@@ -3,15 +3,20 @@ import io from 'socket.io-client';
 
 
 interface LiveSpeedProps {
-    stream_id: number
+    stream: any,
 }
 
-const LiveSpeed: React.FC<LiveSpeedProps> = ({ stream_id }) => {
+const LiveSpeed: React.FC<LiveSpeedProps> = ({ stream }) => {
+    const [streamData, setStreamData] = useState(stream)
     const [liveLiveInfo, setLiveInfo] = useState<any>()
         useEffect(() => {
-        const newSocket = io('http://localhost:3031/live-info'); // replace with your server URL
+            console.log("stream", stream)
+            const newSocket = io('http://localhost:3031/live-info'); // replace with your server URL
         setInterval(() => {
-            newSocket.emit("message", '1')
+            newSocket.emit("message",{
+                stream_id: streamData.id,
+                ipv4: streamData.ipv4
+            } )
         }, 500)
         newSocket.on('message', message => {
             setLiveInfo(message)
@@ -21,7 +26,7 @@ const LiveSpeed: React.FC<LiveSpeedProps> = ({ stream_id }) => {
         return () => {
             newSocket.close();
         }
-    }, [stream_id])
+    }, [stream])
 
     return <>
         {liveLiveInfo?.speed}x

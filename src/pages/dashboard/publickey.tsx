@@ -15,8 +15,8 @@ const Page = ()=>{
       const columns = [
         {
           title: 'No.',
-          dataIndex: 'entryno',
-
+          dataIndex: 'key',
+          width: 50
         },
         {
           title: 'Name',

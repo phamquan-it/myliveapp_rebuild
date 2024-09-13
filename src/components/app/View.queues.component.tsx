@@ -42,7 +42,6 @@ const ViewQueuesProcess: React.FC<ViewQueuesProcessProps> = ({ ipv4,service }) =
             socket.emit("input", service);
 
             socket.on("message", (data: string) => {
-                console.log(data);
                 terminal.write(data);
             });
 

@@ -9,7 +9,7 @@ import Title from 'antd/es/typography/Title';
 import React, { ReactNode, useEffect } from 'react';
 import LiveSpeed from './live-speed';
 interface LiveStreamProps {
-    slug: string;
+    slug: any;
     setService: Function
 }
 
@@ -20,7 +20,7 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
         queryFn: () => axiosInstance.get(`/activity-stream/find-by-slug`, {
             params: {
                 language: "en",
-                slug: slug,
+                slug: slug.slug,
                 offset: 0,
                 limit: 5
             }
@@ -80,7 +80,7 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
             title: 'Speed',
             dataIndex: 'platform',
             key: 'platform',
-            render: () => <LiveSpeed stream_id={1} />
+            render: (text: string, record: any) => <LiveSpeed stream={{...record, ipv4: slug.ipv4}} />,
         },
         {
             title: 'Key',

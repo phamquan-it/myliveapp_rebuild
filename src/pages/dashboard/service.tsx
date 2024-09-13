@@ -127,7 +127,7 @@ export default function Index() {
                     </div>
 
                     <Table
-                        className="border rounded-md shadow-md"
+                        className="border rounded-md shadow-md overflow-hidden"
                         loading={isFetching}
                         dataSource={data?.data?.services
                             .map((service: any, index: number) => ({

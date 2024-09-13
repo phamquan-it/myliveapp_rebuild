@@ -69,6 +69,9 @@
     "myautolive": "Luồng live của tôi"
   },
   "MyLanguage": {
+    "price":"Giá tiền",
+    "start_time":"Thời gian bắt đầu",
+    "end_time":"Thời gian kết thúc",
     "duration":"Thời lượng",
     "resolution":"Độ phân giải",
     "ipv4": "IPv4",

@@ -106,7 +106,7 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug }) => {
                         <VpsProfile vpsProvider={slug} />
                     </div>
                     <div className="col-span-3">
-                        <LiveStream slug={slug.slug} setService={setServiceId} />
+                        <LiveStream slug={slug} setService={setServiceId} />
                     </div>
                 </div>
                 <Tabs defaultActiveKey="1" items={items} />

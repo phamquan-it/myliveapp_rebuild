@@ -14,8 +14,6 @@ import { debounce } from 'lodash';
 import { GetStaticPropsContext } from 'next';
 import router, { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-
-
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
 import {
     Button,
@@ -35,6 +33,7 @@ import LiveState from "@/components/client/LiveState";
 import { useTranslations } from "next-intl";
 import { getCookie } from "cookies-next";
 import { ColumnType } from "antd/es/table";
+import StreamState, { StreamType } from "@/components/autolive/StreamState";
 const Page = () => {
 
     const router = useRouter()
@@ -42,7 +41,7 @@ const Page = () => {
     const [isReady, setIsReady] = useState(false)
     const d = useTranslations("DashboardMenu");
     const t = useTranslations("MyLanguage");
-    const columns:any = [
+    const columns: any = [
         {
             title: t("entryno"),
             dataIndex: "key",
@@ -67,11 +66,26 @@ const Page = () => {
             key: "duration",
         },
         {
+            title: t("start_time"),
+            dataIndex: "start_time",
+            key: "start_time",
+        },
+        {
+            title: t("end_time"),
+            dataIndex: "end_time",
+            key: "end_time",
+        },
+        {
+            title: t("price"),
+            dataIndex: "price",
+            key: "price",
+        },
+        {
             title: t("status"),
             dataIndex: "status",
             key: "method",
             render: (text: string) => (
-                <LiveState liveKey="" platfornId={1} state={false} />
+                <StreamState state={StreamType.RUNNING}/>
             ),
         },
         {
@@ -79,7 +93,7 @@ const Page = () => {
             dataIndex: "createdAt",
             key: "createdAt",
             render: (text: string) => (
-                <>{dayjs(text).format("DD/MM/YYYY hh:mm:ss")}</>
+                <>{dayjs(text).format("DD/MM/YYYY")}</>
             ),
 
         },
@@ -120,9 +134,9 @@ const Page = () => {
             </Title>
             <div className="grid grid-cols-4 gap-3">
                 <Card title="" style={{
-                    backgroundColor:'#1677ff'
-                    }}>
-                     Initalize
+                    backgroundColor: '#1677ff'
+                }}>
+                    Initalize
                 </Card>
                 <Card title="" className='bg-green-400'>
                     Running
@@ -148,8 +162,8 @@ const Page = () => {
                         { value: 4, label: <span>Stopped</span> },
                     ]} style={{
                         width: 100
-                    }} onChange={(e)=>{
-                        syncObj({...router.query, status:e})
+                    }} onChange={(e) => {
+                        syncObj({ ...router.query, status: e })
                     }}
                 />
             </div>

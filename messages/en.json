@@ -69,6 +69,9 @@
     "myautolive": "My autolive"
   },
   "MyLanguage": {
+    "price":"Price",
+    "start_time":"Start time",
+    "end_time":"End time",
     "duration":"Duration",
     "resolution":"Resolution",
     "ipv4": "IPv4",
