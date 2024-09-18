@@ -56,6 +56,13 @@ const Page = () => {
             key: "name",
             ellipsis: true
         },
+         {
+            title: d("platform"),
+            dataIndex: "platform",
+            key: "platform",
+            render: (text: string, record:any)=>record?.platform?.name
+        },
+
         {
             title: t("resolution"),
             dataIndex: "resolution",
@@ -84,9 +91,9 @@ const Page = () => {
         {
             title: t("status"),
             dataIndex: "status",
-            key: "method",
+            key: "status",
             render: (text: string) => (
-                <StreamState state={StreamType.RUNNING}/>
+                <StreamState state={text}/>
             ),
         },
         {
@@ -100,10 +107,12 @@ const Page = () => {
         },
         {
             title: "",
-            dataIndex: "action",
+            dataIndex: "id",
             key: "id",
-            render: ()=>(
-                <StreamAction personStream={undefined}/>
+            render: (text:any)=>(
+                <StreamAction personStream={text} reloadData={function(): void {
+                    throw new Error("Function not implemented.");
+                } }/>
             )
         },
 

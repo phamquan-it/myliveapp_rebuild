@@ -7,7 +7,7 @@ export enum StreamType{
     STOPPED = 'stopped'
 }
 interface StreamStateProps {
-    state: StreamType
+    state: string
 }
 
 const StreamState: React.FC<StreamStateProps> = ({ state }) => {

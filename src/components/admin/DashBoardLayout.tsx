@@ -50,7 +50,7 @@ interface DashBoardLayoutLayout {
     children?: ReactNode;
 }
 const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
-    setCookie("token",getCookie('token'))
+    setCookie("token", getCookie('token'))
     const [role, setRole] = useState("user");
     useEffect(() => {
         try {
@@ -76,18 +76,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             role: "user",
         },
         {
-            key: DashboardRouter.REFUND,
-            icon: <FundOutlined />,
-            role: "admin",
-            label: <Link href={DashboardRouter.REFUND}>{t('refund')}</Link>,
-        },
-        {
-            key: DashboardRouter.CASHFLOW,
-            icon: <FaMoneyBill />,
-            label: <Link href={DashboardRouter.CASHFLOW}>{t('cashflow')}</Link>,
-            role: "admin",
-        },
-        {
             key: DashboardRouter.MYAUTOLIVE,
             icon: <SignalFilled />,
             label: <Link href={DashboardRouter.MYAUTOLIVE}>{t('myautolive')}</Link>,
@@ -104,11 +92,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             icon: <WindowsFilled />,
             role: "admin",
             label: <Link href={DashboardRouter.PLATFORM}>{t('platform')}</Link>,
-        },
-        {
-            key: DashboardRouter.CRON,
-            icon: <CalendarFilled />,
-            label: <Link href={DashboardRouter.CRON}>{t('cron')}</Link>,
         },
         {
             key: DashboardRouter.ORDER,
@@ -162,6 +145,19 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             ]
         },
         {
+            key: DashboardRouter.REFUND,
+            icon: <FundOutlined />,
+            role: "admin",
+            label: <Link href={DashboardRouter.REFUND}>{t('refund')}</Link>,
+        },
+        {
+            key: DashboardRouter.CASHFLOW,
+            icon: <FaMoneyBill />,
+            label: <Link href={DashboardRouter.CASHFLOW}>{t('cashflow')}</Link>,
+            role: "admin",
+        },
+
+        {
             key: DashboardRouter.USER_PROFILE,
             icon: <UserOutlined />,
             label: <Link href={DashboardRouter.USER_PROFILE}>{t('userprofile')}</Link>,
@@ -195,8 +191,8 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                 },
             }),
     });
-    useEffect(()=>{
-        if(isSuccess)  setIsReady(true);
+    useEffect(() => {
+        if (isSuccess) setIsReady(true);
     }, [isSuccess])
 
     const [isCreateStreamOpen, setIsCreateStreamOpen] = useState(false)
@@ -206,7 +202,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
     const showCreateStream = () => {
         setIsCreateStreamOpen(true);
     }
-    return(
+    return (
         <Layout style={{ height: "100vh" }} className="!bg-white">
             <ToastContainer />
             <div className="border-r">
