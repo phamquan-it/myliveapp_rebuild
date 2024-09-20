@@ -124,6 +124,7 @@ export default function Index() {
                         <div>
                             <Input placeholder={p('search')}/>
                         </div>
+                        <CreateService/>
                     </div>
 
                     <Table

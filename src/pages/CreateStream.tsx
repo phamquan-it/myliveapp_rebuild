@@ -9,6 +9,7 @@ import moment from 'moment';
 import CreateStreamForm from '@/components/app/CreateStreamForm';
 import CreateStreamTable from '@/components/app/CreateStreamTable';
 import CreateStreamProcess from '@/components/app/CreateStreamProcess';
+import { useTranslations } from 'next-intl';
 interface StreamRequest {
     source_link: string | null,
     key: string,
@@ -21,6 +22,8 @@ interface StreamRequest {
 
 const App: React.FC = () => {
 
+    const d = useTranslations('DashboardMenu')
+    const t = useTranslations('MyLanguage')
     const getGoogleDriveFileKey = (url: string) => {
         const regex = /\/file\/d\/(.*?)\//;
         const match = url.match(regex);

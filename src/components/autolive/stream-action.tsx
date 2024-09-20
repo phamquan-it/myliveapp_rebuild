@@ -1,7 +1,7 @@
 import axiosInstance from '@/apiClient/axiosConfig';
 import { DeleteFilled, DeleteOutlined, DesktopOutlined, StopOutlined } from '@ant-design/icons';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Dropdown, MenuProps, message } from 'antd';
+import { Button, Dropdown, MenuProps, Popconfirm, PopconfirmProps, Tooltip, message } from 'antd';
 import { ConfigProvider } from 'antd/lib';
 import React from 'react';
 import { TbLetterYSmall } from 'react-icons/tb';
@@ -22,18 +22,71 @@ const StreamAction: React.FC<StreamActionProps> = ({ personStream, reloadData })
         }
     })
 
+    const confirm: PopconfirmProps['onConfirm'] = (e) => {
+
+        const streamData = {
+            stream_id: personStream
+        }
+        stopLive.mutate(streamData)
+    };
+
+    const confirmStart: PopconfirmProps['onConfirm'] = (e) => {
+        console.log(e);
+        message.success('Click on Yes');
+    };
+
+    const confirmDelete: PopconfirmProps['onConfirm'] = (e) => {
+        console.log(e);
+        message.success('Click on Yes');
+    };
+
     return (
-        <div className='flex gap-1'>
-            <Button type="primary" className='bg-green-500' icon={<DesktopOutlined />}></Button>
-            <Button type="default" icon={<StopOutlined style={{
-                color: 'red'
-            }} />} onClick={() => {
-                const streamData = {
-                    stream_id: personStream
-                }
-                stopLive.mutate(streamData)
-            }}></Button>
-            <Button type="primary" danger icon={<DeleteFilled />}></Button>
+        <div className='flex gap-3'>
+
+            <Tooltip title="Start stream">
+                <Popconfirm
+                    title="Start"
+                    description="Are you sure start this stream?"
+                    onConfirm={confirmStart}
+                    okText="Yes"
+                    cancelText="No"
+                    icon={<DesktopOutlined style={{
+                        color: 'green'
+                    }} />}
+                >
+                    <Button className='bg-green-500' type='primary' icon={<DesktopOutlined />}></Button>
+                </Popconfirm>
+            </Tooltip>
+
+            <Tooltip title="Stop stream">
+                <Popconfirm
+                    title="Stop stream"
+                    description="Are you sure stop this stream?"
+                    onConfirm={confirm}
+                    okText="Yes"
+                    cancelText="No"
+                    icon={<StopOutlined style={{ color: 'red' }} />}
+                >
+                    <Button type="default" icon={<StopOutlined style={{
+                        color: 'red'
+                    }} />} ></Button>
+
+                </Popconfirm>
+
+            </Tooltip>
+            <Tooltip title="Delete stream">
+
+                <Popconfirm
+                    title="Delete stream"
+                    description="Are you sure to delete this stream?"
+                    onConfirm={confirmDelete}
+                    okText="Yes"
+                    cancelText="No"
+                    icon={<DeleteFilled style={{ color: 'red' }} />}
+                >
+                    <Button type="primary" danger icon={<DeleteFilled />}></Button>
+                </Popconfirm>
+            </Tooltip>
         </div>
     )
 }

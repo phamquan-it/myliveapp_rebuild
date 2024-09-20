@@ -34,6 +34,10 @@ const Page = () => {
             }),
         placeholderData: (previousData) => previousData,
     });
+    const syncObj = syncObjectToUrl(router)
+    const handleInput = debounce((e) => {
+        syncObj({ keyword: e.target.value })
+    }, 300)
 
     const columns = [
         {
@@ -76,10 +80,6 @@ const Page = () => {
         },
 
     ];
-    const syncObj = syncObjectToUrl(router)
-    const handleInput = debounce((e) => {
-        syncObj({ keyword: e.target.value })
-    }, 300)
 
     return <>
         <Title level={2} className="text-center">Platform</Title>

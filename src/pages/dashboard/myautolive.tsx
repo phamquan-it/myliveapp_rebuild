@@ -35,6 +35,7 @@ import { getCookie } from "cookies-next";
 import { ColumnType } from "antd/es/table";
 import StreamState, { StreamType } from "@/components/autolive/StreamState";
 import StreamAction from "@/components/autolive/stream-action";
+import { DesktopOutlined } from "@ant-design/icons";
 const Page = () => {
 
     const router = useRouter()
@@ -56,11 +57,11 @@ const Page = () => {
             key: "name",
             ellipsis: true
         },
-         {
+        {
             title: d("platform"),
             dataIndex: "platform",
             key: "platform",
-            render: (text: string, record:any)=>record?.platform?.name
+            render: (text: string, record: any) => record?.platform?.name
         },
 
         {
@@ -93,7 +94,7 @@ const Page = () => {
             dataIndex: "status",
             key: "status",
             render: (text: string) => (
-                <StreamState state={text}/>
+                <StreamState state={text} />
             ),
         },
         {
@@ -109,10 +110,10 @@ const Page = () => {
             title: "",
             dataIndex: "id",
             key: "id",
-            render: (text:any)=>(
+            render: (text: any) => (
                 <StreamAction personStream={text} reloadData={function(): void {
                     throw new Error("Function not implemented.");
-                } }/>
+                }} />
             )
         },
 
@@ -140,6 +141,15 @@ const Page = () => {
         syncObj({ keyword: e.target.value })
     }, 300)
 
+    const rowSelection = {
+        onChange: (selectedRowKeys: React.Key[], selectedRows: any[]) => {
+            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        },
+        getCheckboxProps: (record: any) => ({
+            disabled: record.name === 'Disabled User', // Column configuration not to be checked
+            name: record.name,
+        }),
+    };
     return (
         <>
             <Title level={2} className="text-center">
@@ -162,25 +172,33 @@ const Page = () => {
                 </Card>
 
             </div>
-            <div className="flex py-3 gap-2">
-                <Input style={{
-                    width: 200
-                }} placeholder="Search..." onChange={handleInput} defaultValue={router.query.keyword ?? ''} />
-                <Select defaultValue={0}
-                    options={[
-                        { value: 0, label: <span>All</span> },
-                        { value: 1, label: <span>Initalize</span> },
-                        { value: 2, label: <span>Pending</span> },
-                        { value: 3, label: <span>Running</span> },
-                        { value: 4, label: <span>Stopped</span> },
-                    ]} style={{
-                        width: 100
-                    }} onChange={(e) => {
-                        syncObj({ ...router.query, status: e })
-                    }}
-                />
+
+            <div className="flex justify-between items-center">
+                <div className="flex py-3 gap-2">
+                    <Input style={{
+                        width: 200
+                    }} placeholder="Search..." onChange={handleInput} defaultValue={router.query.keyword ?? ''} />
+                    <Select defaultValue={0}
+                        options={[
+                            { value: 0, label: <span>All</span> },
+                            { value: 1, label: <span>Initalize</span> },
+                            { value: 2, label: <span>Pending</span> },
+                            { value: 3, label: <span>Running</span> },
+                            { value: 4, label: <span>Stopped</span> },
+                        ]} style={{
+                            width: 100
+                        }} onChange={(e) => {
+                            syncObj({ ...router.query, status: e })
+                        }}
+                    />
+                </div>
+                <Button type="primary" icon={<DesktopOutlined/>}></Button>
             </div>
             <Table
+                rowSelection={{
+                    type: 'checkbox',
+                    ...rowSelection,
+                }}
                 loading={isFetching}
                 onChange={(pagination) => {
                     syncObj({

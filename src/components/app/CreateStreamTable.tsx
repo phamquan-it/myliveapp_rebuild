@@ -3,32 +3,35 @@ import { Button, Table, Image } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { usePlatformData } from '../live-streams/CreateStreamByAdmin';
+import { useTranslations } from 'next-intl';
 
 interface CreateStreamTableProps {
     dataSource: any
 }
 
 const CreateStreamTable: React.FC<CreateStreamTableProps> = ({ dataSource }) => {
+    const d = useTranslations('DashboardMenu')
+    const t = useTranslations('MyLanguage')
 
     const { data } = usePlatformData();
     const columns = [
         {
-            title: 'No.',
+            title: t('entryno'),
             dataIndex: 'key',
             key: 'key'
         },
         {
-            title: 'Name',
+            title: t('name'),
             dataIndex: 'stream_name',
             key: 'name',
         },
         {
-            title: 'Resolution',
+            title: t('resolution'),
             dataIndex: 'resolution',
             key: 'resolution',
         },
         {
-            title: 'Platform',
+            title: d('platform'),
             dataIndex: 'platforms',
             key: 'platforms',
             render: (platformId: [], record: any) => {
@@ -47,7 +50,7 @@ const CreateStreamTable: React.FC<CreateStreamTableProps> = ({ dataSource }) => 
             }
         },
         {
-            title: 'Start at',
+            title: t('start_time'),
             dataIndex: 'start_at',
             key: 'start_at',
             render: (text: any, record: any) => {
@@ -58,7 +61,7 @@ const CreateStreamTable: React.FC<CreateStreamTableProps> = ({ dataSource }) => 
             }
         },
         {
-            title: 'End at',
+            title: t('endtime'),
             dataIndex: 'start_at',
             key: 'start_at',
             render: (text: any, record: any) => {

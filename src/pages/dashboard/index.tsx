@@ -218,6 +218,61 @@ const Page = () => {
 
                     ]} pagination={false} />
                 </div>
+                <div className="Payment rounded border overflow-hidden shadow">
+                    <div
+                        className="py-3 font-medium ps-3 border-b text-gray-600"
+                        style={{ fontSize: 14 }}
+                    >
+                        Vps logs
+                    </div>
+
+                    <Table dataSource={[
+                        {
+                            key: '1',
+                            slug: 'aglive1',
+                            stream_name: 'test 1',
+                            log: 'input output error',
+
+                        },
+                        {
+                            key: '2',
+                            slug: 'aglive1',
+                            stream_name: 'test 1',
+                            log: 'completed',
+
+                        },
+                    ]} columns={[
+                        {
+                            title: 'No.',
+                            dataIndex: 'key',
+                            key: 'key',
+                        },
+                        {
+                            title: 'Slug',
+                            dataIndex: 'slug',
+                            key: 'slug',
+                        },
+                        {
+                            title: 'Stream name',
+                            dataIndex: 'stream_name',
+                            key: 'stream_name',
+                        },
+
+                        {
+                            title: 'Log',
+                            dataIndex: 'log',
+                            key: 'log',
+                        },
+                        {
+                            title: 'Action',
+                            dataIndex: 'action',
+                            key: 'action',
+                        },
+
+                    ]} pagination={false} />
+                </div>
+
+
             </div>
             <Title className="text-center !text-gray-600" level={3}>
                 Recent orders

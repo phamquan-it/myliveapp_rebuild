@@ -19,8 +19,7 @@ const SelectDateForFilter: React.FC<SelectDateForFilterProps> = () => {
 
     return <>
         <RangePicker
-            showTime={{ format: 'HH:mm' }}
-            format="YYYY-MM-DD HH:mm"
+            format="YYYY-MM-DD"
             onChange={(value, dateString) => {
                 console.log('Selected Time: ', value);
                 console.log('Formatted Selected Time: ', dateString);

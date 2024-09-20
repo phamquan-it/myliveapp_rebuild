@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select, Image, DatePicker, message, Alert, Space, Switch } from 'antd';
+import { Button, Form, Input, Select, Image, DatePicker, message, Alert, Space, Switch, Radio, RadioChangeEvent } from 'antd';
 import React, { useState } from 'react';
 import { usePlatformData } from '../live-streams/CreateStreamByAdmin';
 import { useMutation } from '@tanstack/react-query';
@@ -6,6 +6,7 @@ import axiosInstance from '@/apiClient/axiosConfig';
 import { getCookie } from 'cookies-next';
 import { convertGoogleDriveLinkToDownload } from '@/utils/driveLinkConverter';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import FormListLink from './FormListLink';
 
 const { RangePicker } = DatePicker;
 
@@ -54,6 +55,15 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
         setUserCron(!userCron)
     }
 
+
+    const [value, setValue] = useState(1);
+
+    const onChange = (e: RadioChangeEvent) => {
+        console.log('radio checked', e.target.value);
+        setValue(e.target.value);
+    };
+
+
     return (
         <Form
             form={form}
@@ -66,6 +76,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
             autoComplete="off"
         >
             {/* Drive link input */}
+
             <Form.Item
                 label="Drive link"
                 name="drive_link"
@@ -163,22 +174,35 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
                         )}
                     </Form.List>
 
-
                 </div>
             </div>
-            {/* Live time selection */}
+
             <Form.Item
                 label="Cron"
             >
                 <Switch defaultChecked onChange={handleCron} />
             </Form.Item>
-            <Form.Item label="Live time" name="live_time">
-                <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" />
+            <Form.Item label="Live time" name="live_time" className={userCron ? 'hidden' : ''}>
+                <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" placeholder={['Thời gian bắt đầu', ' Thời gian kết thúc']} />
             </Form.Item>
 
-            <Form.Item wrapperCol={{ offset: 8 }}>
-                <div>
+            <Form.Item
+                label="Loop" name='loop' initialValue={2} rules={[
+                    {
+                        required: true
+                    }
+                ]}
+            >
+                <Radio.Group>
+                    <Radio value={1}>Infinity</Radio>
+                    <Radio value={2}>Only</Radio>
+                </Radio.Group>
+            </Form.Item>
 
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                <div className='flex gap-2'>
+                    <Button type="primary" htmlType='submit'>Add</Button>
+                    <Button type="default" htmlType='reset'>Reset</Button>
                 </div>
             </Form.Item>
         </Form>
