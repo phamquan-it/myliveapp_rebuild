@@ -1,5 +1,6 @@
 import axiosInstance from '@/apiClient/axiosConfig';
 import TableAction from '@/components/admin/TableAction';
+import SearchInput from '@/components/filters/SearchInput';
 import CreatePlatform from '@/components/general/create-platform';
 import { pagination } from '@/helpers/pagination';
 import syncObjectToUrl from '@/helpers/syncObjectToUrl';
@@ -11,6 +12,7 @@ import { getCookie } from 'cookies-next';
 import dayjs from 'dayjs';
 import { debounce } from 'lodash';
 import { GetStaticPropsContext } from 'next';
+import { useTranslations } from 'next-intl';
 import router, { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
@@ -35,18 +37,16 @@ const Page = () => {
         placeholderData: (previousData) => previousData,
     });
     const syncObj = syncObjectToUrl(router)
-    const handleInput = debounce((e) => {
-        syncObj({ keyword: e.target.value })
-    }, 300)
-
+    const t = useTranslations('MyLanguage')
+    const d = useTranslations('DashboardMenu')
     const columns = [
         {
-            title: 'No.',
+            title: t('entryno'),
             dataIndex: 'key',
             key: 'key',
         },
         {
-            title: 'Name',
+            title: t('name'),
             dataIndex: 'name',
             key: 'name',
         },
@@ -67,25 +67,25 @@ const Page = () => {
             key: 'rmtp',
         },
         {
-            title: 'CreateAt',
+            title: t('createat'),
             dataIndex: 'createAt',
             key: 'createAt',
             render: (text: string) => dayjs(text).format('YYYY/MM/DD')
         },
         {
-            title: 'Action',
+            title: t('action'),
             dataIndex: 'action',
             key: 'action',
+            width: 130,
             render: (text: string, record: any, index: number) => (<TableAction openState={false} editForm={<Button />} />)
         },
 
     ];
-
     return <>
-        <Title level={2} className="text-center">Platform</Title>
+        <Title level={2} className="text-center">{ d('platform') }</Title>
         <div className="flex justify-between py-3">
             <div>
-                <Input placeholder="Search..." onChange={handleInput} defaultValue={router.query.keyword ?? ''} />
+                <SearchInput />
             </div>
             <CreatePlatform />
         </div>

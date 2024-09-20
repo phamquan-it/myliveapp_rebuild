@@ -1,4 +1,5 @@
 import axiosInstance from "@/apiClient/axiosConfig";
+import SearchInput from "@/components/filters/SearchInput";
 import { pagination } from "@/helpers/pagination";
 import syncObjectToUrl from "@/helpers/syncObjectToUrl";
 import { useQuery } from "@tanstack/react-query";
@@ -136,11 +137,7 @@ const Page = () => {
     });
 
     const syncObj = syncObjectToUrl(router)
-    const handleInput = debounce((e) => {
-        syncObj({ keyword: e.target.value })
-    }, 300)
-
-    useEffect(() => {
+     useEffect(() => {
         setIsReady(router.isReady)
     }, [router])
 
@@ -153,15 +150,12 @@ const Page = () => {
 
                 <div className="flex" id="filter">
                     <div>
-                        <Input
-                            placeholder={p("search")}
-                            onChange={handleInput}
-                            defaultValue={router.query.keyword ?? ''} />
+                        <SearchInput/>
                     </div>
 
                 </div>
             </div>
-            <Table
+            <Table className='border shadow-sm rounded overflow-hidden'
                 loading={isFetching}
                 onChange={(pagination) => {
                     syncObj({

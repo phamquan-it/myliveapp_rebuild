@@ -1,5 +1,12 @@
 {
-
+  "OrderStatus": {
+    "inprogress": "In progress",
+    "completed": "Completed",
+    "partidal": "Partial",
+    "canceled": "Canceled",
+    "processing": "Processing",
+    "pending": "Pending"
+  },
   "StreamStatus": {
     "all": "All",
     "stopped": "Stopped",
@@ -33,6 +40,7 @@
   "LocaleSwitcher": {
     "switchLocale": "Switch to {locale, select, de {German} en {English} other {Unknown}}"
   },
+
   "PageLayout": {
     "pageTitle": "next-intl",
     "login": "Login",
@@ -78,6 +86,7 @@
   },
   "MyLanguage": {
     "add":"Add",
+    "all_order":"All orders",
     "stream_name":"Stream name",
     "reset":"Reset",
     "add_platform":"Add platform",
@@ -169,7 +178,7 @@
     "selectplatform": "Select platform",
     "selectcategory": "Select category",
     "selectprovider": "Select provider",
-    "select status": "Select status"
+    "select_status": "Select status"
   },
   "UserProfile": {
     "name": "Name",

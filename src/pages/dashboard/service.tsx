@@ -21,18 +21,15 @@ import UpdateService from "@/components/admin/crudform/update/UpdateService";
 import filterOption from "@/hooks/filterOption";
 import filterOptionByLabel from "@/hooks/filterOptionByLabel";
 import axiosInstance from "@/apiClient/axiosConfig";
+import SearchInput from "@/components/filters/SearchInput";
+import { ColumnType } from "antd/es/table";
 export default function Index() {
     const router = useRouter();
     const token = getCookie("token");
 
-    const [seriveData, setSeriveData] = useState({
-        data: [],
-        total: 0,
-    });
-
     const t = useTranslations("MyLanguage");
 
-    const columns: any[] = [
+    const columns: ColumnType<any>[] = [
         {
             title: t("name"),
             dataIndex: "name",
@@ -89,10 +86,9 @@ export default function Index() {
     const { data, isFetching, isError } = useQuery({
         queryKey: ["service", router.asPath],
         queryFn: (querykey: any) => {
-            console.log(querykey);
-
             return axiosInstance.get(`/service/list?language=${router.locale}`, {
                 params: {
+                    keyword: router.query.keyword ?? ''
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -100,10 +96,6 @@ export default function Index() {
             });
         },
     });
-    useEffect(() => {
-        console.log(data?.data?.services)
-    }, [data])
-
     const p = useTranslations("Placeholder")
     return (
         <div className="">
@@ -122,7 +114,7 @@ export default function Index() {
                         id="filter"
                     >
                         <div>
-                            <Input placeholder={p('search')}/>
+                            <SearchInput/>
                         </div>
                         <CreateService/>
                     </div>
@@ -152,8 +144,6 @@ export default function Index() {
                             defaultCurrent: 1,
                             showSizeChanger: true,
                             pageSize: 20,
-                        }}
-                        onChange={(pagination: any) => {
                         }}
                     />
                 </>

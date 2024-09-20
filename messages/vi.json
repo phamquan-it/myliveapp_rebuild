@@ -1,4 +1,14 @@
 {
+  "OrderStatus": {
+    "inprogress": "Đang xử lý",
+    "completed": "Đã hoàn thành",
+    "partidal": "Hoàn tất 1 phần",
+    "canceled": "Đã hủy",
+    "processing": "Chờ duyệt",
+    "pending": "Đang chờ"
+  },
+
+
   "StreamStatus": {
     "all": "Tất cả",
     "stopped": "Đã dừng",
@@ -76,6 +86,7 @@
     "myautolive": "Luồng live của tôi"
   },
   "MyLanguage": {
+    "all_order":"Tất cả đơn hàng",
     "add":"Thêm",
     "stream_name":"Tên luồng",
     "reset":"Đặt lại",
@@ -137,7 +148,7 @@
     "method": "Phương thức",
     "paymethod": "Phương thức thanh toán",
     "date": "Ngày",
-    "content": "Content",
+    "content": "Nội dung",
     "amountusd": "Số lượng(USD)",
     "amountvnd": "Số lượng(VND)",
     "account": "Tài khoản",
@@ -168,7 +179,7 @@
     "selectplatform": "Chọn nền tảng",
     "selectcategory": "Chọn danh mục",
     "selectprovider": "Chọn nhà cung cấp",
-    "select status": "Chọn trạng thái"
+    "select_status": "Chọn trạng thái"
   },
   "UserProfile": {
     "name": "Tên",

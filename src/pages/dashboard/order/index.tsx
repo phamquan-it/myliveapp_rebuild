@@ -9,6 +9,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import {
     Button,
+    Card,
     DatePicker,
     Form,
     Modal,
@@ -34,52 +35,21 @@ import Title from "antd/es/typography/Title";
 import dayjs from "dayjs";
 import { text } from "stream/consumers";
 import Link from "next/link";
-import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 import filterOptionByLabel from "@/hooks/filterOptionByLabel";
 import axiosInstance from "@/apiClient/axiosConfig";
+import { pagination } from "@/helpers/pagination";
+import syncObjectToUrl from "@/helpers/syncObjectToUrl";
+import OrderStatus from "@/components/filters/OrderStatus";
+import SearchInput from "@/components/filters/SearchInput";
+import Statistic from "@/components/admin/order/statistic";
 
 const { Option } = Select;
-const statisticalOrder = [
-    {
-        key: 1,
-        amount: 15.752,
-        status: "Completed",
-    },
-    {
-        key: 2,
-        amount: 89,
-        status: "Partial",
-    },
-    {
-        key: 3,
-        amount: 5,
-        status: "In progress",
-    },
-    {
-        key: 4,
-        amount: 0,
-        status: "Processing",
-    },
-    {
-        key: 5,
-        amount: 0,
-        status: "Pending",
-    },
-    {
-        key: 6,
-        amount: 0,
-        status: "Queue",
-    },
-    {
-        key: 7,
-        amount: 531,
-        status: "Canceled",
-    },
-];
+
 const Page = () => {
-    const router = useRouter();
     const d = useTranslations("DashboardMenu");
     const t = useTranslations("MyLanguage");
+    const router = useRouter()
+    const { limit, offset, pageIndex, pageSize } = pagination(router, 1, 10)
     const columns: any[] = [
         {
             title: "ID Orders",
@@ -195,37 +165,17 @@ const Page = () => {
             },
         },
     ];
-    const [pageIndex, setPageIndex] = useState(
-        !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageIndex))
-            ? parseInt(getObjecFormUrlParameters(router)?.pageIndex)
-            : 1
-    );
     const token = getCookie("token");
 
     const [openState, setOpenState] = useState(false);
-    const [status, setStatus] = useState(
-        getObjecFormUrlParameters(router)?.status
-    );
-    const [provider, setProvider] = useState(
-        !isNaN(parseInt(getObjecFormUrlParameters(router)?.provider))
-            ? getObjecFormUrlParameters(router)?.provider
-            : null
-    );
-    const [keyword, setIKeyword] = useState(
-        getObjecFormUrlParameters(router)?.keyword
-    );
-    const [pageSize, setPageSize] = useState(
-        !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageSize))
-            ? parseInt(getObjecFormUrlParameters(router)?.pageSize)
-            : 10
-    );
+
     const { data, isFetching, isError } = useQuery({
         queryKey: ["orders", router.asPath],
         queryFn: () =>
             axiosInstance.get("/order?language=en", {
                 params: {
-                    providerId: provider,
-                    keyword: keyword,
+                    providerId: router.query.provider ?? null,
+                    keyword: router.query.keyword ?? '',
                     status: status,
                     offset: (pageIndex - 1) * pageSize,
                     limit: pageIndex * pageSize,
@@ -237,170 +187,27 @@ const Page = () => {
         placeholderData: (previousData) => previousData,
     });
 
+    const syncObj = syncObjectToUrl(router)
     const handleTableChange = (pagination: TablePaginationConfig) => {
-        const current = pagination.current || 1;
-        setPageIndex(current);
-        const pageSize = pagination.pageSize || 10;
-        setPageSize(pageSize);
+        const current = pagination.current;
+        const pageSize = pagination.pageSize;
+        syncObj({
+            pageIndex: current,
+            pageSize: pageSize
+        })
     };
 
-    const [showModal, setShowModal] = useState<boolean>(false);
-    const hideModal = () => {
-        setShowModal(false);
-    };
-    const openModal = () => {
-        setShowModal(true);
-    };
-    const onFinish = (values: any) => {
-        console.log("Form values:", values);
-        // Handle form submission logic here
-    };
-    const handleStatus = (value: any) => {
-        setStatus(value);
-    };
-    const handlerProvider = (value: any) => {
-        setProvider(value);
-    };
-    const handleKeyword = (e: any) => {
-        setIKeyword(e.target.value);
-    };
-    useEffect(() => {
-        if (
-            status == null &&
-            provider == null &&
-            keyword == null &&
-            pageSize == 10 &&
-            pageIndex == 1 &&
-            router.asPath == "/dashboard/order"
-        )
-            return;
-        router.push(router, {
-            query: {
-                keyword: keyword,
-                status: status,
-                provider: provider,
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-            },
-        });
-    }, [pageIndex, pageSize, keyword, provider, status]);
     return (
         <>
             <Title level={2} className="text-center">
                 {d("order")}
             </Title>
-            <Modal
-                title={t("create")}
-                open={showModal}
-                onCancel={hideModal}
-                footer={null}
-            >
-                <Form layout="vertical" onFinish={onFinish}>
-                    <Form.Item
-                        label="Services"
-                        name="services"
-                        rules={[{ required: true, message: "Please select a service" }]}
-                    >
-                        <Select placeholder="Select service">
-                            <Option value="service1">Service 1</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item label="Provider" name="provider">
-                        <Input placeholder="Enter provider" />
-                    </Form.Item>
-                    <Form.Item
-                        label="User"
-                        name="user"
-                        rules={[
-                            {
-                                required: true,
-                                type: "email",
-                                message: "Please enter a valid email",
-                            },
-                        ]}
-                    >
-                        <Input placeholder="Enter user email" />
-                    </Form.Item>
-                    <div className="grid grid-cols-2 gap-2">
-                        <Form.Item label="Charge" name="charge">
-                            <Input type="number" placeholder="Enter charge" />
-                        </Form.Item>
-                        <Form.Item label="Start Count" name="startCount">
-                            <Input type="number" placeholder="Enter start count" />
-                        </Form.Item>
-                    </div>
-                    <Form.Item label="Actually Spent" name="actuallySpent">
-                        <Input type="number" placeholder="Enter actually spent" />
-                    </Form.Item>
 
-                    <div className="grid md:grid-cols-2 gap-2">
-                        <Form.Item
-                            label="Status"
-                            name="status"
-                            rules={[{ required: true, message: "Please select a status" }]}
-                        >
-                            <Select placeholder="Select status">
-                                <Option value="In progress">In progress</Option>
-                                <Option value="Completed">Completed</Option>
-                                <Option value="Error">Error</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item label="Quantity" name="quantity">
-                            <Input type="number" placeholder="Enter quantity" />
-                        </Form.Item>
-                    </div>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                            {t("create")}
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Modal>
+            <Statistic />
             <div className="flex justify-between my-3 mt-10">
                 <div style={{ display: "flex", gap: 5 }} id="filter">
-                    <Input
-                        defaultValue={keyword}
-                        placeholder="Search"
-                        style={{ flex: 1 }}
-                        allowClear
-                        onChange={handleKeyword}
-                    />
-                    <Select
-                        defaultValue={status}
-                        placeholder="Select status"
-                        allowClear
-                        style={{ width: 150 }}
-                        onChange={handleStatus}
-                        options={statusOptions}
-                        showSearch
-                        filterOption={filterOptionByLabel}
-                    />
-                    <Select
-                        defaultValue={provider}
-                        placeholder="Select provider"
-                        allowClear
-                        style={{ width: 150 }}
-                        className=""
-                        onChange={handlerProvider}
-                    >
-                        <Option value="1">
-                            <span className="text-sm">Gainsmm</span>
-                        </Option>
-                        <Option value="2">
-                            <span className="text-sm">Viralsmm</span>
-                        </Option>
-                    </Select>
-                </div>
-                <div>
-                    <Button
-                        type="primary"
-                        icon={<PlusCircleFilled />}
-                        iconPosition="end"
-                        onClick={openModal}
-                        id="create"
-                    >
-                        {t("create")}
-                    </Button>
+                    <SearchInput />
+                    <OrderStatus />
                 </div>
             </div>
             <Table
@@ -431,11 +238,4 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
         },
     };
 }
-const statusOptions = [
-    { value: "In progress", label: "In progress" },
-    { value: "Completed", label: "Completed" },
-    { value: "Partial", label: "Partial" },
-    { value: "Canceled", label: "Canceled" },
-    { value: "Processing", label: "Processing" },
-    { value: "Pending", label: "Pending" },
-];
+

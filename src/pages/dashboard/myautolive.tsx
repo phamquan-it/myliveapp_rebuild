@@ -36,6 +36,8 @@ import { ColumnType } from "antd/es/table";
 import StreamState, { StreamType } from "@/components/autolive/StreamState";
 import StreamAction from "@/components/autolive/stream-action";
 import { DesktopOutlined } from "@ant-design/icons";
+import SearchInput from "@/components/filters/SearchInput";
+import StatisticStatus from "@/components/admin/order/statistic-status";
 const Page = () => {
 
     const router = useRouter()
@@ -110,7 +112,7 @@ const Page = () => {
             title: "",
             dataIndex: "id",
             key: "id",
-            render: (text: any, record:any) => (
+            render: (text: any, record: any) => (
                 <StreamAction personStream={text} status={record.status} reloadData={function(): void {
                     throw new Error("Function not implemented.");
                 }} />
@@ -137,10 +139,6 @@ const Page = () => {
     });
 
     const syncObj = syncObjectToUrl(router)
-    const handleInput = debounce((e) => {
-        syncObj({ keyword: e.target.value })
-    }, 300)
-
     const rowSelection = {
         onChange: (selectedRowKeys: React.Key[], selectedRows: any[]) => {
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -153,39 +151,26 @@ const Page = () => {
     const s = useTranslations('StreamStatus')
     return (
         <>
-            <Title level={2} className="text-center">
-                {'Autolive'}
-            </Title>
-            <div className="grid grid-cols-4 gap-3">
-                <Card title="" style={{
-                    backgroundColor: '#1677ff'
-                }}>
-                    Initalize
-                </Card>
-                <Card title="" className='bg-green-400'>
-                    Running
-                </Card>
-                <Card title="" className='bg-orange-400'>
-                    Pendding
-                </Card>
-                <Card title="" className='bg-rose-500'>
-                    Stopped
-                </Card>
+            <Card title="My autolive" className='shadown'>
+                <div className="grid grid-cols-4">
+                    <StatisticStatus value={0} order_status={s('scheduling')}/>
+                    <StatisticStatus value={0} order_status={s('starting')}/>
+                    <StatisticStatus value={0} order_status={s('running')}/>
+                    <StatisticStatus value={0} order_status={s('stopped')}/>
+                </div>
+            </Card>
 
-            </div>
 
             <div className="flex justify-between items-center">
                 <div className="flex py-3 gap-2">
-                    <Input style={{
-                        width: 200
-                    }} placeholder="Search..." onChange={handleInput} defaultValue={router.query.keyword ?? ''} />
+                    <SearchInput />
                     <Select defaultValue={0}
                         options={[
-                            { value: 0, label: <span>{ s('all') }</span> },
-                            { value: 1, label: <span>{ s('scheduling') }</span> },
-                            { value: 2, label: <span>{ s('starting') }</span> },
-                            { value: 3, label: <span>{ s('running') }</span> },
-                            { value: 4, label: <span>{ s('stopped') }</span> },
+                            { value: 0, label: <span>{s('all')}</span> },
+                            { value: 1, label: <span>{s('scheduling')}</span> },
+                            { value: 2, label: <span>{s('starting')}</span> },
+                            { value: 3, label: <span>{s('running')}</span> },
+                            { value: 4, label: <span>{s('stopped')}</span> },
                         ]} style={{
                             width: 200
                         }} onChange={(e) => {
@@ -193,7 +178,7 @@ const Page = () => {
                         }}
                     />
                 </div>
-                <Button type="primary" icon={<DesktopOutlined/>}></Button>
+                <Button type="primary" icon={<DesktopOutlined />}></Button>
             </div>
             <Table
                 rowSelection={{

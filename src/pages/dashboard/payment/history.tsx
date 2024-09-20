@@ -170,8 +170,7 @@ const Page = () => {
                 />
                 <Select
                     style={{ width: 200 }}
-                    placeholder={p("select status")}
-                    defaultValue={status}
+                    placeholder={p('select_status')}
                     showSearch
                     filterOption={filterOptionByLabel}
                     allowClear
@@ -197,17 +196,17 @@ const Page = () => {
                 <HistoryStatitical
                     color="rgb(73, 189, 101)"
                     monney={0.207}
-                    info="Current Viral SMM balance"
+                    info="Completed"
                 />
                 <HistoryStatitical
                     color="rgb(244, 152, 32)"
                     monney={0.207}
-                    info="Current Viral SMM balance"
+                    info="Pending"
                 />
                 <HistoryStatitical
                     color="rgb(158, 73, 230)"
                     monney={0.207}
-                    info="Current Viral SMM balance"
+                    info="In Progress"
                 />
             </div>
             <Table

@@ -1,4 +1,6 @@
+import syncObjectToUrl from '@/helpers/syncObjectToUrl';
 import { DatePicker, DatePickerProps, GetProps } from 'antd';
+import { useRouter } from 'next/router';
 import React from 'react';
 interface SelectDateForFilterProps {
 
@@ -7,24 +9,20 @@ interface SelectDateForFilterProps {
 const SelectDateForFilter: React.FC<SelectDateForFilterProps> = () => {
 
     type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
-
+    const syncObj = syncObjectToUrl(useRouter())
     const { RangePicker } = DatePicker;
-    const onChange: DatePickerProps['onChange'] = (date, dateString) => {
-        console.log(date, dateString);
-    };
-
-    const onOk = (value: DatePickerProps['value'] | RangePickerProps['value']) => {
-        console.log('onOk: ', value);
-    };
+ 
 
     return <>
         <RangePicker
             format="YYYY-MM-DD"
             onChange={(value, dateString) => {
-                console.log('Selected Time: ', value);
-                console.log('Formatted Selected Time: ', dateString);
+                syncObj({
+                    startTime: dateString[0]??'',
+                    endTime: dateString[1]??''
+                })
             }}
-            onOk={onOk}
+            allowClear={true}
         />
     </>
 }
