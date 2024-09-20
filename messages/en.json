@@ -1,4 +1,12 @@
 {
+
+  "StreamStatus": {
+    "all": "All",
+    "stopped": "Stopped",
+    "scheduling": "Scheduling",
+    "running": "Running",
+    "starting": "Starting"
+  },
   "Authenlication": {
     "donothaveanacount": "Do not have an account?",
     "rpassword": "Confirm password",
@@ -69,6 +77,16 @@
     "myautolive": "My autolive"
   },
   "MyLanguage": {
+    "add":"Add",
+    "stream_name":"Stream name",
+    "reset":"Reset",
+    "add_platform":"Add platform",
+    "drive_link":"Drive link",
+    "live_time":"Live time",
+    "loop":"Loop",
+    "infinity": "Infinity",
+    "only":"Only",
+    "cron":"Use cron",
     "price":"Price",
     "start_time":"Start time",
     "end_time":"End time",

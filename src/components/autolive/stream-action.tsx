@@ -8,9 +8,12 @@ import { TbLetterYSmall } from 'react-icons/tb';
 interface StreamActionProps {
     personStream: any,
     reloadData: () => void
+    status: string
 }
 
-const StreamAction: React.FC<StreamActionProps> = ({ personStream, reloadData }) => {
+const StreamAction: React.FC<StreamActionProps> = ({ personStream, reloadData, status }) => {
+
+    console.log(status)
     const stopLive = useMutation({
         mutationKey: ['stoplive'],
         mutationFn: (data: any) => axiosInstance.post('/autolive-control/stop-live', data),
@@ -67,7 +70,7 @@ const StreamAction: React.FC<StreamActionProps> = ({ personStream, reloadData })
                     cancelText="No"
                     icon={<StopOutlined style={{ color: 'red' }} />}
                 >
-                    <Button type="default" icon={<StopOutlined style={{
+                    <Button type="default" disabled={status != 'running'} icon={<StopOutlined style={{
                         color: 'red'
                     }} />} ></Button>
 

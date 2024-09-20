@@ -1,5 +1,12 @@
 {
-  "Authenlication": {
+  "StreamStatus": {
+    "all": "Tất cả",
+    "stopped": "Đã dừng",
+    "scheduling": "Đang lên lịch",
+    "running": "Đang chạy",
+    "starting": "Đang bắt đầu"
+  },
+    "Authenlication": {
     "donothaveanacount": "Chưa có tài khoản?",
     "rpassword": "Xác nhận mật khẩu",
     "gotohomepage": "Đi tới trang chủ",
@@ -69,6 +76,16 @@
     "myautolive": "Luồng live của tôi"
   },
   "MyLanguage": {
+    "add":"Thêm",
+    "stream_name":"Tên luồng",
+    "reset":"Đặt lại",
+    "add_platform":"Thêm nền tảng",
+    "drive_link":"Link GG-Drive",
+    "live_time":"Thời gian live",
+    "loop":"Lặp lại",
+    "infinity": "Không giới hạn",
+    "only":"Chỉ một lần",
+    "cron":"Lên lịch",
     "price":"Giá tiền",
     "start_time":"Thời gian bắt đầu",
     "end_time":"Thời gian kết thúc",

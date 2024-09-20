@@ -140,7 +140,7 @@ const Page = ()=>{
     <Table dataSource={
         data?.data.map((pkey: any, index: number)=>({...pkey,sshpkey:pkey.key , key: index+1}))} 
       columns={columns} 
-      className="border rounded overflow-hidden" 
+      className="border rounded overflow-hidden shadown" 
       loading={isFetching}
       expandable={{
         expandedRowRender: (record) => <Input.TextArea placeholder="" readOnly value={record.sshpkey} autoSize />,

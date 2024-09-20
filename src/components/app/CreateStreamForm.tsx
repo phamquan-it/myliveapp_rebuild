@@ -7,6 +7,9 @@ import { getCookie } from 'cookies-next';
 import { convertGoogleDriveLinkToDownload } from '@/utils/driveLinkConverter';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import FormListLink from './FormListLink';
+import { useTranslations } from 'next-intl';
+import { MdOutlineErrorOutline } from "react-icons/md";
+import { FaRegCheckCircle } from 'react-icons/fa';
 
 const { RangePicker } = DatePicker;
 
@@ -62,6 +65,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
         console.log('radio checked', e.target.value);
         setValue(e.target.value);
     };
+    const t = useTranslations('MyLanguage')
 
 
     return (
@@ -78,28 +82,23 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
             {/* Drive link input */}
 
             <Form.Item
-                label="Drive link"
+                label={t('drive_link')}
                 name="drive_link"
-                rules={[{ required: true, message: 'Please input your driver link!', type: "url" }]}
+                validateStatus={(linkState) ? 'success' : 'error'}
+                rules={[{ required: true, type: "url" }]}
             >
                 <Input
                     onBlur={(e: any) =>
                         checkLink.mutate(convertGoogleDriveLinkToDownload(e.target.value))
                     }
+                    prefix={(linkState) ? <FaRegCheckCircle style={{
+                        color: 'green'
+                        }} /> : <MdOutlineErrorOutline />}
                 />
             </Form.Item>
-
-            {/* Link validation status */}
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Alert
-                    type={linkState ? 'info' : 'error'}
-                    message={linkState ? 'Link ok' : 'Invalid link'}
-                />
-            </Form.Item>
-
             {/* Resolution display */}
             <Form.Item
-                label="Resolution"
+                label={t('resolution')}
                 name="resolution"
                 rules={[{ required: true, message: 'Invalid resolution!' }]}
             >
@@ -108,7 +107,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
 
             {/* Stream name input */}
             <Form.Item
-                label="Stream name"
+                label={t('stream_name')}
                 name="stream_name"
                 rules={[{ required: true, message: 'Please input your stream name!' }]}
             >
@@ -167,7 +166,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
                                 ))}
                                 <Form.Item>
                                     <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                                        Add platform
+                                        {t('add_platform')}
                                     </Button>
                                 </Form.Item>
                             </>
@@ -178,31 +177,31 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
             </div>
 
             <Form.Item
-                label="Cron"
+                label={t('cron')}
             >
                 <Switch defaultChecked onChange={handleCron} />
             </Form.Item>
-            <Form.Item label="Live time" name="live_time" className={userCron ? 'hidden' : ''}>
-                <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" placeholder={['Thời gian bắt đầu', ' Thời gian kết thúc']} />
+            <Form.Item label={t('live_time')} name="live_time" className={userCron ? 'hidden' : ''}>
+                <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" placeholder={[t('start_time'), t('endtime')]} />
             </Form.Item>
 
             <Form.Item
-                label="Loop" name='loop' initialValue={2} rules={[
+                label={t('loop')} name='loop' initialValue={2} rules={[
                     {
                         required: true
                     }
                 ]}
             >
                 <Radio.Group>
-                    <Radio value={1}>Infinity</Radio>
-                    <Radio value={2}>Only</Radio>
+                    <Radio value={1}>{t('infinity')}</Radio>
+                    <Radio value={2}>{t('only')}</Radio>
                 </Radio.Group>
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                 <div className='flex gap-2'>
-                    <Button type="primary" htmlType='submit'>Add</Button>
-                    <Button type="default" htmlType='reset'>Reset</Button>
+                    <Button type="primary" htmlType='submit'>{t('add')}</Button>
+                    <Button type="default" htmlType='reset'>{t('reset')}</Button>
                 </div>
             </Form.Item>
         </Form>

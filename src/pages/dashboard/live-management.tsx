@@ -3,7 +3,9 @@ import axiosInstance from '@/apiClient/axiosConfig';
 import PlatformSelect from '@/components/admin/PlatformSelect';
 import PlatformSelectForFilter from '@/components/admin/PlatformSelectForFilter';
 import DeleteStream from '@/components/autolive/DeleteStream';
+import StreamState from '@/components/autolive/StreamState';
 import ViewAutoliveDetail from '@/components/autolive/ViewAutoliveDetail';
+import SelectVps from '@/components/filters/SelectVps';
 import UserSelect from '@/components/general/user-select';
 import VpsSelect from '@/components/general/vps-select';
 import SelectDateForFilter from '@/components/live-streams/SelectDateForFilter';
@@ -67,7 +69,8 @@ const Page: NextPage<PageProps> = ({ modal }) => {
         {
             title: 'Status',
             dataIndex: 'status',
-            key: 'status'
+            key: 'status',
+            render: (text)=>(<StreamState state={text}/>)
         },
 
         {
@@ -101,7 +104,7 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             <div>
                 <Input placeholder={'Search...'} onChange={handleInput}/>
             </div>
-            <VpsSelect />
+            <SelectVps/>
             <UserSelect />
             <SelectDateForFilter />
         </div>

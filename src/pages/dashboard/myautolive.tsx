@@ -110,8 +110,8 @@ const Page = () => {
             title: "",
             dataIndex: "id",
             key: "id",
-            render: (text: any) => (
-                <StreamAction personStream={text} reloadData={function(): void {
+            render: (text: any, record:any) => (
+                <StreamAction personStream={text} status={record.status} reloadData={function(): void {
                     throw new Error("Function not implemented.");
                 }} />
             )
@@ -150,6 +150,7 @@ const Page = () => {
             name: record.name,
         }),
     };
+    const s = useTranslations('StreamStatus')
     return (
         <>
             <Title level={2} className="text-center">
@@ -180,13 +181,13 @@ const Page = () => {
                     }} placeholder="Search..." onChange={handleInput} defaultValue={router.query.keyword ?? ''} />
                     <Select defaultValue={0}
                         options={[
-                            { value: 0, label: <span>All</span> },
-                            { value: 1, label: <span>Initalize</span> },
-                            { value: 2, label: <span>Pending</span> },
-                            { value: 3, label: <span>Running</span> },
-                            { value: 4, label: <span>Stopped</span> },
+                            { value: 0, label: <span>{ s('all') }</span> },
+                            { value: 1, label: <span>{ s('scheduling') }</span> },
+                            { value: 2, label: <span>{ s('starting') }</span> },
+                            { value: 3, label: <span>{ s('running') }</span> },
+                            { value: 4, label: <span>{ s('stopped') }</span> },
                         ]} style={{
-                            width: 100
+                            width: 200
                         }} onChange={(e) => {
                             syncObj({ ...router.query, status: e })
                         }}

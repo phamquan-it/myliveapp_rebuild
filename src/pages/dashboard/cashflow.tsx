@@ -106,7 +106,7 @@ const Page = () => {
                 className="border shadow-md rounded-md mt-4"
                 dataSource={data?.data.data.map((item: any, index: number) => ({
                     ...item,
-                 //   key: parseInt(query?.pageSize) || 1 * pageSize + (index + 1) - pageSize,
+                    key: 1 * 10 + (index + 1) - 10,
                 }))}
                 scroll={{ x: 700 }}
                 columns={columns}
