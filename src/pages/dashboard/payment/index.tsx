@@ -29,9 +29,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { PlusCircleFilled, StarFilled } from "@ant-design/icons";
 import DeleteForm from "@/components/admin/DeleteForm";
-import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import TableAction from "@/components/admin/TableAction";
-import EditPayment from "@/components/admin/crudform/edit/EditPayment";
 import { toast } from "react-toastify";
 
 const Page = () => {
@@ -102,7 +100,6 @@ const Page = () => {
                                         layout="vertical"
                                         initialValues={{ remember: true }}
                                     >
-                                        <EditPayment value={record} />
 
                                         <Form.Item>
                                             <Button type="primary" htmlType="submit">

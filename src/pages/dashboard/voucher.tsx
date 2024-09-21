@@ -2,7 +2,6 @@ import axiosClient from "@/apiClient/axiosClient";
 import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
 import { debounce } from "lodash";
-import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import EditVoucher from "@/components/admin/crudform/edit/EditVoucher";
 import { PlusCircleFilled } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";

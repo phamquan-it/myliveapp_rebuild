@@ -2,7 +2,6 @@ import axiosClient from "@/apiClient/axiosClient";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
-import EditCategory from "@/components/admin/crudform/edit/EditCategory";
 import HistoryStatitical from "@/components/admin/crudform/statistical/HistoryStatitical";
 import { useQuery } from "@tanstack/react-query";
 import _, { debounce } from "lodash";
