@@ -137,7 +137,7 @@ const Page = () => {
     });
 
     const syncObj = syncObjectToUrl(router)
-     useEffect(() => {
+    useEffect(() => {
         setIsReady(router.isReady)
     }, [router])
 
@@ -150,7 +150,7 @@ const Page = () => {
 
                 <div className="flex" id="filter">
                     <div>
-                        <SearchInput/>
+                        <SearchInput />
                     </div>
 
                 </div>
