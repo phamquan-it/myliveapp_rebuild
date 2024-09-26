@@ -123,13 +123,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                     role: "admin",
                 },
                 {
-                    key: DashboardRouter.VPS_CONFIG,
-                    icon: <CloudServerOutlined />,
-                    label: <Link href={DashboardRouter.VPS_CONFIG}>{('Vps config')}</Link>,
-                    role: "admin",
-                },
-
-                {
                     key: DashboardRouter.PUBLICKEY,
                     icon: <KeyOutlined />,
                     label: <Link href={DashboardRouter.PUBLICKEY}>{('Public key')}</Link>,

@@ -151,15 +151,7 @@ const Page = () => {
     const s = useTranslations('StreamStatus')
     return (
         <>
-            <Card title="My autolive" className='shadown'>
-                <div className="grid grid-cols-4">
-                    <StatisticStatus value={0} order_status={s('scheduling')}/>
-                    <StatisticStatus value={0} order_status={s('starting')}/>
-                    <StatisticStatus value={0} order_status={s('running')}/>
-                    <StatisticStatus value={0} order_status={s('stopped')}/>
-                </div>
-            </Card>
-
+            <Title level={2} className='text-center'>{('Autolive')}</Title>
 
             <div className="flex justify-between items-center">
                 <div className="flex py-3 gap-2">
