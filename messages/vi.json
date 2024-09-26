@@ -86,6 +86,7 @@
     "myautolive": "Luồng live của tôi"
   },
   "MyLanguage": {
+    "add_config":"Thêm cấu hình",
     "all_order":"Tất cả đơn hàng",
     "add":"Thêm",
     "stream_name":"Tên luồng",

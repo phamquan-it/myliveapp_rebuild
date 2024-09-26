@@ -16,5 +16,5 @@ export enum DashboardRouter{
     USER_PROFILE = '/dashboard/user/info',
     SETTING = '/dashboard/settings',
     PUBLICKEY = '/dashboard/publickey',
-    CATEGORY = '/dashboard/category',
+    VPS_CONFIG = '/dashboard/vps-config',
 }

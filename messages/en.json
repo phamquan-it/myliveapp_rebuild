@@ -85,6 +85,7 @@
     "myautolive": "My autolive"
   },
   "MyLanguage": {
+    "add_config":"Add Config",
     "add":"Add",
     "all_order":"All orders",
     "stream_name":"Stream name",

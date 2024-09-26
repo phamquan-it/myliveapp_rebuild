@@ -8,6 +8,7 @@ import TableAction from "@/components/admin/TableAction";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { webdockConfig } from "../../../WEBDOCK_PROVIDER/APIRequest/config";
+import SearchInput from "@/components/filters/SearchInput";
 
 const Page = ()=>{
     const [openState,setOpenState] = useState(false)
@@ -130,7 +131,8 @@ const Page = ()=>{
     
     <Title level={2} className="text-center pb-3">Public key</Title>
     <div className=" flex py-3 justify-between">
-        <div className="filter"><Input placeholder="Search..." />
+        <div className="filter">
+            <SearchInput/>
         </div>
         <Button type="primary" icon={<PlusCircleFilled/>} iconPosition="end" onClick={showModal}>
             Create

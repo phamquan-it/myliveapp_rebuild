@@ -7,6 +7,7 @@ import Title from "antd/es/typography/Title";
 import { DeleteFilled, EditFilled, PlusCircleFilled } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import UpdateAccountScript from "@/components/admin/vps/update-account-script";
+import SearchInput from "@/components/filters/SearchInput";
 
 
 const Page = () => {
@@ -116,7 +117,7 @@ const Page = () => {
 
             <div className="flex justify-between my-2">
                 <div>
-                    <Input placeholder="Search..." />
+                    <SearchInput/>
                 </div>
                 <Button type="primary" icon={<PlusCircleFilled />} iconPosition="end" onClick={showCreatePopup}>
                     Create
