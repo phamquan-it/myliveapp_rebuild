@@ -45,12 +45,12 @@ const VpsConfig: React.FC<VpsConfigProps> = () => {
             width: 50
         },
         {
-            title: 'Resolution',
+            title: t('resolution'),
             dataIndex: 'resolution',
             key: 'resolution',
         },
         {
-            title: 'Max',
+            title: t('max_streams'),
             dataIndex: 'max',
             key: 'max',
             render: (max: string) => <Input readOnly className='border-0' style={{
@@ -77,7 +77,7 @@ const VpsConfig: React.FC<VpsConfigProps> = () => {
 
         },
         {
-            title: 'Storage',
+            title: t('storage'),
             dataIndex: 'storage',
             key: 'storage',
             render: (max: string) => <Input readOnly style={{

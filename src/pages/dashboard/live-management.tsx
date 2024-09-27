@@ -45,40 +45,42 @@ const Page: NextPage<PageProps> = ({ modal }) => {
 
     })
 
+    const t = useTranslations("MyLanguage")
+    const d = useTranslations("DashboardMenu") 
     const columns: ColumnType<ActivityStream>[] = [
         {
-            title: 'No.',
+            title: t('entryno'),
             dataIndex: 'key',
             key: 'key',
         },
         {
-            title: 'Email',
+            title: t('email'),
             dataIndex: 'email',
             key: 'email',
             render: (text: string, record, index) => record?.user?.email
         },
 
         {
-            title: 'Platform',
+            title: d('platform'),
             dataIndex: 'platform',
             key: 'platform',
             render: (text: string, record, index) => record?.platform?.name
         },
         {
-            title: 'Status',
+            title: t('status'),
             dataIndex: 'status',
             key: 'status',
             render: (text)=>(<StreamState state={text}/>)
         },
 
         {
-            title: 'createAt',
+            title: t('createAt'),
             dataIndex: 'createAt',
             key: 'createAt',
             render: (text: string) => dayjs(text).format('YYYY/MM/DD HH:mm:ss')
         },
         {
-            title: 'Action',
+            title: t('action'),
             dataIndex: 'action',
             key: 'action',
             render: (text, record, index) => (
@@ -95,9 +97,8 @@ const Page: NextPage<PageProps> = ({ modal }) => {
     const handleInput = debounce((e) => {
         syncObj({ keyword: e.target.value })
     }, 300)
-   
     return <>
-        <Title level={2} className="text-center">LiveStreams</Title>
+        <Title level={2} className="text-center">{ ('Live streams') }</Title>
         <div className="flex py-3 gap-2">
             <div>
                 <Input placeholder={'Search...'} onChange={handleInput}/>

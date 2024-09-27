@@ -79,9 +79,9 @@ const StreamAction: React.FC<StreamActionProps> = ({ personStream, reloadData, s
     return (
         <div className='flex gap-3'>
 
-            <Tooltip title="Start stream">
+            <Tooltip title={ w('start_stream') }>
                 <Popconfirm
-                    title="Start"
+                    title={ w('start_stream') }
                     description={w('start_this_stream')}
 
                     onConfirm={confirmStart}
@@ -95,10 +95,10 @@ const StreamAction: React.FC<StreamActionProps> = ({ personStream, reloadData, s
                 </Popconfirm>
             </Tooltip>
 
-            <Tooltip title="Stop stream">
+            <Tooltip title={ w('stop_stream') }>
                 <Popconfirm
-                    title={w('stop_this_stream')}
-                    description="Are you sure stop this stream?"
+                    title={w('stop_stream')}
+                    description={ w('stop_this_stream') }
                     onConfirm={confirm}
                     okText={t('yes')}
                     cancelText={t('no')}
@@ -112,10 +112,10 @@ const StreamAction: React.FC<StreamActionProps> = ({ personStream, reloadData, s
                 </Popconfirm>
 
             </Tooltip>
-            <Tooltip title="Delete stream">
+            <Tooltip title={ w('delete_stream') }>
 
                 <Popconfirm
-                    title="Delete stream"
+                    title={ w('delete_stream') }
                     description={w('delete_this_stream')}
                     onConfirm={confirmDelete}
                     okText={t('yes')}

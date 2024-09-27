@@ -25,27 +25,16 @@ import XtermUI, { SSHInfo } from "@/components/app/Xterm.component";
 import VpsDetail from "@/components/admin/vps/VpsDetail";
 import VpsHideOption from "@/components/admin/vps/VpsHideOption";
 import axiosInstance from "@/apiClient/axiosConfig";
+import SearchInput from "@/components/filters/SearchInput";
+import { pagination } from "@/helpers/pagination";
+import syncObjectToUrl from "@/helpers/syncObjectToUrl";
 
 const Page = () => {
     const [openState, setOpenState] = useState(false)
     const t = useTranslations("MyLanguage");
     const p = useTranslations("Placeholder");
     const router = useRouter();
-    const [pageIndex, setPageIndex] = useState(
-        !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageIndex))
-            ? parseInt(getObjecFormUrlParameters(router)?.pageIndex)
-            : 1
-    );
-
-    const [keyword, setKeyword] = useState(
-        getObjecFormUrlParameters(router)?.keyword || ""
-    );
-    const [pageSize, setPageSize] = useState(
-        !isNaN(parseInt(getObjecFormUrlParameters(router)?.pageSize))
-            ? parseInt(getObjecFormUrlParameters(router)?.pageSize)
-            : 10
-    );
-    const [isModalOpen, setIsModalOpen] = useState(false);
+        const [isModalOpen, setIsModalOpen] = useState(false);
     const [sync, setSync] = useState(false)
     const { data, isFetching, isError } = useQuery({
         queryKey: ['queryKey', isModalOpen],
@@ -63,34 +52,8 @@ const Page = () => {
     };
 
 
-    const handleTableChange = (pagination: TablePaginationConfig) => {
-        const current = pagination.current || 1;
-        setPageIndex(current);
-        const pageSize = pagination.pageSize || 10;
-        setPageSize(pageSize);
-    };
-    const handleKeyword = debounce((e: any) => {
-        setKeyword(e.target.value);
-    }, 300);
-    const d = useTranslations("DashboardMenu");
-    useEffect(() => {
-        if (
-            keyword == "" &&
-            pageSize == 10 &&
-            pageIndex == 1 &&
-            router.asPath == "/dashboard/vps"
-        )
-            return;
-        router.push(router, {
-            query: {
-                keyword: keyword,
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-            },
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [keyword, pageIndex, pageSize]);
-
+          const d = useTranslations("DashboardMenu");
+    
     const [sshInfo, setSSHInfo] = useState(
         {
             ipv4OrHost: "",
@@ -201,7 +164,8 @@ const Page = () => {
             openModalViewDetail()
     }, [slug])
 
-
+    const { pageIndex, pageSize,limit, offset } = pagination(router)
+    const syncObj = syncObjectToUrl(router)
     return (
         <>
             <Title className="text-center" level={2}>
@@ -229,12 +193,7 @@ const Page = () => {
             </Modal>
             <div className="flex justify-between items-center my-3">
                 <div id="filter">
-                    <Input
-                        defaultValue={keyword}
-                        placeholder={p("search")}
-                        style={{ width: 200 }}
-                        onChange={handleKeyword}
-                    />
+                    <SearchInput/>
                 </div>
 
                 <Button
@@ -258,8 +217,14 @@ const Page = () => {
                 }))}
                 columns={columns}
                 loading={isFetching}
-                onChange={handleTableChange}
                 scroll={{ x: 1000 }}
+                onChange={(pag)=>{
+                    const { current, pageSize  } = pag
+                    syncObj({
+                        pageIndex: current,
+                        pageSize
+                    })
+                }}
                 pagination={{
                     total: data?.data.total,
                     pageSize: pageSize,

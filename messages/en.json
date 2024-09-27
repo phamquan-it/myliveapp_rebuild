@@ -59,6 +59,8 @@
     "terms": "Terms"
   },
   "DashboardMenu": {
+    "editconfig": "Edit config",
+    "livestreams": "Live streams",
     "cloudserver": "Cloud server",
     "home": "Home",
     "services": "Services",
@@ -85,6 +87,10 @@
     "myautolive": "My autolive"
   },
   "MyLanguage": {
+    "edit_config":"Edit config",
+    "max_streams":"Max streams",
+    "storage":"Storage",
+    "left":"left",
     "yes":"Yes",
     "no":"No",
     "add_config":"Add Config",
@@ -193,6 +199,8 @@
     "profile": "Profile"
   },
   "Settings": {
+    "app_config":"System",
+    "vps_config":"Vps",
     "timeupdateservice": "Time update service",
     "timeupdateorder": "Time update order",
     "timeupdaterate_hour": "Time update rate (hour)",
@@ -208,6 +216,12 @@
     "update": "Update"
   },
   "Warning":{
+     "start_streams":"Start streams",
+     "start_stream":"Start stream",
+     "stop_streams":"Stop streams",
+     "stop_stream":"Stop stream",
+     "delete_streams":"Delete streams",
+     "delete_stream":"Delete stream",
      "start_this_stream": "Start this stream?",
      "stop_this_stream": "Stop this stream?",
      "delete_this_stream": "Delete this stream?",
@@ -217,5 +231,9 @@
   },
   "result": {
     "active": "Successfully, your account is activated!"
+  },
+ "Unit": {
+    "cores": "cores",
+    "streams": "streams"
   }
 }

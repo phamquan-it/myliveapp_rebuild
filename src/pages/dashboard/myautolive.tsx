@@ -40,6 +40,7 @@ import SearchInput from "@/components/filters/SearchInput";
 import StatisticStatus from "@/components/admin/order/statistic-status";
 import { IoPlay } from "react-icons/io5";
 import MutistreamsAction from "@/components/MutistreamsAction";
+import CountdownTimer from "@/components/client/CountdownTimer";
 export interface StreamDataType {
     createAt?: string
     download_link?: string
@@ -102,6 +103,10 @@ const Page = () => {
             title: t("start_time"),
             dataIndex: "start_time",
             key: "start_time",
+            ellipsis: true,
+            render: ()=>(<>
+                <CountdownTimer/>
+            </>)
         },
         {
             title: t("end_time"),

@@ -3,6 +3,7 @@ import {  Space, Statistic, Table } from 'antd';
 import type { TableProps } from 'antd';
 import {  TbCpu, TbSandbox} from 'react-icons/tb';
 import { DollarCircleFilled, HddOutlined } from '@ant-design/icons';
+import { useTranslations } from 'next-intl';
 
 
 
@@ -11,6 +12,7 @@ interface SelectProfileProps{
   onSelectProfileChange?: any
 }
 const SelectProfile:React.FC<SelectProfileProps> = ({profiles, onSelectProfileChange}) => {
+    const u = useTranslations('Unit')
   const fixedColumns: TableProps['columns'] = [
     {
       title: 'Slug',

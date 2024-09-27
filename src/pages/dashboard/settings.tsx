@@ -30,12 +30,12 @@ const Page = () => {
     const items: TabsProps['items'] = [
         {
             key: '1',
-            label: 'Settings',
+            label: t('app_config'),
             children: <SettingForm/>,
         },
         {
             key: '2',
-            label: 'Vps Config',
+            label: t('vps_config'),
             children: <VpsConfig/>,
         },
     ];

@@ -78,32 +78,33 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected }
     };
 
     const w = useTranslations('Warning')
+    const t = useTranslations('MyLanguage')
     return <>
         <div className={`py-3 flex gap-2 ${(streamsSelected.length == 0) ? "hidden" : ""}`}>
 
 
             <Tooltip title={w('start_selected_stream')}>
                 <Popconfirm
-                    title="Start streams"
+                    title={w('start_streams')}
                     description={`${w('start_selected_stream')}?`}
                     onConfirm={confirm}
                     icon={<IoPlay style={{
                         color: '#1677ff'
                     }} />}
-                    okText="Yes"
-                    cancelText="No"
+                    okText={t('yes')}
+                    cancelText={t('no')}
                 >
                     <Button type="primary" icon={<IoPlay />}></Button>
                 </Popconfirm>
             </Tooltip>
             <Tooltip title={w('stop_selected_stream')}>
                 <Popconfirm
-                    title="Stop streams"
+                    title={w('stop_streams')}
                     description={`${w('stop_selected_stream')}?`}
                     onConfirm={confirmStop}
                     icon={<StopOutlined style={{ color: "red" }} />}
-                    okText="Yes"
-                    cancelText="No"
+                    okText={t('yes')}
+                    cancelText={t('no')}
                 >
                     <Button icon={<StopOutlined style={{ color: "red" }} />}></Button>
                 </Popconfirm>
@@ -111,14 +112,14 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected }
             </Tooltip>
             <Tooltip title={w('delete_selected_stream')}>
                 <Popconfirm
-                    title="Delete streams"
+                    title={w('delete_streams')}
                     description={`${w('delete_selected_stream')}?`}
                     onConfirm={confirmDelete}
-                    okText="Yes"
+                    okText={t('yes')}
+                    cancelText={t('no')}
                     icon={<DeleteFilled style={{
                         color: 'red'
                     }} />}
-                    cancelText="No"
                 >
                     <Button type="primary" danger icon={<DeleteFilled />}></Button>
                 </Popconfirm>

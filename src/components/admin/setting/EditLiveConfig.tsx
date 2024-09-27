@@ -2,6 +2,7 @@ import axiosInstance from '@/apiClient/axiosConfig';
 import { EditFilled } from '@ant-design/icons';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Form, FormProps, Input, Modal, message } from 'antd';
+import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 interface EditLiveConfigProps {
     config: any
@@ -52,6 +53,8 @@ const EditLiveConfig: React.FC<EditLiveConfigProps> = ({ config }) => {
     const handleOk = () => {
         form.submit()
     }
+
+    const t = useTranslations("MyLanguage")
     return <>
 
         <Button style={{
@@ -59,7 +62,7 @@ const EditLiveConfig: React.FC<EditLiveConfigProps> = ({ config }) => {
         }} icon={<EditFilled />} type='primary' onClick={() => {
             setIsModalOpen(true)
         }}></Button>
-        <Modal title="Edit config" open={isModalOpen} okButtonProps={{
+        <Modal title={t('edit_config')} open={isModalOpen} okButtonProps={{
             loading: updateConfig.isPending
         }} onOk={handleOk} onCancel={handleCancel}>
 
@@ -74,18 +77,27 @@ const EditLiveConfig: React.FC<EditLiveConfigProps> = ({ config }) => {
                 autoComplete="off"
             >
                 <Form.Item<FieldType>
-                    label="Resolution"
+                    label={t('resolution')}
                     name="resolution"
                     initialValue={config.resolution}
-                    rules={[{ required: true, message: '' }]}
+                    rules={[{ required: true }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item<FieldType>
-                    label="Max"
+                    label={ t('storage') }
+                    name="storage"
+                    initialValue={config.storage}
+                    rules={[{ required: true }]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item<FieldType>
+                    label={t('max_streams')}
                     name="max"
                     initialValue={config.max}
-                    rules={[{ required: true, message: '' }]}
+                    rules={[{ required: true }]}
                 >
                     <Input />
                 </Form.Item>
@@ -93,7 +105,7 @@ const EditLiveConfig: React.FC<EditLiveConfigProps> = ({ config }) => {
                     label="Cpu"
                     name="cpu"
                     initialValue={config.cpu}
-                    rules={[{ required: true, message: '' }]}
+                    rules={[{ required: true }]}
                 >
                     <Input />
                 </Form.Item>
@@ -101,15 +113,7 @@ const EditLiveConfig: React.FC<EditLiveConfigProps> = ({ config }) => {
                     label="Ram"
                     name="ram"
                     initialValue={config.ram}
-                    rules={[{ required: true, message: '' }]}
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item<FieldType>
-                    label="Storage"
-                    name="storage"
-                    initialValue={config.storage}
-                    rules={[{ required: true, message: '' }]}
+                    rules={[{ required: true }]}
                 >
                     <Input />
                 </Form.Item>

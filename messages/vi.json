@@ -60,6 +60,8 @@
     "terms": "Điểu khoản & chính sách"
   },
   "DashboardMenu": {
+    "livestreams": "Luồng live",
+    "editconfig": "Chỉnh sửa cấu hình",
     "cloudserver": "Máy chủ đám mây",
     "home": "Trang chủ",
     "services": "Dịch vụ",
@@ -86,8 +88,12 @@
     "myautolive": "Luồng live của tôi"
   },
   "MyLanguage": {
-    "yes":"Có",
-    "no":"Không",
+    "edit_config":"Chỉnh sửa cấu hình",
+    "max_streams":"Số luồng tối đa",
+    "storage":"Dung lượng ổ cứng",
+    "left":"còn lại",
+    "yes":"Xác nhận",
+    "no":"Hủy",
     "all_order":"Tất cả đơn hàng",
     "add":"Thêm",
     "stream_name":"Tên luồng",
@@ -193,6 +199,8 @@
     "profile": "Thông tin cá nhân"
   },
   "Settings": {
+    "app_config":"Hệ thống",
+    "vps_config":"Vps",
     "timeupdateservice": "Thời gian cập nhật dịch vụ",
     "timeupdateorder": "Thời gian cập nhật đơn hàng",
     "timeupdaterate_hour": "Thời gian cập nhật tỷ giá (giờ)",
@@ -208,6 +216,12 @@
     "update": "Cập nhật"
   },
   "Warning":{
+     "start_streams":"Khởi động",
+     "start_stream":"Khởi động",
+     "stop_streams":"Dừng luồng",
+     "stop_stream":"Dừng luồng",
+     "delete_streams":"Xóa luồng",
+     "delete_stream":"Xóa luồng",
      "start_this_stream": "Khởi động luồng live này?",
      "stop_this_stream": "Dừng luồng live này?",
      "delete_this_stream": "Xóa luồng live này?",
@@ -217,5 +231,9 @@
   },
   "result": {
     "active": "Thành công, tài khoản của bạn đã được kích hoạt!"
+  },
+  "Unit": {
+    "cores": "lõi",
+    "streams": "luồng"
   }
 }

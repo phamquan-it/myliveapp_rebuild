@@ -100,7 +100,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
             <Form.Item
                 label={t('resolution')}
                 name="resolution"
-                rules={[{ required: true, message: 'Invalid resolution!' }]}
+                rules={[{ required: true }]}
             >
                 <Input readOnly disabled />
             </Form.Item>
@@ -109,7 +109,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
             <Form.Item
                 label={t('stream_name')}
                 name="stream_name"
-                rules={[{ required: true, message: 'Please input your stream name!' }]}
+                rules={[{ required: true }]}
             >
                 <Input />
             </Form.Item>
@@ -134,7 +134,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
                                         <Form.Item
                                             {...restField}
                                             name={[name, 'platform']}
-                                            rules={[{ required: true, message: 'Please select platform' }]}
+                                            rules={[{ required: true }]}
                                         >
                                             <Select style={{
                                                 width: 200
@@ -155,7 +155,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
                                         <Form.Item
                                             {...restField}
                                             name={[name, 'stream_key']}
-                                            rules={[{ required: true, message: 'Please enter stream key' }]}
+                                            rules={[{ required: true }]}
                                         >
                                             <Input placeholder="Stream key" style={{
                                                 width: 167
