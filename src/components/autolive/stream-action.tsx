@@ -3,17 +3,18 @@ import { DeleteFilled, DeleteOutlined, DesktopOutlined, StopOutlined } from '@an
 import { useMutation } from '@tanstack/react-query';
 import { Button, Dropdown, MenuProps, Popconfirm, PopconfirmProps, Tooltip, message } from 'antd';
 import { ConfigProvider } from 'antd/lib';
+import { useTranslations } from 'next-intl';
 import React from 'react';
+import { IoPlay } from "react-icons/io5";
 import { TbLetterYSmall } from 'react-icons/tb';
 interface StreamActionProps {
     personStream: any,
     reloadData: () => void
-    status: string
+    status: string | undefined
 }
 
 const StreamAction: React.FC<StreamActionProps> = ({ personStream, reloadData, status }) => {
 
-    console.log(status)
     const stopLive = useMutation({
         mutationKey: ['stoplive'],
         mutationFn: (data: any) => axiosInstance.post('/autolive-control/stop-live', data),
@@ -25,6 +26,33 @@ const StreamAction: React.FC<StreamActionProps> = ({ personStream, reloadData, s
         }
     })
 
+    const startLive = useMutation({
+        mutationKey: ['startlive'],
+        mutationFn: (data: {
+            stream_id: number
+        }) => axiosInstance.post('/autolive-control/start-live', data),
+        onSuccess: () => {
+            message.success("Success")
+        },
+        onError: (err) => {
+            message.error(err.message)
+        }
+    })
+    const deleteStream = useMutation({
+        mutationKey: ['delete-stream'],
+        mutationFn: (data: {
+            stream_id: number
+        }) => axiosInstance.delete('/delete', { data: { stream_id: personStream } }),
+        onSuccess: () => {
+            message.success("Success")
+        },
+        onError: (err) => {
+            message.error(err.message)
+        }
+    })
+
+
+
     const confirm: PopconfirmProps['onConfirm'] = (e) => {
 
         const streamData = {
@@ -34,40 +62,47 @@ const StreamAction: React.FC<StreamActionProps> = ({ personStream, reloadData, s
     };
 
     const confirmStart: PopconfirmProps['onConfirm'] = (e) => {
-        console.log(e);
-        message.success('Click on Yes');
+        console.log(personStream)
+        startLive.mutate({
+            stream_id: personStream
+        })
     };
 
     const confirmDelete: PopconfirmProps['onConfirm'] = (e) => {
         console.log(e);
-        message.success('Click on Yes');
+        deleteStream.mutate({
+            stream_id: personStream
+        })
     };
-
+    const w = useTranslations('Warning')
+    const t = useTranslations('MyLanguage')
     return (
         <div className='flex gap-3'>
 
             <Tooltip title="Start stream">
                 <Popconfirm
                     title="Start"
-                    description="Are you sure start this stream?"
+                    description={w('start_this_stream')}
+
                     onConfirm={confirmStart}
-                    okText="Yes"
-                    cancelText="No"
-                    icon={<DesktopOutlined style={{
-                        color: 'green'
-                    }} />}
+                    okText={t('yes')}
+                    cancelText={t('no')}
+
+                    icon={<IoPlay style={{ color: '#1677ff' }} />}
                 >
-                    <Button className='bg-green-500' type='primary' icon={<DesktopOutlined />}></Button>
+                    <Button type='primary' icon={<IoPlay />}></Button>
+
                 </Popconfirm>
             </Tooltip>
 
             <Tooltip title="Stop stream">
                 <Popconfirm
-                    title="Stop stream"
+                    title={w('stop_this_stream')}
                     description="Are you sure stop this stream?"
                     onConfirm={confirm}
-                    okText="Yes"
-                    cancelText="No"
+                    okText={t('yes')}
+                    cancelText={t('no')}
+
                     icon={<StopOutlined style={{ color: 'red' }} />}
                 >
                     <Button type="default" disabled={status != 'running'} icon={<StopOutlined style={{
@@ -81,10 +116,10 @@ const StreamAction: React.FC<StreamActionProps> = ({ personStream, reloadData, s
 
                 <Popconfirm
                     title="Delete stream"
-                    description="Are you sure to delete this stream?"
+                    description={w('delete_this_stream')}
                     onConfirm={confirmDelete}
-                    okText="Yes"
-                    cancelText="No"
+                    okText={t('yes')}
+                    cancelText={t('no')}
                     icon={<DeleteFilled style={{ color: 'red' }} />}
                 >
                     <Button type="primary" danger icon={<DeleteFilled />}></Button>

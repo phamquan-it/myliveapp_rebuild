@@ -85,6 +85,8 @@
     "myautolive": "My autolive"
   },
   "MyLanguage": {
+    "yes":"Yes",
+    "no":"No",
     "add_config":"Add Config",
     "add":"Add",
     "all_order":"All orders",
@@ -204,6 +206,14 @@
     "timecancelqueueorderday": "Time cancel queue order (day)",
     "provider": "Provider",
     "update": "Update"
+  },
+  "Warning":{
+     "start_this_stream": "Start this stream?",
+     "stop_this_stream": "Stop this stream?",
+     "delete_this_stream": "Delete this stream?",
+     "start_selected_stream": "Start selected streams",
+     "stop_selected_stream": "Stop selected streams",
+     "delete_selected_stream": "Delete selected streams"
   },
   "result": {
     "active": "Successfully, your account is activated!"

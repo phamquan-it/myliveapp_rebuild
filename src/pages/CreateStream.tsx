@@ -10,6 +10,7 @@ import CreateStreamForm from '@/components/app/CreateStreamForm';
 import CreateStreamTable from '@/components/app/CreateStreamTable';
 import CreateStreamProcess from '@/components/app/CreateStreamProcess';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/router';
 interface StreamRequest {
     source_link: string | null,
     key: string,
@@ -21,7 +22,7 @@ interface StreamRequest {
 
 
 const App: React.FC = () => {
-
+    const router = useRouter()
     const d = useTranslations('DashboardMenu')
     const t = useTranslations('MyLanguage')
     const getGoogleDriveFileKey = (url: string) => {

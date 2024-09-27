@@ -53,7 +53,7 @@ const Page = () => {
             key: "fund",
             width: "10%",
             align: "right",
-            render: (text: string, record: any)=> record.finance_transaction.funds
+            render: (text: string, record: any)=> record?.finance_transaction?.funds
         },
         {
             title: t("createat"),

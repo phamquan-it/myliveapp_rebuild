@@ -22,14 +22,14 @@ import filterOption from "@/hooks/filterOption";
 import filterOptionByLabel from "@/hooks/filterOptionByLabel";
 import axiosInstance from "@/apiClient/axiosConfig";
 import SearchInput from "@/components/filters/SearchInput";
-import { ColumnType } from "antd/es/table";
+import { ColumnType, ColumnsType } from "antd/es/table";
 export default function Index() {
     const router = useRouter();
     const token = getCookie("token");
 
     const t = useTranslations("MyLanguage");
 
-    const columns: ColumnType<any>[] = [
+    const columns: ColumnsType<any> = [
         {
             title: t("name"),
             dataIndex: "name",
@@ -40,6 +40,16 @@ export default function Index() {
             title: t("rate"),
             dataIndex: "rate",
             key: "rate",
+            render: (rate: number) => (
+                <>
+                    <div className="flex gap-1">
+                        <div>{rate}</div>
+                        <StarFilled style={{
+                            color: 'orange'
+                            }}/>
+                    </div>
+                </>
+            )
         },
         {
             title: t("minorder"),
@@ -80,7 +90,8 @@ export default function Index() {
             dataIndex: "id",
             key: "id",
             align: "center",
-
+            render:(id: number)=> <Button type='primary' size='small' onClick={()=>{
+            }}>{t('buy')}</Button>
         },
     ];
     const { data, isFetching, isError } = useQuery({
@@ -96,7 +107,6 @@ export default function Index() {
             });
         },
     });
-    const p = useTranslations("Placeholder")
     return (
         <div className="">
             <Head>
@@ -114,9 +124,9 @@ export default function Index() {
                         id="filter"
                     >
                         <div>
-                            <SearchInput/>
+                            <SearchInput />
                         </div>
-                        <CreateService/>
+                        <CreateService />
                     </div>
 
                     <Table

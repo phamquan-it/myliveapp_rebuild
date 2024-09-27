@@ -60,7 +60,7 @@ const EditLiveConfig: React.FC<EditLiveConfigProps> = ({ config }) => {
             setIsModalOpen(true)
         }}></Button>
         <Modal title="Edit config" open={isModalOpen} okButtonProps={{
-
+            loading: updateConfig.isPending
         }} onOk={handleOk} onCancel={handleCancel}>
 
             <Form form={form}

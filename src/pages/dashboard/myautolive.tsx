@@ -32,12 +32,34 @@ import EditLiveStreams from "@/components/live-streams/EditLiveStreams";
 import LiveState from "@/components/client/LiveState";
 import { useTranslations } from "next-intl";
 import { getCookie } from "cookies-next";
-import { ColumnType } from "antd/es/table";
+import { ColumnType, ColumnsType } from "antd/es/table";
 import StreamState, { StreamType } from "@/components/autolive/StreamState";
 import StreamAction from "@/components/autolive/stream-action";
-import { DesktopOutlined } from "@ant-design/icons";
+import { DeleteFilled, DesktopOutlined, StopOutlined } from "@ant-design/icons";
 import SearchInput from "@/components/filters/SearchInput";
 import StatisticStatus from "@/components/admin/order/statistic-status";
+import { IoPlay } from "react-icons/io5";
+import MutistreamsAction from "@/components/MutistreamsAction";
+export interface StreamDataType {
+    createAt?: string
+    download_link?: string
+    duration?: number
+    end_at?: string
+    id?: number
+    key?: string
+    loop?: string
+    name?: string
+    platform?: any[]
+    platformId?: number
+    resolution?: number
+    start_at?: string
+    status?: string
+    updateAt?: string
+    user?: any
+    userId?: number
+    vps?: string
+    vpsId?: number
+}
 const Page = () => {
 
     const router = useRouter()
@@ -45,7 +67,7 @@ const Page = () => {
     const [isReady, setIsReady] = useState(false)
     const d = useTranslations("DashboardMenu");
     const t = useTranslations("MyLanguage");
-    const columns: any = [
+    const columns: ColumnsType<StreamDataType> = [
         {
             title: t("entryno"),
             dataIndex: "key",
@@ -95,7 +117,7 @@ const Page = () => {
             title: t("status"),
             dataIndex: "status",
             key: "status",
-            render: (text: string) => (
+            render: (text: string, record) => (
                 <StreamState state={text} />
             ),
         },
@@ -112,7 +134,7 @@ const Page = () => {
             title: "",
             dataIndex: "id",
             key: "id",
-            render: (text: any, record: any) => (
+            render: (text, record) => (
                 <StreamAction personStream={text} status={record.status} reloadData={function(): void {
                     throw new Error("Function not implemented.");
                 }} />
@@ -138,16 +160,20 @@ const Page = () => {
         placeholderData: (previousData) => previousData,
     });
 
+    const [streamsSelected, setStreamsSelected] = useState<StreamDataType[]>([])
     const syncObj = syncObjectToUrl(router)
     const rowSelection = {
-        onChange: (selectedRowKeys: React.Key[], selectedRows: any[]) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        onChange: (selectedRowKeys: React.Key[], selectedRows: StreamDataType[]) => {
+            setStreamsSelected(selectedRows)
         },
-        getCheckboxProps: (record: any) => ({
+        getCheckboxProps: (record: StreamDataType) => ({
             disabled: record.name === 'Disabled User', // Column configuration not to be checked
             name: record.name,
         }),
     };
+    useEffect(() => {
+        console.log(streamsSelected)
+    }, [streamsSelected])
     const s = useTranslations('StreamStatus')
     return (
         <>
@@ -170,7 +196,7 @@ const Page = () => {
                         }}
                     />
                 </div>
-                <Button type="primary" icon={<DesktopOutlined />}></Button>
+                <MutistreamsAction streamsSelected={streamsSelected} />
             </div>
             <Table
                 rowSelection={{
@@ -196,6 +222,7 @@ const Page = () => {
                 }))}
                 scroll={{ x: 800 }}
                 columns={columns}
+
             />
         </>
     );

@@ -8,9 +8,10 @@ const { Option } = Select;
 const CreateService: React.FC = () => {
 
     type FieldType = {
-        username?: string;
-        password?: string;
-        remember?: string;
+        name?: string;
+        rate?: string;
+        platform?: number;
+        level?: number;
     };
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
@@ -23,26 +24,25 @@ const CreateService: React.FC = () => {
 
     const t = useTranslations("DashboardMenu");
     const d = useTranslations("MyLanguage");
-        
 
-    const handleOk = ()=>{
+
+    const handleOk = () => {
 
     }
-    const handleCancel = ()=>{
+    const handleCancel = () => {
         setIsModalOpen(false)
     }
     const [isModalOpen, setIsModalOpen] = useState(false)
     return (
         <div>
-            <Button type="primary" icon={<PlusCircleFilled />} onClick={()=>{
+            <Button type="primary" icon={<PlusCircleFilled />} iconPosition='end' onClick={() => {
                 setIsModalOpen(true)
             }}>Create</Button>
             <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
 
                 <Form
-                    name="basic"
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 16 }}
+                    name="Create service"
+                    layout='vertical'
                     style={{ maxWidth: 600 }}
                     initialValues={{ remember: true }}
                     onFinish={onFinish}
@@ -50,33 +50,11 @@ const CreateService: React.FC = () => {
                     autoComplete="off"
                 >
                     <Form.Item<FieldType>
-                        label="Username"
-                        name="username"
+                        label="Name"
+                        name="name"
                         rules={[{ required: true, message: 'Please input your username!' }]}
                     >
                         <Input />
-                    </Form.Item>
-
-                    <Form.Item<FieldType>
-                        label="Password"
-                        name="password"
-                        rules={[{ required: true, message: 'Please input your password!' }]}
-                    >
-                        <Input.Password />
-                    </Form.Item>
-
-                    <Form.Item<FieldType>
-                        name="remember"
-                        valuePropName="checked"
-                        wrapperCol={{ offset: 8, span: 16 }}
-                    >
-                        <Checkbox>Remember me</Checkbox>
-                    </Form.Item>
-
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button type="primary" htmlType="submit">
-                            Submit
-                        </Button>
                     </Form.Item>
                 </Form>
 

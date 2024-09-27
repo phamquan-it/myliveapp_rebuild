@@ -86,7 +86,8 @@
     "myautolive": "Luồng live của tôi"
   },
   "MyLanguage": {
-    "add_config":"Thêm cấu hình",
+    "yes":"Có",
+    "no":"Không",
     "all_order":"Tất cả đơn hàng",
     "add":"Thêm",
     "stream_name":"Tên luồng",
@@ -205,6 +206,14 @@
     "timecancelqueueorderday": "Thời gian huỷ đơn hàng đang chờ (ngày)",
     "provider": "Nhà cung cấp",
     "update": "Cập nhật"
+  },
+  "Warning":{
+     "start_this_stream": "Khởi động luồng live này?",
+     "stop_this_stream": "Dừng luồng live này?",
+     "delete_this_stream": "Xóa luồng live này?",
+     "start_selected_stream": "Khởi động luồng live đã chọn",
+     "stop_selected_stream": "Dừng luồng live đã chọn",
+     "delete_selected_stream": "Xóa luồng live đã chọn"
   },
   "result": {
     "active": "Thành công, tài khoản của bạn đã được kích hoạt!"

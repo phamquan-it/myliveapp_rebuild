@@ -17,6 +17,8 @@ import moment from "moment";
 import { PlusOutlined } from "@ant-design/icons";
 import SettingForm from "@/components/admin/SettingForm";
 import VpsConfig from "@/components/admin/VpsConfig";
+import { useRouter } from "next/router";
+import syncObjectToUrl from "@/helpers/syncObjectToUrl";
 
 const Page = () => {
     const onFinish = (values: any) => {
@@ -37,15 +39,19 @@ const Page = () => {
             children: <VpsConfig/>,
         },
     ];
+    const router = useRouter()
+    const tab: string = Array.isArray(router.query?.tab) ? router.query.tab[0] : router.query?.tab || '1';
 
-
-
+    const syncObj = syncObjectToUrl(router)
     return (
         <>
             <Title className="!semi-boldb !text-center">{d("Settings")}</Title>
 
 
-            <Tabs defaultActiveKey="1" items={items} addIcon={<PlusOutlined />} tabPosition='top' />
+            <Tabs defaultActiveKey={tab} items={items} addIcon={<PlusOutlined />} tabPosition='top' onChange={(e)=>{
+                console.log('active key', e)
+                syncObj({tab: e})
+            }} />
         </>
     );
 };
