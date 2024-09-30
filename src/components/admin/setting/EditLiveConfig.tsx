@@ -1,7 +1,7 @@
 import axiosInstance from '@/apiClient/axiosConfig';
 import { EditFilled } from '@ant-design/icons';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Button, Form, FormProps, Input, Modal, message } from 'antd';
+import { Button, ConfigProvider, Form, FormProps, Input, Modal, message } from 'antd';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 interface EditLiveConfigProps {
@@ -11,7 +11,7 @@ interface EditLiveConfigProps {
 const EditLiveConfig: React.FC<EditLiveConfigProps> = ({ config }) => {
     const [form] = Form.useForm();
     type FieldType = {
-        resolution?: string;
+        resolution_key?: string;
         max?: number;
         cpu?: number;
         ram?: number;
@@ -30,7 +30,7 @@ const EditLiveConfig: React.FC<EditLiveConfigProps> = ({ config }) => {
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
 
         const parsedValues: FieldType = {
-            resolution: values.resolution, // Assuming resolution is a string
+            resolution_key: values.resolution_key, // Assuming resolution is a string
             max: Number(values.max), // Convert to number
             cpu: Number(values.cpu), // Convert to number
             ram: Number(values.ram), // Convert to number
@@ -56,12 +56,20 @@ const EditLiveConfig: React.FC<EditLiveConfigProps> = ({ config }) => {
 
     const t = useTranslations("MyLanguage")
     return <>
-
-        <Button style={{
-            backgroundColor: 'green'
-        }} icon={<EditFilled />} type='primary' onClick={() => {
-            setIsModalOpen(true)
-        }}></Button>
+        <ConfigProvider
+            theme={{
+                token: {
+                    colorPrimary: 'green', // Set the primary color to green
+                },
+            }}
+        >
+            <Button
+                type="default"
+                onClick={() => setIsModalOpen(true)}
+                style={{ color: 'green', borderColor: 'green' }}
+                icon={<EditFilled />}
+            />
+        </ConfigProvider>
         <Modal title={t('edit_config')} open={isModalOpen} okButtonProps={{
             loading: updateConfig.isPending
         }} onOk={handleOk} onCancel={handleCancel}>
@@ -78,14 +86,14 @@ const EditLiveConfig: React.FC<EditLiveConfigProps> = ({ config }) => {
             >
                 <Form.Item<FieldType>
                     label={t('resolution')}
-                    name="resolution"
-                    initialValue={config.resolution}
+                    name="resolution_key"
+                    initialValue={config.resolution_key}
                     rules={[{ required: true }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item<FieldType>
-                    label={ t('storage') }
+                    label={t('storage')}
                     name="storage"
                     initialValue={config.storage}
                     rules={[{ required: true }]}

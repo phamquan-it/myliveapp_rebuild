@@ -274,13 +274,12 @@ const Page = () => {
 
 
             </div>
-            <Title className="text-center !text-gray-600" level={3}>
+            <Table title={() => <span className=''>
                 Recent orders
-            </Title>
-            <Table
+            </span>}
                 dataSource={dataSource}
                 columns={columns}
-                className="border rounded-md overflow-hidden"
+                className="border rounded-md overflow-hidden mt-3"
                 pagination={false}
                 scroll={{ y: 300 }}
             />

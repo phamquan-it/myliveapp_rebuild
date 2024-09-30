@@ -1,14 +1,23 @@
 import axiosInstance from '@/apiClient/axiosConfig';
-import { EditFilled } from '@ant-design/icons';
+import { EditFilled, PlusCircleFilled, PlusCircleOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Input, Table } from 'antd';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 import SelectProfile from './vps/select-profile';
 import EditLiveConfig from './setting/EditLiveConfig';
+import EditConversion from './vps/EditConversion';
+import CreateConversion from './vps/CreateConversion';
 interface VpsConfigProps {
 
 }
+export interface ConversionType {
+    id?: number;
+    from?: string;
+    to?: string;
+    amount?: number;
+}
+
 
 const VpsConfig: React.FC<VpsConfigProps> = () => {
 
@@ -22,20 +31,6 @@ const VpsConfig: React.FC<VpsConfigProps> = () => {
     });
 
     const t = useTranslations('MyLanguage')
-    const dataSource = [
-        {
-            key: '1',
-            name: 'Mike',
-            age: 32,
-            address: '10 Downing Street',
-        },
-        {
-            key: '2',
-            name: 'John',
-            age: 42,
-            address: '10 Downing Street',
-        },
-    ];
 
     const columns = [
         {
@@ -46,8 +41,8 @@ const VpsConfig: React.FC<VpsConfigProps> = () => {
         },
         {
             title: t('resolution'),
-            dataIndex: 'resolution',
-            key: 'resolution',
+            dataIndex: 'resolution_key',
+            key: 'resolution_key',
         },
         {
             title: t('max_streams'),
@@ -98,14 +93,76 @@ const VpsConfig: React.FC<VpsConfigProps> = () => {
         queryFn: () => axiosInstance.get("/vps-config/list")
     })
 
+
+    const conversion_columns = [
+        {
+            title: t('entryno'),
+            dataIndex: 'key',
+            key: 'key',
+        },
+        {
+            title: 'From',
+            dataIndex: 'from',
+            key: 'from',
+        },
+        {
+            title: 'To',
+            dataIndex: 'to',
+            key: 'to',
+        },
+        {
+            title: t('amount'),
+            dataIndex: 'amount',
+            key: 'amount',
+        },
+        {
+            title: t('action'),
+            dataIndex: 'id',
+            key: 'id',
+            render: (id: number, record: ConversionType) => (<EditConversion conversion={record} />)
+        },
+
+
+    ];
+
+    const conversion = useQuery({
+        queryKey: ['conversion'],
+        queryFn: () => axiosInstance.get("/conversion/list")
+    })
+
     return <>
         <SelectProfile profiles={profilesSlug?.data?.data.profiles} onSelectProfileChange={(value: string) => {
             console.log(value)
         }} />
-        <Table className='border rounded overflow-hidden my-3'
+
+        <div className="grid grid-cols-2">
+
+        </div>
+        <Table className='border rounded overflow-hidden my-3' title={() => "Vps config"}
             pagination={false}
+            loading={isFetching}
             dataSource={data?.data.map((config: any, index: number) => ({ ...config, key: index + 1 }))}
             columns={columns} />
+
+
+        <Table bordered
+            loading={conversion.isFetching}
+            dataSource={conversion?.data?.data.map((
+                conv: any,
+                index: number) => ({
+                    ...conv,
+                    key: index + 1
+                }))}
+            title={() => <div className="flex justify-between items-center">
+                <div>
+                Conversion
+                </div>
+                <div> 
+                    <CreateConversion/>
+                                    </div>    
+        </div>}
+            className=' overfow-hidden'
+            columns={conversion_columns} />
     </>
 
 }
