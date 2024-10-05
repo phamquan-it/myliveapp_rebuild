@@ -19,8 +19,3 @@ jobs:
                   port: ${{ secrets.VPS_PORT }}
                   script: |
                       cd /www/wwwroot/myliveapp_rebuild/
-                      git pull
-                      npm install
-                      npm run build
-                      pm2 restart cms-autolive
-                      pm2 save
