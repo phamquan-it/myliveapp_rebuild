@@ -17,5 +17,3 @@ jobs:
                   username: ${{ secrets.VPS_USER_AUTOLIVE_SERVER }}
                   key: ${{ secrets.VPS_PRIVATE_KEY_AUTOLIVE_SERVER }}
                   port: ${{ secrets.VPS_PORT }}
-                  script: |
-                    cd .
