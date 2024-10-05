@@ -30,7 +30,12 @@ const StreamAction: React.FC<StreamActionProps> = ({ personStream, reloadData, s
         mutationKey: ['startlive'],
         mutationFn: (data: {
             stream_id: number
-        }) => axiosInstance.post('/autolive-control/start-live', data),
+        }) => axiosInstance.get('/autolive-control/start-live', {
+            params:{
+                language:"en",
+                stream_id: data.stream_id
+            }
+        }),
         onSuccess: () => {
             message.success("Success")
         },

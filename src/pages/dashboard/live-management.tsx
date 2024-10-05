@@ -1,11 +1,13 @@
 import { ActivityStream } from '@/@type/api_object';
 import axiosInstance from '@/apiClient/axiosConfig';
+import CreateNewStream from '@/components/admin/create-new-stream';
 import DeleteStream from '@/components/autolive/DeleteStream';
 import StreamState from '@/components/autolive/StreamState';
 import ViewAutoliveDetail from '@/components/autolive/ViewAutoliveDetail';
 import SelectVps from '@/components/filters/SelectVps';
 import UserSelect from '@/components/general/user-select';
 import VpsSelect from '@/components/general/vps-select';
+import CreateStreamByAdmin from '@/components/live-streams/CreateStreamByAdmin';
 import SelectDateForFilter from '@/components/live-streams/SelectDateForFilter';
 import { pagination } from '@/helpers/pagination';
 import syncObjectToUrl from '@/helpers/syncObjectToUrl';
@@ -46,7 +48,7 @@ const Page: NextPage<PageProps> = ({ modal }) => {
     })
 
     const t = useTranslations("MyLanguage")
-    const d = useTranslations("DashboardMenu") 
+    const d = useTranslations("DashboardMenu")
     const columns: ColumnType<ActivityStream>[] = [
         {
             title: t('entryno'),
@@ -70,7 +72,7 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             title: t('status'),
             dataIndex: 'status',
             key: 'status',
-            render: (text)=>(<StreamState state={text}/>)
+            render: (text) => (<StreamState state={text} />)
         },
 
         {
@@ -98,16 +100,18 @@ const Page: NextPage<PageProps> = ({ modal }) => {
         syncObj({ keyword: e.target.value })
     }, 300)
     return <>
-        <Title level={2} className="text-center">{ ('Live streams') }</Title>
-        <div className="flex py-3 gap-2">
-            <div>
-                <Input placeholder={'Search...'} onChange={handleInput}/>
+        <Title level={2} className="text-center">{('Live streams')}</Title>
+        <div className="flex py-3 gap-2 justify-between">
+            <div className='flex gap-2'>
+                <div>
+                    <Input placeholder={'Search...'} onChange={handleInput} />
+                </div>
+                <SelectVps />
+                <UserSelect />
+                <SelectDateForFilter />
             </div>
-            <SelectVps/>
-            <UserSelect />
-            <SelectDateForFilter />
         </div>
-        <Table dataSource={data?.data?.data.map((livestream:any, index: number)=>({
+        <Table dataSource={data?.data?.data.map((livestream: any, index: number) => ({
             ...livestream,
             key: pageIndex * pageSize + (index + 1) - pageSize,
         }))}

@@ -6,7 +6,7 @@ import { Button, Form, FormProps, Input, Modal, Select, message } from 'antd';
 import React, { useState } from 'react';
 
 
-export const usePlatformData = (filter:any = {}) => {
+export const usePlatformData = (filter: any = {}) => {
     return useQuery({
         queryKey: ['platform', filter],
         queryFn: () => axiosInstance.get('/platform/list?language=en&offset=0&limit=100')
@@ -16,7 +16,7 @@ export const useUserData = (filter: any) => {
     return useQuery({
         queryKey: ['user', filter],
         queryFn: () => axiosInstance.get('/users?language=en', {
-            params:filter
+            params: filter
         })
     });
 };
@@ -54,8 +54,6 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
         key?: string;
         source_link?: string;
         platformId?: number;
-        port?: number;
-        ipv4?: string;
         vpsId?: number;
         userId?: string;
         link?: string;
@@ -73,8 +71,6 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
     })
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        values.port = 3002;
-        values.ipv4 = ipv4;
         values.link = rmtp + '/' + values.key;
         createStream.mutate(values);
         console.log('Success:', values);
@@ -116,28 +112,6 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
                     <Input />
                 </Form.Item>
                 <Form.Item<FieldType>
-                    label="User"
-                    name="userId"
-                    rules={[{ required: true }]}
-                >
-                    <Select options={userData?.data?.data?.data?.map((user: any) => ({ label: user.email, value: user.id }))} />
-                </Form.Item>
-                <Form.Item<FieldType>
-                    label="Vps"
-                    name="vpsId"
-                    rules={[{ required: true }]}
-                >
-
-                    <Select options={vpsdata?.data?.data?.data?.map((vps: any) => ({ label: vps.hostname, value: vps.vpsProvider }))}
-                        onChange={(value) => {
-                            vpsdata?.data?.data?.data?.forEach((vps: any) => {
-                                if (vps.vpsProvider == value) setIpv4(vps.ipv4);
-                            })
-                        }}
-                    />
-
-                </Form.Item>
-                <Form.Item<FieldType>
                     label="Platform"
                     name="platformId"
                     rules={[{ required: true }]}
@@ -154,11 +128,7 @@ const CreateStreamByAdmin: React.FC<CreateStreamByAdminProps> = () => {
                             })
                         }} />
                 </Form.Item>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit" loading={createStream.isPending}>
-                        Create
-                    </Button>
-                </Form.Item>
+
             </Form>
 
         </Modal>

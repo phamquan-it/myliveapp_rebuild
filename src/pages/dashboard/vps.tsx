@@ -34,7 +34,7 @@ const Page = () => {
     const t = useTranslations("MyLanguage");
     const p = useTranslations("Placeholder");
     const router = useRouter();
-        const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [sync, setSync] = useState(false)
     const { data, isFetching, isError } = useQuery({
         queryKey: ['queryKey', isModalOpen],
@@ -52,8 +52,8 @@ const Page = () => {
     };
 
 
-          const d = useTranslations("DashboardMenu");
-    
+    const d = useTranslations("DashboardMenu");
+
     const [sshInfo, setSSHInfo] = useState(
         {
             ipv4OrHost: "",
@@ -102,7 +102,7 @@ const Page = () => {
         {
             title: ('Num of stream'),
             dataIndex: "numberoflivestreams",
-            render: (text: string, record:any)=>{
+            render: (text: string, record: any) => {
                 return (
                     <>
                         <Tag color="success">0 streamings</Tag>
@@ -164,7 +164,7 @@ const Page = () => {
             openModalViewDetail()
     }, [slug])
 
-    const { pageIndex, pageSize,limit, offset } = pagination(router)
+    const { pageIndex, pageSize, limit, offset } = pagination(router)
     const syncObj = syncObjectToUrl(router)
     return (
         <>
@@ -193,7 +193,7 @@ const Page = () => {
             </Modal>
             <div className="flex justify-between items-center my-3">
                 <div id="filter">
-                    <SearchInput/>
+                    <SearchInput />
                 </div>
 
                 <Button
@@ -218,8 +218,8 @@ const Page = () => {
                 columns={columns}
                 loading={isFetching}
                 scroll={{ x: 1000 }}
-                onChange={(pag)=>{
-                    const { current, pageSize  } = pag
+                onChange={(pag) => {
+                    const { current, pageSize } = pag
                     syncObj({
                         pageIndex: current,
                         pageSize
