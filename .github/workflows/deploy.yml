@@ -13,7 +13,7 @@ jobs:
             - name: Deploy to FE via SSH
               uses: appleboy/ssh-action@v0.1.3
               with:
-                  host: ${{ secrets.VPS_HOST_AUTOLIVE_SERVER }}
-                  username: ${{ secrets.VPS_USER_AUTOLIVE_SERVER }}
-                  key: ${{ secrets.VPS_PRIVATE_KEY_AUTOLIVE_SERVER }}
-                  port: 22
+                  host: ${{ secrets.VPS_HOST }}
+                  username: ${{ secrets.VPS_USER }}
+                  key: ${{ secrets.VPS_PRIVATE_KEY }}
+                  port: ${{ secrets.VPS_PORT }}
