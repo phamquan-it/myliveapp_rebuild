@@ -16,4 +16,4 @@ jobs:
                   host: ${{ secrets.VPS_HOST_AUTOLIVE_SERVER }}
                   username: ${{ secrets.VPS_USER_AUTOLIVE_SERVER }}
                   key: ${{ secrets.VPS_PRIVATE_KEY_AUTOLIVE_SERVER }}
-                  port: ${{ secrets.VPS_PORT }}
+                  port: 22
