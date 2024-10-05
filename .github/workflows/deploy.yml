@@ -1,0 +1,26 @@
+name: Deploy  FE  App to VPS
+
+on:
+    push:
+        branches:
+            - main # Trigger the workflow on push to the main branch
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Deploy to VPS via SSH
+              uses: appleboy/ssh-action@v0.1.3
+              with:
+                  host: ${{ secrets.VPS_HOST_AUTOLIVE_SERVER }}
+                  username: ${{ secrets.VPS_USER_AUTOLIVE_SERVER }}
+                  key: ${{ secrets.VPS_PRIVATE_KEY_AUTOLIVE_SERVER }}
+                  port: ${{ secrets.VPS_PORT }}
+                  script: |
+                      cd /www/wwwroot/myliveapp_rebuild/
+                      git pull
+                      npm install
+                      npm run build
+                      pm2 restart cms-autolive
+                      pm2 save

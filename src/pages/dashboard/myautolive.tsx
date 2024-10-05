@@ -139,6 +139,7 @@ const Page = () => {
             title: "",
             dataIndex: "id",
             key: "id",
+            width: 150,
             render: (text, record) => (
                 <StreamAction personStream={text} status={record.status} reloadData={function(): void {
                     throw new Error("Function not implemented.");

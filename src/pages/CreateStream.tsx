@@ -77,7 +77,7 @@ const App: React.FC = () => {
         streamData.map((newStream) => {
             newStream.platforms.map((platform: any) => {
                 const streamRequest: StreamRequest = {
-                    source_link: getGoogleDriveFileKey(newStream.drive_link),
+                    source_link: `https://drive.google.com/uc?export=download&id=${getGoogleDriveFileKey(newStream.drive_link)}`,
                     key: platform.stream_key,
                     name: newStream.stream_name,
                     vpsId,
