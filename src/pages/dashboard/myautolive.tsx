@@ -41,6 +41,7 @@ import StatisticStatus from "@/components/admin/order/statistic-status";
 import { IoPlay } from "react-icons/io5";
 import MutistreamsAction from "@/components/MutistreamsAction";
 import CountdownTimer from "@/components/client/CountdownTimer";
+import HorizoneMenu from "@/components/admin/HorizoneMenu";
 export interface StreamDataType {
     createAt?: string
     download_link?: string
@@ -83,6 +84,11 @@ const Page = () => {
             ellipsis: true
         },
         {
+            title: ("ID"),
+            dataIndex: "id",
+            key: "id",
+        },
+        {
             title: d("platform"),
             dataIndex: "platform",
             key: "platform",
@@ -104,8 +110,8 @@ const Page = () => {
             dataIndex: "start_time",
             key: "start_time",
             ellipsis: true,
-            render: ()=>(<>
-                <CountdownTimer/>
+            render: () => (<>
+                <CountdownTimer />
             </>)
         },
         {
@@ -136,14 +142,18 @@ const Page = () => {
 
         },
         {
+            title: ('Downloaded'),
+            dataIndex: 'downloaded',
+            key: 'downloaded',
+            render: (downloaded: boolean) => (downloaded) ? 'Yes' : 'No'
+        },
+        {
             title: "",
             dataIndex: "id",
             key: "id",
             width: 150,
             render: (text, record) => (
-                <StreamAction personStream={text} status={record.status} reloadData={function(): void {
-                    throw new Error("Function not implemented.");
-                }} />
+                <StreamAction personStream={text} status={record.status} />
             )
         },
 
@@ -151,7 +161,7 @@ const Page = () => {
 
     const token = getCookie('token')
     const { data, isFetching, isError } = useQuery({
-        queryKey: ["activity-stream", router.asPath],
+        queryKey: ["activityStream", router.asPath],
         queryFn: () =>
             axiosInstance.get("/activity-stream?language=en", {
                 params: {
@@ -177,16 +187,13 @@ const Page = () => {
             name: record.name,
         }),
     };
-    useEffect(() => {
-        console.log(streamsSelected)
-    }, [streamsSelected])
     const s = useTranslations('StreamStatus')
     return (
         <>
             <Title level={2} className='text-center'>{('Autolive')}</Title>
 
             <div className="flex justify-between items-center">
-                <div className="flex py-3 gap-2">
+                <div className={`flex py-3 gap-2 transition duration-500 transform ${streamsSelected.length == 0?'':''}`}>
                     <SearchInput />
                     <Select defaultValue={0}
                         options={[
@@ -202,8 +209,10 @@ const Page = () => {
                         }}
                     />
                 </div>
-                <MutistreamsAction streamsSelected={streamsSelected} />
             </div>
+            <HorizoneMenu data={streamsSelected}>
+                <MutistreamsAction streamsSelected={streamsSelected} />
+            </HorizoneMenu>
             <Table
                 rowSelection={{
                     type: 'checkbox',

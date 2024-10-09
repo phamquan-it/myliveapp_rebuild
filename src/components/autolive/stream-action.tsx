@@ -9,11 +9,10 @@ import { IoPlay } from "react-icons/io5";
 import { TbLetterYSmall } from 'react-icons/tb';
 interface StreamActionProps {
     personStream: any,
-    reloadData: () => void
-    status: string | undefined
+      status: string | undefined
 }
 
-const StreamAction: React.FC<StreamActionProps> = ({ personStream, reloadData, status }) => {
+const StreamAction: React.FC<StreamActionProps> = ({ personStream, status }) => {
 
     const stopLive = useMutation({
         mutationKey: ['stoplive'],

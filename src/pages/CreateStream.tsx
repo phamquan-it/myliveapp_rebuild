@@ -3,7 +3,7 @@ import { CloseOutlined, PlusCircleFilled } from '@ant-design/icons';
 import { Button, Card, DatePicker, Form, Input, Modal, Select, Tooltip, Space, Switch, message, Table, Image } from 'antd';
 import { FormInstance } from 'antd/lib';
 import { usePlatformData } from '@/components/live-streams/CreateStreamByAdmin';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '@/apiClient/axiosConfig';
 import moment from 'moment';
 import CreateStreamForm from '@/components/app/CreateStreamForm';
@@ -23,6 +23,7 @@ interface StreamRequest {
 
 
 const App: React.FC = () => {
+    const queryClient = useQueryClient()
     const router = useRouter()
     const d = useTranslations('DashboardMenu')
     const t = useTranslations('MyLanguage')
@@ -58,6 +59,7 @@ const App: React.FC = () => {
         mutationFn: (data: any) => axiosInstance.post('/autolive-control/create-new-stream', data),
         onSuccess: () => {
             message.success("OK")
+            queryClient.invalidateQueries({ queryKey:['activityStream']  })
         },
         onError: () => {
             message.error("no ok")

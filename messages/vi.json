@@ -88,6 +88,9 @@
     "myautolive": "Luồng live của tôi"
   },
   "MyLanguage": {
+    "update_info": "Cập nhật thông tin",
+    "change_password": "Đổi mật khẩu",
+    "update_servive_price": "Cập nhật giá dịch vụ",
     "edit_config":"Chỉnh sửa cấu hình",
     "max_streams":"Số luồng tối đa",
     "storage":"Dung lượng ổ cứng",

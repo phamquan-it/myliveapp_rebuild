@@ -47,6 +47,8 @@ const Page: NextPage<PageProps> = ({ modal }) => {
 
     })
 
+    console.log(data)
+
     const t = useTranslations("MyLanguage")
     const d = useTranslations("DashboardMenu")
     const columns: ColumnType<ActivityStream>[] = [
@@ -61,12 +63,28 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             key: 'email',
             render: (text: string, record, index) => record?.user?.email
         },
-
+        {
+            title: ('Slug'),
+            dataIndex: 'hostname',
+            key: 'hostname',
+            render: (text, record) => record?.vps?.hostname,
+        },
+        {
+            title: ('ID'),
+            dataIndex: 'id',
+            key: 'id'
+        },
         {
             title: d('platform'),
             dataIndex: 'platform',
             key: 'platform',
             render: (text: string, record, index) => record?.platform?.name
+        },
+        {
+            title: ('Downloaded'),
+            dataIndex: 'downloaded',
+            key: 'downloaded',
+            render: (downloaded: boolean) => (downloaded) ? 'Yes' : 'No'
         },
         {
             title: t('status'),
@@ -111,7 +129,8 @@ const Page: NextPage<PageProps> = ({ modal }) => {
                 <SelectDateForFilter />
             </div>
         </div>
-        <Table dataSource={data?.data?.data.map((livestream: any, index: number) => ({
+
+        <Table className='border rounded overflow-hidden shadown' dataSource={data?.data?.data.map((livestream: any, index: number) => ({
             ...livestream,
             key: pageIndex * pageSize + (index + 1) - pageSize,
         }))}
@@ -121,6 +140,9 @@ const Page: NextPage<PageProps> = ({ modal }) => {
                 total: data?.data?.total,
                 pageSize: pageSize,
                 current: pageIndex
+            }}
+            rowSelection={{
+                type: 'checkbox'
             }}
             onChange={(pagination) => {
                 syncObj({

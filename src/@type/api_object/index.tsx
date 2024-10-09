@@ -68,5 +68,9 @@ export interface ActivityStream {
     updateAt?: string
     user?: User,
     platform?: Platform
-    vps: Vps
+    vps?: Vps
+    resolution?: string | null,
+    start_at?: string,
+    end_at?: string
+    downloaded: any
 }

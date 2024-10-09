@@ -28,6 +28,10 @@ import axiosInstance from "@/apiClient/axiosConfig";
 import SearchInput from "@/components/filters/SearchInput";
 import { pagination } from "@/helpers/pagination";
 import syncObjectToUrl from "@/helpers/syncObjectToUrl";
+import { ColumnsType } from "antd/es/table";
+import HorizoneMenu from "@/components/admin/HorizoneMenu";
+import HideMenuSelected from "@/components/vps/HideMenuSelected";
+import Reloadbtn from "../reloadbtn";
 
 const Page = () => {
     const [openState, setOpenState] = useState(false)
@@ -37,7 +41,7 @@ const Page = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [sync, setSync] = useState(false)
     const { data, isFetching, isError } = useQuery({
-        queryKey: ['queryKey', isModalOpen],
+        queryKey: ['vpsData', isModalOpen],
         queryFn: () => axiosInstance.get<any>('/vps-provider/getvps', {
             params: {
                 language: "en"
@@ -63,7 +67,7 @@ const Page = () => {
     const setSlugData = (slug: string) => {
         setSlug(slug)
     }
-    const columns = [
+    const columns: ColumnsType<any> = [
         {
             title: t('entryno'),
             dataIndex: "key",
@@ -166,6 +170,7 @@ const Page = () => {
 
     const { pageIndex, pageSize, limit, offset } = pagination(router)
     const syncObj = syncObjectToUrl(router)
+    const [selectedRows, setSelectedRows] = useState<any>([])
     return (
         <>
             <Title className="text-center" level={2}>
@@ -195,7 +200,6 @@ const Page = () => {
                 <div id="filter">
                     <SearchInput />
                 </div>
-
                 <Button
                     type="primary"
                     id="create"
@@ -208,7 +212,9 @@ const Page = () => {
                     {t("create")}
                 </Button>
             </div>
-
+            <HorizoneMenu data={selectedRows}>
+                <HideMenuSelected selectedRows={selectedRows}/> 
+            </HorizoneMenu>
             <Table
                 className="border rounded-md shadow-md overflow-hidden"
                 dataSource={data?.data.map((item: any, index: number) => ({
@@ -230,6 +236,12 @@ const Page = () => {
                     pageSize: pageSize,
                     current: pageIndex,
                     showSizeChanger: true,
+                }}
+                rowSelection={{
+                    type: 'checkbox',
+                    onChange: (selectedRowKeys, selectedRows) => {
+                        setSelectedRows(selectedRows)
+                    }
                 }}
             />
 

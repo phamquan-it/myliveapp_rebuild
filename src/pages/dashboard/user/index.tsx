@@ -21,6 +21,7 @@ import {
 } from "antd";
 import { AnyObject } from "antd/es/_util/type";
 import {
+    ColumnsType,
     FilterValue,
     SorterResult,
     TableCurrentDataSource,
@@ -41,13 +42,14 @@ import SearchInput from "@/components/filters/SearchInput";
 import { pagination } from "@/helpers/pagination";
 import axiosInstance from "@/apiClient/axiosConfig";
 import syncObjectToUrl from "@/helpers/syncObjectToUrl";
+import UserAction from "@/components/admin/user/UserAction";
 const { Option } = Select;
 const Page = () => {
     const token = getCookie("token");
     const router = useRouter();
     const t = useTranslations("MyLanguage");
     const d = useTranslations("DashboardMenu");
-    const columns: any[] = [
+    const columns: ColumnsType<any> = [
         {
             align: "center",
             title: t("entryno"),
@@ -108,6 +110,9 @@ const Page = () => {
             key: "id",
             align: "center",
             width: 200,
+            render: ()=>{
+                return <UserAction/>
+            }
         },
     ];
 

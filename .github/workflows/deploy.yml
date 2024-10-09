@@ -22,5 +22,5 @@ jobs:
                       git pull
                       npm install
                       npm run build
-                      pm2 restart cms-autolive
+                      pm2 restart felive
                       pm2 save

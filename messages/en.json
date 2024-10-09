@@ -59,7 +59,7 @@
     "terms": "Terms"
   },
   "DashboardMenu": {
-    "editconfig": "Edit config",
+        "editconfig": "Edit config",
     "livestreams": "Live streams",
     "cloudserver": "Cloud server",
     "home": "Home",
@@ -87,6 +87,9 @@
     "myautolive": "My autolive"
   },
   "MyLanguage": {
+    "update_info": "Update info",
+    "change_password": "Change password",
+    "update_servive_price": "Update services price",
     "edit_config":"Edit config",
     "max_streams":"Max streams",
     "storage":"Storage",

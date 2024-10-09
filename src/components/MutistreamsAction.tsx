@@ -61,6 +61,7 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected }
 
 
     const confirm: PopconfirmProps['onConfirm'] = (e) => {
+        console.log(streamIdSelected)
         startMultiStreams.mutate({
             stream_id: streamIdSelected
         })
@@ -79,55 +80,50 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected }
 
     const w = useTranslations('Warning')
     const t = useTranslations('MyLanguage')
-    return <>
-        <div className={`py-3 flex gap-2 ${(streamsSelected.length == 0) ? "hidden" : ""}`}>
+    return <div className='flex gap-1'>
 
 
-            <Tooltip title={w('start_selected_stream')}>
-                <Popconfirm
-                    title={w('start_streams')}
-                    description={`${w('start_selected_stream')}?`}
-                    onConfirm={confirm}
-                    icon={<IoPlay style={{
-                        color: '#1677ff'
-                    }} />}
-                    okText={t('yes')}
-                    cancelText={t('no')}
-                >
-                    <Button type="primary" icon={<IoPlay />}></Button>
-                </Popconfirm>
-            </Tooltip>
-            <Tooltip title={w('stop_selected_stream')}>
-                <Popconfirm
-                    title={w('stop_streams')}
-                    description={`${w('stop_selected_stream')}?`}
-                    onConfirm={confirmStop}
-                    icon={<StopOutlined style={{ color: "red" }} />}
-                    okText={t('yes')}
-                    cancelText={t('no')}
-                >
-                    <Button icon={<StopOutlined style={{ color: "red" }} />}></Button>
-                </Popconfirm>
-
-            </Tooltip>
-            <Tooltip title={w('delete_selected_stream')}>
-                <Popconfirm
-                    title={w('delete_streams')}
-                    description={`${w('delete_selected_stream')}?`}
-                    onConfirm={confirmDelete}
-                    okText={t('yes')}
-                    cancelText={t('no')}
-                    icon={<DeleteFilled style={{
-                        color: 'red'
-                    }} />}
-                >
-                    <Button type="primary" danger icon={<DeleteFilled />}></Button>
-                </Popconfirm>
-
-            </Tooltip>
-
-        </div>
-    </>
+        <Tooltip title={w('start_selected_stream')}>
+            <Popconfirm
+                title={w('start_streams')}
+                description={`${w('start_selected_stream')}?`}
+                onConfirm={confirm}
+                icon={<IoPlay style={{
+                    color: '#1677ff'
+                }} />}
+                okText={t('yes')}
+                cancelText={t('no')}
+            >
+                <Button type="primary" icon={<IoPlay />}>Start live</Button>
+            </Popconfirm>
+        </Tooltip>
+        <Tooltip title={w('stop_selected_stream')}>
+            <Popconfirm
+                title={w('stop_streams')}
+                description={`${w('stop_selected_stream')}?`}
+                onConfirm={confirmStop}
+                icon={<StopOutlined style={{ color: "red" }} />}
+                okText={t('yes')}
+                cancelText={t('no')}
+            >
+                <Button icon={<StopOutlined style={{ color: "red" }} />}>Stop live</Button>
+            </Popconfirm>
+        </Tooltip>
+        <Tooltip title={w('delete_selected_stream')}>
+            <Popconfirm
+                title={w('delete_streams')}
+                description={`${w('delete_selected_stream')}?`}
+                onConfirm={confirmDelete}
+                okText={t('yes')}
+                cancelText={t('no')}
+                icon={<DeleteFilled style={{
+                    color: 'red'
+                }} />}
+            >
+                <Button type="primary" danger icon={<DeleteFilled />}>Delete</Button>
+            </Popconfirm>
+        </Tooltip>
+    </div>
 }
 
 export default MutistreamsAction

@@ -36,7 +36,7 @@ const XtermUI: React.FC<XtermUIProps> = ({ SSHInfo, }) => {
             }, 200)
 
 
-            const socket = io("https://api.golive365.top/");
+            const socket = io(process.env.API_URL);
             socketRef.current = socket;
 
             terminal.onData((data: any) => {
