@@ -32,6 +32,7 @@ import { ColumnsType } from "antd/es/table";
 import HorizoneMenu from "@/components/admin/HorizoneMenu";
 import HideMenuSelected from "@/components/vps/HideMenuSelected";
 import Reloadbtn from "../reloadbtn";
+import NumOfStreamsVps from "@/components/vps/NumOfStreamsVps";
 
 const Page = () => {
     const [openState, setOpenState] = useState(false)
@@ -71,17 +72,20 @@ const Page = () => {
         {
             title: t('entryno'),
             dataIndex: "key",
+            key:'key',
             width: 35
         },
 
         {
             title: t('name'),
             dataIndex: "name",
+            key: 'name',
             width: 150
         },
         {
             title: "Slug",
             dataIndex: "slug",
+            key:'slug'
         },
         {
             title: "Brand",
@@ -92,6 +96,7 @@ const Page = () => {
         {
             title: t('ipv4'),
             dataIndex: "ipv4",
+            key:'ipv4'
         },
         {
             title: ('Distro'),
@@ -105,14 +110,8 @@ const Page = () => {
         },
         {
             title: ('Num of stream'),
-            dataIndex: "numberoflivestreams",
-            render: (text: string, record: any) => {
-                return (
-                    <>
-                        <Tag color="success">0 streamings</Tag>
-                    </>
-                )
-            }
+            dataIndex: "stream",
+            render: (text, record)=> <NumOfStreamsVps slug={record.slug}/>
         },
         {
             title: t('status'),
@@ -213,7 +212,7 @@ const Page = () => {
                 </Button>
             </div>
             <HorizoneMenu data={selectedRows}>
-                <HideMenuSelected selectedRows={selectedRows}/> 
+                <HideMenuSelected selectedRows={selectedRows} />
             </HorizoneMenu>
             <Table
                 className="border rounded-md shadow-md overflow-hidden"

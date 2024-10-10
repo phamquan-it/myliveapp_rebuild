@@ -12,7 +12,8 @@
     "stopped": "Stopped",
     "scheduling": "Scheduling",
     "running": "Running",
-    "starting": "Starting"
+    "starting": "Starting",
+    "error":"Error"
   },
   "Authenlication": {
     "donothaveanacount": "Do not have an account?",

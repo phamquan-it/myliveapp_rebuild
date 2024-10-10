@@ -14,7 +14,8 @@
     "stopped": "Đã dừng",
     "scheduling": "Đang lên lịch",
     "running": "Đang chạy",
-    "starting": "Đang bắt đầu"
+    "starting": "Đang bắt đầu",
+    "error":"Thất bại"
   },
     "Authenlication": {
     "donothaveanacount": "Chưa có tài khoản?",

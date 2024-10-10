@@ -1,3 +1,4 @@
+import { StopOutlined } from '@ant-design/icons';
 import { Tag } from 'antd';
 import { useTranslations } from 'next-intl';
 import React from 'react';
@@ -23,7 +24,7 @@ const StreamState: React.FC<StreamStateProps> = ({ state }) => {
         case StreamType.STOPPED:
             return <Tag color='red'>{ s('stopped') }</Tag>
     }
-    return <Tag color='red' />
+    return <Tag color='error'>{ s('error') }</Tag>
 }
 
 export default StreamState

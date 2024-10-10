@@ -12,18 +12,16 @@ interface MutistreamsActionProps {
 
 const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected }) => {
 
-
-    const streamIdSelected: number[] = streamsSelected.reduce((acc, stream) => {
-        if (stream.id !== undefined) {
-            acc.push(stream.id);
-        }
-        return acc;
-    }, [] as number[]);
-    const startMultiStreams = useMutation({
+    const startLive = useMutation({
         mutationKey: ['startlive'],
         mutationFn: (data: {
-            stream_id: number[]
-        }) => axiosInstance.post('/autolive-control/streams/start', data),
+            stream_id: number
+        }) => axiosInstance.get('/autolive-control/start-live', {
+            params: {
+                language: "en",
+                stream_id: data.stream_id
+            }
+        }),
         onSuccess: () => {
             message.success("Success")
         },
@@ -31,11 +29,20 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected }
             message.error(err.message)
         }
     })
-    const stopMultiStreams = useMutation({
+
+    const streamIdSelected: number[] = streamsSelected.reduce((acc, stream) => {
+        if (stream.id !== undefined) {
+            acc.push(stream.id);
+        }
+        return acc;
+    }, [] as number[]);
+      const stopMultiStreams = useMutation({
         mutationKey: ['startlive'],
         mutationFn: (data: {
             stream_id: number[]
-        }) => axiosInstance.post('/autolive-control/streams/start', data),
+        }) => axiosInstance.get('/autolive-control/start-live', {
+            params: data
+        }),
         onSuccess: () => {
             message.success("Success")
         },
@@ -61,9 +68,10 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected }
 
 
     const confirm: PopconfirmProps['onConfirm'] = (e) => {
-        console.log(streamIdSelected)
-        startMultiStreams.mutate({
-            stream_id: streamIdSelected
+        streamIdSelected.forEach((value) => {
+            startLive.mutate({
+                stream_id: value
+            })
         })
     };
 

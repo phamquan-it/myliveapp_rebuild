@@ -1,6 +1,6 @@
 import axiosInstance from '@/apiClient/axiosConfig';
 import { DeleteFilled, DeleteOutlined, DesktopOutlined, StopOutlined } from '@ant-design/icons';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Dropdown, MenuProps, Popconfirm, PopconfirmProps, Tooltip, message } from 'antd';
 import { ConfigProvider } from 'antd/lib';
 import { useTranslations } from 'next-intl';
@@ -9,16 +9,18 @@ import { IoPlay } from "react-icons/io5";
 import { TbLetterYSmall } from 'react-icons/tb';
 interface StreamActionProps {
     personStream: any,
-      status: string | undefined
+    status: string | undefined
 }
 
 const StreamAction: React.FC<StreamActionProps> = ({ personStream, status }) => {
+    const queryClient = useQueryClient()
 
     const stopLive = useMutation({
         mutationKey: ['stoplive'],
         mutationFn: (data: any) => axiosInstance.post('/autolive-control/stop-live', data),
         onSuccess: () => {
             message.success("Success")
+            queryClient.invalidateQueries({ queryKey: ['activityStream'] })
         },
         onError: (err) => {
             message.error(err.message)
@@ -30,13 +32,14 @@ const StreamAction: React.FC<StreamActionProps> = ({ personStream, status }) => 
         mutationFn: (data: {
             stream_id: number
         }) => axiosInstance.get('/autolive-control/start-live', {
-            params:{
-                language:"en",
+            params: {
+                language: "en",
                 stream_id: data.stream_id
             }
         }),
         onSuccess: () => {
             message.success("Success")
+            queryClient.invalidateQueries({ queryKey: ['activityStream'] })
         },
         onError: (err) => {
             message.error(err.message)
@@ -46,8 +49,9 @@ const StreamAction: React.FC<StreamActionProps> = ({ personStream, status }) => 
         mutationKey: ['delete-stream'],
         mutationFn: (data: {
             stream_id: number
-        }) => axiosInstance.delete('/delete', { data: { stream_id: personStream } }),
+        }) => axiosInstance.delete("/activity-stream/delete/" + personStream),
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['activityStream'] })
             message.success("Success")
         },
         onError: (err) => {
@@ -83,9 +87,9 @@ const StreamAction: React.FC<StreamActionProps> = ({ personStream, status }) => 
     return (
         <div className='flex gap-3'>
 
-            <Tooltip title={ w('start_stream') }>
+            <Tooltip title={w('start_stream')}>
                 <Popconfirm
-                    title={ w('start_stream') }
+                    title={w('start_stream')}
                     description={w('start_this_stream')}
 
                     onConfirm={confirmStart}
@@ -99,10 +103,10 @@ const StreamAction: React.FC<StreamActionProps> = ({ personStream, status }) => 
                 </Popconfirm>
             </Tooltip>
 
-            <Tooltip title={ w('stop_stream') }>
+            <Tooltip title={w('stop_stream')}>
                 <Popconfirm
                     title={w('stop_stream')}
-                    description={ w('stop_this_stream') }
+                    description={w('stop_this_stream')}
                     onConfirm={confirm}
                     okText={t('yes')}
                     cancelText={t('no')}
@@ -116,10 +120,10 @@ const StreamAction: React.FC<StreamActionProps> = ({ personStream, status }) => 
                 </Popconfirm>
 
             </Tooltip>
-            <Tooltip title={ w('delete_stream') }>
+            <Tooltip title={w('delete_stream')}>
 
                 <Popconfirm
-                    title={ w('delete_stream') }
+                    title={w('delete_stream')}
                     description={w('delete_this_stream')}
                     onConfirm={confirmDelete}
                     okText={t('yes')}
