@@ -19,8 +19,4 @@ jobs:
                   port: ${{ secrets.VPS_PORT }}
                   script: |
                       cd /www/wwwroot/myliveapp_rebuild/
-                      git pull
-                      npm install
-                      npm run build
-                      pm2 start npm --name "live-infinity" -- run start -- -p 4001
-                      pm2 save
+                 

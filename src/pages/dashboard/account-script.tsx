@@ -114,7 +114,7 @@ const Page = () => {
         <>
             <div className="flex justify-between my-2">
                 <div>
-                    <SearchInput/>
+                    <SearchInput />
                 </div>
                 <Button type="primary" icon={<PlusCircleFilled />} iconPosition="end" onClick={showCreatePopup}>
                     Create
@@ -167,10 +167,9 @@ const Page = () => {
 
 
 
-            <Table className='border rounded overflow-hidden shadow'
-                pagination={{
-                    pageSize: 20
-                }}
+            <Table pagination={{
+                pageSize: 20
+            }}
                 expandable={{
                     expandedRowRender: (record: any) => <Input.TextArea placeholder="" allowClear value={record.content} readOnly autoSize />,
                     rowExpandable: (record) => record.content !== undefined,

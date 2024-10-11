@@ -152,7 +152,7 @@ const Page = () => {
 
                 </div>
             </div>
-            <Table className='border shadow-sm rounded overflow-hidden'
+            <Table
                 loading={isFetching}
                 onChange={(pagination) => {
                     syncObj({

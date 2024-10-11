@@ -181,7 +181,7 @@ const Page = () => {
     return (
         <>
             <div className="flex justify-between items-center">
-                <div className={`flex py-3 gap-2 transition duration-500 transform ${streamsSelected.length == 0?'':''}`}>
+                <div className={`flex py-3 gap-2 transition duration-500 transform ${streamsSelected.length == 0 ? '' : ''}`}>
                     <SearchInput />
                     <Select defaultValue={0}
                         options={[
@@ -218,7 +218,6 @@ const Page = () => {
                     current: pageIndex
                 }}
 
-                className="border rounded shadow-md"
                 dataSource={data?.data.data.map((item: any, index: number) => ({
                     ...item,
                     key: pageIndex * pageSize + (index + 1) - pageSize,

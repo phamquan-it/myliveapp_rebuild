@@ -99,7 +99,6 @@ const Page = () => {
             </div>
 
             <Table
-                className="border shadow-md rounded-md mt-4"
                 dataSource={data?.data.data.map((item: any, index: number) => ({
                     ...item,
                     key: 1 * 10 + (index + 1) - 10,

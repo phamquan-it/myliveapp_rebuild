@@ -20,7 +20,7 @@ import {
     WindowsFilled,
     WindowsOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu, MenuProps, Modal, Spin, theme, Tooltip } from "antd";
+import { Affix, Button, Layout, Menu, MenuProps, Modal, Spin, theme, Tooltip } from "antd";
 import { useRouter } from "next/router";
 import { TbCategoryFilled } from "react-icons/tb";
 import {
@@ -305,7 +305,9 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                         <div className="w-full flex justify-between pe-10">
                             <div>Live stream</div>
                             <div className="flex items-center gap-2">
-                                <CreateStream />
+                                <Affix offsetTop={100}>
+                                        <CreateStream />
+                                </Affix>
                                 <LocaleSwitcher />
                             </div>
                         </div>

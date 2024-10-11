@@ -129,7 +129,7 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             </div>
         </div>
 
-        <Table className='border rounded overflow-hidden shadown' dataSource={data?.data?.data.map((livestream: any, index: number) => ({
+        <Table dataSource={data?.data?.data.map((livestream: any, index: number) => ({
             ...livestream,
             key: pageIndex * pageSize + (index + 1) - pageSize,
         }))}

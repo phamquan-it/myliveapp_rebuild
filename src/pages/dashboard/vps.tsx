@@ -72,7 +72,7 @@ const Page = () => {
         {
             title: t('entryno'),
             dataIndex: "key",
-            key:'key',
+            key: 'key',
             width: 35
         },
 
@@ -85,7 +85,7 @@ const Page = () => {
         {
             title: "Slug",
             dataIndex: "slug",
-            key:'slug'
+            key: 'slug'
         },
         {
             title: "Brand",
@@ -96,7 +96,7 @@ const Page = () => {
         {
             title: t('ipv4'),
             dataIndex: "ipv4",
-            key:'ipv4'
+            key: 'ipv4'
         },
         {
             title: ('Distro'),
@@ -111,7 +111,7 @@ const Page = () => {
         {
             title: ('Num of stream'),
             dataIndex: "stream",
-            render: (text, record)=> <NumOfStreamsVps slug={record.slug}/>
+            render: (text, record) => <NumOfStreamsVps slug={record.slug} />
         },
         {
             title: t('status'),
@@ -211,7 +211,6 @@ const Page = () => {
                 <HideMenuSelected selectedRows={selectedRows} />
             </HorizoneMenu>
             <Table
-                className="border rounded-md shadow-md overflow-hidden"
                 dataSource={data?.data.map((item: any, index: number) => ({
                     ...item,
                     key: pageIndex * pageSize + (index + 1) - pageSize,

@@ -137,7 +137,6 @@ const Page = () => {
                 </div>
             </div>
             <Table
-                className="rounded-md shadow-md border mt-3 overflow-hidden"
                 dataSource={data?.data?.data?.map((item: any, index: number) => ({
                     ...item,
                     key: pageIndex * pageSize + (index + 1) - pageSize,

@@ -208,7 +208,6 @@ const Page = () => {
             <Table
                 dataSource={[]}
                 columns={columns}
-                className="border rounded-md shadow overflow-hidden"
                 scroll={{ x: 800 }}
             />
         </>
