@@ -36,7 +36,7 @@ const Page: NextPage<PageProps> = ({ modal }) => {
     const [isReady, setIsReady] = useState(false)
 
     const { data, isFetching } = useQuery({
-        queryKey: ['ActivityStream', router.asPath],
+        queryKey: ['activityStream', router.asPath],
         queryFn: () => axiosInstance.get("/activity-stream?language=en", {
             params: {
                 keyword: router.query.keyword ?? '',
@@ -118,7 +118,6 @@ const Page: NextPage<PageProps> = ({ modal }) => {
         syncObj({ keyword: e.target.value })
     }, 300)
     return <>
-        <Title level={2} className="text-center">{('Live streams')}</Title>
         <div className="flex py-3 gap-2 justify-between">
             <div className='flex gap-2'>
                 <div>
@@ -148,6 +147,11 @@ const Page: NextPage<PageProps> = ({ modal }) => {
                 syncObj({
                     pageIndex: pagination.current,
                 })
+            }}
+            expandable={{
+                expandedRowRender: (record) => <p style={{ margin: 0 }}>
+                    log stream
+                </p>,
             }}
         />
     </>

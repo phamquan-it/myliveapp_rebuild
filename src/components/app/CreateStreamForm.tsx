@@ -72,9 +72,8 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
         <Form
             form={form}
             name="basic"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
-            style={{ maxWidth: 600 }}
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 18 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             autoComplete="off"
@@ -117,7 +116,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
             {/* Platforms selection */}
 
 
-            <div style={{ display: 'grid', gridTemplateColumns: '8fr 16fr', gap: '16px', maxWidth: '600px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '4fr 18fr', gap: '16px' }}>
                 <div style={{ gridColumn: 'span 1', padding: '8px' }}>
                 </div>
                 <div style={{ gridColumn: 'span 1', backgroundColor: '#ffffff', padding: '3px' }}>
@@ -158,7 +157,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
                                             rules={[{ required: true }]}
                                         >
                                             <Input placeholder="Stream key" style={{
-                                                width: 167
+                                                width: "360px"
                                             }} />
                                         </Form.Item>
                                         <MinusCircleOutlined onClick={() => remove(name)} />
@@ -186,15 +185,15 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData }) =>
             </Form.Item>
 
             <Form.Item
-                label={t('loop')} name='loop' initialValue={2} rules={[
+                label={t('loop')} name='loop' initialValue={'only'} rules={[
                     {
                         required: true
                     }
                 ]}
             >
                 <Radio.Group>
-                    <Radio value={1}>{t('infinity')}</Radio>
-                    <Radio value={2}>{t('only')}</Radio>
+                    <Radio value='infinity'>{t('infinity')}</Radio>
+                    <Radio value='only'>{t('only')}</Radio>
                 </Radio.Group>
             </Form.Item>
 

@@ -13,7 +13,7 @@ const Page = () => {
     const router = useRouter();
     const { query } = router
     const { keyword, pageIndex, pageSize } = query
-    useEffect(()=>{
+    useEffect(() => {
         console.log(query)
     }, [query])
 
@@ -53,7 +53,7 @@ const Page = () => {
             key: "fund",
             width: "10%",
             align: "right",
-            render: (text: string, record: any)=> record?.finance_transaction?.funds
+            render: (text: string, record: any) => record?.finance_transaction?.funds
         },
         {
             title: t("createat"),
@@ -84,14 +84,10 @@ const Page = () => {
         const current = pagination.current || 1;
         const pageSize = pagination.pageSize || 20;
     };
-   
+
     const p = useTranslations("Placeholder");
     return (
         <>
-            <Title level={2} className="text-center !mb-8">
-                {d("cashflow")}
-            </Title>
-
             <div className="flex justify-between mt-10">
                 <div className="flex justify-start gap-1 " id="filter">
                     <Input
@@ -114,8 +110,8 @@ const Page = () => {
                 onChange={handleTableChange}
                 pagination={{
                     total: data?.data.total,
-             //       current: pageIndex,
-                //    pageSize: pageSize,
+                    //       current: pageIndex,
+                    //    pageSize: pageSize,
                 }}
             />
         </>

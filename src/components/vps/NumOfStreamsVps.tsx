@@ -8,10 +8,15 @@ interface NumOfStreamsVpsProps {
 
 const NumOfStreamsVps: React.FC<NumOfStreamsVpsProps> = ({ slug }) => {
     const [numOfStream, setNumOfStream] = useState(0)
-    const data = axiosInstance.get(`/vps-provider/get-count-streams-runing?slug=${slug}`).then((res)=>{
-        setNumOfStream(res.data)
-    });
-    
+    try {
+        const data = axiosInstance.get(`/autolive-control/get-count-streams-from-slug?slug=${slug}`).then((res) => {
+            setNumOfStream(res.data)
+        }).catch((err)=>{
+            console.log(err.message)
+        });
+
+    } catch (e) {
+    }
     return <Tag color="green">{numOfStream} streamings</Tag>
 }
 

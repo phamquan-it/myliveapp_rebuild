@@ -146,17 +146,7 @@ const Page = () => {
             dataIndex: 'downloaded',
             key: 'downloaded',
             render: (downloaded: boolean) => (downloaded) ? 'Yes' : 'No'
-        },
-        {
-            title: "",
-            dataIndex: "id",
-            key: "id",
-            width: 150,
-            render: (text, record) => (
-                <StreamAction personStream={text} status={record.status} />
-            )
-        },
-
+        }
     ];
 
     const token = getCookie('token')
@@ -190,8 +180,6 @@ const Page = () => {
     const s = useTranslations('StreamStatus')
     return (
         <>
-            <Title level={2} className='text-center'>{('Autolive')}</Title>
-
             <div className="flex justify-between items-center">
                 <div className={`flex py-3 gap-2 transition duration-500 transform ${streamsSelected.length == 0?'':''}`}>
                     <SearchInput />
@@ -211,7 +199,7 @@ const Page = () => {
                 </div>
             </div>
             <HorizoneMenu data={streamsSelected}>
-                <MutistreamsAction streamsSelected={streamsSelected} />
+                <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} />
             </HorizoneMenu>
             <Table
                 rowSelection={{

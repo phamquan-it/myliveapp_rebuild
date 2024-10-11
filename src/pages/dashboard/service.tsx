@@ -46,7 +46,7 @@ export default function Index() {
                         <div>{rate}</div>
                         <StarFilled style={{
                             color: 'orange'
-                            }}/>
+                        }} />
                     </div>
                 </>
             )
@@ -90,7 +90,7 @@ export default function Index() {
             dataIndex: "id",
             key: "id",
             align: "center",
-            render:(id: number)=> <Button type='primary' size='small' onClick={()=>{
+            render: (id: number) => <Button type='primary' size='small' onClick={() => {
             }}>{t('buy')}</Button>
         },
     ];
@@ -115,10 +115,6 @@ export default function Index() {
             </Head>
             <div>
                 <>
-                    <Title level={2} className="text-center">
-                        {t("service")}
-                    </Title>
-
                     <div
                         className="grid md:flex justify-between items-center my-3"
                         id="filter"

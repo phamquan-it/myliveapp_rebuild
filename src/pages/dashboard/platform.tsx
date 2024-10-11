@@ -82,7 +82,6 @@ const Page = () => {
 
     ];
     return <>
-        <Title level={2} className="text-center">{ d('platform') }</Title>
         <div className="flex justify-between py-3">
             <div>
                 <SearchInput />

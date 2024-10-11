@@ -45,9 +45,6 @@ const Page = () => {
     const syncObj = syncObjectToUrl(router)
     return (
         <>
-            <Title className="!semi-boldb !text-center">{d("Settings")}</Title>
-
-
             <Tabs defaultActiveKey={tab} items={items} addIcon={<PlusOutlined />} tabPosition='top' onChange={(e)=>{
                 console.log('active key', e)
                 syncObj({tab: e})

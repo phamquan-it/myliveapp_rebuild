@@ -199,10 +199,6 @@ const Page = () => {
 
     return (
         <>
-            <Title level={2} className="text-center">
-                {d("order")}
-            </Title>
-
             <Statistic />
             <div className="flex justify-between my-3 mt-10">
                 <div style={{ display: "flex", gap: 5 }} id="filter">

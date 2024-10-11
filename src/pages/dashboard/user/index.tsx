@@ -110,8 +110,8 @@ const Page = () => {
             key: "id",
             align: "center",
             width: 200,
-            render: ()=>{
-                return <UserAction/>
+            render: () => {
+                return <UserAction />
             }
         },
     ];
@@ -131,9 +131,6 @@ const Page = () => {
     const syncObj = syncObjectToUrl(router)
     return (
         <>
-            <Title level={2} className="text-center">
-                {d("user")}
-            </Title>
             <div className="flex justify-between">
                 <div>
                     <SearchInput />

@@ -159,9 +159,6 @@ const Page = () => {
     }, 300)
     return (
         <>
-            <Title level={2} className="text-center">
-                {d("paymenthistory")}
-            </Title>
             <div className="flex gap-1 my-3" id="filter">
                 <Input
                     placeholder={p("search")} defaultValue={router?.query?.keyword}

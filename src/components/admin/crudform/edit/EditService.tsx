@@ -5,7 +5,6 @@ import { StarFilled } from "@ant-design/icons";
 import PlatformSelect from "../../PlatformSelect";
 import { useQuery } from "@tanstack/react-query";
 import axiosClient from "@/apiClient/axiosClient";
-import CategorySelect from "../../CategorySelect";
 
 const { Option } = Select;
 interface editServiceProps {
@@ -89,7 +88,6 @@ const EditService: React.FC<editServiceProps> = ({ service }) => {
           console.log(value);
         }}
       />
-      <CategorySelect initialValue={14} />
       <Form.Item
         label={d("name")}
         name="name"

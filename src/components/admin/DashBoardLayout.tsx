@@ -123,24 +123,11 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                     role: "admin",
                 },
                 {
-                    key: DashboardRouter.PUBLICKEY,
-                    icon: <KeyOutlined />,
-                    label: <Link href={DashboardRouter.PUBLICKEY}>{('Public key')}</Link>,
-                    role: "admin",
-                },
-                {
                     key: DashboardRouter.ACCOUNT_SCRIPT,
                     icon: <JavaScriptOutlined />,
                     label: <Link href={DashboardRouter.ACCOUNT_SCRIPT}>{('Account script')}</Link>,
                     role: "admin",
-                },
-                {
-                    key: DashboardRouter.SCRIPT_LIBRARY,
-                    icon: <>&gt;_&nbsp; &nbsp;</>,
-                    label: <Link href={DashboardRouter.SCRIPT_LIBRARY}>{('Script library')}</Link>,
-                    role: "admin",
-                },
-
+                }
             ]
         },
         {

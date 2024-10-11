@@ -1,4 +1,3 @@
-import CategorySelect from "@/components/admin/CategorySelect";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import PlatformSelect from "@/components/admin/PlatformSelect";
 import { Button, Form, Input, Select, Switch } from "antd";
@@ -29,7 +28,6 @@ const Page = () => {
               onFinishFailed={onFinishFailed}
             >
               <PlatformSelect required={true} />
-              <CategorySelect />
               <Form.Item label={t("services")} name="service">
                 <Select showSearch placeholder="Select service" />
               </Form.Item>

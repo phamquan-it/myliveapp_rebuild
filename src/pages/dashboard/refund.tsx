@@ -143,9 +143,6 @@ const Page = () => {
 
     return (
         <>
-            <Title level={2} className="text-center">
-                {d("refund")}
-            </Title>
             <div className="flex justify-between my-3">
 
                 <div className="flex" id="filter">

@@ -172,10 +172,6 @@ const Page = () => {
     const [selectedRows, setSelectedRows] = useState<any>([])
     return (
         <>
-            <Title className="text-center" level={2}>
-                Vps
-            </Title>
-
             <Modal
                 title={`Terminal ${sshInfo.sshUser}@${sshInfo.ipv4OrHost}`}
                 open={isModalOpen}

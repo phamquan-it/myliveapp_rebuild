@@ -112,9 +112,6 @@ const Page = () => {
 
     return (
         <>
-
-            <Title level={2} className="text-center">Account script</Title>
-
             <div className="flex justify-between my-2">
                 <div>
                     <SearchInput/>

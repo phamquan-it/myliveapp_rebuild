@@ -18,7 +18,8 @@ interface StreamRequest {
     vpsId?: number
     platformId: number,
     startTime?: string,
-    endTime?: string
+    endTime?: string,
+    loop?: string
 }
 
 
@@ -83,16 +84,17 @@ const App: React.FC = () => {
                     key: platform.stream_key,
                     name: newStream.stream_name,
                     vpsId,
-                    platformId: platform.platform
+                    platformId: platform.platform,
+                    loop: newStream.loop
                 }
-                console.log(streamRequest)
                 if (newStream.live_time != null) {
                     streamRequest.startTime = moment(newStream.live_time[0].$d).format('YYYY-MM-DD HH:mm')
                     streamRequest.endTime = moment(newStream.live_time[1].$d).format('YYYY-MM-DD HH:mm')
-                    mutate(streamRequest)
+                  //  mutate(streamRequest)
                     console.log("Live with cron", streamRequest)
                 } else {
-                    mutate(streamRequest)
+                   mutate(streamRequest)
+                    console.log(streamRequest)
                     console.log("live now")
                 }
 

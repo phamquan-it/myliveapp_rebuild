@@ -1,17 +1,20 @@
 import axiosInstance from '@/apiClient/axiosConfig';
 import { StreamDataType } from '@/pages/dashboard/myautolive';
 import { DeleteFilled, StopOutlined } from '@ant-design/icons';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Popconfirm, PopconfirmProps, Tooltip, message } from 'antd';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 import { IoPlay } from 'react-icons/io5';
 interface MutistreamsActionProps {
-    streamsSelected: StreamDataType[]
+    streamsSelected: StreamDataType[],
+    setStreamsSelected: (newStreamSelected: []) => void
 }
 
-const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected }) => {
+const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, setStreamsSelected }) => {
+    const queryClient = useQueryClient()
 
+    // start streams
     const startLive = useMutation({
         mutationKey: ['startlive'],
         mutationFn: (data: {
@@ -24,6 +27,9 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected }
         }),
         onSuccess: () => {
             message.success("Success")
+            setTimeout(() => {
+                queryClient.invalidateQueries({ queryKey: ['activityStream'] })
+            }, 3000)
         },
         onError: (err) => {
             message.error(err.message)
@@ -36,15 +42,16 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected }
         }
         return acc;
     }, [] as number[]);
-      const stopMultiStreams = useMutation({
-        mutationKey: ['startlive'],
-        mutationFn: (data: {
-            stream_id: number[]
-        }) => axiosInstance.get('/autolive-control/start-live', {
-            params: data
-        }),
+
+    const stopLive = useMutation({
+        mutationKey: ['stoplive'],
+        mutationFn: (data: any) => axiosInstance.post('/autolive-control/stop-live', data),
         onSuccess: () => {
             message.success("Success")
+            setTimeout(() => {
+                queryClient.invalidateQueries({ queryKey: ['activityStream'] })
+            }, 3000)
+
         },
         onError: (err) => {
             message.error(err.message)
@@ -60,6 +67,9 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected }
         }),
         onSuccess: () => {
             message.success("Success")
+            setTimeout(() => {
+                queryClient.invalidateQueries({ queryKey: ['activityStream'] })
+            }, 3000)
         },
         onError: (err) => {
             message.error(err.message)
@@ -74,17 +84,41 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected }
             })
         })
     };
-
+    // stop streams
     const confirmStop: PopconfirmProps['onConfirm'] = (e) => {
-        stopMultiStreams.mutate({
-            stream_id: streamIdSelected
+        streamIdSelected.forEach((value) => {
+            stopLive.mutate({
+                stream_id: value
+            })
         })
+
     };
+
+
+    const deleteStream = useMutation({
+        mutationKey: ['delete-stream'],
+        mutationFn: (data: {
+            stream_id: number
+        }) => axiosInstance.delete("/activity-stream/delete/" + data.stream_id),
+        onSuccess: () => {
+            message.success("Success")
+            queryClient.invalidateQueries({ queryKey: ['activityStream'] })
+        },
+        onError: (err) => {
+            message.error(err.message)
+        }
+    })
+
+    //delete stream
     const confirmDelete: PopconfirmProps['onConfirm'] = (e) => {
-        deleteMultiStreams.mutate({
-            stream_id: streamIdSelected
+        streamIdSelected.forEach((value) => {
+            deleteStream.mutate({
+                stream_id: value
+            })
         })
+
     };
+
 
     const w = useTranslations('Warning')
     const t = useTranslations('MyLanguage')
