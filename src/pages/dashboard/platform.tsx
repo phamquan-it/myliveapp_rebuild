@@ -82,14 +82,17 @@ const Page = () => {
 
     ];
     return <>
-        <div className="flex justify-between py-3">
-            <div>
+        <div className="sm:flex justify-between py-3">
+            <div className='mb-2 sm:mb-0'>
                 <SearchInput />
             </div>
             <CreatePlatform />
         </div>
         <Table
             loading={isFetching}
+            scroll={{
+                x: 300
+            }}
             onChange={(pagination) => {
                 syncObj({
                     pageIndex: pagination.current,

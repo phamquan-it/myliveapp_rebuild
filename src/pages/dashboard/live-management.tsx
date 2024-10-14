@@ -118,10 +118,12 @@ const Page: NextPage<PageProps> = ({ modal }) => {
         syncObj({ keyword: e.target.value })
     }, 300)
     return <>
-        <div className="flex py-3 gap-2 justify-between">
-            <div className='flex gap-2'>
+        <div className="  md:flex py-3 gap-2 justify-between">
+            <div className='grid gap-2 md:flex gap-2'>
                 <div>
-                    <Input placeholder={'Search...'} onChange={handleInput} />
+                    <Input placeholder={'Search...'} onChange={handleInput} style={{
+                        width: 200
+                        }} />
                 </div>
                 <SelectVps />
                 <UserSelect />
@@ -133,6 +135,10 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             ...livestream,
             key: pageIndex * pageSize + (index + 1) - pageSize,
         }))}
+
+            scroll={{
+                x: 400
+            }}
             loading={isFetching}
             columns={columns}
             pagination={{

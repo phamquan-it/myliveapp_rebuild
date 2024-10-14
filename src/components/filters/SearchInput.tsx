@@ -18,10 +18,7 @@ const SearchInput: React.FC<SearchInputProps> = () => {
     const p = useTranslations('Placeholder')
 
     return <>
-        <Input
-            style={{
-                width: 200
-            }}
+        <Input className='w-full sm:w-52'
         defaultValue={router.query.keyword ?? ''} onChange={handleInput} placeholder={p('search')}/>
     </>
 }

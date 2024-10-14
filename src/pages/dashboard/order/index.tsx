@@ -201,7 +201,7 @@ const Page = () => {
         <>
             <Statistic />
             <div className="flex justify-between my-3 mt-10">
-                <div style={{ display: "flex", gap: 5 }} id="filter">
+                <div className='grid sm:flex gap-0.5' id="filter">
                     <SearchInput />
                     <OrderStatus />
                 </div>

@@ -191,7 +191,7 @@ const Page = () => {
             >
                 <VpsForm closeModal={hideModal} setSlug={setSlugData} />
             </Modal>
-            <div className="flex justify-between items-center my-3">
+            <div className="grid gap-2 sm:flex justify-between items-center my-3">
                 <div id="filter">
                     <SearchInput />
                 </div>

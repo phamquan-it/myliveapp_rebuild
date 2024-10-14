@@ -139,6 +139,7 @@ const VpsConfig: React.FC<VpsConfigProps> = () => {
 
         </div>
         <Table className='border rounded overflow-hidden my-3' title={() => "Vps config"}
+            scroll={{ x: 300 }}
             pagination={false}
             loading={isFetching}
             dataSource={data?.data.map((config: any, index: number) => ({ ...config, key: index + 1 }))}

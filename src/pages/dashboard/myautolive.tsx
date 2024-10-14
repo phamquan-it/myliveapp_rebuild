@@ -181,7 +181,7 @@ const Page = () => {
     return (
         <>
             <div className="flex justify-between items-center">
-                <div className={`flex py-3 gap-2 transition duration-500 transform ${streamsSelected.length == 0 ? '' : ''}`}>
+                <div className={`sm:flex py-3 gap-2 transition duration-500 transform ${streamsSelected.length == 0 ? '' : ''}`}>
                     <SearchInput />
                     <Select defaultValue={0}
                         options={[
@@ -190,9 +190,8 @@ const Page = () => {
                             { value: 2, label: <span>{s('starting')}</span> },
                             { value: 3, label: <span>{s('running')}</span> },
                             { value: 4, label: <span>{s('stopped')}</span> },
-                        ]} style={{
-                            width: 200
-                        }} onChange={(e) => {
+                        ]} className='w-full mt-2 sm:mt-0 sm:w-48'
+                        onChange={(e) => {
                             syncObj({ ...router.query, status: e })
                         }}
                     />

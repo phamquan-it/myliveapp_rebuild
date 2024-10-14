@@ -34,10 +34,10 @@ const CreateService: React.FC = () => {
     }
     const [isModalOpen, setIsModalOpen] = useState(false)
     return (
-        <div>
+        <div className=''>
             <Button type="primary" icon={<PlusCircleFilled />} iconPosition='end' onClick={() => {
                 setIsModalOpen(true)
-            }}>Create</Button>
+            }} className='!w-full'>Create</Button>
             <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
 
                 <Form

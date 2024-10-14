@@ -17,22 +17,22 @@ type FieldType = {
 const CreatePlatform = () => {
     const createPlatform = useMutation({
         mutationKey: ['platform'],
-        mutationFn: (platform:any) => axiosInstance
+        mutationFn: (platform: any) => axiosInstance
             .post("platform/add",
                 platform,
             ),
-            onSuccess: (res)=>{
-                message.success("Success")
-                setIsModalOpen(false)
-            },
-            onError: (err)=>{
-                message.error(err.message)
-            }
+        onSuccess: (res) => {
+            message.success("Success")
+            setIsModalOpen(false)
+        },
+        onError: (err) => {
+            message.error(err.message)
+        }
     })
 
 
     const [key, setKey] = useState('')
-    const onFinish: FormProps<FieldType>['onFinish'] = (values:FieldType) => {
+    const onFinish: FormProps<FieldType>['onFinish'] = (values: FieldType) => {
         if (key != '') {
             values.image = key
             createPlatform.mutate(values)
@@ -68,7 +68,9 @@ const CreatePlatform = () => {
         setIsModalOpen(true);
     }
     return <>
-        <Button type="primary" onClick={showModal} icon={<PlusCircleFilled />} iconPosition="end">Create</Button>
+        <div>
+            <Button type="primary" onClick={showModal} icon={<PlusCircleFilled />} iconPosition="end" className='w-full'>Create</Button>
+        </div>
         <Modal title="Create" open={isModalOpen} onCancel={handleCancel} footer={[]}>
             <Form
                 layout="vertical"

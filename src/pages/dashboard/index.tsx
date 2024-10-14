@@ -172,7 +172,7 @@ const Page = () => {
             <div>
                 <DashBoardStatical />
             </div>
-            <div className=" grid grid-cols-2 gap-3">
+            <div className=" grid md:grid-cols-2 gap-3">
                 <div className="Payment rounded border overflow-hidden shadow">
                     <div
                         className="py-3 font-medium ps-3 border-b text-gray-600"
@@ -181,42 +181,46 @@ const Page = () => {
                         Cashflow
                     </div>
 
-                    <Table dataSource={[
-                        {
-                            key: '1',
-                            email: 'johndoe@outlook.com',
-                            action: 'withDraw',
-                            amount: '30$',
-                        },
-                        {
-                            key: '2',
-                            name: 'John',
-                            age: 42,
-                            address: '10 Downing Street',
-                        },
-                    ]} columns={[
-                        {
-                            title: 'No.',
-                            dataIndex: 'key',
-                            key: 'key',
-                        },
-                        {
-                            title: 'Email',
-                            dataIndex: 'email',
-                            key: 'email',
-                        },
-                        {
-                            title: 'Action',
-                            dataIndex: 'acttion',
-                            key: 'action',
-                        },
-                        {
-                            title: 'Amount',
-                            dataIndex: 'amount',
-                            key: 'amount',
-                        },
+                    <Table
+                        scroll={{
+                            x: 300
+                        }}
+                        dataSource={[
+                            {
+                                key: '1',
+                                email: 'johndoe@outlook.com',
+                                action: 'withDraw',
+                                amount: '30$',
+                            },
+                            {
+                                key: '2',
+                                name: 'John',
+                                age: 42,
+                                address: '10 Downing Street',
+                            },
+                        ]} columns={[
+                            {
+                                title: 'No.',
+                                dataIndex: 'key',
+                                key: 'key',
+                            },
+                            {
+                                title: 'Email',
+                                dataIndex: 'email',
+                                key: 'email',
+                            },
+                            {
+                                title: 'Action',
+                                dataIndex: 'acttion',
+                                key: 'action',
+                            },
+                            {
+                                title: 'Amount',
+                                dataIndex: 'amount',
+                                key: 'amount',
+                            },
 
-                    ]} pagination={false} />
+                        ]} pagination={false} />
                 </div>
                 <div className="Payment rounded border overflow-hidden shadow">
                     <div
@@ -226,50 +230,55 @@ const Page = () => {
                         Vps logs
                     </div>
 
-                    <Table dataSource={[
-                        {
-                            key: '1',
-                            slug: 'aglive1',
-                            stream_name: 'test 1',
-                            log: 'input output error',
+                    <Table
+                        scroll={{
+                            x: 300
+                        }}
 
-                        },
-                        {
-                            key: '2',
-                            slug: 'aglive1',
-                            stream_name: 'test 1',
-                            log: 'completed',
+                        dataSource={[
+                            {
+                                key: '1',
+                                slug: 'aglive1',
+                                stream_name: 'test 1',
+                                log: 'input output error',
 
-                        },
-                    ]} columns={[
-                        {
-                            title: 'No.',
-                            dataIndex: 'key',
-                            key: 'key',
-                        },
-                        {
-                            title: 'Slug',
-                            dataIndex: 'slug',
-                            key: 'slug',
-                        },
-                        {
-                            title: 'Stream name',
-                            dataIndex: 'stream_name',
-                            key: 'stream_name',
-                        },
+                            },
+                            {
+                                key: '2',
+                                slug: 'aglive1',
+                                stream_name: 'test 1',
+                                log: 'completed',
 
-                        {
-                            title: 'Log',
-                            dataIndex: 'log',
-                            key: 'log',
-                        },
-                        {
-                            title: 'Action',
-                            dataIndex: 'action',
-                            key: 'action',
-                        },
+                            },
+                        ]} columns={[
+                            {
+                                title: 'No.',
+                                dataIndex: 'key',
+                                key: 'key',
+                            },
+                            {
+                                title: 'Slug',
+                                dataIndex: 'slug',
+                                key: 'slug',
+                            },
+                            {
+                                title: 'Stream name',
+                                dataIndex: 'stream_name',
+                                key: 'stream_name',
+                            },
 
-                    ]} pagination={false} />
+                            {
+                                title: 'Log',
+                                dataIndex: 'log',
+                                key: 'log',
+                            },
+                            {
+                                title: 'Action',
+                                dataIndex: 'action',
+                                key: 'action',
+                            },
+
+                        ]} pagination={false} />
                 </div>
 
 
@@ -277,11 +286,12 @@ const Page = () => {
             <Table title={() => <span className=''>
                 Recent orders
             </span>}
+
                 dataSource={dataSource}
                 columns={columns}
                 className="border rounded-md overflow-hidden mt-3"
                 pagination={false}
-                scroll={{ y: 300 }}
+                scroll={{ y: 300, x: 600 }}
             />
         </>
     );

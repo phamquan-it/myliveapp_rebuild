@@ -12,7 +12,7 @@ const Statistic: React.FC<StatisticProps> = () => {
     const s = useTranslations('OrderStatus')
     return <>
         <Card title={t('all_order')}>
-            <div className="grid grid-cols-6">
+            <div className="grid grid-cols-2  sm:grid-cols-6">
                 <StatisticStatus value={0} order_status={s('completed')} />
                 <StatisticStatus value={0} order_status={s('partidal')} />
                 <StatisticStatus value={0} order_status={s('inprogress')} />

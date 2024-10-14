@@ -23,6 +23,7 @@ import {
 import { Affix, Button, Layout, Menu, MenuProps, Modal, Spin, theme, Tooltip } from "antd";
 import { useRouter } from "next/router";
 import { TbCategoryFilled } from "react-icons/tb";
+import Draggable from 'react-draggable';
 import {
     FaBuyNLarge,
     FaCamera,
@@ -190,6 +191,18 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
     }
     return (
         <Layout style={{ height: "100vh" }} className="!bg-white">
+
+            <Draggable>
+                <div style={{
+                    position: 'absolute',
+                    zIndex: 1000000000,
+                    top: 200,
+                    left: 300
+                }}>
+                    <CreateStream />
+                </div>
+            </Draggable>
+
             <ToastContainer />
             <div className="border-r">
                 <div
@@ -288,37 +301,37 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                     style={{
                         padding: 0,
                         background: colorBgContainer,
+                        overflow: "hidden"
                     }}
                     className=" border"
                 >
-                    <div className="flex">
-                        <Button
-                            type="text"
-                            icon=<MenuOutlined />
-                            onClick={() => setCollapsed(!collapsed)}
-                            style={{
-                                fontSize: "16px",
-                                width: 64,
-                                height: 64,
-                            }}
-                        />
-                        <div className="w-full flex justify-between pe-10">
-                            <div>Live stream</div>
-                            <div className="flex items-center gap-2">
-                                <Affix offsetTop={100}>
-                                        <CreateStream />
-                                </Affix>
-                                <LocaleSwitcher />
-                            </div>
+                    <div className="flex items-center w-full justify-between">
+                        <div className='flex relative' style={{ width: 200 }}>
+                            <Button
+                                type="text"
+                                icon=<MenuOutlined />
+                                onClick={() => setCollapsed(!collapsed)}
+                                style={{
+                                    fontSize: "16px",
+                                    width: 64,
+                                    height: 64,
+
+                                }}
+                            />
+                            <div className='absolute left-11'> Live stream</div>
+                        </div>
+                        <div className="sm:me-3 flex items-center">
+                            <LocaleSwitcher />
                         </div>
 
-
                     </div>
+
                 </Header>
                 <Content
                     style={{
                         padding: "30px 20px",
                         overflowY: "scroll",
+                        overflowX: "auto"
                     }}
 
                 >

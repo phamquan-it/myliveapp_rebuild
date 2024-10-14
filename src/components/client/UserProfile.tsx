@@ -68,7 +68,7 @@ const UserProfile: React.FC<userProfileProps> = (props) => {
     const t = useTranslations("UserProfile");
     return (
         <>
-            <div className="w-10/12 grid md:grid-cols-2 m-auto gap-9 shadow-md p-4 rounded-md border min-w-80">
+            <div className="w-10/12 grid md:grid-cols-2 m-auto gap-9 sm:shadow-md p-4 sm:rounded-md sm:border">
                 <div>
                     <ToastContainer />
                     <Form

@@ -122,7 +122,7 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, 
 
     const w = useTranslations('Warning')
     const t = useTranslations('MyLanguage')
-    return <div className='flex gap-1'>
+    return <div className='grid sm:flex gap-1'>
 
 
         <Tooltip title={w('start_selected_stream')}>

@@ -112,7 +112,7 @@ const Page = () => {
 
     return (
         <>
-            <div className="flex justify-between my-2">
+            <div className="grid sm:flex justify-between my-2">
                 <div>
                     <SearchInput />
                 </div>
@@ -167,7 +167,9 @@ const Page = () => {
 
 
 
-            <Table pagination={{
+            <Table
+            scroll={{ x: 400 }}
+            pagination={{
                 pageSize: 20
             }}
                 expandable={{

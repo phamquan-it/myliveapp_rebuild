@@ -159,12 +159,12 @@ const Page = () => {
     }, 300)
     return (
         <>
-            <div className="flex gap-1 my-3" id="filter">
+            <div className="sm:flex gap-1 my-3" id="filter">
                 <Input
                     placeholder={p("search")} defaultValue={router?.query?.keyword}
                     style={{ width: 200 }} onChange={handleInput}
                 />
-                <Select
+                <Select className='mt-2 sm:mt-0'
                     style={{ width: 200 }}
                     placeholder={p('select_status')}
                     showSearch

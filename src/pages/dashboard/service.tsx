@@ -114,44 +114,41 @@ export default function Index() {
                 <link rel="icon" href="/logo.png" />
             </Head>
             <div>
-                <>
-                    <div
-                        className="grid md:flex justify-between items-center my-3"
-                        id="filter"
-                    >
-                        <div>
-                            <SearchInput />
-                        </div>
-                        <CreateService />
-                    </div>
 
-                    <Table
-                        loading={isFetching}
-                        dataSource={data?.data?.services
-                            .map((service: any, index: number) => ({
-                                ...service, key: index
-                            }))}
-                        columns={columns}
-                        expandable={{
-                            expandedRowRender: (record: any) => (
-                                <TextArea
-                                    value={record.description_en}
-                                    readOnly
-                                    autoSize
-                                />
-                            ),
-                            rowExpandable: (record) =>
-                                record?.description_en !== undefined,
-                        }}
-                        scroll={{ x: 1000 }}
-                        pagination={{
-                            position: ["bottomCenter"],
-                            defaultCurrent: 1,
-                            showSizeChanger: true,
-                            pageSize: 20,
-                        }}
-                    />
-                </>
+                <div
+                    className="grid md:flex justify-between items-center my-3 gap-2"
+                    id="filter"
+                >
+                    <SearchInput />
+                    <CreateService />
+                </div>
+
+                <Table
+                    loading={isFetching}
+                    dataSource={data?.data?.services
+                        .map((service: any, index: number) => ({
+                            ...service, key: index
+                        }))}
+                    columns={columns}
+                    expandable={{
+                        expandedRowRender: (record: any) => (
+                            <TextArea
+                                value={record.description_en}
+                                readOnly
+                                autoSize
+                            />
+                        ),
+                        rowExpandable: (record) =>
+                            record?.description_en !== undefined,
+                    }}
+                    scroll={{ x: 1000 }}
+                    pagination={{
+                        position: ["bottomCenter"],
+                        defaultCurrent: 1,
+                        showSizeChanger: true,
+                        pageSize: 20,
+                    }}
+                />
             </div>
         </div>
     );
