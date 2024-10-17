@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Table, Image, Select } from 'antd';
 import { ColumnType } from 'antd/es/table';
 import Title from 'antd/es/typography/Title';
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import LiveSpeed from './live-speed';
 interface LiveStreamProps {
     slug: any;
@@ -38,7 +38,6 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
             key: 'key',
             width: 50
         },
-
         {
             title: 'Email',
             dataIndex: 'email',
@@ -47,7 +46,6 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
                 return record?.user?.email
             },
             ellipsis: true
-
         },
         {
             title: 'Name',
@@ -62,6 +60,8 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
             title: 'Platform',
             dataIndex: 'platform',
             key: 'platform',
+            width: 100,
+            align:'center',
             render: (text: string, record: any) => (
                 <Image alt="" src="https://cdn-icons-png.flaticon.com/128/174/174883.png" width={25} />
             ),
@@ -71,16 +71,13 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
             filterMode: () => {
                 return "menu";
             },
-            filters: [
-                { text: '>=35', value: 'gte35' },
-                { text: '<18', value: 'lt18' },
-            ],
+            filters: [],
         },
         {
             title: 'Speed',
             dataIndex: 'platform',
             key: 'platform',
-            render: (text: string, record: any) => <LiveSpeed stream={{...record, ipv4: slug.ipv4}} />,
+            render: (text: string, record: any) => <LiveSpeed stream={{ ...record, ipv4: slug.ipv4 }} />,
         },
         {
             title: 'Key',
@@ -90,6 +87,7 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
         },
 
     ];
+     const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
 
     return <>
         <Title level={5} className="text-center border-b">Live stream</Title>
@@ -105,8 +103,14 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
                     onClick: () => {
                         console.log(record)
                         setService("vps-log" + record.id)
+                        setSelectedRowKeys([record.key]);
                     }
                 }
+            }}
+            rowSelection={{
+                type: 'radio',
+                selectedRowKeys, // controlled selected row keys
+                
             }}
         />
 
