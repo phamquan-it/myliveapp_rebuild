@@ -4,6 +4,7 @@ import moment from 'moment';
 import React from 'react';
 import { usePlatformData } from '../live-streams/CreateStreamByAdmin';
 import { useTranslations } from 'next-intl';
+import { ColumnsType } from 'antd/es/table';
 
 interface CreateStreamTableProps {
     dataSource: any
@@ -14,7 +15,7 @@ const CreateStreamTable: React.FC<CreateStreamTableProps> = ({ dataSource }) => 
     const t = useTranslations('MyLanguage')
 
     const { data } = usePlatformData();
-    const columns = [
+    const columns:ColumnsType<any> = [
         {
             title: t('entryno'),
             dataIndex: 'key',
@@ -29,6 +30,7 @@ const CreateStreamTable: React.FC<CreateStreamTableProps> = ({ dataSource }) => 
             title: t('resolution'),
             dataIndex: 'resolution',
             key: 'resolution',
+            ellipsis: true 
         },
         {
             title: d('platform'),

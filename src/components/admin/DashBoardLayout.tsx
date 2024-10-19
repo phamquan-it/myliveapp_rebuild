@@ -43,6 +43,7 @@ import CreateStreamByAdmin from "../live-streams/CreateStreamByAdmin";
 import Link from "next/link";
 import { DashboardRouter } from "@/enums/router/dashboard";
 import CreateStream from "@/pages/CreateStream";
+import NewStream from "../autolive/new-streams";
 
 const { Header, Sider, Content } = Layout;
 
@@ -199,7 +200,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                     top: 200,
                     left: 300
                 }}>
-                    <CreateStream />
                 </div>
             </Draggable>
 
@@ -320,6 +320,15 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                             />
                             <div className='absolute left-11'> Live stream</div>
                         </div>
+                        <Affix style={{
+                            top: 50,
+                            position: 'absolute',
+                            right: 200,
+                            zIndex: 1000
+                        }} >
+                            <CreateStream />
+
+                        </Affix>
                         <div className="sm:me-3 flex items-center">
                             <LocaleSwitcher />
                         </div>

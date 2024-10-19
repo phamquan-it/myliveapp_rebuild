@@ -88,6 +88,7 @@
     "myautolive": "My autolive"
   },
   "MyLanguage": {
+    "schedule":"schedule",
     "update_info": "Update info",
     "change_password": "Change password",
     "update_servive_price": "Update services price",

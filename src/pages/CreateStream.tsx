@@ -11,6 +11,14 @@ import CreateStreamTable from '@/components/app/CreateStreamTable';
 import CreateStreamProcess from '@/components/app/CreateStreamProcess';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
+
+export enum DownloadOn{
+    GOOGLE_DRIVE = 'google_drive',
+    UPLOAD = 'upload',
+    DEFAULT_DOWNLOAD = 'default_download',
+    YOUTUBE_DOWNLOAD =  'youtube'
+}
+
 interface StreamRequest {
     source_link: string | null,
     key: string,
@@ -19,7 +27,8 @@ interface StreamRequest {
     platformId: number,
     startTime?: string,
     endTime?: string,
-    loop?: string
+    loop?: string,
+    download_on?: DownloadOn
 }
 
 
@@ -119,13 +128,7 @@ const App: React.FC = () => {
             >
                 <div className="grid gap-3">
                     <CreateStreamTable dataSource={streamData} />
-                    <Select options={data?.data?.map((vps: any) => ({
-                        label: vps.slug,
-                        value: vps?.vps?.vpsProvider
-                    }))} onChange={(value) => {
-                        setVpsId(value)
-                    }} />
-                    <CreateStreamForm setStreamData={setStreamData} />
+                    <CreateStreamForm setStreamData={setStreamData} vps={data} />
 
                 </div>
             </Modal>
