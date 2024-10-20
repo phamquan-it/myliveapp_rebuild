@@ -1,15 +1,20 @@
-import { Button, Form, Input, Select, Image, DatePicker, message, Alert, Space, Switch, Radio, RadioChangeEvent } from 'antd';
-import React, { useState } from 'react';
+import { Button, Form, Input, Select, Image, DatePicker, message, Alert, Space, Switch, Radio, RadioChangeEvent, Upload } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { usePlatformData } from '../live-streams/CreateStreamByAdmin';
 import { useMutation } from '@tanstack/react-query';
 import axiosInstance from '@/apiClient/axiosConfig';
 import { getCookie } from 'cookies-next';
 import { convertGoogleDriveLinkToDownload, getGoogleDriveKey } from '@/utils/driveLinkConverter';
-import { GoogleOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { GoogleOutlined, MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import FormListLink from './FormListLink';
 import { useTranslations } from 'next-intl';
 import { MdOutlineErrorOutline } from "react-icons/md";
 import { FaGoogleDrive, FaRegCheckCircle } from 'react-icons/fa';
+import moment from 'moment';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import { useCheckLink, useGoogleDriveCheckLink, useYoutubeCheckLink } from '@/apiClient/providers/streams';
 
 const { RangePicker } = DatePicker;
 
@@ -19,74 +24,11 @@ interface CreateStreamFormProps {
 }
 
 // Helper hook for checking links
-const useCheckLink = (form: any, setLinkState: React.Dispatch<React.SetStateAction<boolean>>) => {
-    const token = getCookie('token');
-
-    return useMutation({
-        mutationKey: ['checklink'],
-        mutationFn: (data: any) =>
-            axiosInstance.get('/autolive-control/get-video-metadata', {
-                params: { source_link: data },
-                headers: { Authorization: `Bearer ${token}` },
-            }),
-        onSuccess: (res) => {
-            const resolution = `${res.data[0].width}x${res.data[0].height}`;
-            setLinkState(true);
-            form.setFieldsValue({ resolution });
-        },
-        onError: () => {
-            setLinkState(false);
-            form.setFieldsValue({ resolution: '' });
-        },
-    });
-};
-
-const useGoogleDriveCheckLink = (form: any, setLinkState: React.Dispatch<React.SetStateAction<boolean>>) => {
-    const token = getCookie('token');
-
-    return useMutation({
-        mutationKey: ['googledrivechecklink'],
-        mutationFn: (data: any) =>
-            axiosInstance.get('/autolive-control/get-google-drive-video-metadata', {
-                params: { source_link: data },
-                headers: { Authorization: `Bearer ${token}` },
-            }),
-        onSuccess: (res) => {
-            const { width, height } = res.data?.videoMediaMetadata
-            const resolution = `${width}x${height}`;
-            setLinkState(true);
-            form.setFieldsValue({ resolution });
-        },
-        onError: (err) => {
-            setLinkState(false);
-            form.setFieldsValue({ resolution: '' });
-        },
-    });
-};
-
-const useYoutubeCheckLink = (form: any, setLinkState: React.Dispatch<React.SetStateAction<boolean>>) => {
-    const token = getCookie('token');
-    return useMutation({
-        mutationKey: ['youtubechecklink'],
-        mutationFn: (data: any) =>
-            axiosInstance.get('/youtubedl', {
-                params: { youtube_link: data },
-                headers: { Authorization: `Bearer ${token}` },
-            }),
-        onSuccess: (res) => {
-            setLinkState(true);
-            console.log(res.data)
-        },
-        onError: (err) => {
-            setLinkState(false);
-            console.error(err.message)
-        },
-    });
-};
-
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps }) => {
-
+    const [sourceLink, setSourceLink] = useState('google_drive')
     const [linkState, setLinkState] = useState(false);
     const [form] = Form.useForm();
     const { data } = usePlatformData();
@@ -96,17 +38,26 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
 
     // Form submission logic
     const onFinish = (values: any) => {
-        console.log(values);
-        if (values.platforms.length != 0)
-            setStreamData((prevData: any) => [...prevData, values]);
+        const currentDate = new Date();
+        const timezoneOffsetInMinutes = currentDate.getTimezoneOffset();
+        const timezoneOffsetInHours = -(timezoneOffsetInMinutes / 60);
+        if (values.live_time != undefined) {
+            const start_time = moment(values.live_time[0].$d).subtract(timezoneOffsetInHours, 'hour').format('YYYY-MM-DDTHH:mm:ss') + "Z";
+            const end_time = moment(values.live_time[1].$d).subtract(timezoneOffsetInHours, 'hour').format('YYYY-MM-DDTHH:mm:ss') + "Z";
+            values.start_time = start_time;
+            values.end_time = end_time;
+        }
+        values.platforms.map((platform: any) => {
+            values.platformId = platform.platform;
+            setStreamData((prevData: any) => [{ ...values, platforms: [platform], ...platform }, ...prevData])
+        });
     };
 
     const [userCron, setUserCron] = useState(false)
-    const [isYoutubeLink, setIsYoutubeLink] = useState(true)
+
     const handleCron = () => {
         setUserCron(!userCron)
     }
-
 
     const [value, setValue] = useState(1);
 
@@ -115,8 +66,52 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
         setValue(e.target.value);
     };
     const t = useTranslations('MyLanguage')
+    useEffect(() => {
+        if (sourceLink == 'upload') {
+            setLinkState(true)
+        }
+    }, [sourceLink])
+    const getLabel = () => {
+        switch (sourceLink) {
+            case 'google_drive':
+                return 'Drive link'
+            case 'youtube':
+                return 'Youtube link'
+            case 'upload':
+                return 'Upload file';
+            default:
+                return 'Default download'
+        }
+    }
 
-    console.log(youtubeCheckLink?.data?.data)
+    const handleChange = (info: any) => {
+        const { file } = info;
+        if (file.status === 'removed') return; // Ignore if the file is removed
+
+        const isVideo = file.type.startsWith('video/');
+        if (!isVideo) {
+            message.error('You can only upload video files!');
+            return;
+        }
+
+        const video = document.createElement('video');
+        const objectURL = URL.createObjectURL(file.originFileObj);
+
+        video.src = objectURL;
+
+        video.onloadedmetadata = () => {
+            const width = video.videoWidth;
+            const height = video.videoHeight;
+
+            // Set the resolution state (optional)
+            console.log(width, height)
+            const resolution = `${width}x${height}`;
+            setLinkState(true);
+            form.setFieldsValue({ resolution });
+            // Check the resolution (for example: 1280x720)
+            URL.revokeObjectURL(objectURL); // Clean up
+        };
+    };
     return (
         <Form
             form={form}
@@ -134,107 +129,157 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
                 name="vpsId"
                 rules={[{ required: true }]}
             >
-                <Select options={vps.data.map((vp: any) => ({ ...vp, value: vp.vps_vps_provider, label: `${vp.name} - ${vp.vps_vps_provider}` }))} />
+                <Select options={vps?.data.map((vp: any) => ({ ...vp, value: vp.vps_vps_provider, label: `${vp.name} - ${vp.vps_vps_provider}` }))} />
             </Form.Item>
             <Form.Item
-                label={t('drive_link')}
+                label={`${getLabel()}`}
                 name="drive_link"
                 validateStatus={(linkState) ? 'success' : 'error'}
                 rules={[{ required: true, type: "url" }]}
             >
-                <Input
+                <Input disabled={sourceLink == 'upload'}
                     onBlur={(e: any) => {
-                        youtubeCheckLink.mutate(e.target.value)
+                        switch (sourceLink) {
+                            case 'youtube':
+                                youtubeCheckLink.mutate(e.target.value)
+                                break;
+                            case 'google_drive':
+                                googleCheckLink.mutate(getGoogleDriveKey(e.target.value))
+                                break;
+                            case 'upload':
+                                setLinkState(true);
+                                break;
+                            default:
+                                checkLink.mutate(e.target.value)
+                        }
                     }}
                     prefix={(linkState) ? <FaRegCheckCircle style={{
                         color: 'green'
                     }} /> : <MdOutlineErrorOutline />}
-                    addonAfter={<Image src="https://cdn-icons-png.flaticon.com/128/5968/5968523.png" width={25} alt="" preview={false} />}
+                    addonAfter={
+                        <>
+                            <Select style={{
+                                width: 70
+                            }} options={[
+                                {
+                                    value: 'google_drive',
+                                    label: <div className='flex items-center'>
+                                        <Image src="https://cdn-icons-png.flaticon.com/128/5968/5968523.png" width={20} alt="" preview={false} />
+                                    </div>
+                                },
+                                {
+                                    value: 'youtube',
+                                    label: <div className='flex items-center'>
+                                        <Image src="https://cdn-icons-png.flaticon.com/128/174/174883.png" width={20} alt="" preview={false} />
+                                    </div>
+                                },
+                                {
+                                    value: 'default_download',
+                                    label: <div className='flex items-center'>
+                                        <Image src="https://cdn-icons-png.flaticon.com/128/9502/9502265.png" width={20} alt="" preview={false} />
+                                    </div>
+                                },
+                                {
+                                    value: 'upload',
+                                    label: <div className='flex items-center'>
+                                        <Image src="https://cdn-icons-png.flaticon.com/128/10024/10024248.png" width={20} alt="" preview={false} />
+                                    </div>
+                                }
+                            ]}
+                                onChange={(e: string) => {
+                                    setSourceLink(e)
+                                    setLinkState(false)
+                                }}
+                                value={sourceLink} />
+                        </>
+                    }
                 />
             </Form.Item>
+            {sourceLink == 'upload' ? <>
+                <Form.Item
+                    wrapperCol={{ offset: 4, span: 20 }}
+                    rules={[{ required: true }]}
+                >
+                    <Upload onChange={handleChange} >
+                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                    </Upload>
+                </Form.Item>
+
+            </> : <></>}
             {/* Resolution display */}
             <Form.Item
                 label={t('resolution')}
                 name="resolution"
                 rules={[{ required: true }]}
             >
-                {isYoutubeLink
-                    ? <Select options={youtubeCheckLink.data?.data.map((youtube: any)=>({ label: youtube.format, value: youtube.url }))}/>
+                {(sourceLink == 'youtube')
+                    ? <Select options={youtubeCheckLink.data?.data.map((youtube: any) => ({ label: youtube.format, value: youtube.url }))} />
                     : <Input readOnly disabled />
                 }
             </Form.Item>
-
-            {/* Stream name input */}
+            {/* Platforms selection */}
             <Form.Item
-                label={t('stream_name')}
-                name="stream_name"
+                wrapperCol={{ offset: 4, span: 20 }}
                 rules={[{ required: true }]}
             >
-                <Input />
-            </Form.Item>
-
-            {/* Platforms selection */}
-
-
-            <div style={{ display: 'grid', gridTemplateColumns: '4fr 18fr', gap: '16px' }}>
-                <div style={{ gridColumn: 'span 1', padding: '8px' }}>
-                </div>
-                <div style={{ gridColumn: 'span 1', backgroundColor: '#ffffff', padding: '3px' }}>
-
-                    <Form.List name="platforms">
-                        {(fields, { add, remove }) => (
-                            <>
-                                {fields.map(({ key, name, ...restField }) => (
-                                    <Space
-                                        key={key}
-                                        style={{ display: 'flex', marginBottom: 8, alignItems: 'center' }}
-                                        align="baseline"
+                <Form.List name="platforms">
+                    {(fields, { add, remove }) => (
+                        <>
+                            {fields.map(({ key, name, ...restField }) => (
+                                <Space
+                                    key={key}
+                                    style={{ display: 'flex', marginBottom: 8, alignItems: 'center' }}
+                                    align="baseline"
+                                >
+                                    <Form.Item
+                                        {...restField}
+                                        name={[name, 'platform']}
+                                        rules={[{ required: true }]}
                                     >
-                                        <Form.Item
-                                            {...restField}
-                                            name={[name, 'platform']}
-                                            rules={[{ required: true }]}
-                                        >
-                                            <Select style={{
-                                                width: 200
-                                            }}
-                                                options={data?.data?.platforms.map((platform: any) => ({
-                                                    ...platform,
-                                                    label: (
-                                                        <div className="flex items-center gap-1">
-                                                            <Image width={20} src={platform.image} alt="image" />
-                                                            {platform?.name}
-                                                        </div>
-                                                    ),
-                                                    value: platform.id,
-                                                }))}
-                                            />
+                                        <Select style={{
+                                            width: 200
+                                        }}
+                                            options={data?.data?.platforms.map((platform: any) => ({
+                                                ...platform,
+                                                label: (
+                                                    <div className="flex items-center gap-1">
+                                                        <Image width={20} src={platform.image} alt="image" />
+                                                        {platform?.name}
+                                                    </div>
+                                                ),
+                                                value: platform.id,
+                                            }))}
+                                        />
 
-                                        </Form.Item>
-                                        <Form.Item
-                                            {...restField}
-                                            name={[name, 'stream_key']}
-                                            rules={[{ required: true }]}
-                                        >
-                                            <Input placeholder="Stream key" style={{
-                                                width: "360px"
-                                            }} />
-                                        </Form.Item>
-                                        <MinusCircleOutlined onClick={() => remove(name)} />
-                                    </Space>
-                                ))}
-                                <Form.Item>
-                                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                                        {t('add_platform')}
-                                    </Button>
-                                </Form.Item>
-                            </>
-                        )}
-                    </Form.List>
+                                    </Form.Item>
+                                    <Form.Item
+                                        {...restField}
+                                        name={[name, 'stream_key']}
+                                        rules={[{ required: true }]}
+                                    >
+                                        <Input placeholder="Stream key" />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name={[name, 'stream_name']}
+                                        rules={[{ required: true }]}
+                                    >
+                                        <Input placeholder="Stream name" />
+                                    </Form.Item>
 
-                </div>
-            </div>
-
+                                    <MinusCircleOutlined className='-translate-y-1' onClick={() => remove(name)} />
+                                </Space>
+                            ))}
+                            <Form.Item>
+                                <Button
+                                    type="dashed"
+                                    onClick={() => add()} icon={<PlusOutlined />}>
+                                    {t('add_platform')}
+                                </Button>
+                            </Form.Item>
+                        </>
+                    )}
+                </Form.List>
+            </Form.Item>
             <Form.Item
                 label={t('schedule')}
             >

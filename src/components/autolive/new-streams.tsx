@@ -11,11 +11,9 @@ const NewStream: React.FC<NewStreamProps> = () => {
     const handleOk = () => {
 
     }
-
     const handleCancel = () => {
         setIsModalOpen(false)
     }
-
     type FieldType = {
         source_link?: string;  // A link, so it's a string
         key?: string;          // Unique identifier, string type
@@ -44,9 +42,6 @@ const NewStream: React.FC<NewStreamProps> = () => {
         >New stream</Button>
 
         <Modal title="New stream" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={600}>
-
-
-
             <Form
                 name="basic"
                 labelCol={{ span: 4 }}

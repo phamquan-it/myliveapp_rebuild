@@ -12,19 +12,19 @@ import CreateStreamProcess from '@/components/app/CreateStreamProcess';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
 
-export enum DownloadOn{
+export enum DownloadOn {
     GOOGLE_DRIVE = 'google_drive',
     UPLOAD = 'upload',
     DEFAULT_DOWNLOAD = 'default_download',
-    YOUTUBE_DOWNLOAD =  'youtube'
+    YOUTUBE_DOWNLOAD = 'youtube'
 }
 
-interface StreamRequest {
-    source_link: string | null,
-    key: string,
-    name: string,
+export interface StreamRequest {
+    source_link?: string | null,
+    key?: string,
+    name?: string,
     vpsId?: number
-    platformId: number,
+    platformId?: number,
     startTime?: string,
     endTime?: string,
     loop?: string,
@@ -69,7 +69,7 @@ const App: React.FC = () => {
         mutationFn: (data: any) => axiosInstance.post('/autolive-control/create-new-stream', data),
         onSuccess: () => {
             message.success("OK")
-            queryClient.invalidateQueries({ queryKey:['activityStream']  })
+            queryClient.invalidateQueries({ queryKey: ['activityStream'] })
         },
         onError: () => {
             message.error("no ok")
@@ -82,36 +82,8 @@ const App: React.FC = () => {
     }, [isModalOpen])
 
     const handleOk = () => {
-        if (vpsId == 0) {
-            message.error("Please select an vps")
-            return
-        }
-        streamData.map((newStream) => {
-            newStream.platforms.map((platform: any) => {
-                const streamRequest: StreamRequest = {
-                    source_link: `https://drive.google.com/uc?export=download&id=${getGoogleDriveFileKey(newStream.drive_link)}`,
-                    key: platform.stream_key,
-                    name: newStream.stream_name,
-                    vpsId,
-                    platformId: platform.platform,
-                    loop: newStream.loop
-                }
-                if (newStream.live_time != null) {
-                    streamRequest.startTime = moment(newStream.live_time[0].$d).format('YYYY-MM-DD HH:mm')
-                    streamRequest.endTime = moment(newStream.live_time[1].$d).format('YYYY-MM-DD HH:mm')
-                  //  mutate(streamRequest)
-                    console.log("Live with cron", streamRequest)
-                } else {
-                   mutate(streamRequest)
-                    console.log(streamRequest)
-                    console.log("live now")
-                }
-
-            })
-        })
+        console.log(streamData)
     };
-
-
     return (
         <>
             <Button type="primary" onClick={() => setIsModalOpen(true)} icon={<PlusCircleFilled />}></Button>
@@ -129,7 +101,6 @@ const App: React.FC = () => {
                 <div className="grid gap-3">
                     <CreateStreamTable dataSource={streamData} />
                     <CreateStreamForm setStreamData={setStreamData} vps={data} />
-
                 </div>
             </Modal>
         </>

@@ -25,6 +25,7 @@ const CreateStreamTable: React.FC<CreateStreamTableProps> = ({ dataSource }) => 
             title: t('name'),
             dataIndex: 'stream_name',
             key: 'name',
+            render: (text, record)=> record.platforms[0].stream_name
         },
         {
             title: t('resolution'),
@@ -83,8 +84,6 @@ const CreateStreamTable: React.FC<CreateStreamTableProps> = ({ dataSource }) => 
                 <Button size="small" className={'border-none shadow-none'} icon={<CloseOutlined style={{ color: "red" }} />}></Button>
             )
         },
-
-
     ];
 
     return <>
