@@ -47,9 +47,13 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
             values.start_time = start_time;
             values.end_time = end_time;
         }
+        const drive_link = (sourceLink == 'google_drive')
+            ? getGoogleDriveKey(values.drive_link)
+            : (sourceLink == 'youtube') ? values.resolution
+                : values.drive_link
         values.platforms.map((platform: any) => {
             values.platformId = platform.platform;
-            setStreamData((prevData: any) => [{ ...values, platforms: [platform], ...platform }, ...prevData])
+            setStreamData((prevData: any) => [{ ...values, platforms: [platform], ...platform, download_on: sourceLink, drive_link }, ...prevData])
         });
     };
 
@@ -86,7 +90,9 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
 
     const handleChange = (info: any) => {
         const { file } = info;
-        if (file.status === 'removed') return; // Ignore if the file is removed
+        if (file.status === 'removed') {
+            form.setFieldValue('resolution','')
+        }; // Ignore if the file is removed
 
         const isVideo = file.type.startsWith('video/');
         if (!isVideo) {
@@ -121,6 +127,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
             initialValues={{ remember: true }}
             onFinish={onFinish}
             autoComplete="off"
+            labelAlign="left"
         >
             {/* Drive link input */}
 
@@ -135,7 +142,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
                 label={`${getLabel()}`}
                 name="drive_link"
                 validateStatus={(linkState) ? 'success' : 'error'}
-                rules={[{ required: true, type: "url" }]}
+                rules={[{ required: true, type: (sourceLink != "upload")?"url":"string" }]}
             >
                 <Input disabled={sourceLink == 'upload'}
                     onBlur={(e: any) => {
@@ -187,6 +194,9 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
                                 }
                             ]}
                                 onChange={(e: string) => {
+                                    if (e == 'upload') {
+                                        form.setFieldValue('drive_link', new Date().toString())
+                                    }
                                     setSourceLink(e)
                                     setLinkState(false)
                                 }}
@@ -197,10 +207,11 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
             </Form.Item>
             {sourceLink == 'upload' ? <>
                 <Form.Item
+                    name="upload"
                     wrapperCol={{ offset: 4, span: 20 }}
                     rules={[{ required: true }]}
                 >
-                    <Upload onChange={handleChange} >
+                    <Upload onChange={handleChange} multiple={false}>
                         <Button icon={<UploadOutlined />}>Click to Upload</Button>
                     </Upload>
                 </Form.Item>
@@ -213,7 +224,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
                 rules={[{ required: true }]}
             >
                 {(sourceLink == 'youtube')
-                    ? <Select options={youtubeCheckLink.data?.data.map((youtube: any) => ({ label: youtube.format, value: youtube.url }))} />
+                    ? <Select options={youtubeCheckLink.data?.data.map((youtube: any) => ({ label: youtube.format, value: youtube.manifest_url }))} defaultActiveFirstOption />
                     : <Input readOnly disabled />
                 }
             </Form.Item>

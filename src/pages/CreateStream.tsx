@@ -11,6 +11,7 @@ import CreateStreamTable from '@/components/app/CreateStreamTable';
 import CreateStreamProcess from '@/components/app/CreateStreamProcess';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
+import { CreateNewStream } from '@/@type/api_object/streams/create_new_stream';
 
 export enum DownloadOn {
     GOOGLE_DRIVE = 'google_drive',
@@ -81,8 +82,37 @@ const App: React.FC = () => {
         setStreamData([])
     }, [isModalOpen])
 
+    const createStream = useMutation({
+        mutationKey: ['createStream'],
+        mutationFn: (stream: CreateNewStream) => axiosInstance.post("/autolive-control/create-new-stream", stream),
+        onSuccess: () => {
+            message.success("Create stream ok")
+        },
+        onError: (err) => {
+            console.error(err)
+            message.error("Create strean error")
+        }
+    })
     const handleOk = () => {
-        console.log(streamData)
+        streamData.map((data: any) => {
+            const newStream: CreateNewStream = {
+                source_link: data.drive_link,
+                key: data.stream_key,
+                name: data.stream_name,
+                platformId: data.platformId,
+                loop: data.loop,
+                vpsId: data.vpsId,
+                download_on: data.download_on
+            }
+            if (data.start_time != undefined) {
+                newStream.startTime = data.start_time
+            }
+            if (data.end_time != undefined) {
+                newStream.endTime = data.end_time
+            }
+
+            createStream.mutate(newStream)
+        })
     };
     return (
         <>

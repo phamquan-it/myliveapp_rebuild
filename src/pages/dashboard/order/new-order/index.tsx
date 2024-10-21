@@ -1,80 +1,118 @@
+import { CreateNewStream } from "@/@type/api_object/streams/create_new_stream";
+import axiosInstance from "@/apiClient/axiosConfig";
 import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import PlatformSelect from "@/components/admin/PlatformSelect";
-import { Button, Form, Input, Select, Switch } from "antd";
+import CreateStreamForm from "@/components/app/CreateStreamForm";
+import CreateStreamTable from "@/components/app/CreateStreamTable";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button, Form, Input, Select, Switch, message } from "antd";
 import Title from "antd/lib/typography/Title";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const Page = () => {
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-  };
+    const queryClient = useQueryClient()
+    const router = useRouter()
+    const d = useTranslations('DashboardMenu')
+    const t = useTranslations('MyLanguage')
+    const getGoogleDriveFileKey = (url: string) => {
+        const regex = /\/file\/d\/(.*?)\//;
+        const match = url.match(regex);
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
-  const t = useTranslations("DashboardMenu");
-  return (
-    <>
-      <div>
-        <Title className="!text-center">New Order</Title>
-        <div className="grid grid-cols-12 gap-4">
-          <div className="p-3 col-span-7 bg-white rounded-2xl py-5">
-            <Form
-              name="basic"
-              layout="vertical"
-              initialValues={{ remember: true }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-            >
-              <PlatformSelect required={true} />
-              <Form.Item label={t("services")} name="service">
-                <Select showSearch placeholder="Select service" />
-              </Form.Item>
-              <Form.Item label="Temporary price" name="temporaryprice">
-                <Input disabled />
-              </Form.Item>
-              <Form.Item label="Voucher" name="voucher">
-                <Select />
-              </Form.Item>
-              <Form.Item label="User" name="user">
-                <Select />
-              </Form.Item>
-              <Form.Item label="Charge" name="charge">
-                <Input disabled />
-              </Form.Item>
-              <Form.Item label="" name="">
-                <span className="font-medium">Schedule (Timezone: +07:00)</span>{" "}
-                <Switch defaultChecked />
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit" block>
-                  Submit
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-          <div className=" py-5 px-4 col-span-5 bg-white rounded-2xl me-3">
-            <Form layout="vertical">
-              <Form.Item
-                label={<span className="text-sm font-medium">Description</span>}
-                name=""
-              >
-                <Input.TextArea placeholder="" allowClear rows={12} readOnly />
-              </Form.Item>
-            </Form>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+        if (match && match[1]) {
+            return match[1]; // This is the Google Drive file key
+        } else {
+            return null; // Return null if the file key is not found
+        }
+    }
+    const { data, isFetching } = useQuery({
+        queryKey: ['queryKey'],
+        queryFn: () => axiosInstance.get<any>('vps-provider/getvps', {
+            params: {
+                language: "en"
+            }
+        })
+    });
+    const [vpsId, setVpsId] = useState(0)
+    console.log("vps", data?.data?.data)
+
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+    const { mutate, isPending, isError } = useMutation({
+        mutationKey: ['createStream'],
+        mutationFn: (data: any) => axiosInstance.post('/autolive-control/create-new-stream', data),
+        onSuccess: () => {
+            message.success("OK")
+            queryClient.invalidateQueries({ queryKey: ['activityStream'] })
+        },
+        onError: () => {
+            message.error("no ok")
+        }
+    })
+    const [streamData, setStreamData] = useState<any[]>([])
+
+    useEffect(() => {
+        setStreamData([])
+    }, [isModalOpen])
+
+    const createStream = useMutation({
+        mutationKey: ['createStream'],
+        mutationFn: (stream: CreateNewStream) => axiosInstance.post("/autolive-control/create-new-stream", stream),
+        onSuccess: () => {
+            message.success("Create stream ok")
+        },
+        onError: (err) => {
+            console.error(err)
+            message.error("Create strean error")
+        }
+    })
+    const handleOk = () => {
+        streamData.map((data: any) => {
+            const newStream: CreateNewStream = {
+                source_link: data.drive_link,
+                key: data.stream_key,
+                name: data.stream_name,
+                platformId: data.platformId,
+                loop: data.loop,
+                vpsId: data.vpsId,
+                download_on: data.download_on
+            }
+            if (data.start_time != undefined) {
+                newStream.startTime = data.start_time
+            }
+            if (data.end_time != undefined) {
+                newStream.endTime = data.end_time
+            }
+
+
+            console.log(data)
+            return
+            createStream.mutate(newStream)
+        })
+    };
+
+    return (
+        <>
+
+            <div className="grid gap-3">
+                <CreateStreamTable dataSource={streamData} />
+                <CreateStreamForm setStreamData={setStreamData} vps={data} />
+            </div>
+        </>
+    );
 };
 export default Page;
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
-  return {
-    props: {
-      messages: (await import(`../../../../../messages/${locale}.json`))
-        .default,
-    },
-  };
+    return {
+        props: {
+            messages: (await import(`../../../../../messages/${locale}.json`))
+                .default,
+        },
+    };
 }
