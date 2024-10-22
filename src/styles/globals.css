@@ -32,17 +32,8 @@
 }
 .custom_row_height .ant-table-cell .ant-btn span{
   font-size: 15px !important;
-  
 }
-/* *{
-  font-size: small;
-} */
-/* .ant-menu .ant-menu-item .ant-menu-item-icon svg, .ant-menu .ant-menu-submenu-title .ant-menu-item-icon svg{
-  font-size: small !important;
-}
-textarea.ant-input{
-  font-size: small;
-} */
+
 
 .customIndexTable table{
   border: 1px solid rgb(218, 218, 218) !important;

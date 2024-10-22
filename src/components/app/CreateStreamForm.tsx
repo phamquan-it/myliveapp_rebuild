@@ -15,6 +15,8 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { useCheckLink, useGoogleDriveCheckLink, useYoutubeCheckLink } from '@/apiClient/providers/streams';
+import { RcFile, UploadProps } from 'antd/es/upload';
+import md5 from 'md5';
 
 const { RangePicker } = DatePicker;
 
@@ -30,6 +32,7 @@ dayjs.extend(timezone);
 const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps }) => {
     const [sourceLink, setSourceLink] = useState('google_drive')
     const [linkState, setLinkState] = useState(false);
+    const [fileList, setFileList] = useState<RcFile[]>([]);
     const [form] = Form.useForm();
     const { data } = usePlatformData();
     const checkLink = useCheckLink(form, setLinkState);
@@ -47,6 +50,11 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
             values.start_time = start_time;
             values.end_time = end_time;
         }
+        if (sourceLink == 'upload' || sourceLink == 'gcloud') {
+            values.upload_files = fileList;
+        }
+
+        //sign source link 
         const drive_link = (sourceLink == 'google_drive')
             ? getGoogleDriveKey(values.drive_link)
             : (sourceLink == 'youtube') ? values.resolution
@@ -71,7 +79,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
     };
     const t = useTranslations('MyLanguage')
     useEffect(() => {
-        if (sourceLink == 'upload') {
+        if (sourceLink == 'upload' || sourceLink == 'gcloud') {
             setLinkState(true)
         }
     }, [sourceLink])
@@ -82,7 +90,9 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
             case 'youtube':
                 return 'Youtube link'
             case 'upload':
-                return 'Upload file';
+                return 'Upload file'
+            case 'gcloud':
+                return 'Google cloud'
             default:
                 return 'Default download'
         }
@@ -90,34 +100,60 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
 
     const handleChange = (info: any) => {
         const { file } = info;
-        if (file.status === 'removed') {
-            form.setFieldValue('resolution','')
-        }; // Ignore if the file is removed
-
-        const isVideo = file.type.startsWith('video/');
-        if (!isVideo) {
-            message.error('You can only upload video files!');
-            return;
-        }
-
-        const video = document.createElement('video');
-        const objectURL = URL.createObjectURL(file.originFileObj);
-
-        video.src = objectURL;
-
-        video.onloadedmetadata = () => {
-            const width = video.videoWidth;
-            const height = video.videoHeight;
-
-            // Set the resolution state (optional)
-            console.log(width, height)
-            const resolution = `${width}x${height}`;
-            setLinkState(true);
-            form.setFieldsValue({ resolution });
-            // Check the resolution (for example: 1280x720)
-            URL.revokeObjectURL(objectURL); // Clean up
-        };
+        console.log(file)
     };
+    const getVideoResolution = (file: RcFile): Promise<{ width: number; height: number }> => {
+        return new Promise((resolve, reject) => {
+            const video = document.createElement('video');
+            video.preload = 'metadata';
+
+            video.onloadedmetadata = () => {
+                const width = video.videoWidth;
+                const height = video.videoHeight;
+                resolve({ width, height });
+            };
+
+            video.onerror = reject;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                if (e.target && e.target.result) {
+                    video.src = URL.createObjectURL(file); // Load the video into the video element
+                }
+            };
+
+            reader.readAsArrayBuffer(file); // Read the file to trigger loading the video
+        });
+    };
+    const props = {
+        onRemove: (file: any) => {
+            setFileList((prevFileList) => {
+                const index = prevFileList.indexOf(file);
+                const newFileList = prevFileList.slice();
+                newFileList.splice(index, 1);
+                form.setFieldsValue({ resolution: '' });
+                return newFileList;
+            });
+        },
+        beforeUpload: async (file: RcFile) => {
+            try {
+                const { width, height } = await getVideoResolution(file);
+                const resolution = `${width}x${height}`;
+                setLinkState(true);
+                form.setFieldsValue({ resolution });
+                console.log('Video resolution:', width, height);
+            } catch (error) {
+                console.error('Error getting video resolution:', error);
+            }
+            if (fileList.length < 1) {
+                setFileList([...fileList, file]);
+            }
+            return false; // Prevent automatic upload by Ant Design
+        },
+        onChange: handleChange,
+        fileList,
+    };
+
     return (
         <Form
             form={form}
@@ -142,7 +178,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
                 label={`${getLabel()}`}
                 name="drive_link"
                 validateStatus={(linkState) ? 'success' : 'error'}
-                rules={[{ required: true, type: (sourceLink != "upload")?"url":"string" }]}
+                rules={[{ required: true, type: "string" }]}
             >
                 <Input disabled={sourceLink == 'upload'}
                     onBlur={(e: any) => {
@@ -154,6 +190,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
                                 googleCheckLink.mutate(getGoogleDriveKey(e.target.value))
                                 break;
                             case 'upload':
+                            case 'gcloud':
                                 setLinkState(true);
                                 break;
                             default:
@@ -191,11 +228,18 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
                                     label: <div className='flex items-center'>
                                         <Image src="https://cdn-icons-png.flaticon.com/128/10024/10024248.png" width={20} alt="" preview={false} />
                                     </div>
+                                },
+                                {
+                                    value: 'gcloud',
+                                    label: <div className='flex items-center'>
+                                        <Image src="https://cdn-icons-png.flaticon.com/128/300/300221.png" width={20} alt="" preview={false} />
+                                    </div>
                                 }
+
                             ]}
                                 onChange={(e: string) => {
-                                    if (e == 'upload') {
-                                        form.setFieldValue('drive_link', new Date().toString())
+                                    if (e == 'upload' || e == 'gcloud') {
+                                        form.setFieldValue('drive_link', md5(new Date().toString()))
                                     }
                                     setSourceLink(e)
                                     setLinkState(false)
@@ -205,15 +249,18 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
                     }
                 />
             </Form.Item>
-            {sourceLink == 'upload' ? <>
+            {(sourceLink == 'upload' || sourceLink == 'gcloud') ? <>
                 <Form.Item
                     name="upload"
                     wrapperCol={{ offset: 4, span: 20 }}
                     rules={[{ required: true }]}
                 >
-                    <Upload onChange={handleChange} multiple={false}>
+
+                    <Upload {...props}>
                         <Button icon={<UploadOutlined />}>Click to Upload</Button>
                     </Upload>
+
+
                 </Form.Item>
 
             </> : <></>}
