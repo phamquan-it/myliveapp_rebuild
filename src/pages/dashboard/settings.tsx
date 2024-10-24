@@ -19,6 +19,7 @@ import SettingForm from "@/components/admin/SettingForm";
 import VpsConfig from "@/components/admin/VpsConfig";
 import { useRouter } from "next/router";
 import syncObjectToUrl from "@/helpers/syncObjectToUrl";
+import AccountScript from "@/components/vps/account-script";
 
 const Page = () => {
     const onFinish = (values: any) => {
@@ -31,13 +32,19 @@ const Page = () => {
         {
             key: '1',
             label: t('app_config'),
-            children: <SettingForm/>,
+            children: <SettingForm />,
         },
         {
             key: '2',
             label: t('vps_config'),
-            children: <VpsConfig/>,
+            children: <VpsConfig />,
         },
+        {
+            key: '3',
+            label: ('Shell script'),
+            children: <AccountScript />,
+        },
+
     ];
     const router = useRouter()
     const tab: string = Array.isArray(router.query?.tab) ? router.query.tab[0] : router.query?.tab || '1';
@@ -45,9 +52,9 @@ const Page = () => {
     const syncObj = syncObjectToUrl(router)
     return (
         <>
-            <Tabs defaultActiveKey={tab} items={items} addIcon={<PlusOutlined />} tabPosition='top' onChange={(e)=>{
+            <Tabs defaultActiveKey={tab} items={items} addIcon={<PlusOutlined />} tabPosition='top' onChange={(e) => {
                 console.log('active key', e)
-                syncObj({tab: e})
+                syncObj({ tab: e })
             }} />
         </>
     );

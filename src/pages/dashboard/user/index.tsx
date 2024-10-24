@@ -131,10 +131,29 @@ const Page = () => {
     const syncObj = syncObjectToUrl(router)
     return (
         <>
-            <div className="flex justify-between">
-                <div>
-                    <SearchInput />
-                </div>
+            <div className="flex py-3 gap-2">
+                <SearchInput />
+                <Select className="w-48" options={[
+                    { value: 1, label: <span>User</span> },
+                    { value: 2, label: <span>Manager</span> },
+                    { value: 3, label: <span>Admin</span> },
+                ]}
+                    onChange={(e) => {
+                        syncObj({ role: e })
+                    }}
+                    placeholder="Select role"
+                />
+                <Select className="w-48" options={[
+                    { value: 1, label: <span>Active</span> },
+                    { value: 0, label: <span>In active</span> },
+                ]
+                }
+                    onChange={(e) => {
+                        syncObj({ active: e })
+                    }}
+                    placeholder="Is active"
+                />
+
             </div>
             <Table
                 dataSource={data?.data?.data?.map((item: any, index: number) => ({

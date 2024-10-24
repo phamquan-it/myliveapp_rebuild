@@ -4,6 +4,7 @@ import { pagination } from "@/helpers/pagination";
 import syncObjectToUrl from "@/helpers/syncObjectToUrl";
 import { useQuery } from "@tanstack/react-query";
 import { Input, Table, Tag } from "antd";
+import { ColumnsType } from "antd/lib/table";
 import Title from "antd/lib/typography/Title";
 import { getCookie } from "cookies-next";
 import dayjs from "dayjs";
@@ -25,14 +26,13 @@ const Page = () => {
 
 
 
-    const columns: any[] = [
+    const columns: ColumnsType<any> = [
         {
             title: t("entryno"),
             dataIndex: "key",
             key: "key",
             width: 80,
             align: "center",
-
         },
         {
             title: "ID",
@@ -45,9 +45,7 @@ const Page = () => {
             dataIndex: "key",
             key: "key",
             render: (text: string, record: any) => {
-                console.log(record.order);
-
-                return record?.user_refund?.email;
+                return record?.user?.email;
             },
             ellipsis: true,
         },
@@ -60,28 +58,20 @@ const Page = () => {
                 dayjs(record.createdAt).format("DD/MM/YYYY HH:mm:ss"), //
         },
         {
-            title: t("service"),
+            title: ("ID Stream"),
             dataIndex: "key",
             key: "key",
             render: (text: string, record: any) => {
-                return record?.order?.service?.name == undefined
-                    ? record?.order?.service?.name_vi
-                    : record?.order?.service?.name;
+                return record?.activityStream?.id
             },
-            ellipsis: true,
         },
         {
-            title: t("link"),
+            title: ("Stream name"),
             dataIndex: "key",
             key: "key",
             render: (text: string, record: any) => {
-                return (
-                    <Link href={`${record?.order?.link}`} target="_blank">
-                        {record?.order?.link}
-                    </Link>
-                );
+                return record?.activityStream?.name
             },
-            ellipsis: true,
         },
         {
             title: t("status"),
@@ -93,27 +83,22 @@ const Page = () => {
                     color={record?.order?.status == "Canceled" ? "volcano" : "purple"}
                     className="my-1"
                 >
-                    {record?.order?.status}
                 </Tag>
             ),
         },
         {
             width: 130,
             align: "right",
-            title: t("amountPaid"),
-            dataIndex: "charge_original",
-            key: "charge_original",
-            render: (text: string) => {
-                const number = parseFloat(text);
-                return parseFloat(number.toFixed(5));
-            },
+            title: ("Reason"),
+            dataIndex: "reason",
+            key: "reason",
         },
         {
             width: 130,
             align: "right",
             title: t("refundAmount"),
-            dataIndex: "refund",
-            key: "refund",
+            dataIndex: "amount",
+            key: "amount",
             render: (text: string) => {
                 const number = parseFloat(text);
                 return parseFloat(number.toFixed(5));
@@ -135,6 +120,9 @@ const Page = () => {
             }),
         placeholderData: (previousData) => previousData,
     });
+
+
+    console.log("Refund", data)
 
     const syncObj = syncObjectToUrl(router)
     useEffect(() => {

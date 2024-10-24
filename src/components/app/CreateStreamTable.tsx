@@ -15,7 +15,7 @@ const CreateStreamTable: React.FC<CreateStreamTableProps> = ({ dataSource }) => 
     const t = useTranslations('MyLanguage')
 
     const { data } = usePlatformData();
-    const columns:ColumnsType<any> = [
+    const columns: ColumnsType<any> = [
         {
             title: t('entryno'),
             dataIndex: 'key',
@@ -25,13 +25,13 @@ const CreateStreamTable: React.FC<CreateStreamTableProps> = ({ dataSource }) => 
             title: t('name'),
             dataIndex: 'stream_name',
             key: 'name',
-            render: (text, record)=> record.platforms[0].stream_name
+            render: (text, record) => record.platforms[0].stream_name
         },
         {
             title: t('resolution'),
             dataIndex: 'resolution',
             key: 'resolution',
-            ellipsis: true 
+            ellipsis: true
         },
         {
             title: d('platform'),
@@ -86,18 +86,18 @@ const CreateStreamTable: React.FC<CreateStreamTableProps> = ({ dataSource }) => 
         },
     ];
 
-    return <>
+    return <div className='w-full'>
         <Table dataSource={dataSource
             .map((newstream: any, index: number) => ({
                 ...newstream,
                 key: index + 1
             }))}
-            className='border'
+            className='border w-full'
             columns={columns}
             pagination={false}
-            scroll={{ y: 100 }} />
+        />
 
-    </>
+    </div>
 }
 
 export default CreateStreamTable

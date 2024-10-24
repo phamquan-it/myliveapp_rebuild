@@ -155,7 +155,11 @@ const Page = () => {
             align: "center",
             render: (text: string, record: any) => {
                 return (
-                    <div className="flex justify-center">
+                    <div className="flex justify-center" style={{
+                        maxWidth: 500,
+                        margin:"auto",
+                        overflow:"hidden"
+                        }}>
                         <TableAction
                             openState={openState}
                             viewDetail={<>view detail</>}

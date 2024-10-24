@@ -1,20 +1,22 @@
 import { ActivityStream } from '@/@type/api_object';
 import axiosInstance from '@/apiClient/axiosConfig';
 import CreateNewStream from '@/components/admin/create-new-stream';
+import StreamLog from '@/components/admin/streams/log';
 import DeleteStream from '@/components/autolive/DeleteStream';
 import StreamState from '@/components/autolive/StreamState';
 import ViewAutoliveDetail from '@/components/autolive/ViewAutoliveDetail';
+import SearchInput from '@/components/filters/SearchInput';
 import SelectVps from '@/components/filters/SelectVps';
 import UserSelect from '@/components/general/user-select';
 import VpsSelect from '@/components/general/vps-select';
-import CreateStreamByAdmin from '@/components/live-streams/CreateStreamByAdmin';
+import CreateStreamByAdmin, { usePlatformData } from '@/components/live-streams/CreateStreamByAdmin';
 import SelectDateForFilter from '@/components/live-streams/SelectDateForFilter';
 import { pagination } from '@/helpers/pagination';
 import syncObjectToUrl from '@/helpers/syncObjectToUrl';
 import getObjecFormUrlParameters from '@/hooks/getObjectFormParameter';
 import { SearchOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Input, Table } from 'antd';
+import { Button, Input, Select, Table, Image } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { ColumnType } from 'antd/lib/table';
 import dayjs from 'dayjs';
@@ -44,7 +46,6 @@ const Page: NextPage<PageProps> = ({ modal }) => {
                 limit
             }
         })
-
     })
 
     console.log(data)
@@ -117,16 +118,42 @@ const Page: NextPage<PageProps> = ({ modal }) => {
     const handleInput = debounce((e) => {
         syncObj({ keyword: e.target.value })
     }, 300)
+    const platformQuery = usePlatformData();
+    const s = useTranslations('StreamStatus')
     return <>
-        <div className="  md:flex py-3 gap-2 justify-between">
+        <div className="md:flex py-3 gap-2 justify-between">
             <div className='grid gap-2 md:flex gap-2'>
-                <div>
-                    <Input placeholder={'Search...'} onChange={handleInput} style={{
-                        width: 200
-                        }} />
-                </div>
+                <SearchInput />
+                <Select className='w-48' options={platformQuery.data?.data?.platforms.map((platform: any) => ({
+                    ...platform,
+                    label: (
+                        <div className="flex items-center gap-1">
+                            <Image width={20} src={platform.image} alt="image" />
+                            {platform?.name}
+                        </div>
+                    ),
+                    value: platform.id,
+                }))}
+                    placeholder="Select platform"
+                    onChange={(e) => {
+                        syncObj({ platform: e??'' })
+                    }}
+                    allowClear
+                />
                 <SelectVps />
                 <UserSelect />
+                <Select defaultValue={''}
+                    options={[
+                        { value: '', label: <span>{s('all')}</span> },
+                        { value: 'scheduling', label: <span>{s('scheduling')}</span> },
+                        { value: 'starting', label: <span>{s('starting')}</span> },
+                        { value: 'running', label: <span>{s('running')}</span> },
+                        { value: 'stopped', label: <span>{s('stopped')}</span> },
+                    ]} className='w-full mt-2 sm:mt-0 sm:w-48'
+                    onChange={(e) => {
+                        syncObj({ ...router.query, status: e })
+                    }}
+                />
                 <SelectDateForFilter />
             </div>
         </div>
@@ -156,7 +183,7 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             }}
             expandable={{
                 expandedRowRender: (record) => <p style={{ margin: 0 }}>
-                    log stream
+                    <StreamLog stream_id={record.id + ''} />
                 </p>,
             }}
         />

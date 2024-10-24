@@ -61,7 +61,7 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
             dataIndex: 'platform',
             key: 'platform',
             width: 100,
-            align:'center',
+            align: 'center',
             render: (text: string, record: any) => (
                 <Image alt="" src="https://cdn-icons-png.flaticon.com/128/174/174883.png" width={25} />
             ),
@@ -87,7 +87,7 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
         },
 
     ];
-     const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
+    const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
 
     return <>
         <Title level={5} className="text-center border-b">Live stream</Title>
@@ -108,10 +108,11 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
                 }
             }}
             rowSelection={{
+                renderCell: ()=> <></>,
                 type: 'radio',
                 selectedRowKeys, // controlled selected row keys
-                
             }}
+
         />
 
     </>

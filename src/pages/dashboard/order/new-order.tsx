@@ -4,8 +4,9 @@ import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import PlatformSelect from "@/components/admin/PlatformSelect";
 import CreateStreamForm from "@/components/app/CreateStreamForm";
 import CreateStreamTable from "@/components/app/CreateStreamTable";
+import { customUploadFile } from "@/pages/CreateStream";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, Form, Input, Select, Switch, message } from "antd";
+import { Affix, Button, Form, Input, Select, Switch, message } from "antd";
 import Title from "antd/lib/typography/Title";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
@@ -46,12 +47,39 @@ const Page = () => {
     };
     const { mutate, isPending, isError } = useMutation({
         mutationKey: ['createStream'],
-        mutationFn: (data: any) => axiosInstance.post('/autolive-control/create-new-stream', data),
-        onSuccess: () => {
+        mutationFn: (data: {
+            stream: any,
+            fileList: any
+        }) => new Promise((resolve, reject) => {
+            axiosInstance.post('/autolive-control/create-new-stream', data.stream).then((res) => {
+                if (res?.data.download_on != 'upload') {
+                    resolve(res.data)
+                } else {
+                    const file = data.fileList[0]
+                    const formData = new FormData();
+                    //upload file
+                    formData.append('video', file); // Append file to form data
+                    axiosInstance.post('/sftp-upload/' + res?.data?.id, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        },
+                    }).then((resupload) => {
+                        resolve(resupload)
+                    }).catch((err) => {
+                        reject(err)
+                    })
+                }
+
+            }).catch((err) => {
+                reject(err)
+            })
+        }),
+        onSuccess: (res) => {
             message.success("OK")
             queryClient.invalidateQueries({ queryKey: ['activityStream'] })
         },
-        onError: () => {
+        onError: (err) => {
+            console.log(err)
             message.error("no ok")
         }
     })
@@ -60,20 +88,12 @@ const Page = () => {
     useEffect(() => {
         setStreamData([])
     }, [isModalOpen])
+    // create stream
 
-    const createStream = useMutation({
-        mutationKey: ['createStream'],
-        mutationFn: (stream: CreateNewStream) => axiosInstance.post("/autolive-control/create-new-stream", stream),
-        onSuccess: () => {
-            message.success("Create stream ok")
-        },
-        onError: (err) => {
-            console.error(err)
-            message.error("Create strean error")
-        }
-    })
+
+    const [uploadStatus, setUploadStatus] = useState()
     const handleOk = () => {
-        streamData.map((data: any) => {
+        streamData.map(async (data: any) => {
             const newStream: CreateNewStream = {
                 source_link: data.drive_link,
                 key: data.stream_key,
@@ -83,26 +103,42 @@ const Page = () => {
                 vpsId: data.vpsId,
                 download_on: data.download_on
             }
+
+            if (data.download_on == "gcloud") {
+                const fileList = data.upload_files;
+                const key = await customUploadFile(fileList, setUploadStatus)
+                newStream.source_link = key + "";
+            }
             if (data.start_time != undefined) {
                 newStream.startTime = data.start_time
             }
             if (data.end_time != undefined) {
                 newStream.endTime = data.end_time
             }
-
-
-            console.log(data)
-            return
-            createStream.mutate(newStream)
+            mutate({
+                stream: newStream,
+                fileList: data.upload_files
+            })
         })
     };
-
     return (
         <>
+            <div className="m-auto grid max-w-screen-xl">
 
-            <div className="grid gap-3">
-                <CreateStreamTable dataSource={streamData} />
-                <CreateStreamForm setStreamData={setStreamData} vps={data} />
+                <Title level={5}>New order</Title>
+                <div>
+                    <CreateStreamForm setStreamData={setStreamData} vps={data} />
+                </div>
+                <div style={{
+                    position: "relative"
+                }}>
+                    <Affix className='absolute right-0 -top-10'>
+                        <Button type="primary" onClick={handleOk} loading={isPending}>
+                            Xác nhận
+                        </Button>
+                    </Affix>
+                    <CreateStreamTable dataSource={streamData} />
+                </div>
             </div>
         </>
     );
@@ -111,7 +147,7 @@ export default Page;
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
     return {
         props: {
-            messages: (await import(`../../../../../messages/${locale}.json`))
+            messages: (await import(`../../../../messages/${locale}.json`))
                 .default,
         },
     };

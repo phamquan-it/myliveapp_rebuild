@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Button, Form, Input, message, Modal, Table } from "antd";
+import { Affix, Button, Form, Input, message, Modal, Table } from "antd";
 import axios from "axios";
 import { GetStaticPropsContext } from "next";
 import { webdockConfig } from "../../../WEBDOCK_PROVIDER/APIRequest/config";
@@ -10,7 +10,7 @@ import UpdateAccountScript from "@/components/admin/vps/update-account-script";
 import SearchInput from "@/components/filters/SearchInput";
 
 
-const Page = () => {
+const AccountScript = () => {
 
     const columns = [
         {
@@ -112,15 +112,11 @@ const Page = () => {
 
     return (
         <>
-            <div className="grid sm:flex justify-between my-2">
-                <div>
-                    <SearchInput />
-                </div>
+            <Affix offsetTop={100}>
                 <Button type="primary" icon={<PlusCircleFilled />} iconPosition="end" onClick={showCreatePopup}>
                     Create
                 </Button>
-            </div>
-
+            </Affix>
             <Modal title="Update" open={isModalUpdateOpen} footer={[]} onCancel={hideModalUpdate} destroyOnClose={true}>
                 <UpdateAccountScript accountScript={accountScript} />
             </Modal>
@@ -168,10 +164,10 @@ const Page = () => {
 
 
             <Table
-            scroll={{ x: 400 }}
-            pagination={{
-                pageSize: 20
-            }}
+                scroll={{ x: 400 }}
+                pagination={{
+                    pageSize: 20
+                }}
                 expandable={{
                     expandedRowRender: (record: any) => <Input.TextArea placeholder="" allowClear value={record.content} readOnly autoSize />,
                     rowExpandable: (record) => record.content !== undefined,
@@ -180,7 +176,7 @@ const Page = () => {
         </>
     );
 }
-export default Page
+export default AccountScript
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
     return {

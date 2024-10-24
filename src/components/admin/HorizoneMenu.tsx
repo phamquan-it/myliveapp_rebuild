@@ -7,7 +7,7 @@ interface HorizoneMenuProps {
 const HorizoneMenu: React.FC<HorizoneMenuProps> = ({ children, data }) => {
     return (
         <div
-            className={`border-b transition-opacity duration-150 ${data.length === 0 ? 'hidden' : ''
+            className={`border-b pb-3 transition-opacity duration-150 ${data.length === 0 ? 'invisible' : ''
                 }`}
         >
             {children}

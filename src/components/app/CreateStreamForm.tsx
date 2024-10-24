@@ -89,8 +89,6 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
                 return 'Drive link'
             case 'youtube':
                 return 'Youtube link'
-            case 'upload':
-                return 'Upload file'
             case 'gcloud':
                 return 'Google cloud'
             default:
@@ -155,218 +153,215 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
     };
 
     return (
-        <Form
-            form={form}
-            name="basic"
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 18 }}
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-            autoComplete="off"
-            labelAlign="left"
-        >
-            {/* Drive link input */}
-
-            <Form.Item
-                label="Vps"
-                name="vpsId"
-                rules={[{ required: true }]}
+        <div className='w-full'>
+            <Form
+                form={form}
+                name="basic"
+                labelCol={{ span: 4 }}
+                wrapperCol={{ span: 20 }}
+                initialValues={{ remember: true }}
+                onFinish={onFinish}
+                autoComplete="off"
+                labelAlign="left"
             >
-                <Select options={vps?.data.map((vp: any) => ({ ...vp, value: vp.vps_vps_provider, label: `${vp.name} - ${vp.vps_vps_provider}` }))} />
-            </Form.Item>
-            <Form.Item
-                label={`${getLabel()}`}
-                name="drive_link"
-                validateStatus={(linkState) ? 'success' : 'error'}
-                rules={[{ required: true, type: "string" }]}
-            >
-                <Input disabled={sourceLink == 'upload'}
-                    onBlur={(e: any) => {
-                        switch (sourceLink) {
-                            case 'youtube':
-                                youtubeCheckLink.mutate(e.target.value)
-                                break;
-                            case 'google_drive':
-                                googleCheckLink.mutate(getGoogleDriveKey(e.target.value))
-                                break;
-                            case 'upload':
-                            case 'gcloud':
-                                setLinkState(true);
-                                break;
-                            default:
-                                checkLink.mutate(e.target.value)
-                        }
-                    }}
-                    prefix={(linkState) ? <FaRegCheckCircle style={{
-                        color: 'green'
-                    }} /> : <MdOutlineErrorOutline />}
-                    addonAfter={
-                        <>
-                            <Select style={{
-                                width: 70
-                            }} options={[
-                                {
-                                    value: 'google_drive',
-                                    label: <div className='flex items-center'>
-                                        <Image src="https://cdn-icons-png.flaticon.com/128/5968/5968523.png" width={20} alt="" preview={false} />
-                                    </div>
-                                },
-                                {
-                                    value: 'youtube',
-                                    label: <div className='flex items-center'>
-                                        <Image src="https://cdn-icons-png.flaticon.com/128/174/174883.png" width={20} alt="" preview={false} />
-                                    </div>
-                                },
-                                {
-                                    value: 'default_download',
-                                    label: <div className='flex items-center'>
-                                        <Image src="https://cdn-icons-png.flaticon.com/128/9502/9502265.png" width={20} alt="" preview={false} />
-                                    </div>
-                                },
-                                {
-                                    value: 'upload',
-                                    label: <div className='flex items-center'>
-                                        <Image src="https://cdn-icons-png.flaticon.com/128/10024/10024248.png" width={20} alt="" preview={false} />
-                                    </div>
-                                },
-                                {
-                                    value: 'gcloud',
-                                    label: <div className='flex items-center'>
-                                        <Image src="https://cdn-icons-png.flaticon.com/128/300/300221.png" width={20} alt="" preview={false} />
-                                    </div>
-                                }
+                {/* Drive link input */}
 
-                            ]}
-                                onChange={(e: string) => {
-                                    if (e == 'upload' || e == 'gcloud') {
-                                        form.setFieldValue('drive_link', md5(new Date().toString()))
-                                    }
-                                    setSourceLink(e)
-                                    setLinkState(false)
-                                }}
-                                value={sourceLink} />
-                        </>
-                    }
-                />
-            </Form.Item>
-            {(sourceLink == 'upload' || sourceLink == 'gcloud') ? <>
                 <Form.Item
-                    name="upload"
+                    label="Vps"
+                    name="vpsId"
+                    rules={[{ required: true }]}
+                >
+                    <Select options={vps?.data.map((vp: any) => ({ ...vp, value: vp.vps_vps_provider, label: `${vp.name} - ${vp.vps_vps_provider}` }))} />
+                </Form.Item>
+                <Form.Item
+                    label={`${getLabel()}`}
+                    name="drive_link"
+                    validateStatus={(linkState) ? 'success' : 'error'}
+                    rules={[{ required: true, type: "string" }]}
+                >
+                    <Input disabled={sourceLink == 'upload'}
+                        onBlur={(e: any) => {
+                            switch (sourceLink) {
+                                case 'youtube':
+                                    youtubeCheckLink.mutate(e.target.value)
+                                    break;
+                                case 'google_drive':
+                                    googleCheckLink.mutate(getGoogleDriveKey(e.target.value))
+                                    break;
+                                case 'upload':
+                                case 'gcloud':
+                                    setLinkState(true);
+                                    break;
+                                default:
+                                    checkLink.mutate(e.target.value)
+                            }
+                        }}
+                        prefix={(linkState) ? <FaRegCheckCircle style={{
+                            color: 'green'
+                        }} /> : <MdOutlineErrorOutline />}
+                        addonAfter={
+                            <>
+                                <Select style={{
+                                    width: 170
+                                }} options={[
+                                    {
+                                        value: 'google_drive',
+                                        label: <div className='flex items-center gap-2'>
+                                            <Image src="https://cdn-icons-png.flaticon.com/128/5968/5968523.png" width={20} alt="" preview={false} / > GG Drive
+                                        </div>
+                                    },
+                                    {
+                                        value: 'youtube',
+                                        label: <div className='flex items-center gap-2'>
+                                            <Image src="https://cdn-icons-png.flaticon.com/128/174/174883.png" width={20} alt="" preview={false} /> Youtube
+                                        </div>
+                                    },
+                                    {
+                                        value: 'default_download',
+                                        label: <div className='flex items-center gap-2'>
+                                            <Image src="https://cdn-icons-png.flaticon.com/128/9502/9502265.png" width={20} alt="" preview={false} /> Download link
+                                        </div>
+                                    },
+                                    {
+                                        value: 'gcloud',
+                                        label: <div className='flex items-center gap-2'>
+                                            <Image src="https://cdn-icons-png.flaticon.com/128/300/300221.png" width={20} alt="" preview={false} /> Upload
+                                        </div>
+                                    }
+
+                                ]}
+                                    onChange={(e: string) => {
+                                        if (e == 'upload' || e == 'gcloud') {
+                                            form.setFieldValue('drive_link', md5(new Date().toString()))
+                                        }
+                                        setSourceLink(e)
+                                        setLinkState(false)
+                                    }}
+                                    value={sourceLink} />
+                            </>
+                        }
+                    />
+                </Form.Item>
+                {(sourceLink == 'upload' || sourceLink == 'gcloud') ? <>
+                    <Form.Item
+                        name="upload"
+                        wrapperCol={{ offset: 4, span: 20 }}
+                        rules={[{ required: true }]}
+                    >
+
+                        <Upload {...props}>
+                            <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                        </Upload>
+
+
+                    </Form.Item>
+
+                </> : <></>}
+                {/* Resolution display */}
+                <Form.Item
+                    label={t('resolution')}
+                    name="resolution"
+                    rules={[{ required: true }]}
+                >
+                    {(sourceLink == 'youtube')
+                        ? <Select options={youtubeCheckLink.data?.data.map((youtube: any) => ({ label: youtube.format, value: youtube.manifest_url }))} defaultActiveFirstOption />
+                        : <Input readOnly disabled />
+                    }
+                </Form.Item>
+                {/* Platforms selection */}
+                <Form.Item
                     wrapperCol={{ offset: 4, span: 20 }}
                     rules={[{ required: true }]}
                 >
+                    <Form.List name="platforms">
+                        {(fields, { add, remove }) => (
+                            <>
+                                {fields.map(({ key, name, ...restField }) => (
+                                    <Space
+                                        key={key}
+                                        style={{ display: 'flex', marginBottom: 8, alignItems: 'center' }}
+                                        align="baseline"
+                                    >
+                                        <Form.Item
+                                            {...restField}
+                                            name={[name, 'platform']}
+                                            rules={[{ required: true }]}
+                                        >
+                                            <Select style={{
+                                                width: 200
+                                            }}
+                                                options={data?.data?.platforms.map((platform: any) => ({
+                                                    ...platform,
+                                                    label: (
+                                                        <div className="flex items-center gap-1">
+                                                            <Image width={20} src={platform.image} alt="image" />
+                                                            {platform?.name}
+                                                        </div>
+                                                    ),
+                                                    value: platform.id,
+                                                }))}
+                                                placeholder="Select platform"
+                                            />
 
-                    <Upload {...props}>
-                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                    </Upload>
+                                        </Form.Item>
+                                        <Form.Item
+                                            {...restField}
+                                            name={[name, 'stream_key']}
+                                            rules={[{ required: true }]}
+                                        >
+                                            <Input placeholder="Stream key" />
+                                        </Form.Item>
+                                        <Form.Item
+                                            name={[name, 'stream_name']}
+                                            rules={[{ required: true }]}
+                                        >
+                                            <Input placeholder="Stream name" />
+                                        </Form.Item>
 
-
+                                        <MinusCircleOutlined className='-translate-y-1' onClick={() => remove(name)} />
+                                    </Space>
+                                ))}
+                                <Form.Item>
+                                    <Button
+                                        type="dashed"
+                                        onClick={() => add()} icon={<PlusOutlined />}>
+                                        {t('add_platform')}
+                                    </Button>
+                                </Form.Item>
+                            </>
+                        )}
+                    </Form.List>
+                </Form.Item>
+                <Form.Item
+                    label={t('schedule')}
+                >
+                    <Switch defaultChecked onChange={handleCron} />
+                </Form.Item>
+                <Form.Item label={t('live_time')} name="live_time" className={userCron ? 'hidden' : ''}>
+                    <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" placeholder={[t('start_time'), t('endtime')]} />
                 </Form.Item>
 
-            </> : <></>}
-            {/* Resolution display */}
-            <Form.Item
-                label={t('resolution')}
-                name="resolution"
-                rules={[{ required: true }]}
-            >
-                {(sourceLink == 'youtube')
-                    ? <Select options={youtubeCheckLink.data?.data.map((youtube: any) => ({ label: youtube.format, value: youtube.manifest_url }))} defaultActiveFirstOption />
-                    : <Input readOnly disabled />
-                }
-            </Form.Item>
-            {/* Platforms selection */}
-            <Form.Item
-                wrapperCol={{ offset: 4, span: 20 }}
-                rules={[{ required: true }]}
-            >
-                <Form.List name="platforms">
-                    {(fields, { add, remove }) => (
-                        <>
-                            {fields.map(({ key, name, ...restField }) => (
-                                <Space
-                                    key={key}
-                                    style={{ display: 'flex', marginBottom: 8, alignItems: 'center' }}
-                                    align="baseline"
-                                >
-                                    <Form.Item
-                                        {...restField}
-                                        name={[name, 'platform']}
-                                        rules={[{ required: true }]}
-                                    >
-                                        <Select style={{
-                                            width: 200
-                                        }}
-                                            options={data?.data?.platforms.map((platform: any) => ({
-                                                ...platform,
-                                                label: (
-                                                    <div className="flex items-center gap-1">
-                                                        <Image width={20} src={platform.image} alt="image" />
-                                                        {platform?.name}
-                                                    </div>
-                                                ),
-                                                value: platform.id,
-                                            }))}
-                                        />
+                <Form.Item
+                    label={t('loop')} name='loop' initialValue={'only'} rules={[
+                        {
+                            required: true
+                        }
+                    ]}
+                >
+                    <Radio.Group>
+                        <Radio value='infinity'>{t('infinity')}</Radio>
+                        <Radio value='only'>{t('only')}</Radio>
+                    </Radio.Group>
+                </Form.Item>
+                <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
+                    <div className='flex gap-2'>
+                        <Button type="primary" htmlType='submit'>{t('add')}</Button>
+                        <Button type="default" htmlType='reset'>{t('reset')}</Button>
+                    </div>
+                </Form.Item>
+            </Form>
 
-                                    </Form.Item>
-                                    <Form.Item
-                                        {...restField}
-                                        name={[name, 'stream_key']}
-                                        rules={[{ required: true }]}
-                                    >
-                                        <Input placeholder="Stream key" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name={[name, 'stream_name']}
-                                        rules={[{ required: true }]}
-                                    >
-                                        <Input placeholder="Stream name" />
-                                    </Form.Item>
-
-                                    <MinusCircleOutlined className='-translate-y-1' onClick={() => remove(name)} />
-                                </Space>
-                            ))}
-                            <Form.Item>
-                                <Button
-                                    type="dashed"
-                                    onClick={() => add()} icon={<PlusOutlined />}>
-                                    {t('add_platform')}
-                                </Button>
-                            </Form.Item>
-                        </>
-                    )}
-                </Form.List>
-            </Form.Item>
-            <Form.Item
-                label={t('schedule')}
-            >
-                <Switch defaultChecked onChange={handleCron} />
-            </Form.Item>
-            <Form.Item label={t('live_time')} name="live_time" className={userCron ? 'hidden' : ''}>
-                <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" placeholder={[t('start_time'), t('endtime')]} />
-            </Form.Item>
-
-            <Form.Item
-                label={t('loop')} name='loop' initialValue={'only'} rules={[
-                    {
-                        required: true
-                    }
-                ]}
-            >
-                <Radio.Group>
-                    <Radio value='infinity'>{t('infinity')}</Radio>
-                    <Radio value='only'>{t('only')}</Radio>
-                </Radio.Group>
-            </Form.Item>
-
-            <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
-                <div className='flex gap-2'>
-                    <Button type="primary" htmlType='submit'>{t('add')}</Button>
-                    <Button type="default" htmlType='reset'>{t('reset')}</Button>
-                </div>
-            </Form.Item>
-        </Form>
+        </div>
     );
 };
 

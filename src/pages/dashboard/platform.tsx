@@ -1,5 +1,7 @@
 import axiosInstance from '@/apiClient/axiosConfig';
 import TableAction from '@/components/admin/TableAction';
+import EditPlatform from '@/components/admin/crudform/edit/EditPlatform';
+import DeletePlatform from '@/components/admin/platform/DeletePlatform';
 import SearchInput from '@/components/filters/SearchInput';
 import CreatePlatform from '@/components/general/create-platform';
 import { pagination } from '@/helpers/pagination';
@@ -74,10 +76,15 @@ const Page = () => {
         },
         {
             title: t('action'),
-            dataIndex: 'action',
-            key: 'action',
+            dataIndex: 'id',
+            key: 'id',
             width: 130,
-            render: (text: string, record: any, index: number) => (<TableAction openState={false} editForm={<Button />} />)
+            render: (id: number, record: any, index: number) => (
+                <div className="flex gap-2">
+                    <EditPlatform platform={record} />
+                    <DeletePlatform id={id} />
+                </div>
+            )
         },
 
     ];

@@ -1,4 +1,5 @@
 import axiosInstance from "@/apiClient/axiosConfig";
+import SearchInput from "@/components/filters/SearchInput";
 import { useQuery } from "@tanstack/react-query";
 import { Input, Select, Table, TablePaginationConfig } from "antd";
 import Title from "antd/lib/typography/Title";
@@ -29,31 +30,37 @@ const Page = () => {
 
         },
         {
-            title: t("email"),
-            dataIndex: "email",
-            key: "email",
+            title: "Description",
+            dataIndex: "description",
+            key: "description",
         },
         {
-            title: t("action"),
-            dataIndex: "action",
-            key: "action",
+            title: ("Balance"),
+            dataIndex: "balance",
+            key: "balance",
             width: "13%",
             align: "center",
         },
         {
-            title: t("amount"),
-            dataIndex: "amount",
-            key: "amount",
+            title: ("Inflow"),
+            dataIndex: "inflow",
+            key: "inflow",
             width: "10%",
             align: "center",
         },
         {
-            title: t("fund"),
-            dataIndex: "fund",
-            key: "fund",
+            title: ("outflow"),
+            dataIndex: "outflow",
+            key: "outflow",
             width: "10%",
             align: "right",
-            render: (text: string, record: any) => record?.finance_transaction?.funds
+        },
+        {
+            title: ("Transaction date"),
+            dataIndex: "transaction_date",
+            key: "transaction_date",
+            width: "10%",
+            render: (text: string) => dayjs(text).format("YYYY-MM-DD HH"),
         },
         {
             title: t("createat"),
@@ -70,12 +77,8 @@ const Page = () => {
     const [openState, setOpenState] = useState(false);
 
     const { data, isFetching, isError } = useQuery({
-        queryKey: ["category", router.asPath],
-        queryFn: () => axiosInstance.get('/cashflow/list', {
-            params: {
-                languague: 'en'
-            }
-        }),
+        queryKey: ["cashflow", router.asPath],
+        queryFn: () => axiosInstance.get('/cashflow/list?language=en'),
         placeholderData: (previousData) => previousData,
     });
     const handleTableChange = (
@@ -88,14 +91,8 @@ const Page = () => {
     const p = useTranslations("Placeholder");
     return (
         <>
-            <div className="flex justify-between mt-10">
-                <div className="flex justify-start gap-1 " id="filter">
-                    <Input
-                        style={{ width: 200 }}
-                        placeholder={p("search")}
-                        defaultValue={keyword as string}
-                    />
-                </div>
+            <div className="flex justify-between mt-10 mb-3">
+                    <SearchInput />
             </div>
 
             <Table

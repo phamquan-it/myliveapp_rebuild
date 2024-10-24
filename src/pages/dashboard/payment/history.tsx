@@ -27,6 +27,7 @@ import filterOptionByLabel from "@/hooks/filterOptionByLabel";
 import { pagination } from "@/helpers/pagination";
 import axiosInstance from "@/apiClient/axiosConfig";
 import syncObjectToUrl from "@/helpers/syncObjectToUrl";
+import SearchInput from "@/components/filters/SearchInput";
 
 const Page = () => {
     const router = useRouter();
@@ -59,7 +60,7 @@ const Page = () => {
 
         {
             title: t("paymethod"),
-            dataIndex: "card_type",
+            dataIndex: "method",
             key: "card_type",
         },
         {
@@ -70,7 +71,7 @@ const Page = () => {
         },
         {
             title: t("content"),
-            dataIndex: "order_info",
+            dataIndex: "content",
             key: "order_info",
         },
         {
@@ -80,25 +81,6 @@ const Page = () => {
             key: "status",
             render: (text: string) => (
                 <div className="flex justify-center">
-                    <Tag
-                        color={
-                            text == "-1"
-                                ? "red"
-                                : text == "1"
-                                    ? "green"
-                                    : text == "3"
-                                        ? "orange"
-                                        : "cyan"
-                        }
-                    >
-                        {text == "-1"
-                            ? "Deny"
-                            : text == "1"
-                                ? "Completed"
-                                : text == "3"
-                                    ? "Pending"
-                                    : "In Progress"}
-                    </Tag>
                 </div>
             ),
         },
@@ -112,13 +94,6 @@ const Page = () => {
             dataIndex: "exchange_rate",
             key: "exchange_rate",
         },
-        {
-            align: "right",
-            title: t("amountvnd"),
-            dataIndex: "amount_vi",
-            key: "amount_vi",
-        },
-
         {
             witdth: 200,
             align: "center",
@@ -138,9 +113,9 @@ const Page = () => {
 
     const { limit, offset, pageIndex, pageSize } = pagination(router)
     const { data, isFetching, isError } = useQuery({
-        queryKey: ["platform", router],
+        queryKey: ["history", router],
         queryFn: () =>
-            axiosInstance.get("/platform/list", {
+            axiosInstance.get("payment/history", {
                 params: {
                     language: "en",
                     keyword: router.query.keyword ?? '',
@@ -159,25 +134,6 @@ const Page = () => {
     }, 300)
     return (
         <>
-            <div className="sm:flex gap-1 my-3" id="filter">
-                <Input
-                    placeholder={p("search")} defaultValue={router?.query?.keyword}
-                    style={{ width: 200 }} onChange={handleInput}
-                />
-                <Select className='mt-2 sm:mt-0'
-                    style={{ width: 200 }}
-                    placeholder={p('select_status')}
-                    showSearch
-                    filterOption={filterOptionByLabel}
-                    allowClear
-                    options={[
-                        { value: -1, label: "Deny" },
-                        { value: 2, label: "In progess" },
-                        { value: 3, label: "Pending" },
-                        { value: 1, label: "Completed" },
-                    ]}
-                />
-            </div>
             <div className="my-3 gap-3 grid lg:grid-cols-5 md:grid-cols-2">
                 <HistoryStatitical
                     color="rgb(10, 143, 220)"
@@ -205,11 +161,47 @@ const Page = () => {
                     info="In Progress"
                 />
             </div>
+            <div className="sm:flex gap-1 my-3" id="filter">
+                <SearchInput />
+                <Select className='mt-2 sm:mt-0'
+                    style={{ width: 200 }}
+                    placeholder={p('select_status')}
+                    showSearch
+                    filterOption={filterOptionByLabel}
+                    allowClear
+                    options={[
+                        { value: 'deny', label: "Deny" },
+                        { value: 'inprogress', label: "In progess" },
+                        { value: 'pendding', label: "Pending" },
+                        { value: 'completed', label: "Completed" },
+                    ]}
+                    onChange={(e) => {
+                        syncObj({ status: e })
+                    }
+                    } />
+            </div>
             <Table
-                dataSource={[]}
-                columns={columns}
-                scroll={{ x: 800 }}
-            />
+                loading={isFetching}
+                scroll={{
+                    x: 300
+                }}
+                onChange={(pagination) => {
+                    syncObj({
+                        pageIndex: pagination.current,
+                    })
+                }}
+                pagination={{
+                    total: data?.data?.total,
+                    pageSize: pageSize,
+                    current: pageIndex
+                }}
+                dataSource={data?.data?.data
+                    .map((platform: any, index: number) => ({
+                        ...platform,
+                        key: pageIndex * pageSize + (index + 1) - pageSize,
+                    }))}
+                columns={columns} />
+
         </>
     );
 };

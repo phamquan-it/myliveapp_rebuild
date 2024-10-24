@@ -113,24 +113,10 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             role: "admin",
         },
         {
-            key: "16",
+            key: DashboardRouter.VPS,
             icon: <CloudServerOutlined />,
-            label: "Vps",
+            label: <Link href={DashboardRouter.VPS}>{('Vps')}</Link>,
             role: "admin",
-            children: [
-                {
-                    key: DashboardRouter.VPS,
-                    icon: <CloudServerOutlined />,
-                    label: <Link href={DashboardRouter.VPS}>{('Vps')}</Link>,
-                    role: "admin",
-                },
-                {
-                    key: DashboardRouter.ACCOUNT_SCRIPT,
-                    icon: <JavaScriptOutlined />,
-                    label: <Link href={DashboardRouter.ACCOUNT_SCRIPT}>{('Account script')}</Link>,
-                    role: "admin",
-                }
-            ]
         },
         {
             key: DashboardRouter.REFUND,
@@ -320,15 +306,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                             />
                             <div className='absolute left-11'> Live stream</div>
                         </div>
-                        <Affix style={{
-                            top: 50,
-                            position: 'absolute',
-                            right: 200,
-                            zIndex: 1000
-                        }} >
-                            <CreateStream />
-
-                        </Affix>
                         <div className="sm:me-3 flex items-center">
                             <LocaleSwitcher />
                         </div>

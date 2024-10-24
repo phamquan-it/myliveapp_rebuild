@@ -5,6 +5,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { webdockConfig } from "../../../WEBDOCK_PROVIDER/APIRequest/config";
 import _ from "lodash";
 import {
+    Affix,
     Button,
     Input,
     Modal,
@@ -172,6 +173,11 @@ const Page = () => {
     const [selectedRows, setSelectedRows] = useState<any>([])
     return (
         <>
+            <Affix offsetTop={100}>
+                <HorizoneMenu data={selectedRows}>
+                    <HideMenuSelected selectedRows={selectedRows} />
+                </HorizoneMenu>
+            </Affix>
             <Modal
                 title={`Terminal ${sshInfo.sshUser}@${sshInfo.ipv4OrHost}`}
                 open={isModalOpen}
@@ -207,9 +213,7 @@ const Page = () => {
                     {t("create")}
                 </Button>
             </div>
-            <HorizoneMenu data={selectedRows}>
-                <HideMenuSelected selectedRows={selectedRows} />
-            </HorizoneMenu>
+
             <Table
                 dataSource={data?.data.map((item: any, index: number) => ({
                     ...item,

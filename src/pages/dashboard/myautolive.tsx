@@ -16,6 +16,7 @@ import router, { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
 import {
+    Affix,
     Button,
     Card,
     DatePicker,
@@ -27,6 +28,7 @@ import {
     Table,
     TablePaginationConfig,
     Tag,
+    Image,
 } from "antd";
 import EditLiveStreams from "@/components/live-streams/EditLiveStreams";
 import LiveState from "@/components/client/LiveState";
@@ -42,6 +44,8 @@ import { IoPlay } from "react-icons/io5";
 import MutistreamsAction from "@/components/MutistreamsAction";
 import CountdownTimer from "@/components/client/CountdownTimer";
 import HorizoneMenu from "@/components/admin/HorizoneMenu";
+import PlatformSelect from "@/components/admin/PlatformSelect";
+import { usePlatformData } from "@/components/live-streams/CreateStreamByAdmin";
 export interface StreamDataType {
     createAt?: string
     download_link?: string
@@ -69,6 +73,7 @@ const Page = () => {
     const [isReady, setIsReady] = useState(false)
     const d = useTranslations("DashboardMenu");
     const t = useTranslations("MyLanguage");
+    const platformQuery = usePlatformData();
     const columns: ColumnsType<StreamDataType> = [
         {
             title: t("entryno"),
@@ -153,11 +158,13 @@ const Page = () => {
     const { data, isFetching, isError } = useQuery({
         queryKey: ["activityStream", router.asPath],
         queryFn: () =>
-            axiosInstance.get("/activity-stream?language=en", {
+            axiosInstance.get("/activity-stream/client-activity-stream?language=en", {
                 params: {
                     keyword: router.query.keyword ?? '',
                     offset: (pageIndex - 1) * pageSize,
                     limit: pageIndex * pageSize,
+                    status: router?.query?.status,
+                    platform: router?.query?.platform
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -180,16 +187,38 @@ const Page = () => {
     const s = useTranslations('StreamStatus')
     return (
         <>
+            <Affix>
+                <HorizoneMenu data={streamsSelected}>
+                    <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} />
+                </HorizoneMenu>
+            </Affix>
             <div className="flex justify-between items-center">
                 <div className={`sm:flex py-3 gap-2 transition duration-500 transform ${streamsSelected.length == 0 ? '' : ''}`}>
                     <SearchInput />
-                    <Select defaultValue={0}
+                    <Select
+                        placeholder="Select platform"
+                    style={{
+                        width: 200
+                    }} options={platformQuery?.data?.data?.platforms.map((platform: any) => ({
+                        ...platform,
+                        label: (
+                            <div className="flex items-center gap-1">
+                                <Image width={20} src={platform.image} alt="image" />
+                                {platform?.name}
+                            </div>
+                        ),
+                        value: platform.id,
+                    }))} onChange={(e)=>{
+                        if(e == undefined) e=""
+                        syncObj({ ...router.query, platform: e })
+                    }} allowClear />
+                    <Select defaultValue={''}
                         options={[
-                            { value: 0, label: <span>{s('all')}</span> },
-                            { value: 1, label: <span>{s('scheduling')}</span> },
-                            { value: 2, label: <span>{s('starting')}</span> },
-                            { value: 3, label: <span>{s('running')}</span> },
-                            { value: 4, label: <span>{s('stopped')}</span> },
+                            { value: '', label: <span>{s('all')}</span> },
+                            { value: 'scheduling', label: <span>{s('scheduling')}</span> },
+                            { value: 'starting', label: <span>{s('starting')}</span> },
+                            { value: 'running', label: <span>{s('running')}</span> },
+                            { value: 'stopped', label: <span>{s('stopped')}</span> },
                         ]} className='w-full mt-2 sm:mt-0 sm:w-48'
                         onChange={(e) => {
                             syncObj({ ...router.query, status: e })
@@ -197,9 +226,6 @@ const Page = () => {
                     />
                 </div>
             </div>
-            <HorizoneMenu data={streamsSelected}>
-                <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} />
-            </HorizoneMenu>
             <Table
                 rowSelection={{
                     type: 'checkbox',

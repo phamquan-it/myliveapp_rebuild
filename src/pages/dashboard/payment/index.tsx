@@ -88,71 +88,8 @@ const Page = () => {
             title: t("action"),
             dataIndex: "id",
             key: "id",
-            render: (text: string, record: any) => {
-                return (
-                    <div className="flex justify-center">
-                        <TableAction
-                            openState={openState}
-                            editForm={
-                                <>
-                                    <Form
-                                        name="basic"
-                                        layout="vertical"
-                                        initialValues={{ remember: true }}
-                                    >
-
-                                        <Form.Item>
-                                            <Button type="primary" htmlType="submit">
-                                                Update
-                                            </Button>
-                                        </Form.Item>
-                                    </Form>
-                                </>
-                            }
-                            deleteForm={
-                                <DeleteForm
-                                    onCancel={() => {
-                                        setOpenState(!openState);
-                                    }}
-                                    onDelete={() => {
-                                        axiosClient
-                                            .delete(`/payment/delete/${text}`)
-                                            .then(() => {
-                                                toast.success("success");
-                                            })
-                                            .catch((err) => {
-                                                toast.error(err.message);
-                                            });
-                                        setOpenState(!openState);
-                                    }}
-                                />
-                            }
-                        />
-                    </div>
-                );
-            },
         },
     ];
-    const [openState, setOpenState] = useState(false);
-    const [keyword, setKeyword] = useState("");
-    const [params, setParams] = useState({
-        keyword: keyword,
-        offset: 0,
-        limit: 10,
-    });
-    const handleTableChange = (
-        pagination: TablePaginationConfig,
-        filters: Record<string, FilterValue | null>,
-        sorter: SorterResult<AnyObject> | SorterResult<AnyObject>[],
-        extra: TableCurrentDataSource<AnyObject>
-    ) => {
-        const current = pagination.current || 1;
-        setPageIndex(current);
-        const pageSize = pagination.pageSize || 10;
-        const offset = (current - 1) * pageSize;
-        const limit = current * pageSize;
-        setParams({ ...params, limit: limit, offset: offset });
-    };
 
     const onFinish = (values: any) => {
         console.log("Form values:", values);
@@ -243,20 +180,6 @@ const Page = () => {
             </Modal>
 
             <div className="flex justify-between" id="filter">
-                <Input
-                    placeholder="Search..."
-                    style={{ width: 200 }}
-                    onChange={(e) => {
-                        setKeyword(e.target.value);
-                        const search = lodash.debounce(() => {
-                            setParams({
-                                ...params,
-                                keyword,
-                            });
-                        }, 300);
-                        search();
-                    }}
-                />
                 <Button
                     type="primary"
                     onClick={openModal}
@@ -274,7 +197,6 @@ const Page = () => {
                     key: pageIndex * 10 + (index + 1) - 10,
                 }))}
                 columns={columns}
-                onChange={handleTableChange}
 
             />
         </>

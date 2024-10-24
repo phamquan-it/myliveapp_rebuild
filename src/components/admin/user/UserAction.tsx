@@ -3,6 +3,7 @@ import { Button, Modal, Tabs, TabsProps } from 'antd';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 import UpdateUserInfo from './UpdateUserInfo';
+import ChangeUserPassword from './ChangeUserPassword';
 interface UserActionProps {
 
 }
@@ -29,7 +30,7 @@ const UserAction: React.FC<UserActionProps> = () => {
         {
             key: '2',
             label: t('change_password'),
-            children: 'Content of Tab Pane 2',
+            children: <ChangeUserPassword/>
         },
         {
             key: '3',
