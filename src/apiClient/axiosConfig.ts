@@ -6,18 +6,19 @@ const axiosInstance = axios.create({
 });
 axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`
 axiosInstance.interceptors.request.use(
-    function(config) {
-        const accessToken = getCookie('token')
-        // Do something before the request is sent
-        // For example, add an authentication token to the headers
-        const token = localStorage.getItem('authToken'); // Retrieve auth token from localStorage
+    (config) => {
+        // Get the token from the cookies
+        const token = getCookie('token');
+
+        // If token exists, add it to the Authorization header
         if (token) {
-            config.headers.Authorization = `Bearer ${accessToken}`;
+            config.headers['Authorization'] = `Bearer ${token}`;
         }
+
         return config;
     },
-    function(error) {
-        // Handle the error
+    (error) => {
+        // Handle request error
         return Promise.reject(error);
     }
 );
