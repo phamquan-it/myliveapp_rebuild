@@ -2,7 +2,9 @@ export interface User {
     id?: string
     name?: string
     email?: string
-    remain?: number
+    remains?: number
+    total?: number
+    role_id?: number
     isActive?: boolean
     createAt?: string
     updateAt?: string

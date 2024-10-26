@@ -224,7 +224,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                                     style={{ fontSize: "small" }}
                                 >
                                     <span className="text-gray-700">{t("funds")}</span>
-                                    <span className="text-blue-500">$0</span>
+                                    <span className="text-blue-500">${data?.data?.remains}</span>
                                 </div>
                                 <div
                                     className=" flex justify-between p-3"

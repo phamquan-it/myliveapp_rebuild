@@ -31,7 +31,7 @@ const SelectVps: React.FC<SelectVpsProps> = () => {
                 width: 200
             }}
             onChange={(e)=>{
-                syncObj({vps: e??''})
+                syncObj({ vps_slug: e??''})
             }}
             allowClear
         />

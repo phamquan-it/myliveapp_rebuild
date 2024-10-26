@@ -79,10 +79,6 @@ const Page = () => {
             title: t("status"),
             dataIndex: "status",
             key: "status",
-            render: (text: string) => (
-                <div className="flex justify-center">
-                </div>
-            ),
         },
         {
             title: t("amountusd"),
@@ -120,7 +116,8 @@ const Page = () => {
                     language: "en",
                     keyword: router.query.keyword ?? '',
                     offset,
-                    limit
+                    limit,
+                    status: router.query.status
                 },
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -172,11 +169,11 @@ const Page = () => {
                     options={[
                         { value: 'deny', label: "Deny" },
                         { value: 'inprogress', label: "In progess" },
-                        { value: 'pendding', label: "Pending" },
+                        { value: 'pennding', label: "Pending" },
                         { value: 'completed', label: "Completed" },
                     ]}
                     onChange={(e) => {
-                        syncObj({ status: e })
+                        syncObj({ status: e??'' })
                     }
                     } />
             </div>

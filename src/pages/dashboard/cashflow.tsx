@@ -2,6 +2,7 @@ import axiosInstance from "@/apiClient/axiosConfig";
 import SearchInput from "@/components/filters/SearchInput";
 import { useQuery } from "@tanstack/react-query";
 import { Input, Select, Table, TablePaginationConfig } from "antd";
+import { ColumnsType } from "antd/es/table";
 import Title from "antd/lib/typography/Title";
 import dayjs from "dayjs";
 import { GetStaticPropsContext } from "next";
@@ -20,7 +21,7 @@ const Page = () => {
 
     const t = useTranslations("MyLanguage");
     const d = useTranslations("DashboardMenu");
-    const columns: any[] = [
+    const columns: ColumnsType<any> = [
         {
             title: t("entryno"),
             dataIndex: "key",

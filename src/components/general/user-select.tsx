@@ -20,7 +20,7 @@ const UserSelect:React.FC<UserSelectProps> = () => {
             width: 200
             }} options={data?.data?.data.map((user:any)=>({...user, label: user.email, value: user.id}))}
             onChange={(e)=>{
-                syncObj({userId: e?? ''})
+                syncObj({user_id: e?? ''})
             }}
             allowClear={true}
         />

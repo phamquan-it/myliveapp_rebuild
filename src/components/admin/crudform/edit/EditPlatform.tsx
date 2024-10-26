@@ -2,7 +2,7 @@ import { EditFilled, PlusCircleFilled, UploadOutlined } from '@ant-design/icons'
 import { Button, Form, FormProps, Input, Modal, Upload, UploadProps, message } from 'antd';
 import React, { useState } from 'react';
 import axiosInstance from '@/apiClient/axiosConfig';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { headers } from 'next/headers';
 import { handleUploadFile } from '../../../../../handleUploadFile';
 import { Platform } from '@/@type';
@@ -19,6 +19,8 @@ interface UpdatePlatformProps {
     platform: any
 }
 const UpdatePlatform: React.FC<UpdatePlatformProps> = ({ platform }) => {
+     const queryClient = useQueryClient()
+
     console.log(platform.id)
     const createPlatform = useMutation({
         mutationKey: ['platform'],
@@ -29,6 +31,7 @@ const UpdatePlatform: React.FC<UpdatePlatformProps> = ({ platform }) => {
         onSuccess: (res) => {
             message.success("Success")
             setIsModalOpen(false)
+            queryClient.invalidateQueries({ queryKey:['platform'] })
         },
         onError: (err) => {
             message.error(err.message)

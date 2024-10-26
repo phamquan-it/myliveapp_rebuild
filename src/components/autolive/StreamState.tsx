@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import React from 'react';
 export enum StreamType {
     SCHEDULING = 'scheduling',
-    STARTING = 'starting',
+    INITALIZE = 'initalize',
     RUNNING = 'running',
     STOPPED = 'stopped'
 }
@@ -17,8 +17,8 @@ const StreamState: React.FC<StreamStateProps> = ({ state }) => {
     switch (state) {
         case StreamType.SCHEDULING:
             return <Tag color='blue'>{s('scheduling')}</Tag>
-        case StreamType.STARTING:
-            return <Tag color='orange'>{s('starting')}</Tag>
+        case StreamType.INITALIZE:
+            return <Tag color='magenta'>{s('initalize')}</Tag>
         case StreamType.RUNNING:
             return <Tag color='green'>{s('running')}</Tag>
         case StreamType.STOPPED:

@@ -13,7 +13,8 @@
     "scheduling": "Scheduling",
     "running": "Running",
     "starting": "Starting",
-    "error":"Error"
+    "error":"Error",
+    "initalize":"Initalize"
   },
   "Authenlication": {
     "donothaveanacount": "Do not have an account?",

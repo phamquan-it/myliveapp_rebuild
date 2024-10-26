@@ -3,7 +3,7 @@ import { Button, Form, FormProps, Input, Modal, Upload, UploadProps, message } f
 import React, { useState } from 'react';
 import { handleUploadFile } from '../../../handleUploadFile';
 import axiosInstance from '@/apiClient/axiosConfig';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { headers } from 'next/headers';
 type FieldType = {
     name?: string;
@@ -15,6 +15,7 @@ type FieldType = {
 
 
 const CreatePlatform = () => {
+    const queryClient = useQueryClient()
     const createPlatform = useMutation({
         mutationKey: ['platform'],
         mutationFn: (platform: any) => axiosInstance
@@ -53,6 +54,7 @@ const CreatePlatform = () => {
             setKey(response.key)
             onSuccess && onSuccess(response);
             message.success('File uploaded successfully');
+            queryClient.invalidateQueries({queryKey:['platform']})
         } catch (error) {
             onError && onError(error);
             message.error('File upload failed');

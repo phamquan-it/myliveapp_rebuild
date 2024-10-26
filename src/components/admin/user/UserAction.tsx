@@ -4,11 +4,12 @@ import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 import UpdateUserInfo from './UpdateUserInfo';
 import ChangeUserPassword from './ChangeUserPassword';
+import { User } from '@/@type/api_object';
 interface UserActionProps {
-
+    user: User
 }
 
-const UserAction: React.FC<UserActionProps> = () => {
+const UserAction: React.FC<UserActionProps> = ({ user }) => {
     const t = useTranslations('MyLanguage')
     const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -25,12 +26,18 @@ const UserAction: React.FC<UserActionProps> = () => {
         {
             key: '1',
             label: t('update_info'),
-            children: <UpdateUserInfo/>,
+            children: <UpdateUserInfo user_info={{
+                user_id: user.id,
+                name: user.name,
+                role_id: user.role_id
+            }} />,
         },
         {
             key: '2',
             label: t('change_password'),
-            children: <ChangeUserPassword/>
+            children: <ChangeUserPassword change_password={{
+                user_id: user.id,
+            }} />
         },
         {
             key: '3',

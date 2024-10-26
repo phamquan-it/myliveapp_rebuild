@@ -15,7 +15,8 @@
     "scheduling": "Đang lên lịch",
     "running": "Đang chạy",
     "starting": "Đang bắt đầu",
-    "error":"Thất bại"
+    "error":"Thất bại",
+    "initalize":"Khởi tạo"
   },
     "Authenlication": {
     "donothaveanacount": "Chưa có tài khoản?",

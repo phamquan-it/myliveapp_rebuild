@@ -1,17 +1,34 @@
-import { Button, Form, FormProps, Input, Select } from 'antd';
+import axiosInstance from '@/apiClient/axiosConfig';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button, Form, FormProps, Input, Select, message } from 'antd';
 import React from 'react';
-interface UpdateUserInfoProps {
+type FieldType = {
+    user_id?: string
+    name?: string;
+    role_id?: number;
+};
 
+interface UpdateUserInfoProps {
+    user_info: FieldType
 }
 
-const UpdateUserInfo: React.FC<UpdateUserInfoProps> = () => {
-    type FieldType = {
-        name?: string;
-        role: string;
-    };
+const UpdateUserInfo: React.FC<UpdateUserInfoProps> = ({ user_info }) => {
+    const queryClient = useQueryClient()
+
+    const { mutate, isPending } = useMutation({
+        mutationKey: ['updateinfo'],
+        mutationFn: (info: any) => axiosInstance.patch('users/update-info', { ...user_info, ...info }),
+        onSuccess: (res) => {
+            message.success("OK")
+            queryClient.invalidateQueries({queryKey: ['user']})
+        },
+        onError: (err) => {
+            message.error(err.message)
+        }
+    })
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        console.log('Success:', values);
+        mutate(values)
     };
 
     const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
@@ -26,7 +43,7 @@ const UpdateUserInfo: React.FC<UpdateUserInfoProps> = () => {
             labelAlign='left'
             wrapperCol={{ span: 18 }}
             style={{ maxWidth: 600 }}
-            initialValues={{ remember: true }}
+            initialValues={{ name: user_info.name, role_id: user_info.role_id }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -41,7 +58,7 @@ const UpdateUserInfo: React.FC<UpdateUserInfoProps> = () => {
 
             <Form.Item<FieldType>
                 label="Role"
-                name="role"
+                name="role_id"
                 rules={[{ required: true }]}
             >
                 <Select options={
@@ -54,7 +71,7 @@ const UpdateUserInfo: React.FC<UpdateUserInfoProps> = () => {
 
 
             <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" loading={isPending}>
                     {('Update')}
                 </Button>
             </Form.Item>

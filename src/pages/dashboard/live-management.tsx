@@ -43,7 +43,8 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             params: {
                 keyword: router.query.keyword ?? '',
                 offset,
-                limit
+                limit,
+                ...router.query
             }
         })
     })
@@ -88,30 +89,34 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             render: (downloaded: boolean) => (downloaded) ? 'Yes' : 'No'
         },
         {
+            title: ('Loop'),
+            dataIndex: 'loop',
+            key: 'loop',
+        },
+        {
             title: t('status'),
             dataIndex: 'status',
             key: 'status',
             render: (text) => (<StreamState state={text} />)
         },
-
+        {
+            title: t('start_time'),
+            dataIndex: 'start_at',
+            key: 'start_at',
+            render: (text: string) => text == undefined ? 'Not schedule' : dayjs(text).format('YYYY/MM/DD HH:mm')
+        },
+        {
+            title: t('end_time'),
+            dataIndex: 'end_at',
+            key: 'end_at',
+            render: (text: string) => text == undefined ? 'Not schedule' : dayjs(text).format('YYYY/MM/DD HH:mm')
+        },
         {
             title: t('createAt'),
             dataIndex: 'createAt',
             key: 'createAt',
-            render: (text: string) => dayjs(text).format('YYYY/MM/DD HH:mm:ss')
+            render: (text: string) => dayjs(text).format('YYYY/MM/DD')
         },
-        {
-            title: t('action'),
-            dataIndex: 'action',
-            key: 'action',
-            render: (text, record, index) => (
-                <>
-                    <div className="flex gap-1">
-                        <ViewAutoliveDetail activityStream={record} />
-                    </div>
-                </>
-            )
-        }
 
     ];
     const syncObj = syncObjectToUrl(router)
@@ -136,7 +141,7 @@ const Page: NextPage<PageProps> = ({ modal }) => {
                 }))}
                     placeholder="Select platform"
                     onChange={(e) => {
-                        syncObj({ platform: e??'' })
+                        syncObj({ platform: e ?? '' })
                     }}
                     allowClear
                 />
@@ -146,9 +151,10 @@ const Page: NextPage<PageProps> = ({ modal }) => {
                     options={[
                         { value: '', label: <span>{s('all')}</span> },
                         { value: 'scheduling', label: <span>{s('scheduling')}</span> },
-                        { value: 'starting', label: <span>{s('starting')}</span> },
+                        { value: 'initalize', label: <span>{s('initalize')}</span> },
                         { value: 'running', label: <span>{s('running')}</span> },
                         { value: 'stopped', label: <span>{s('stopped')}</span> },
+                        { value: 'error', label: <span>{s('error')}</span> },
                     ]} className='w-full mt-2 sm:mt-0 sm:w-48'
                     onChange={(e) => {
                         syncObj({ ...router.query, status: e })

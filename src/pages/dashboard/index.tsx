@@ -32,6 +32,8 @@ import { useTranslations } from "use-intl";
 import DashBoardStatical from "@/components/admin/crudform/statistical/DashboardStatiticcal";
 import Title from "antd/es/typography/Title";
 import dayjs from "dayjs";
+import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "@/apiClient/axiosConfig";
 
 const Page = () => {
     const t = useTranslations("MyLanguage");
@@ -167,6 +169,32 @@ const Page = () => {
     ];
 
 
+
+    const cashflowQuery = useQuery({
+        queryKey: ["cashflow"],
+        queryFn: () => axiosInstance.get('/cashflow/list', {
+            params: {
+                language: "en",
+                offset: 0,
+                limit: 10
+            }
+        }),
+        placeholderData: (previousData) => previousData,
+    });
+
+    const orderQuery = useQuery({
+        queryKey: ["orders"],
+        queryFn: () =>
+            axiosInstance.get("/order?language=en", {
+                params: {
+                    offset: 0,
+                    limit: 10,
+                },
+            }),
+        placeholderData: (previousData) => previousData,
+    });
+
+
     return (
         <>
             <div>
@@ -181,46 +209,57 @@ const Page = () => {
                         Cashflow
                     </div>
 
-                    <Table
+                    <Table loading={cashflowQuery.isFetching}
                         scroll={{
                             x: 300
                         }}
-                        dataSource={[
-                            {
-                                key: '1',
-                                email: 'johndoe@outlook.com',
-                                action: 'withDraw',
-                                amount: '30$',
-                            },
-                            {
-                                key: '2',
-                                name: 'John',
-                                age: 42,
-                                address: '10 Downing Street',
-                            },
-                        ]} columns={[
-                            {
-                                title: 'No.',
-                                dataIndex: 'key',
-                                key: 'key',
-                            },
-                            {
-                                title: 'Email',
-                                dataIndex: 'email',
-                                key: 'email',
-                            },
-                            {
-                                title: 'Action',
-                                dataIndex: 'acttion',
-                                key: 'action',
-                            },
-                            {
-                                title: 'Amount',
-                                dataIndex: 'amount',
-                                key: 'amount',
-                            },
+                        dataSource={cashflowQuery?.data?.data?.data.map((cashflow: any, index: number) => ({ ...cashflow, key: index + 1 }))} columns={
+                            [
+                                {
+                                    title: t("entryno"),
+                                    dataIndex: "key",
+                                    key: "key",
+                                    width: "6%",
+                                    align: "center",
 
-                        ]} pagination={false} />
+                                },
+                                {
+                                    title: "Description",
+                                    dataIndex: "description",
+                                    key: "description",
+                                },
+                                {
+                                    title: ("Balance"),
+                                    dataIndex: "balance",
+                                    key: "balance",
+                                    width: "13%",
+                                    align: "center",
+                                },
+                                {
+                                    title: ("Inflow"),
+                                    dataIndex: "inflow",
+                                    key: "inflow",
+                                    width: "10%",
+                                    align: "center",
+                                },
+                                {
+                                    title: ("outflow"),
+                                    dataIndex: "outflow",
+                                    key: "outflow",
+                                    width: "10%",
+                                    align: "right",
+                                },
+                                {
+                                    title: t("createat"),
+                                    dataIndex: "createdAt",
+                                    key: "createdAt",
+                                    width: "15%",
+                                    align: "center",
+                                    render: (text: string) => dayjs(text).format("YYYY-MM-DD HH:mm:ss"),
+                                },
+                            ]
+
+                        } pagination={false} />
                 </div>
                 <div className="Payment rounded border overflow-hidden shadow">
                     <div
@@ -287,7 +326,10 @@ const Page = () => {
                 Recent orders
             </span>}
 
-                dataSource={dataSource}
+                dataSource={orderQuery?.data?.data.data.map((item: any, index: number) => ({
+                    ...item,
+                    key: index + 1,
+                }))}
                 columns={columns}
                 className="border rounded-md overflow-hidden mt-3"
                 pagination={false}

@@ -87,14 +87,14 @@ const Page = () => {
         },
         {
             title: t("fund"),
-            dataIndex: "funds",
-            key: "funds",
+            dataIndex: "remains",
+            key: "remains",
             align: "right",
         },
         {
             title: t("totalmoney"),
-            dataIndex: "total_money",
-            key: "total_money",
+            dataIndex: "total",
+            key: "total",
             align: "right",
         },
         {
@@ -110,8 +110,8 @@ const Page = () => {
             key: "id",
             align: "center",
             width: 200,
-            render: () => {
-                return <UserAction />
+            render: (text, record) => {
+                return <UserAction user={record} />
             }
         },
     ];
@@ -124,7 +124,8 @@ const Page = () => {
                 language: 'en',
                 keyword: router.query?.keyword ?? '',
                 offset,
-                limit
+                limit,
+                ...router.query
             }
         })
     })
@@ -139,17 +140,19 @@ const Page = () => {
                     { value: 3, label: <span>Admin</span> },
                 ]}
                     onChange={(e) => {
-                        syncObj({ role: e })
+                        syncObj({ role: e ?? '' })
                     }}
                     placeholder="Select role"
+                    allowClear
                 />
                 <Select className="w-48" options={[
                     { value: 1, label: <span>Active</span> },
                     { value: 0, label: <span>In active</span> },
                 ]
                 }
+                    allowClear
                     onChange={(e) => {
-                        syncObj({ active: e })
+                        syncObj({ is_active: e ?? '' })
                     }}
                     placeholder="Is active"
                 />

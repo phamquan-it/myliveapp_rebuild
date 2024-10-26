@@ -18,8 +18,8 @@ const SelectDateForFilter: React.FC<SelectDateForFilterProps> = () => {
             format="YYYY-MM-DD"
             onChange={(value, dateString) => {
                 syncObj({
-                    startTime: dateString[0]??'',
-                    endTime: dateString[1]??''
+                    start_date: dateString[0]??'',
+                    end_date: dateString[1]??''
                 })
             }}
             allowClear={true}

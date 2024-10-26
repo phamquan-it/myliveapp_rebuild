@@ -1,16 +1,31 @@
-import { Button, Form, FormProps, Input } from 'antd';
+import axiosInstance from '@/apiClient/axiosConfig';
+import { useMutation } from '@tanstack/react-query';
+import { Button, Form, FormProps, Input, message } from 'antd';
 import React from 'react';
-interface ChangeUserPasswordProps {
+export type ChangePasswordType = {
+    user_id?: string,
+    new_password?: string
+    confirm_password?: string
+};
 
+interface ChangeUserPasswordProps {
+    change_password: ChangePasswordType
 }
 
-const ChangeUserPassword: React.FC<ChangeUserPasswordProps> = () => {
-    type ChangePasswordType = {
-        old_password?: string;
-        new_password?: string;
-        confirm_password?: string;
-    };
+const ChangeUserPassword: React.FC<ChangeUserPasswordProps> = ({ change_password }) => {
+
+    const { mutate, isPending } = useMutation({
+        mutationKey: ['update_user_password'],
+        mutationFn: (data: ChangePasswordType) => axiosInstance.patch('/users/update-password', data),
+        onSuccess: ()=>{
+            message.success("Success")
+        },
+        onError: (err)=>{
+            message.error(err.message)
+        }
+    })
     const onFinish: FormProps<ChangePasswordType>['onFinish'] = (values) => {
+        mutate({...change_password, ...values})
         console.log('Success:', values);
     };
 
@@ -30,13 +45,6 @@ const ChangeUserPassword: React.FC<ChangeUserPasswordProps> = () => {
             autoComplete="off"
             labelAlign="left"
         >
-            <Form.Item<ChangePasswordType>
-                label="Old password"
-                name="old_password"
-                rules={[{ required: true }]}
-            >
-                <Input.Password />
-            </Form.Item>
 
             <Form.Item<ChangePasswordType>
                 label="New password"
@@ -46,7 +54,7 @@ const ChangeUserPassword: React.FC<ChangeUserPasswordProps> = () => {
                 <Input.Password />
             </Form.Item>
 
-             <Form.Item<ChangePasswordType>
+            <Form.Item<ChangePasswordType>
                 label="Comfirm password"
                 name="confirm_password"
                 rules={[{ required: true }]}
@@ -54,7 +62,7 @@ const ChangeUserPassword: React.FC<ChangeUserPasswordProps> = () => {
                 <Input.Password />
             </Form.Item>
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" loading={isPending}>
                     Change password
                 </Button>
             </Form.Item>

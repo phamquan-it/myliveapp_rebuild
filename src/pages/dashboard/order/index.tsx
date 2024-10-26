@@ -123,7 +123,7 @@ const Page = () => {
             key: "status",
             render: (text: string) => {
                 return (
-                    <div className="flex justify-center">
+                    <div className="">
                         <Tag
                             color={
                                 text == "Completed"
@@ -157,9 +157,9 @@ const Page = () => {
                 return (
                     <div className="flex justify-center" style={{
                         maxWidth: 500,
-                        margin:"auto",
-                        overflow:"hidden"
-                        }}>
+                        margin: "auto",
+                        overflow: "hidden"
+                    }}>
                         <TableAction
                             openState={openState}
                             viewDetail={<>view detail</>}

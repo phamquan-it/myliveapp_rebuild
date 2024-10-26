@@ -120,9 +120,10 @@ const Page = () => {
             </>)
         },
         {
-            title: t("end_time"),
-            dataIndex: "end_time",
-            key: "end_time",
+            title: t('end_time'),
+            dataIndex: 'end_at',
+            key: 'end_at',
+            render: (text: string) => text == undefined ? 'Not schedule' : dayjs(text).format('YYYY/MM/DD HH:mm')
         },
         {
             title: t("price"),
@@ -197,28 +198,29 @@ const Page = () => {
                     <SearchInput />
                     <Select
                         placeholder="Select platform"
-                    style={{
-                        width: 200
-                    }} options={platformQuery?.data?.data?.platforms.map((platform: any) => ({
-                        ...platform,
-                        label: (
-                            <div className="flex items-center gap-1">
-                                <Image width={20} src={platform.image} alt="image" />
-                                {platform?.name}
-                            </div>
-                        ),
-                        value: platform.id,
-                    }))} onChange={(e)=>{
-                        if(e == undefined) e=""
-                        syncObj({ ...router.query, platform: e })
-                    }} allowClear />
+                        style={{
+                            width: 200
+                        }} options={platformQuery?.data?.data?.platforms.map((platform: any) => ({
+                            ...platform,
+                            label: (
+                                <div className="flex items-center gap-1">
+                                    <Image width={20} src={platform.image} alt="image" />
+                                    {platform?.name}
+                                </div>
+                            ),
+                            value: platform.id,
+                        }))} onChange={(e) => {
+                            if (e == undefined) e = ""
+                            syncObj({ ...router.query, platform: e })
+                        }} allowClear />
                     <Select defaultValue={''}
                         options={[
                             { value: '', label: <span>{s('all')}</span> },
+                            { value: 'initalize', label: <span>{s('initalize')}</span> },
                             { value: 'scheduling', label: <span>{s('scheduling')}</span> },
-                            { value: 'starting', label: <span>{s('starting')}</span> },
                             { value: 'running', label: <span>{s('running')}</span> },
                             { value: 'stopped', label: <span>{s('stopped')}</span> },
+                            { value: 'error', label: <span>{s('error')}</span> },
                         ]} className='w-full mt-2 sm:mt-0 sm:w-48'
                         onChange={(e) => {
                             syncObj({ ...router.query, status: e })

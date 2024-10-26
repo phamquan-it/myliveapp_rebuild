@@ -1,6 +1,6 @@
 import axiosInstance from '@/apiClient/axiosConfig';
 import { DeleteFilled, DeleteOutlined } from '@ant-design/icons';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Popconfirm, PopconfirmProps, message } from 'antd';
 import React from 'react';
 interface DeletePlatformProps {
@@ -8,11 +8,13 @@ interface DeletePlatformProps {
 }
 
 const DeletePlatform: React.FC<DeletePlatformProps> = ({ id }) => {
+    const queryClient = useQueryClient()
 
     const { mutate, isPending } = useMutation({
         mutationKey: ['platform/delete' + id],
         mutationFn: () => axiosInstance.delete("/platform/delete/" + id),
         onSuccess: (res) => {
+            queryClient.invalidateQueries({ queryKey: ['platform'] })
             message.success("OK")
         },
         onError: (err) => {
