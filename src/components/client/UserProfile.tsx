@@ -2,7 +2,7 @@ import axiosClient from "@/apiClient/axiosClient";
 import axiosInstance from "@/apiClient/axiosConfig";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Form, Image, Input, Progress, Switch, Table } from "antd";
+import { Form, Image, Input, Progress, Switch, Table, message } from "antd";
 import Title from "antd/es/typography/Title";
 import { Button } from "antd/lib";
 import { getCookie } from "cookies-next";
@@ -13,95 +13,74 @@ import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useTranslations } from "use-intl";
 
-interface userProfileProps {
-    email: string;
-    name: string;
-    funds: string;
-    role: string;
-    active: number;
-}
 
-const UserProfile: React.FC<userProfileProps> = (props) => {
-    const token = getCookie("token");
+
+const UserProfile: React.FC = () => {
+
+    const { data, isFetching } = useQuery({
+        queryKey: ['userinfo'],
+        queryFn: () => axiosInstance.get("/auth/profile")
+    })
     const router = useRouter();
-    const onFinish = (values: any) => {
-        if (values.confirmpassword == values.newpassword) {
-            const user = data?.data?.data;
-            axiosInstance
-                .patch(
-                    `/user/update/${user.id}?language=en`,
-                    {
-                        ...user,
-                        old_password: values.oldpassword,
-                        new_password: values.newpassword,
-                    },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                )
-                .then((res) => {
-                    toast.success(res.data.message);
-                })
-                .catch((err) => {
-                    toast.error(err.message);
-                    console.log(err);
-                });
-        } else {
-            toast.error("Confirm password does not match");
+
+    const changeNameMutation = useMutation({
+        mutationKey: ['changeName'],
+        mutationFn: (name: string) => axiosInstance.patch('/users/change-name', { name }),
+        onSuccess: (res) => {
+            message.success("OK")
+        },
+        onError: (err) => {
+            message.error(err.message)
         }
+    })
+
+    const changePasswordMutation = useMutation({
+        mutationKey: ['changeName'],
+        mutationFn: (values: any) => axiosInstance.patch('users/change-password', {
+            password: values.oldpassword,
+            new_password: values.newpassword
+        }),
+        onSuccess: (res) => {
+            message.success("Change password OK")
+        },
+        onError: (err) => {
+            message.error(err.message)
+            console.error(err)
+        }
+    })
+
+    const onFinish = (values: any) => {
+        if (values.newpassword != values.confirmpassword) {
+            message.error("Comfirm password not OK")
+        }
+        changePasswordMutation.mutate(values)
     };
 
     const onFinishFailed = (errorInfo: any) => {
-        console.log("Failed:", errorInfo);
     };
-    const { data, isSuccess } = useQuery({
-        queryKey: ["userinfo"],
-        queryFn: () =>
-            axiosInstance.get("/user/info?language=en", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }),
-    });
+
     const t = useTranslations("UserProfile");
+
+    const [form] = Form.useForm()
+
+    useEffect(() => {
+        form.setFieldValue('name', data?.data?.name)
+    }, [data, form])
+
     return (
         <>
             <div className="w-10/12 grid md:grid-cols-2 m-auto gap-9 sm:shadow-md p-4 sm:rounded-md sm:border">
                 <div>
                     <ToastContainer />
                     <Form
+                        form={form}
+                        onFinish={(values: { name: string }) => {
+                            changeNameMutation.mutate(values.name)
+                        }}
                         name="basic"
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 16 }}
                         labelAlign="left"
-                        initialValues={{ name: data?.data?.data?.name }}
-                        onFinish={(value) => {
-                            // console.log(value.name);
-
-                            const user = data?.data?.data;
-                            axiosClient
-                                .patch(
-                                    `/user/update/${user.id}?language=en`,
-                                    {
-                                        ...user,
-                                        name: value.name,
-                                    },
-                                    {
-                                        headers: {
-                                            Authorization: `Bearer ${token}`,
-                                        },
-                                    }
-                                )
-                                .then((res) => {
-                                    toast.success(res.data.message);
-                                })
-                                .catch((err) => {
-                                    toast.error(err.message);
-                                    console.log(err);
-                                });
-                        }}
                     >
                         <Form.Item
                             label={<span className="font-medium">{t("name")}</span>}
@@ -123,7 +102,6 @@ const UserProfile: React.FC<userProfileProps> = (props) => {
                             </Button>
                         </Form.Item>
                     </Form>
-
                 </div>
 
                 <Form
