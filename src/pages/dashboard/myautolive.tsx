@@ -145,13 +145,6 @@ const Page = () => {
             render: (text: string) => (
                 <>{dayjs(text).format("DD/MM/YYYY")}</>
             ),
-
-        },
-        {
-            title: ('Downloaded'),
-            dataIndex: 'downloaded',
-            key: 'downloaded',
-            render: (downloaded: boolean) => (downloaded) ? 'Yes' : 'No'
         }
     ];
 
@@ -213,17 +206,17 @@ const Page = () => {
                             if (e == undefined) e = ""
                             syncObj({ ...router.query, platform: e })
                         }} allowClear />
-                    <Select defaultValue={''}
+                    <Select allowClear
                         options={[
-                            { value: '', label: <span>{s('all')}</span> },
                             { value: 'initalize', label: <span>{s('initalize')}</span> },
                             { value: 'scheduling', label: <span>{s('scheduling')}</span> },
                             { value: 'running', label: <span>{s('running')}</span> },
                             { value: 'stopped', label: <span>{s('stopped')}</span> },
                             { value: 'error', label: <span>{s('error')}</span> },
                         ]} className='w-full mt-2 sm:mt-0 sm:w-48'
+                        placeholder="Select status"
                         onChange={(e) => {
-                            syncObj({ ...router.query, status: e })
+                            syncObj({ ...router.query, status: e ?? '' })
                         }}
                     />
                 </div>

@@ -11,12 +11,13 @@ import UserSelect from '@/components/general/user-select';
 import VpsSelect from '@/components/general/vps-select';
 import CreateStreamByAdmin, { usePlatformData } from '@/components/live-streams/CreateStreamByAdmin';
 import SelectDateForFilter from '@/components/live-streams/SelectDateForFilter';
+import ViewStreamLog from '@/components/live-streams/ViewStreamLog';
 import { pagination } from '@/helpers/pagination';
 import syncObjectToUrl from '@/helpers/syncObjectToUrl';
 import getObjecFormUrlParameters from '@/hooks/getObjectFormParameter';
 import { SearchOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Input, Select, Table, Image } from 'antd';
+import { Button, Input, Select, Table, Image, Checkbox } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { ColumnType } from 'antd/lib/table';
 import dayjs from 'dayjs';
@@ -92,6 +93,7 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             title: ('Loop'),
             dataIndex: 'loop',
             key: 'loop',
+            render: (loop) => <Checkbox defaultChecked={loop == "infinity"}></Checkbox>
         },
         {
             title: t('status'),
@@ -117,7 +119,12 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             key: 'createAt',
             render: (text: string) => dayjs(text).format('YYYY/MM/DD')
         },
-
+        {
+            title: t('action'),
+            dataIndex: 'id',
+            key: 'id',
+            render: (text: string) => <ViewStreamLog id={text + ''} />
+        }
     ];
     const syncObj = syncObjectToUrl(router)
     const handleInput = debounce((e) => {
@@ -147,9 +154,10 @@ const Page: NextPage<PageProps> = ({ modal }) => {
                 />
                 <SelectVps />
                 <UserSelect />
-                <Select defaultValue={''}
+                <Select
+                    placeholder="Select status"
+                    allowClear
                     options={[
-                        { value: '', label: <span>{s('all')}</span> },
                         { value: 'scheduling', label: <span>{s('scheduling')}</span> },
                         { value: 'initalize', label: <span>{s('initalize')}</span> },
                         { value: 'running', label: <span>{s('running')}</span> },
@@ -157,7 +165,7 @@ const Page: NextPage<PageProps> = ({ modal }) => {
                         { value: 'error', label: <span>{s('error')}</span> },
                     ]} className='w-full mt-2 sm:mt-0 sm:w-48'
                     onChange={(e) => {
-                        syncObj({ ...router.query, status: e })
+                        syncObj({ ...router.query, status: e ?? '' })
                     }}
                 />
                 <SelectDateForFilter />
@@ -186,11 +194,6 @@ const Page: NextPage<PageProps> = ({ modal }) => {
                 syncObj({
                     pageIndex: pagination.current,
                 })
-            }}
-            expandable={{
-                expandedRowRender: (record) => <p style={{ margin: 0 }}>
-                    <StreamLog stream_id={record.id + ''} />
-                </p>,
             }}
         />
     </>

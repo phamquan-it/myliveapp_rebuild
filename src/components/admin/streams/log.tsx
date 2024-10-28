@@ -13,7 +13,7 @@ const StreamLog: React.FC<StreamLogProps> = ({ stream_id }) => {
     })
 
     return <>
-        <Input.TextArea rows={5}  value={data?.data} readOnly/>
+        <Input.TextArea rows={15}  value={data?.data} readOnly/>
     </>
 
 }
