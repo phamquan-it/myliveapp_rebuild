@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import axiosInstance from "../axiosConfig";
+import { getMaxResolutionFormat } from "@/helpers/youtubefilterlink";
 
 const useCheckLink = (form: any, setLinkState: React.Dispatch<React.SetStateAction<boolean>>) => {
     const token = getCookie('token');
@@ -37,8 +38,8 @@ const useGoogleDriveCheckLink = (form: any, setLinkState: React.Dispatch<React.S
         onSuccess: (res) => {
             const { width, height } = res.data?.videoMediaMetadata
             const resolution = `${width}x${height}`;
+            console.log(resolution)
             setLinkState(true);
-            form.setFieldsValue({ resolution });
         },
         onError: (err) => {
             setLinkState(false);
@@ -58,7 +59,7 @@ const useYoutubeCheckLink = (form: any, setLinkState: React.Dispatch<React.SetSt
             }),
         onSuccess: (res) => {
             setLinkState(true);
-            console.log(res.data)
+            console.log(res.data?.data)
         },
         onError: (err) => {
             setLinkState(false);

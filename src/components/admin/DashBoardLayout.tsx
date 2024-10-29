@@ -44,6 +44,7 @@ import Link from "next/link";
 import { DashboardRouter } from "@/enums/router/dashboard";
 import CreateStream from "@/pages/CreateStream";
 import NewStream from "../autolive/new-streams";
+import NewOrder from "../live-streams/new-order";
 
 const { Header, Sider, Content } = Layout;
 
@@ -59,7 +60,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             setRole(data?.role);
         } catch (error) { }
     }, []);
-
+    const [isModalOpen, setIsModalOpen] = useState(false)
     const t = useTranslations("DashboardMenu");
 
     const items_menu = [
@@ -235,13 +236,18 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                                 </div>
                             </div>
                             <div className="mx-3 grid gap-2">
+                                <Modal title="New order" open={isModalOpen} onCancel={() => {
+                                    setIsModalOpen(false)
+                                }} footer={[]} width={1000}>
+                                    <NewOrder />
+                                </Modal>
                                 <Button
                                     type="primary"
                                     className="!h-10"
                                     style={{ fontSize: "small" }}
                                     icon={<PlusCircleFilled />}
                                     onClick={() => {
-                                        router.push("/dashboard/order/new-order");
+                                        setIsModalOpen(true)
                                     }}
                                 >
                                     {t("neworder")}

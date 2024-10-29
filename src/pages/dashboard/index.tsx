@@ -37,41 +37,7 @@ import axiosInstance from "@/apiClient/axiosConfig";
 
 const Page = () => {
     const t = useTranslations("MyLanguage");
-    const data = [
-        {
-            title: "Deposit from Bank",
-            description: "5 march, 18:33 ",
-        },
-        {
-            title: "Ant Design Title 2",
-            description: "5 march, 18:33 ",
-        },
-        {
-            title: "Ant Design Title 3",
-            description: "5 march, 18:33 ",
-        },
-        {
-            title: "Ant Design Title 4",
-            description: "5 march, 18:33 ",
-        },
-    ];
-    const dataSource = [
-        {
-            key: "1",
-            name: "Mike",
-            age: 32,
-            address: "10 Downing Street",
-        },
-        {
-            key: "2",
-            name: "John",
-            age: 42,
-            address: "10 Downing Street",
-        },
-    ];
-
-
-    const columns: any[] = [
+      const columns: any[] = [
         {
             title: "ID Orders",
             dataIndex: "id",
