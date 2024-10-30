@@ -9,20 +9,18 @@ interface LiveSpeedProps {
 const LiveSpeed: React.FC<LiveSpeedProps> = ({ stream }) => {
     const [streamData, setStreamData] = useState(stream)
     const [liveLiveInfo, setLiveInfo] = useState<any>()
-        useEffect(() => {
-            console.log("stream", stream.id)
-            const newSocket = io('https://api.golive365.top/live-info'); // replace with your server URL
+    useEffect(() => {
+        console.log("stream", stream.id)
+        const newSocket = io('https://api.golive365.top/live-info'); // replace with your server URL
         setInterval(() => {
-            newSocket.emit("message",{
+            newSocket.emit("message", {
                 stream_id: streamData.id,
                 ipv4: streamData.ipv4
-            } )
+            })
         }, 500)
-        newSocket.on('message'+stream.id, message => {
+        newSocket.on('message' + stream.id, message => {
             setLiveInfo(message)
         })
-
-
         return () => {
             newSocket.close();
         }

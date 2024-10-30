@@ -112,11 +112,11 @@ const Page = () => {
         },
         {
             title: t("start_time"),
-            dataIndex: "start_time",
-            key: "start_time",
+            dataIndex: "start_at",
+            key: "start_at",
             ellipsis: true,
-            render: () => (<>
-                <CountdownTimer />
+            render: (text) => (<>
+                <CountdownTimer startTime={text} />
             </>)
         },
         {
@@ -225,6 +225,7 @@ const Page = () => {
                 rowSelection={{
                     type: 'checkbox',
                     ...rowSelection,
+
                 }}
                 loading={isFetching}
                 onChange={(pagination) => {

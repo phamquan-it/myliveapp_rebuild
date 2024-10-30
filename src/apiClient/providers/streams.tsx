@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import axiosInstance from "../axiosConfig";
 import { getMaxResolutionFormat } from "@/helpers/youtubefilterlink";
+import { message } from "antd";
 
 const useCheckLink = (form: any, setLinkState: React.Dispatch<React.SetStateAction<boolean>>) => {
     const token = getCookie('token');
@@ -16,11 +17,9 @@ const useCheckLink = (form: any, setLinkState: React.Dispatch<React.SetStateActi
         onSuccess: (res) => {
             const resolution = `${res.data[0].width}x${res.data[0].height}`;
             setLinkState(true);
-            form.setFieldsValue({ resolution });
         },
         onError: () => {
             setLinkState(false);
-            form.setFieldsValue({ resolution: '' });
         },
     });
 };

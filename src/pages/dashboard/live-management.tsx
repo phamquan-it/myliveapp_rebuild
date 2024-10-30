@@ -1,5 +1,6 @@
 import { ActivityStream } from '@/@type/api_object';
 import axiosInstance from '@/apiClient/axiosConfig';
+import DateFilter from '@/components/DateFilter';
 import CreateNewStream from '@/components/admin/create-new-stream';
 import StreamLog from '@/components/admin/streams/log';
 import DeleteStream from '@/components/autolive/DeleteStream';
@@ -39,7 +40,7 @@ const Page: NextPage<PageProps> = ({ modal }) => {
     const [isReady, setIsReady] = useState(false)
 
     const { data, isFetching } = useQuery({
-        queryKey: ['activityStream', router.asPath],
+        queryKey: ['livestreams', router.asPath],
         queryFn: () => axiosInstance.get("/activity-stream?language=en", {
             params: {
                 keyword: router.query.keyword ?? '',
@@ -65,12 +66,6 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             dataIndex: 'email',
             key: 'email',
             render: (text: string, record, index) => record?.user?.email
-        },
-        {
-            title: ('Slug'),
-            dataIndex: 'hostname',
-            key: 'hostname',
-            render: (text, record) => record?.vps?.hostname,
         },
         {
             title: ('ID'),
@@ -168,7 +163,7 @@ const Page: NextPage<PageProps> = ({ modal }) => {
                         syncObj({ ...router.query, status: e ?? '' })
                     }}
                 />
-                <SelectDateForFilter />
+                <DateFilter />
             </div>
         </div>
 

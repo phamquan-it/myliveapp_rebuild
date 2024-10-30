@@ -2,7 +2,7 @@ import axiosInstance from '@/apiClient/axiosConfig';
 import { useCheckLink, useGoogleDriveCheckLink, useYoutubeCheckLink } from '@/apiClient/providers/streams';
 import PlatformSelect from '@/components/admin/PlatformSelect';
 import { CheckCircleOutlined, UploadOutlined } from '@ant-design/icons';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button, Checkbox, DatePicker, Form, FormProps, Input, Select, Space, Table, Upload, UploadProps, Image, message } from 'antd';
 import form from 'antd/es/form';
 import Title from 'antd/lib/typography/Title';
@@ -16,13 +16,23 @@ import { MdOutlineErrorOutline } from 'react-icons/md';
 import { getGoogleDriveKey } from '@/utils/driveLinkConverter';
 import { getManifestUrl, getManifestUrls, getMaxResolutionFormat } from '@/helpers/youtubefilterlink';
 import { StreamType } from '@/@type/CreateStreamType';
-import { customUploadFile } from '@/pages/uploadvideotest';
+import { RcFile } from 'antd/lib/upload';
+import { handleUploadFile } from '../../../handleUploadFile';
+import { getVideoProperties } from '@/helpers/getVideoInfo';
 const { RangePicker } = DatePicker;
 
 
 const NewOrder = () => {
+    const queryClient = useQueryClient()
+    const [videoInfo, setVideoInfo] = useState({
+        resolution: '',
+        duration: '',
+        ext: '',
+        size: ''
+    })
+    const [fileList, setFileList] = useState<RcFile[]>([]);
 
-
+    const [isUploading, setIsUploading] = useState(false)
     const [linkState, setLinkState] = useState(false)
     const checkLink = useCheckLink(form, setLinkState);
     const googleCheckLink = useGoogleDriveCheckLink(form, setLinkState)
@@ -42,10 +52,49 @@ const NewOrder = () => {
     const onFinishFailed: FormProps<StreamType>['onFinishFailed'] = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
-    const uploadProps: UploadProps = {
-        directory: false, // Allows folder selection
+
+    const props: UploadProps = {
         accept: ".mp4",
         maxCount: 1,
+        onRemove: (file: any) => {
+            setVideoInfo({
+                duration: '',
+                ext: '',
+                resolution: '',
+                size: ''
+            })
+            setFileList((prevFileList) => {
+                const index = prevFileList.indexOf(file);
+                const newFileList = prevFileList.slice();
+                newFileList.splice(index, 1);
+                return newFileList;
+            });
+        },
+        beforeUpload: async (file: RcFile) => {
+            const { width, height, duration } = await getVideoProperties(file);
+            const resolution = `${width}x${height}`;
+            setVideoInfo({
+                duration: duration + '',
+                resolution,
+                ext: file.type,
+                size: file.size + ''
+            })
+            try {
+                setLinkState(true);
+            } catch (error) {
+                console.error('Error getting video resolution:', error);
+            }
+            if (fileList.length < 1) {
+                setFileList([...fileList, file]);
+            }
+            return false; // Prevent automatic upload by Ant Design
+        },
+        onChange: () => { },
+        fileList,
+    };
+
+    const uploadProps: UploadProps = {
+        directory: false, // Allows folder selection
         beforeUpload: (file: any) => {
             const isMp4OrMov = file.type === 'video/mp4' || file.type === 'video/quicktime';
             if (!isMp4OrMov) {
@@ -57,9 +106,10 @@ const NewOrder = () => {
     const createStreamMutation = useMutation({
         mutationKey: ['createStream'],
         mutationFn: (data: StreamType) =>
-            axiosInstance.post('/autolive-control/create-new-stream', data),
+            axiosInstance.post('/autolive-control/create-new-stream', { ...data, resolution: videoInfo.resolution + '', duration: videoInfo.duration + '' }),
         onSuccess: () => {
             message.success("OK")
+            queryClient.invalidateQueries({ queryKey: ['activityStream', 'livestreams'] })
         },
         onError: (err) => {
             message.error("Err")
@@ -67,46 +117,79 @@ const NewOrder = () => {
     })
 
     const onFinish: FormProps<StreamType>['onFinish'] = async (values) => {
-        console.log(values)
-        if (sourceLink === SourceLink.UPLOAD) {
-            const fileList = values.file.fileList;
-            const key = await customUploadFile(fileList, (isUploading:boolean) => {
-                console.log(`Uploading: ${isUploading}`);
-            });
-        }
 
-        return
-        //  values.download_on = sourceLink;
-        //  const currentDate = new Date();
-        //  const timezoneOffsetInMinutes = currentDate.getTimezoneOffset();
-        //  const timezoneOffsetInHours = -(timezoneOffsetInMinutes / 60);
-        //  values.loop = (loop) ? "infinity" : "only"
-        //  if (values.schedule != undefined && useCron) {
-        //      const start_time = moment(values.schedule[0].$d).subtract(timezoneOffsetInHours, 'hour').format('YYYY-MM-DDTHH:mm:ss') + "Z";
-        //      const end_time = moment(values.schedule[1].$d).subtract(timezoneOffsetInHours, 'hour').format('YYYY-MM-DDTHH:mm:ss') + "Z";
-        //      values.startTime = start_time;
-        //      values.endTime = end_time;
-        //  }
-        //  switch (sourceLink) {
-        //      case SourceLink.GOOGLE_DRIVE:
-        //          values.source_link = getGoogleDriveKey(values.source_link + '') + ''
-        //          break;
-        //      case SourceLink.YOUTUBE:
-        //          values.source_link = getManifestUrl(youtubeCheckLink?.data?.data);
-        //          break
-        //      case SourceLink.UPLOAD:
-        //          values.source_link = ''
-        //          break;
-        //  }
-        //  await createStreamMutation.mutate(values)
-        //  console.log('Success:', values);
+        values.download_on = sourceLink;
+        const currentDate = new Date();
+        const timezoneOffsetInMinutes = currentDate.getTimezoneOffset();
+        const timezoneOffsetInHours = -(timezoneOffsetInMinutes / 60);
+        values.loop = (loop) ? "infinity" : "only"
+        if (values.schedule != undefined && useCron) {
+            const start_time = moment(values.schedule[0].$d).subtract(timezoneOffsetInHours, 'hour').format('YYYY-MM-DDTHH:mm:ss') + "Z";
+            const end_time = moment(values.schedule[1].$d).subtract(timezoneOffsetInHours, 'hour').format('YYYY-MM-DDTHH:mm:ss') + "Z";
+            values.startTime = start_time;
+            values.endTime = end_time;
+        }
+        switch (sourceLink) {
+            case SourceLink.GOOGLE_DRIVE:
+                values.source_link = getGoogleDriveKey(values.source_link + '') + ''
+                break;
+            case SourceLink.YOUTUBE:
+                values.source_link = getManifestUrl(youtubeCheckLink?.data?.data);
+                break
+            case SourceLink.UPLOAD:
+                console.log(values)
+                const key = await customUploadFile(fileList, (isUploading: boolean) => {
+                    setIsUploading(isUploading)
+                    console.log(`Uploading: ${isUploading}`);
+                });
+                values.source_link = key + ''
+                break;
+        }
+        console.log(values)
+        await createStreamMutation.mutate(values)
+        console.log('Success:', values);
     };
     useEffect(() => {
         const maxResolutionFormat = getMaxResolutionFormat(youtubeCheckLink?.data?.data);
         const manifestUrl: any = getManifestUrl(youtubeCheckLink?.data?.data);
-        console.log(maxResolutionFormat)
         console.log(manifestUrl)
+        console.log(maxResolutionFormat)
+        setVideoInfo({
+            resolution: `${maxResolutionFormat?.width ?? ''} x ${maxResolutionFormat?.height ?? ''}`,
+            duration: 'Unknown',
+            size: maxResolutionFormat?.filesize,
+            ext: maxResolutionFormat?.ext
+        })
     }, [youtubeCheckLink.data])
+
+    useEffect(() => {
+        const videoData = googleCheckLink?.data?.data
+
+        console.log(
+            videoData
+        )
+        setVideoInfo({
+            duration: videoData?.videoMediaMetadata?.durationMillis,
+            resolution: `${videoData?.videoMediaMetadata?.width ?? ''}x${videoData?.videoMediaMetadata?.height ?? ''}`,
+            ext: videoData?.mimeType,
+            size: videoData?.size,
+        })
+    }, [googleCheckLink.data])
+
+    useEffect(() => {
+        const vidInfo = checkLink.data?.data[0]
+        console.log(
+            checkLink.data?.data[1]
+        )
+        setVideoInfo({
+            duration: vidInfo?.duration ?? '',
+            ext: "",
+            resolution: `${vidInfo?.width ?? ''}x${vidInfo?.height ?? ''}`,
+            size: ""
+        })
+    }, [checkLink.data])
+
+
 
     const platformquery = usePlatformData();
     const [sourceLink, setSourceLink] = useState(SourceLink.GOOGLE_DRIVE)
@@ -160,6 +243,9 @@ const NewOrder = () => {
                                     case SourceLink.YOUTUBE:
                                         youtubeCheckLink.mutate(e.target.value)
                                         break;
+                                    case SourceLink.DOWNLOAD_LINK:
+                                        checkLink.mutate(e.target.value)
+                                        break;
                                 }
 
                             }}
@@ -174,7 +260,7 @@ const NewOrder = () => {
                                         name="file"
                                         wrapperCol={{ offset: 4, span: 20 }}
                                     >
-                                        <Upload {...uploadProps}>
+                                        <Upload {...props}>
                                             <Button icon={<UploadOutlined />}>Click to Upload</Button>
                                         </Upload>
                                     </Form.Item>
@@ -236,6 +322,7 @@ const NewOrder = () => {
                                     setUseCron(!useCron)
                                 }} value="loop">Schedule</Checkbox>
                             </Form.Item>
+
                         </Space>
                     </Form.Item>
                     {(useCron) ?
@@ -250,18 +337,26 @@ const NewOrder = () => {
                     }
                     <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
                         <div className="flex gap-2">
-                            <Button type="primary" htmlType="submit" loading={createStreamMutation.isPending}>
+                            <Button type="primary" htmlType="submit" loading={createStreamMutation.isPending || isUploading}>
                                 Create
                             </Button>
                             <Button htmlType="reset">
                                 Reset
                             </Button>
+                            <Form.Item>
+                                {isUploading ? "Uploading..." : ''}
+                            </Form.Item>
                         </div>
                     </Form.Item>
                 </Form>
             </div>
             <div className="grid grid-rows-2 gap-3">
-                <Input.TextArea readOnly />
+                <Input.TextArea readOnly value={`
+Resolution: ${videoInfo.resolution}
+Fize size: ${videoInfo.size ?? ''}
+Duration: ${videoInfo.duration ?? ''}
+Extention: ${videoInfo.ext ?? ''}
+                    `} />
                 <Table showHeader={false} dataSource={dataSource} columns={columns} pagination={false} />
             </div>
         </div>
@@ -306,12 +401,12 @@ const dataSource = [
     },
     {
         key: '2',
-        name: 'Tax',
-        age: 42,
+        name: 'Exchange rate',
+        age: 24000,
     },
     {
         key: '3',
-        name: 'Total',
+        name: 'Total(VND)',
         age: 42,
     },
 ];
@@ -329,4 +424,27 @@ const columns = [
     },
 ];
 
+export const customUploadFile = async (fileList: any, setUploading: any) => {
+    if (fileList.length === 0) {
+        message.error('No file selected');
+        return;
+    }
 
+    const file = fileList[0]; // Taking the first file
+
+    setUploading(true);
+
+    try {
+        const response = await handleUploadFile(file, '/video-uploads');
+        if (response.key) {
+            message.success('Upload successful!');
+            return response.key
+        } else {
+            message.error('Upload failed');
+        }
+    } catch (error) {
+        message.error('Error uploading video');
+    } finally {
+        setUploading(false);
+    }
+}
