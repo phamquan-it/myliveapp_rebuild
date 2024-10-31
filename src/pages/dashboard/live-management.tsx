@@ -73,6 +73,13 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             key: 'id'
         },
         {
+            title: ('Loop'),
+            dataIndex: 'loop',
+            key: 'loop',
+            render: (loop) => <Checkbox defaultChecked={loop == "infinity"}></Checkbox>
+        },
+
+        {
             title: d('platform'),
             dataIndex: 'platform',
             key: 'platform',
@@ -83,12 +90,6 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             dataIndex: 'downloaded',
             key: 'downloaded',
             render: (downloaded: boolean) => (downloaded) ? 'Yes' : 'No'
-        },
-        {
-            title: ('Loop'),
-            dataIndex: 'loop',
-            key: 'loop',
-            render: (loop) => <Checkbox defaultChecked={loop == "infinity"}></Checkbox>
         },
         {
             title: t('status'),
@@ -114,6 +115,7 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             key: 'createAt',
             render: (text: string) => dayjs(text).format('YYYY/MM/DD')
         },
+
         {
             title: t('action'),
             dataIndex: 'id',

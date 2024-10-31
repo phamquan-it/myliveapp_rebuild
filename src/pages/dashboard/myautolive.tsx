@@ -29,6 +29,8 @@ import {
     TablePaginationConfig,
     Tag,
     Image,
+    Spin,
+    Tooltip,
 } from "antd";
 import EditLiveStreams from "@/components/live-streams/EditLiveStreams";
 import LiveState from "@/components/client/LiveState";
@@ -37,7 +39,7 @@ import { getCookie } from "cookies-next";
 import { ColumnType, ColumnsType } from "antd/es/table";
 import StreamState, { StreamType } from "@/components/autolive/StreamState";
 import StreamAction from "@/components/autolive/stream-action";
-import { DeleteFilled, DesktopOutlined, StopOutlined } from "@ant-design/icons";
+import { DeleteFilled, DesktopOutlined, DownloadOutlined, StopOutlined } from "@ant-design/icons";
 import SearchInput from "@/components/filters/SearchInput";
 import StatisticStatus from "@/components/admin/order/statistic-status";
 import { IoPlay } from "react-icons/io5";
@@ -65,6 +67,7 @@ export interface StreamDataType {
     userId?: number
     vps?: string
     vpsId?: number
+    downloaded?: boolean
 }
 const Page = () => {
 
@@ -135,7 +138,10 @@ const Page = () => {
             dataIndex: "status",
             key: "status",
             render: (text: string, record) => (
-                <StreamState state={text} />
+                record.downloaded ? <StreamState state={text} /> :
+                    <Tooltip title="Downloading">
+                        <Spin size="small" />
+                    </Tooltip>
             ),
         },
         {
