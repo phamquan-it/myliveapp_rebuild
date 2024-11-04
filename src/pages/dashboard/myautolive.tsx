@@ -145,13 +145,11 @@ const Page = () => {
             ),
         },
         {
-            title: t("createAt"),
-            dataIndex: "createdAt",
-            key: "createdAt",
-            render: (text: string) => (
-                <>{dayjs(text).format("DD/MM/YYYY")}</>
-            ),
-        }
+            title: t('createAt'),
+            dataIndex: 'createAt',
+            key: 'createAt',
+            render: (text: string) => dayjs(text).format('YYYY/MM/DD')
+        },
     ];
 
     const token = getCookie('token')

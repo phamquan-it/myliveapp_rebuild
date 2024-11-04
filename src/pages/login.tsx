@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useEffect } from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Checkbox } from "antd";
 import Title from "antd/es/typography/Title";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
@@ -47,53 +47,65 @@ const LoginForm = () => {
 
 
     return (
-        <>
-            <FormLayout>
+        <div className="h-screen flex justify-center items-center bg-slate-100">
+            <div className="w-full md:w1/2 lg:w-1/3 p-3 border shadow rounded bg-white">
                 <Form
-                    className="w-full py-5 pe-3"
+                    className="py-3 pe-3"
                     name="basic"
                     initialValues={{ remember: true }}
                     {...layout}
                     onFinish={onFinish}
                 >
-                    <Title level={3} className="text-center !pt-4">
-                        {t("login")}
-                    </Title>
+
+                    <div className="px-2 pb-3">
+                        <Title level={3} className="!pt-4 !mb-1">
+                            LiveStreams
+                        </Title>
+                        <p className="text-slate-700">Welcome to livestreams</p>
+                    </div>
                     <div className="px-2">
                         <Form.Item<FieldType>
-                            label={t("email")}
                             name="email"
                             rules={[{ required: true, message: t("requiredEmail") }]}
                         >
-                            <Input />
+                            <Input className="py-2" placeholder="Enter email" />
                         </Form.Item>
 
                         <Form.Item<FieldType>
-                            label={t("password")}
                             name="password"
                             rules={[
                                 { required: true, message: t("requiredpassword") },
                                 {
-                                    min: 5,
+                                    min: 8,
                                     message: t("min5char"),
                                 },
                             ]}
                         >
-                            <Input.Password />
+                            <Input.Password className="py-2" placeholder="Enter password" />
                         </Form.Item>
-
+                        <div className="flex justify-between">
+                            <Form.Item
+                                className="!mb-0"
+                                rules={[{ required: true }]}
+                            >
+                                <Checkbox>Remenber me</Checkbox>
+                            </Form.Item>
+                            <Form.Item
+                                className="!mb-0"
+                            >
+                                <Link href="forgot-password">Forgot password?</Link>
+                            </Form.Item>
+                        </div>
                         <Form.Item className="!mt-5">
                             <Button
                                 type="primary"
                                 block
+                                size="large"
                                 htmlType="submit"
                                 loading={isPending}
                             >
                                 {t("login")}
                             </Button>
-                            <div className="mt-3">
-                                <Link href={"/"}>{t("gotohomepage")}</Link>
-                            </div>
                             <p className="text-center flex items-center mt-3">
                                 {t("donothaveanacount")}
                                 <Button
@@ -109,8 +121,8 @@ const LoginForm = () => {
                         </Form.Item>
                     </div>
                 </Form>
-            </FormLayout>
-        </>
+            </div>
+        </div>
     );
 };
 export default LoginForm;

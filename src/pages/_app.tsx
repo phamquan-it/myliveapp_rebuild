@@ -28,9 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
         setIsReady(router.isReady)
     }, [router])
     const path: string = router.asPath;
-
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const Layout = !path.includes("/dashboard") ? PageLayout : DashBoardLayout;
 
     if (!isReady) return (<div className="h-screen w-screen flex justify-center items-center"><Spin /> </div>)
     return (
@@ -48,10 +46,8 @@ export default function App({ Component, pageProps }: AppProps) {
                         theme={theme}
                         locale={router.locale == "vi" ? vi : en}
                     >
-                        <Layout>
-                            <NextNProgress color="#29D" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} options={{ showSpinner: false }} />
-                            <Component {...pageProps} />
-                        </Layout>
+                        <NextNProgress color="#29D" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} options={{ showSpinner: false }} />
+                        <Component {...pageProps} />
                     </ConfigProvider>
                 </ReactQueryProvider>
             </ReduxProvider>

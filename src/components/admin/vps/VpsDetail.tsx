@@ -99,7 +99,7 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug }) => {
             <Button type="default" onClick={() => setIsModalOpen(true)} icon={<EyeFilled />}></Button>
             <Modal destroyOnClose={true} width={1300} title="Vps detail" open={isModalOpen} onCancel={() => {
                 setIsModalOpen(false);
-            }}>
+            }} footer={[]}>
                 <div className="grid grid-cols-4 gap-2 pb-8">
                     <div>
                         <Title level={5} className="text-center border-b">Vps info</Title>

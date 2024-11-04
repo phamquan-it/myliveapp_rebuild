@@ -1,7 +1,7 @@
-export enum DashboardRouter{
+export enum DashboardRouter {
     HOME = '/dashboard',
     SERVICE = '/dashboard/service',
-    REFUND  = '/dashboard/refund',
+    REFUND = '/dashboard/refund',
     CASHFLOW = '/dashboard/cashflow',
     MYAUTOLIVE = '/dashboard/myautolive',
     PAYMENT_HISTORY = '/dashboard/payment/history',
@@ -11,6 +11,7 @@ export enum DashboardRouter{
     USER = '/dashboard/user',
     VPS = '/dashboard/vps',
     LIVESTREAM = '/dashboard/live-management',
+    ADVANDED_CONFIG = '/dashboard/advanced-config',
     ACCOUNT_SCRIPT = '/dashboard/account-script',
     SCRIPT_LIBRARY = '/dashboard/script_library',
     USER_PROFILE = '/dashboard/user/info',

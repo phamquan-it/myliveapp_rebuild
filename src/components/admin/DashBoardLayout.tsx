@@ -45,6 +45,7 @@ import { DashboardRouter } from "@/enums/router/dashboard";
 import CreateStream from "@/pages/CreateStream";
 import NewStream from "../autolive/new-streams";
 import NewOrder from "../live-streams/new-order";
+import { VscSettings } from "react-icons/vsc";
 
 const { Header, Sider, Content } = Layout;
 
@@ -117,6 +118,12 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
             key: DashboardRouter.VPS,
             icon: <CloudServerOutlined />,
             label: <Link href={DashboardRouter.VPS}>{('Vps')}</Link>,
+            role: "admin",
+        },
+        {
+            key: DashboardRouter.ADVANDED_CONFIG,
+            icon: <VscSettings />,
+            label: <Link href={DashboardRouter.ADVANDED_CONFIG}>{('AdvancedConfig')}</Link>,
             role: "admin",
         },
         {
