@@ -8,7 +8,9 @@ const MyDocument = () => {
   return (
     <Html lang="en">
       <Head />
-      <body className="">
+        <body style={{
+            overflow:"hidden"
+            }}>
         <Main />
         <NextScript />
       </body>

@@ -8,7 +8,7 @@ import { pagination } from '@/helpers/pagination';
 import syncObjectToUrl from '@/helpers/syncObjectToUrl';
 import getObjecFormUrlParameters from '@/hooks/getObjectFormParameter';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Input, Spin, Table, Image } from 'antd';
+import { Button, Input, Spin, Table, Image, ConfigProvider } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { getCookie } from 'cookies-next';
 import dayjs from 'dayjs';
@@ -95,27 +95,36 @@ const Page = () => {
             </div>
             <CreatePlatform />
         </div>
-        <Table
-            loading={isFetching}
-            scroll={{
-                x: 300
-            }}
-            onChange={(pagination) => {
-                syncObj({
-                    pageIndex: pagination.current,
-                })
-            }}
-            pagination={{
-                total: data?.data?.total,
-                pageSize: pageSize,
-                current: pageIndex
-            }}
-            dataSource={data?.data?.platforms
-                .map((platform: any, index: number) => ({
-                    ...platform,
-                    key: pageIndex * pageSize + (index + 1) - pageSize,
-                }))}
-            columns={columns} />
+        <ConfigProvider theme={{
+            components:{
+                Table:{
+                    cellPaddingBlock:2
+            }
+            }
+            }}>
+            <Table
+                loading={isFetching}
+                scroll={{
+                    x: 300
+                }}
+                onChange={(pagination) => {
+                    syncObj({
+                        pageIndex: pagination.current,
+                    })
+                }}
+                pagination={{
+                    total: data?.data?.total,
+                    pageSize: pageSize,
+                    current: pageIndex
+                }}
+                dataSource={data?.data?.platforms
+                    .map((platform: any, index: number) => ({
+                        ...platform,
+                        key: pageIndex * pageSize + (index + 1) - pageSize,
+                    }))}
+                columns={columns} />
+
+        </ConfigProvider>
     </>
 }
 

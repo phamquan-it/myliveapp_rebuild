@@ -27,7 +27,9 @@ const UserTable: React.FC<UserTableProps> = () => {
 
     const columns: ColumnsType<User> = [
         {
-            title: 'Name',
+            title: <div className="py-2">
+                Name
+            </div>,
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => (<>

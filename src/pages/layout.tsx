@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IoIosLogOut } from "react-icons/io";
 import { BsFilterLeft } from "react-icons/bs";
-import { Button, ConfigProvider, Flex, Layout, Menu, MenuProps, Image, Avatar, Table, Dropdown, Input } from 'antd';
-import { AppstoreOutlined, FundOutlined, HistoryOutlined, HomeFilled, MailOutlined, PlusOutlined, SettingOutlined, SignalFilled, UserOutlined, WindowsFilled } from '@ant-design/icons';
+import { Button, ConfigProvider, Flex, Layout, Menu, MenuProps, Image, Avatar, Table, Dropdown, Input, Select, List, Card, Radio, DatePicker } from 'antd';
+import { AppstoreOutlined, CloseOutlined, FilterFilled, FundOutlined, HistoryOutlined, HomeFilled, MailOutlined, PlusOutlined, SettingOutlined, SignalFilled, UserOutlined, WindowsFilled } from '@ant-design/icons';
 import Link from 'antd/es/typography/Link';
 import { FaBuyNLarge, FaListUl, FaMoneyBill, FaServer, FaSubscript, FaUbuntu } from 'react-icons/fa';
 import { DashboardRouter } from '@/enums/router/dashboard';
@@ -13,6 +13,10 @@ import Title from 'antd/lib/typography/Title';
 import UserTable from '@/components/newui/UserTable';
 import { ColumnsType } from 'antd/es/table';
 import SearchInput from '@/components/filters/SearchInput';
+import CashflowTable from '@/components/cashflowTable';
+import ServiceList from '@/components/service';
+import VpsTable from '@/components/admin/vps/VpsTable';
+import AutoLiveTable from '@/components/autolive/AutoLiveTable';
 const { Header, Footer, Sider, Content } = Layout;
 
 const DashBoardLayout = () => {
@@ -21,14 +25,14 @@ const DashBoardLayout = () => {
 
     const items: MenuItem[] = [
         {
-            key: 'sub1',
-            label: <Link className="">Home</Link>,
+            key: DashboardRouter.HOME,
             icon: <HomeFilled className="!text-lg" />,
+            label: <Link href={DashboardRouter.HOME}>{('Home')}</Link>,
         },
         {
-            key: 'sub2',
-            label: <Link className="">Services</Link>,
+            key: DashboardRouter.SERVICE,
             icon: <FaListUl />,
+            label: <Link href={DashboardRouter.SERVICE}>{('Services')}</Link>,
         },
         {
             key: DashboardRouter.MYAUTOLIVE,
@@ -113,7 +117,7 @@ const DashBoardLayout = () => {
         console.log('click ', e);
     };
 
-
+    const [filterOpen, setFilterOpen] = useState(false)
     return <>
         <ConfigProvider theme={{
             components: {
@@ -151,7 +155,7 @@ const DashBoardLayout = () => {
                                         <Table dataSource={dataSource} columns={columns} showHeader={false} pagination={false} />
                                         <div className="px-2 pt-3 flex justify-end gap-2">
                                             <Button type="primary" size="small">Deposit</Button>
-                                            <Button type="default" size="small" icon={<IoIosLogOut />}>Logout</Button>
+                                            <Button type="default" size="small" >Logout</Button>
 
                                         </div>
                                     </ConfigProvider>
@@ -186,21 +190,117 @@ const DashBoardLayout = () => {
                         />
                     </Sider>
                     <Content>
-                        <Layout >
+
+                        <Layout className="h-full">
                             <Header className='border-b border-s'>
                                 <div className="h-full flex items-center justify-between">
-                                    <Button type="default" icon={<BsFilterLeft />} size="large"></Button>
+                                    <Button type="default" icon={<BsFilterLeft />} size="large" onClick={() => {
+                                        setFilterOpen(!filterOpen)
+                                    }}></Button>
                                     <div>
-                                        <SearchInput/>
+                                        <SearchInput />
                                     </div>
                                 </div>
                             </Header>
-                            <Content style={{
-                                padding: 10
-                            }}>
-                                <UserTable />
-                            </Content>
+                            <Layout>
+                                <Content style={{
+                                    padding: 10,
+                                    overflow: "auto",
+                                    scrollbarWidth: "thin"
+                                }}>
+                                    <AutoLiveTable/>
+                                    <VpsTable/>
+                                    <ServiceList />
+
+                                    <div className="py-3">
+                                        <CashflowTable />
+                                    </div>
+                                    <UserTable />
+
+                                    <List
+                                        grid={{
+                                            gutter: 16,
+                                            xs: 1,
+                                            sm: 2,
+                                            md: 4,
+                                            lg: 4,
+                                            xl: 6,
+                                            xxl: 6,
+                                        }}
+                                        dataSource={[
+                                            {
+                                                title: 'Ubuntu',
+                                                icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhUXYtZGaSVpgszvcdic5jZKt2rhQZqPGEng&s'
+                                            },
+                                            {
+                                                title: 'Debian',
+                                                icon: 'https://www.svgrepo.com/show/353640/debian.svg'
+                                            },
+                                            {
+                                                title: 'CentOS',
+                                                icon: 'https://static-00.iconduck.com/assets.00/centos-icon-2048x2048-39pfdqnc.png'
+                                            },
+                                            {
+                                                title: 'Ferora',
+                                                icon: 'https://upload.wikimedia.org/wikipedia/commons/4/41/Fedora_icon_%282021%29.svg'
+                                            },
+                                            {
+                                                title: 'Pop!_OS',
+                                                icon: 'https://static-00.iconduck.com/assets.00/pop-os-icon-2048x2048-mjad7yws.png'
+                                            },
+                                            {
+                                                title: 'Arch Linux',
+                                                icon: "https://img.icons8.com/?size=48&id=uIXgLv5iSlLJ&format=png"
+                                            },
+                                        ]}
+                                        renderItem={(item: any) => (
+                                            <List.Item>
+                                                <Card className="flex" hoverable>
+                                                    <div className="flex justify-between">
+                                                        <div>
+                                                            <Image width={50} src={item.icon} alt="" />
+                                                            <Title level={3}>{item.title}</Title>
+                                                        </div>
+
+                                                    </div>
+                                                </Card>
+                                            </List.Item>
+                                        )}
+                                    />
+
+                                </Content>
+                                <Sider collapsedWidth={0} width="300" collapsed={filterOpen} style={{
+                                    backgroundColor: 'transparent'
+                                }} >
+                                    <div className="bg-white rounded m-3 p-3 shadow-md" style={{
+                                        height: "95%"
+                                    }}>
+
+                                        <div className="flex justify-between">
+                                            <Title level={5}><FilterFilled />Filters</Title>
+                                            <Button type="default" className="border-none" icon={<CloseOutlined />} onClick={() => {
+                                                setFilterOpen(true)
+                                            }}>
+
+                                            </Button>
+                                        </div>
+                                        <h1 className="text-slate-700 text-md font-semibold mb-1">Platform</h1>
+                                        <Select options={[{ value: 'sample', label: <span>sample</span> }]} className="w-full" placeholder="Select platform" />
+                                        <h1 className="text-slate-700 text-md font-semibold my-2 mb-1">Status</h1>
+                                        <Select className="w-full" options={[{ value: 'initalize', label: <span>Initalize</span> }]} placeholder="Select status" />
+                                        <h1 className="text-slate-700 text-md font-semibold my-2 mb-1">Date</h1>
+                                        <DatePicker.RangePicker />
+                                        <h1 className="text-slate-700 text-md font-semibold my-2 mb-1">User</h1>
+                                        <Select className="w-full" placeholder="Select user" options={[{ value: 'sample', label: <span>quanqqq11@gmail.com</span> }]} />
+                                        <h1 className="text-slate-700 text-md font-semibold my-2 mb-1">Vps</h1>
+                                        <Select className="w-full" placeholder="Select vps" options={[{ value: 'sample', label: <span>livestream1</span> }]} />
+                                    </div>
+                                </Sider>
+                            </Layout>
                         </Layout>
+
+
+
                     </Content>
                 </Layout>
             </Layout>
