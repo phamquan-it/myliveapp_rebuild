@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { IoIosLogOut } from "react-icons/io";
 import { BsFilterLeft } from "react-icons/bs";
 import { Button, ConfigProvider, Flex, Layout, Menu, MenuProps, Image, Avatar, Table, Dropdown, Input, Select, List, Card, Radio, DatePicker } from 'antd';
@@ -18,8 +18,10 @@ import ServiceList from '@/components/service';
 import VpsTable from '@/components/admin/vps/VpsTable';
 import AutoLiveTable from '@/components/autolive/AutoLiveTable';
 const { Header, Footer, Sider, Content } = Layout;
-
-const DashBoardLayout = () => {
+interface DashBoardLayoutProps{
+    children: ReactNode
+}
+const DashBoardLayout:React.FC<DashBoardLayoutProps> = ({children}) => {
     type MenuItem = Required<MenuProps>['items'][number];
     const t = useTranslations("DashboardMenu");
 
@@ -208,6 +210,7 @@ const DashBoardLayout = () => {
                                     overflow: "auto",
                                     scrollbarWidth: "thin"
                                 }}>
+                                    {children}
                                     <AutoLiveTable/>
                                     <VpsTable/>
                                     <ServiceList />

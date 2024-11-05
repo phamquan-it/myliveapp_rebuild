@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
+import _ from 'lodash-es';
+import path from 'path';
 const nextConfig = {
+    experimental: {
+        esmExternals: 'loose', // Enabling the loose behavior for ESM externals
+    },
     reactStrictMode: true,
     transpilePackages: [
         // antd & deps
@@ -39,6 +44,15 @@ const nextConfig = {
         "rc-upload",
         "rc-util",
     ],
+    webpack(config) {
+        // Example of using `path` with `import`
+        config.resolve.alias = {
+            ...config.resolve.alias,
+            'lodash-es': path.resolve('./node_modules/lodash-es')
+        };
+
+        return config;
+    },
     i18n: {
         locales: ['en', 'vi'],
         defaultLocale: 'en'

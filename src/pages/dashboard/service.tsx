@@ -23,7 +23,8 @@ import filterOptionByLabel from "@/hooks/filterOptionByLabel";
 import axiosInstance from "@/apiClient/axiosConfig";
 import SearchInput from "@/components/filters/SearchInput";
 import { ColumnType, ColumnsType } from "antd/es/table";
-export default function Index() {
+import DashBoardLayout from "../layout";
+const Page = ()=> {
     const router = useRouter();
     const token = getCookie("token");
 

@@ -13,15 +13,14 @@ import vi from "antd/locale/vi_VN";
 import en from "antd/locale/en_US";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import DashBoardLayout from "@/components/admin/DashBoardLayout";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import PageLayout from "@/components/PageLayout";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
+import DashBoardLayout from "./layout";
 
 config.autoAddCss = false;
 
 export default function App({ Component, pageProps }: AppProps) {
-
     const router = useRouter();
     const [isReady, setIsReady] = useState(false)
     useEffect(() => {
@@ -31,6 +30,8 @@ export default function App({ Component, pageProps }: AppProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     if (!isReady) return (<div className="h-screen w-screen flex justify-center items-center"><Spin /> </div>)
+
+    const Layout = DashBoardLayout;
     return (
         <NextIntlClientProvider
             locale={router.locale}
@@ -47,7 +48,9 @@ export default function App({ Component, pageProps }: AppProps) {
                         locale={router.locale == "vi" ? vi : en}
                     >
                         <NextNProgress color="#29D" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} options={{ showSpinner: false }} />
-                        <Component {...pageProps} />
+                        <Layout>
+                            <Component {...pageProps} />
+                        </Layout>
                     </ConfigProvider>
                 </ReactQueryProvider>
             </ReduxProvider>
