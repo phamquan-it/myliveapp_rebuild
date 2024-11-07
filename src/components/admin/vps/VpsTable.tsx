@@ -84,38 +84,10 @@ const VpsTable: React.FC<VpsTableProps> = () => {
             dataIndex: 'id',
             key: 'id',
             render: () => (<>
-                <Dropdown trigger={['click']} menu={{
-                    items: [
-                        {
-                            key: '1',
-                            label: (
-                                <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                                    Start vps
-                                </a>
-                            ),
-                        },
-                        {
-                            key: '2',
-                            label: (
-                                <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                                    Stop Vps
-                                </a>
-                            ),
-                        },
-                        {
-                            key: '3',
-                            label: (
-                                <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
-                                    Stop all live
-                                </a>
-                            ),
-                        },
-                    ]
-                }} placement="bottomRight">
-                    <Button shape="circle" type="link" className="border-none text-slate-700" icon={
-                        <FiMoreVertical />
-                    }></Button>
-                </Dropdown>
+                <Button shape="circle" type="link" className="border-none text-slate-700" icon={
+                    <FiMoreVertical />
+                }></Button>
+
             </>),
             width: 50
         },

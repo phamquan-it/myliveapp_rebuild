@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
     Button,
     Card,
+    ConfigProvider,
     DatePicker,
     Form,
     Modal,
@@ -141,7 +142,7 @@ const Page = () => {
                                                         : "red"
                             }
                         >
-                            {text == undefined ? "Null" : text}
+                            {text}
                         </Tag>
                     </div>
                 );
@@ -210,21 +211,31 @@ const Page = () => {
                     <OrderStatus />
                 </div>
             </div>
-            <Table
-                dataSource={data?.data.data.map((item: any, index: number) => ({
-                    ...item,
-                    key: pageIndex * 10 + (index + 1) - 10,
-                }))}
-                columns={columns}
-                loading={isFetching}
-                onChange={handleTableChange}
-                scroll={{ x: 1200 }}
-                pagination={{
-                    total: data?.data.total,
-                    pageSize: pageSize,
-                    current: pageIndex,
-                }}
-            />
+            <ConfigProvider theme={{
+                components: {
+                    Table:{ 
+                        cellPaddingBlock: 3
+                }
+                }
+                }}>
+                <Table
+                    rowClassName="!font-sans"
+                    dataSource={data?.data.data.map((item: any, index: number) => ({
+                        ...item,
+                        key: pageIndex * 10 + (index + 1) - 10,
+                    }))}
+                    columns={columns}
+                    loading={isFetching}
+                    onChange={handleTableChange}
+                    scroll={{ x: 1200 }}
+                    pagination={{
+                        total: data?.data.total,
+                        pageSize: pageSize,
+                        current: pageIndex,
+                    }}
+                />
+
+            </ConfigProvider>
         </>
     );
 };

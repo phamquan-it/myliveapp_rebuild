@@ -10,7 +10,7 @@ const LanguageChoose: React.FC<LanguageChooseProps> = ({ onChange }) => {
     router.push(router, "", { locale: value });
   };
   return (
-    <Select
+    <Select className="!font-sans"
       style={{ width: 200 }}
       placeholder="Choose a language"
       value={router.locale}

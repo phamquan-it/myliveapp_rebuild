@@ -77,6 +77,7 @@ const Page: React.FC<PageProps> = () => {
             <CreateAdvandedConfig />
         </div>
         <Table<AdvandedConfig>
+            rowClassName="font-sans"
             loading={isFetching}
             scroll={{
                 x: 300

@@ -1,4 +1,4 @@
-import { ConfigProvider, Table } from 'antd';
+import { ConfigProvider, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 
@@ -8,11 +8,13 @@ const CashflowTable = () => {
         {
             key: '1',
             name: 'Mike',
+            action: "Deposit",
             amount: 32,
             remmains: 0.35,
         },
         {
             key: '2',
+            action: "Deposit",
             name: 'John',
             amount: 42,
             remmains: 5,
@@ -30,7 +32,10 @@ const CashflowTable = () => {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
-            align: 'right',
+            align:'center',
+            render: (text) => (<>
+                <Tag color="magenta" className="font-semibold">{text}</Tag>
+            </>)
         },
         {
             title: 'Amount',

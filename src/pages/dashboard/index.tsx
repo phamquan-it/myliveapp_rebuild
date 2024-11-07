@@ -34,10 +34,11 @@ import Title from "antd/es/typography/Title";
 import dayjs from "dayjs";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/apiClient/axiosConfig";
+import CashflowTable from "@/components/cashflowTable";
 
 const Page = () => {
     const t = useTranslations("MyLanguage");
-      const columns: any[] = [
+    const columns: any[] = [
         {
             title: "ID Orders",
             dataIndex: "id",
@@ -163,144 +164,7 @@ const Page = () => {
 
     return (
         <>
-            <div>
-                <DashBoardStatical />
-            </div>
-            <div className=" grid md:grid-cols-2 gap-3">
-                <div className="Payment rounded border overflow-hidden shadow">
-                    <div
-                        className="py-3 font-medium ps-3 border-b text-gray-600"
-                        style={{ fontSize: 14 }}
-                    >
-                        Cashflow
-                    </div>
-
-                    <Table loading={cashflowQuery.isFetching}
-                        scroll={{
-                            x: 300
-                        }}
-                        dataSource={cashflowQuery?.data?.data?.data.map((cashflow: any, index: number) => ({ ...cashflow, key: index + 1 }))} columns={
-                            [
-                                {
-                                    title: t("entryno"),
-                                    dataIndex: "key",
-                                    key: "key",
-                                    width: "6%",
-                                    align: "center",
-
-                                },
-                                {
-                                    title: "Description",
-                                    dataIndex: "description",
-                                    key: "description",
-                                },
-                                {
-                                    title: ("Balance"),
-                                    dataIndex: "balance",
-                                    key: "balance",
-                                    width: "13%",
-                                    align: "center",
-                                },
-                                {
-                                    title: ("Inflow"),
-                                    dataIndex: "inflow",
-                                    key: "inflow",
-                                    width: "10%",
-                                    align: "center",
-                                },
-                                {
-                                    title: ("outflow"),
-                                    dataIndex: "outflow",
-                                    key: "outflow",
-                                    width: "10%",
-                                    align: "right",
-                                },
-                                {
-                                    title: t("createat"),
-                                    dataIndex: "createdAt",
-                                    key: "createdAt",
-                                    width: "15%",
-                                    align: "center",
-                                    render: (text: string) => dayjs(text).format("YYYY-MM-DD HH:mm:ss"),
-                                },
-                            ]
-
-                        } pagination={false} />
-                </div>
-                <div className="Payment rounded border overflow-hidden shadow">
-                    <div
-                        className="py-3 font-medium ps-3 border-b text-gray-600"
-                        style={{ fontSize: 14 }}
-                    >
-                        Vps logs
-                    </div>
-
-                    <Table
-                        scroll={{
-                            x: 300
-                        }}
-
-                        dataSource={[
-                            {
-                                key: '1',
-                                slug: 'aglive1',
-                                stream_name: 'test 1',
-                                log: 'input output error',
-
-                            },
-                            {
-                                key: '2',
-                                slug: 'aglive1',
-                                stream_name: 'test 1',
-                                log: 'completed',
-
-                            },
-                        ]} columns={[
-                            {
-                                title: 'No.',
-                                dataIndex: 'key',
-                                key: 'key',
-                            },
-                            {
-                                title: 'Slug',
-                                dataIndex: 'slug',
-                                key: 'slug',
-                            },
-                            {
-                                title: 'Stream name',
-                                dataIndex: 'stream_name',
-                                key: 'stream_name',
-                            },
-
-                            {
-                                title: 'Log',
-                                dataIndex: 'log',
-                                key: 'log',
-                            },
-                            {
-                                title: 'Action',
-                                dataIndex: 'action',
-                                key: 'action',
-                            },
-
-                        ]} pagination={false} />
-                </div>
-
-
-            </div>
-            <Table title={() => <span className=''>
-                Recent orders
-            </span>}
-
-                dataSource={orderQuery?.data?.data.data.map((item: any, index: number) => ({
-                    ...item,
-                    key: index + 1,
-                }))}
-                columns={columns}
-                className="border rounded-md overflow-hidden mt-3"
-                pagination={false}
-                scroll={{ y: 300, x: 600 }}
-            />
+            <CashflowTable />
         </>
     );
 };

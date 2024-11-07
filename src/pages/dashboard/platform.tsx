@@ -48,7 +48,7 @@ const Page = () => {
             key: 'key',
         },
         {
-            title: t('name'),
+            title: <div className="py-2">{t('name')}</div>,
             dataIndex: 'name',
             key: 'name',
         },
@@ -58,7 +58,7 @@ const Page = () => {
             key: 'image',
             render: (text: string) => {
                 return (
-                    <Image alt='icon' width={30} height={30} src={text} preview={false} />
+                    <Image alt='icon' width={30} src={text} preview={false} />
                 )
             }
 
@@ -89,42 +89,45 @@ const Page = () => {
 
     ];
     return <>
-        <div className="sm:flex justify-between py-3">
-            <div className='mb-2 sm:mb-0'>
-                <SearchInput />
+        <div style={{
+            margin: "auto"
+        }}>
+            <div className="sm:flex justify-between py-3">
+                <div className='mb-2 sm:mb-0'>
+                    <SearchInput />
+                </div>
+                <CreatePlatform />
             </div>
-            <CreatePlatform />
-        </div>
-        <ConfigProvider theme={{
-            components:{
-                Table:{
-                    cellPaddingBlock:2
-            }
-            }
+            <ConfigProvider theme={{
+                components: {
+                    Table: {
+                        cellPaddingBlock: 5
+                    }
+                }
             }}>
-            <Table
-                loading={isFetching}
-                scroll={{
-                    x: 300
-                }}
-                onChange={(pagination) => {
-                    syncObj({
-                        pageIndex: pagination.current,
-                    })
-                }}
-                pagination={{
-                    total: data?.data?.total,
-                    pageSize: pageSize,
-                    current: pageIndex
-                }}
-                dataSource={data?.data?.platforms
-                    .map((platform: any, index: number) => ({
-                        ...platform,
-                        key: pageIndex * pageSize + (index + 1) - pageSize,
-                    }))}
-                columns={columns} />
+                <Table rowClassName="font-sans" loading={isFetching}
+                    scroll={{
+                        x: 300
+                    }}
+                    onChange={(pagination) => {
+                        syncObj({
+                            pageIndex: pagination.current,
+                        })
+                    }}
+                    pagination={{
+                        total: data?.data?.total,
+                        pageSize: pageSize,
+                        current: pageIndex
+                    }}
+                    dataSource={data?.data?.platforms
+                        .map((platform: any, index: number) => ({
+                            ...platform,
+                            key: pageIndex * pageSize + (index + 1) - pageSize,
+                        }))}
+                    columns={columns} />
 
-        </ConfigProvider>
+            </ConfigProvider>
+        </div>
     </>
 }
 

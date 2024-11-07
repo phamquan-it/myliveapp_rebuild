@@ -7,11 +7,14 @@ import _ from "lodash";
 import {
     Affix,
     Button,
+    ConfigProvider,
     Input,
     Modal,
     Table,
     TablePaginationConfig,
     Tag,
+    Image,
+    Tooltip,
 } from "antd";
 import Title from "antd/es/typography/Title";
 import { GetStaticPropsContext } from "next";
@@ -34,6 +37,8 @@ import HorizoneMenu from "@/components/admin/HorizoneMenu";
 import HideMenuSelected from "@/components/vps/HideMenuSelected";
 import Reloadbtn from "../reloadbtn";
 import NumOfStreamsVps from "@/components/vps/NumOfStreamsVps";
+import { FaPlay } from "react-icons/fa";
+import { FiMoreVertical } from "react-icons/fi";
 
 const Page = () => {
     const [openState, setOpenState] = useState(false)
@@ -71,7 +76,7 @@ const Page = () => {
     }
     const columns: ColumnsType<any> = [
         {
-            title: t('entryno'),
+            title: <div className="py-2">No.</div>,
             dataIndex: "key",
             key: 'key',
             width: 35
@@ -81,12 +86,14 @@ const Page = () => {
             title: t('name'),
             dataIndex: "name",
             key: 'name',
-            width: 150
         },
         {
-            title: "Slug",
-            dataIndex: "slug",
-            key: 'slug'
+            title: 'Platform',
+            dataIndex: 'platform',
+            key: 'platform',
+            render: () => (
+                <Image className="mt-1" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJVI5SCDlnpFcgofZJAAQuIzHeBdlPO1n6Yw&s" width={30} alt="" preview={false} />
+            )
         },
         {
             title: "Brand",
@@ -94,44 +101,66 @@ const Page = () => {
             key: 'brand',
             render: (text: string, record: any) => record?.vps?.brand
         },
+
         {
-            title: t('ipv4'),
-            dataIndex: "ipv4",
-            key: 'ipv4'
-        },
-        {
-            title: ('Distro'),
-            dataIndex: "ipv4",
-            key: 'id',
-            render: (text: string, record: any) => `
-            ${record?.vps?.distro ?? ''} 
-            ${record?.vps?.release ??
-                'Not known'
-                }`
-        },
-        {
-            title: ('Num of stream'),
+            title: ('Amount'),
             dataIndex: "stream",
+            align: "center",
             render: (text, record) => <NumOfStreamsVps slug={record.slug} />
         },
         {
-            title: t('status'),
-            width: 190,
-            dataIndex: ('slug'),
-            render: (text: any, record: any) => (<div className="grid grid-cols-4">
-                <VpsDetail slug={record} closeModal={() => { }} />
-                <Button type="default" disabled={record.status != "running"} icon={<>&gt;_</>} onClick={() => {
-                    setSSHInfo({
-                        ipv4OrHost: record.ipv4,
-                        sshUser: 'root'
-                    })
-                }}></Button>
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: () => <>
+                <div className="flex justify-center">
+                    <Tooltip title="Running">
+                        <FaPlay className="text-sky-600" />
+                    </Tooltip>
+                </div>
+            </>,
+            align: "center"
+        },
+        {
+            title: 'Price',
+            dataIndex: 'address',
+            key: 'address',
+            width: 150,
+            align: "right",
+            render: () => (<span className="font-semibold">
+                10$
+            </span>)
+        },
+        {
+            dataIndex: 'id',
+            key: 'id',
+            render: () => (<>
+                <Button shape="circle" type="link" className="border-none text-slate-700" icon={
+                    <FiMoreVertical />
+                }></Button>
+            </>),
+            width: 50
+        },
 
 
-                {/* <VpsButtonState record={record}/> */}
-                <VpsHideOption vps={record} />
-            </div>)
-        }
+        //      {
+        //          title: '',
+        //          width: 190,
+        //          dataIndex: ('slug'),
+        //          render: (text: any, record: any) => (<div className="grid grid-cols-4">
+        //              <VpsDetail slug={record} closeModal={() => { }} />
+        //              <Button type="default" disabled={record.status != "running"} icon={<>&gt;_</>} onClick={() => {
+        //                  setSSHInfo({
+        //                      ipv4OrHost: record.ipv4,
+        //                      sshUser: 'root'
+        //                  })
+        //              }}></Button>
+
+
+        //              {/* <VpsButtonState record={record}/> */}
+        //              <VpsHideOption vps={record} />
+        //          </div>)
+        //      }
     ]
 
     const [connectionState, setConnectionState] = useState(false);
@@ -213,35 +242,44 @@ const Page = () => {
                     {t("create")}
                 </Button>
             </div>
-
-            <Table
-                dataSource={data?.data.map((item: any, index: number) => ({
-                    ...item,
-                    key: pageIndex * pageSize + (index + 1) - pageSize,
-                }))}
-                columns={columns}
-                loading={isFetching}
-                scroll={{ x: 1000 }}
-                onChange={(pag) => {
-                    const { current, pageSize } = pag
-                    syncObj({
-                        pageIndex: current,
-                        pageSize
-                    })
-                }}
-                pagination={{
-                    total: data?.data.total,
-                    pageSize: pageSize,
-                    current: pageIndex,
-                    showSizeChanger: true,
-                }}
-                rowSelection={{
-                    type: 'checkbox',
-                    onChange: (selectedRowKeys, selectedRows) => {
-                        setSelectedRows(selectedRows)
+            <ConfigProvider theme={{
+                components: {
+                    Table: {
+                        cellPaddingBlock: 5
                     }
-                }}
-            />
+                }
+            }}>
+                <Table className="!font-sans"
+                    dataSource={data?.data.map((item: any, index: number) => ({
+                        ...item,
+                        key: pageIndex * pageSize + (index + 1) - pageSize,
+                    }))}
+                    columns={columns}
+                    loading={isFetching}
+                    scroll={{ x: 1000 }}
+                    onChange={(pag) => {
+                        const { current, pageSize } = pag
+                        syncObj({
+                            pageIndex: current,
+                            pageSize
+                        })
+                    }}
+                    pagination={{
+                        total: data?.data.total,
+                        pageSize: pageSize,
+                        current: pageIndex,
+                        showSizeChanger: true,
+                    }}
+                    rowSelection={{
+                        type: 'checkbox',
+                        onChange: (selectedRowKeys, selectedRows) => {
+                            setSelectedRows(selectedRows)
+                        }
+                    }}
+                />
+
+
+            </ConfigProvider>
 
         </>
     );

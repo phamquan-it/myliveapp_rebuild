@@ -84,6 +84,7 @@ const CreatePlatform = () => {
                 autoComplete="off"
             >
                 <Form.Item<FieldType>
+                    required={false}
                     label="Name"
                     name="name"
                     rules={[{ required: true, message: 'Please input your username!' }]}
@@ -92,6 +93,7 @@ const CreatePlatform = () => {
                 </Form.Item>
 
                 <Form.Item<FieldType>
+                    required={false}
                     label="Rmtp"
                     name="rmtp"
                     rules={[{ required: true, message: 'Please input your password!' }]}

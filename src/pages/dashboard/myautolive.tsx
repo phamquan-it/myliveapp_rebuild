@@ -31,6 +31,7 @@ import {
     Image,
     Spin,
     Tooltip,
+    Divider,
 } from "antd";
 import EditLiveStreams from "@/components/live-streams/EditLiveStreams";
 import LiveState from "@/components/client/LiveState";
@@ -48,6 +49,7 @@ import CountdownTimer from "@/components/client/CountdownTimer";
 import HorizoneMenu from "@/components/admin/HorizoneMenu";
 import PlatformSelect from "@/components/admin/PlatformSelect";
 import { usePlatformData } from "@/components/live-streams/CreateStreamByAdmin";
+import { FaPlay } from "react-icons/fa";
 export interface StreamDataType {
     createAt?: string
     download_link?: string
@@ -79,22 +81,15 @@ const Page = () => {
     const platformQuery = usePlatformData();
     const columns: ColumnsType<StreamDataType> = [
         {
-            title: t("entryno"),
-            dataIndex: "key",
-            key: "key",
-            align: "center",
-            width: 70
+            title: ("ID"),
+            dataIndex: "id",
+            key: "id",
         },
         {
             title: t("name"),
             dataIndex: "name",
             key: "name",
             ellipsis: true
-        },
-        {
-            title: ("ID"),
-            dataIndex: "id",
-            key: "id",
         },
         {
             title: d("platform"),
@@ -190,6 +185,7 @@ const Page = () => {
                     <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} />
                 </HorizoneMenu>
             </Affix>
+
             <div className="flex justify-between items-center">
                 <div className={`sm:flex py-3 gap-2 transition duration-500 transform ${streamsSelected.length == 0 ? '' : ''}`}>
                     <SearchInput />
@@ -226,6 +222,8 @@ const Page = () => {
                 </div>
             </div>
             <Table
+               
+                rowClassName="!font-sans"
                 rowSelection={{
                     type: 'checkbox',
                     ...rowSelection,

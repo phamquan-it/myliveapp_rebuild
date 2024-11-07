@@ -3,10 +3,10 @@ import { IoIosLogOut } from "react-icons/io";
 import { BsFilterLeft } from "react-icons/bs";
 import { Button, ConfigProvider, Flex, Layout, Menu, MenuProps, Image, Avatar, Table, Dropdown, Input, Select, List, Card, Radio, DatePicker } from 'antd';
 import { AppstoreOutlined, CloseOutlined, FilterFilled, FundOutlined, HistoryOutlined, HomeFilled, MailOutlined, PlusOutlined, SettingOutlined, SignalFilled, UserOutlined, WindowsFilled } from '@ant-design/icons';
-import Link from 'antd/es/typography/Link';
 import { FaBuyNLarge, FaListUl, FaMoneyBill, FaServer, FaSubscript, FaUbuntu } from 'react-icons/fa';
 import { DashboardRouter } from '@/enums/router/dashboard';
 import { useTranslations } from 'next-intl';
+import Link from "next/link";
 import { GetStaticPropsContext } from 'next';
 import { VscSettings } from 'react-icons/vsc';
 import Title from 'antd/lib/typography/Title';
@@ -17,11 +17,12 @@ import CashflowTable from '@/components/cashflowTable';
 import ServiceList from '@/components/service';
 import VpsTable from '@/components/admin/vps/VpsTable';
 import AutoLiveTable from '@/components/autolive/AutoLiveTable';
+import LocaleSwitcher from '@/LocaleSwitcher';
 const { Header, Footer, Sider, Content } = Layout;
-interface DashBoardLayoutProps{
+interface DashBoardLayoutProps {
     children: ReactNode
 }
-const DashBoardLayout:React.FC<DashBoardLayoutProps> = ({children}) => {
+const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
     type MenuItem = Required<MenuProps>['items'][number];
     const t = useTranslations("DashboardMenu");
 
@@ -84,8 +85,8 @@ const DashBoardLayout:React.FC<DashBoardLayoutProps> = ({children}) => {
             type: 'divider',
         },
         {
-            key: DashboardRouter.PLATFORM,
-            label: <Link href={DashboardRouter.PLATFORM}>{('Settings')}</Link>,
+            key: DashboardRouter.SETTING,
+            label: <Link href={DashboardRouter.SETTING}>{('Settings')}</Link>,
             icon: <SettingOutlined />,
         },
 
@@ -102,12 +103,12 @@ const DashBoardLayout:React.FC<DashBoardLayoutProps> = ({children}) => {
             children: [
                 {
                     key: 'sub4',
-                    label: 'Vps',
+                    label: <Link href={DashboardRouter.VPS}>{('Vps')}</Link>,
                     icon: <FaServer />,
                 },
                 {
                     key: 'scrip',
-                    label: 'Script setup',
+                    label: <Link href={DashboardRouter.SCRIPT_SETUP}>{('Script setup')}</Link>,
                     icon: <FaUbuntu />,
                 },
 
@@ -118,8 +119,9 @@ const DashBoardLayout:React.FC<DashBoardLayoutProps> = ({children}) => {
     const onClick: MenuProps['onClick'] = (e) => {
         console.log('click ', e);
     };
+    const [newOrderText, setNewOrderText] = useState("New order")
 
-    const [filterOpen, setFilterOpen] = useState(false)
+    const [filterOpen, setFilterOpen] = useState(true)
     return <>
         <ConfigProvider theme={{
             components: {
@@ -130,17 +132,18 @@ const DashBoardLayout:React.FC<DashBoardLayoutProps> = ({children}) => {
             }
 
         }}>
-            <Layout className="h-screen">
+            <Layout className="h-screen " >
                 <Header className="border-b">
                     <div className="flex justify-between items-center h-full">
 
                         <div className="h-full flex items-center">
-                            <Image height={50} alt="" src="/assets/livestreams.webp" />
+                            <Image height={40} alt="" src="/assets/livestreams.webp" />
                             <div className="h-full">
                                 <Title className="h-full !text-sky-500" level={3}>LiveStreams</Title>
                             </div>
                         </div>
-                        <div className="p-3">
+                        <div className="p-3 flex justify-center gap-2 items-center">
+                            <LocaleSwitcher/>
                             <Dropdown trigger={['click']} dropdownRender={() => <>
                                 <div className="border bg-white py-3 rounded w-64">
                                     <div className="px-3 pb-3">
@@ -163,22 +166,30 @@ const DashBoardLayout:React.FC<DashBoardLayoutProps> = ({children}) => {
                                     </ConfigProvider>
                                 </div>
                             </>} placement="bottomLeft">
-                                <Avatar size={50} icon={<UserOutlined />} />
+                                <Avatar size={40} icon={<UserOutlined />} />
                             </Dropdown>
                         </div>
                     </div>
                 </Header>
                 <Layout>
-                    <Sider theme="light" style={{
-                        overflowY: 'auto',
-                        scrollbarWidth: "thin"
-                    }}>
+                    <Sider theme="light"
+                        onChange={(e) => {
+                            console.log(e)
+                        }} onCollapse={(collaped) => {
+                            setNewOrderText(collaped ? "" : "New order")
+                        }}
+                        style={{
+                            overflowY: 'auto',
+                            scrollbarWidth: "thin"
+                        }}
+                        collapsible
+                    >
                         <div className="p-3">
                             <Button type="default"
                                 icon={<PlusOutlined />}
                                 className="w-50 shadow " block size="large">
-                                <span className="!text-semibold">
-                                    New order
+                                <span className="!text-semibold !font-sans">
+                                    {newOrderText}
                                 </span>
                             </Button>
                         </div>
@@ -187,8 +198,7 @@ const DashBoardLayout:React.FC<DashBoardLayoutProps> = ({children}) => {
                             defaultSelectedKeys={['1']}
                             defaultOpenKeys={['sub1']}
                             mode="inline"
-                            items={items}
-                            className="font-semibold"
+                            items={items} className="font-sans"
                         />
                     </Sider>
                     <Content>
@@ -209,70 +219,12 @@ const DashBoardLayout:React.FC<DashBoardLayoutProps> = ({children}) => {
                                     padding: 10,
                                     overflow: "auto",
                                     scrollbarWidth: "thin"
-                                }}>
+                                }} className="font-serif ">
                                     {children}
-                                    <AutoLiveTable/>
-                                    <VpsTable/>
-                                    <ServiceList />
 
-                                    <div className="py-3">
-                                        <CashflowTable />
-                                    </div>
-                                    <UserTable />
-
-                                    <List
-                                        grid={{
-                                            gutter: 16,
-                                            xs: 1,
-                                            sm: 2,
-                                            md: 4,
-                                            lg: 4,
-                                            xl: 6,
-                                            xxl: 6,
-                                        }}
-                                        dataSource={[
-                                            {
-                                                title: 'Ubuntu',
-                                                icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhUXYtZGaSVpgszvcdic5jZKt2rhQZqPGEng&s'
-                                            },
-                                            {
-                                                title: 'Debian',
-                                                icon: 'https://www.svgrepo.com/show/353640/debian.svg'
-                                            },
-                                            {
-                                                title: 'CentOS',
-                                                icon: 'https://static-00.iconduck.com/assets.00/centos-icon-2048x2048-39pfdqnc.png'
-                                            },
-                                            {
-                                                title: 'Ferora',
-                                                icon: 'https://upload.wikimedia.org/wikipedia/commons/4/41/Fedora_icon_%282021%29.svg'
-                                            },
-                                            {
-                                                title: 'Pop!_OS',
-                                                icon: 'https://static-00.iconduck.com/assets.00/pop-os-icon-2048x2048-mjad7yws.png'
-                                            },
-                                            {
-                                                title: 'Arch Linux',
-                                                icon: "https://img.icons8.com/?size=48&id=uIXgLv5iSlLJ&format=png"
-                                            },
-                                        ]}
-                                        renderItem={(item: any) => (
-                                            <List.Item>
-                                                <Card className="flex" hoverable>
-                                                    <div className="flex justify-between">
-                                                        <div>
-                                                            <Image width={50} src={item.icon} alt="" />
-                                                            <Title level={3}>{item.title}</Title>
-                                                        </div>
-
-                                                    </div>
-                                                </Card>
-                                            </List.Item>
-                                        )}
-                                    />
 
                                 </Content>
-                                <Sider collapsedWidth={0} width="300" collapsed={filterOpen} style={{
+                                <Sider collapsedWidth={0} width="40%" collapsed={filterOpen} style={{
                                     backgroundColor: 'transparent'
                                 }} >
                                     <div className="bg-white rounded m-3 p-3 shadow-md" style={{
@@ -287,16 +239,6 @@ const DashBoardLayout:React.FC<DashBoardLayoutProps> = ({children}) => {
 
                                             </Button>
                                         </div>
-                                        <h1 className="text-slate-700 text-md font-semibold mb-1">Platform</h1>
-                                        <Select options={[{ value: 'sample', label: <span>sample</span> }]} className="w-full" placeholder="Select platform" />
-                                        <h1 className="text-slate-700 text-md font-semibold my-2 mb-1">Status</h1>
-                                        <Select className="w-full" options={[{ value: 'initalize', label: <span>Initalize</span> }]} placeholder="Select status" />
-                                        <h1 className="text-slate-700 text-md font-semibold my-2 mb-1">Date</h1>
-                                        <DatePicker.RangePicker />
-                                        <h1 className="text-slate-700 text-md font-semibold my-2 mb-1">User</h1>
-                                        <Select className="w-full" placeholder="Select user" options={[{ value: 'sample', label: <span>quanqqq11@gmail.com</span> }]} />
-                                        <h1 className="text-slate-700 text-md font-semibold my-2 mb-1">Vps</h1>
-                                        <Select className="w-full" placeholder="Select vps" options={[{ value: 'sample', label: <span>livestream1</span> }]} />
                                     </div>
                                 </Sider>
                             </Layout>

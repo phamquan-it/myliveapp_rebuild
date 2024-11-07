@@ -1,59 +1,45 @@
+import { Service } from '@/@type/Service';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Divider, List, Rate } from 'antd';
+import { Button, Card, Divider, List, Rate, Table } from 'antd';
 import React from 'react';
+interface ServiceListProp {
+    data: Service[]
+}
+const ServiceList: React.FC<ServiceListProp> = ({ data }) => {
+    const dataSource = [
+        {
+            key: '1',
+            name: 'Mike',
+            age: 32,
+            address: '10 Downing Street',
+        },
+        {
+            key: '2',
+            name: 'John',
+            age: 42,
+            address: '10 Downing Street',
+        },
+    ];
 
-const ServiceList = () => {
-    const data = [
+    const columns = [
         {
-            title: 'LiveStream1',
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
         },
         {
-            title: 'LiveStream2',
+            title: 'Age',
+            dataIndex: 'age',
+            key: 'age',
         },
         {
-            title: 'LiveStream3',
-        },
-        {
-            title: 'ProLiveStream1',
-        },
-        {
-            title: 'ProLiveStream2',
-        },
-        {
-            title: 'ProLiveStream3',
+            title: 'Address',
+            dataIndex: 'address',
+            key: 'address',
         },
     ];
     return <>
-        <List
-            grid={{
-                gutter: 16,
-                xs: 1,
-                sm: 2,
-                md: 4,
-                lg: 4,
-                xl: 6,
-                xxl: 6,
-            }}
-            dataSource={data}
-            renderItem={(item) => (
-                <List.Item>
-                    <Card hoverable>
-                        <h1 className="text-green-700 text-lg font-semibold text-center mb-4">
-                            {item.title}
-                        </h1>
-                        <ul className="font-semibold px-3">
-                            <li >Price: 100$</li>
-                            <li>Stable: yes</li>
-                            <li>Support: 24/24</li>
-                        </ul>
-                        <div className="px-2 pt-1">
-                        </div>
-                        <Divider className="my-2"></Divider>
-                        <Button type="primary" block icon={<PlusOutlined />}>Order</Button>
-                    </Card>
-                </List.Item>
-            )}
-        />
+        <Table dataSource={dataSource} columns={columns} />;
     </>
 }
 

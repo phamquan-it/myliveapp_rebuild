@@ -5,6 +5,11 @@ const theme: ThemeConfig = {
   token: {
     fontSize: 14,
   },
+  components:{
+      Table:{
+          cellPaddingBlock: 8,
+      }
+  }
   
 };
 

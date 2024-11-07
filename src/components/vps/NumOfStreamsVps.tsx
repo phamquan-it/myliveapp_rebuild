@@ -17,7 +17,7 @@ const NumOfStreamsVps: React.FC<NumOfStreamsVpsProps> = ({ slug }) => {
 
     } catch (e) {
     }
-    return <Tag color="green">{numOfStream} streamings</Tag>
+    return numOfStream
 }
 
 export default NumOfStreamsVps

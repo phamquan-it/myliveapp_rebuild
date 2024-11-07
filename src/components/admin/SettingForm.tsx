@@ -58,7 +58,7 @@ const SettingForm: React.FC<SettingFormProps> = () => {
     return (
         <>
             <div className="bg-white rounded-2xl p-5 w-5/6 m-auto">
-                <Form
+                <Form className="!font-sans"
                     name="basic"
                     labelCol={{ span: 7 }}
                     wrapperCol={{ span: 18 }}
@@ -79,6 +79,7 @@ const SettingForm: React.FC<SettingFormProps> = () => {
                         label={<span className="font-medium">{t('timeupdateservice')}</span>}
                         name="time_update_service"
                         rules={[{ required: true }]}
+                        required={false} 
                     >
                         <DatePicker
                             picker="time"
@@ -89,6 +90,7 @@ const SettingForm: React.FC<SettingFormProps> = () => {
                     </Form.Item>
 
                     <Form.Item<FieldType>
+                        required={false} 
                         label={<span className="font-medium">{t('timeupdateorder')}</span>}
                         name="time_update_order"
                         rules={[{ required: true }]}
@@ -102,6 +104,7 @@ const SettingForm: React.FC<SettingFormProps> = () => {
                     </Form.Item>
 
                     <Form.Item<FieldType>
+                        required={false}
                         label={<span className="font-medium">WhatsApp</span>}
                         name="what_app"
                         rules={[{ required: true }]}
@@ -110,6 +113,7 @@ const SettingForm: React.FC<SettingFormProps> = () => {
                     </Form.Item>
 
                     <Form.Item<FieldType>
+                        required={false}
                         label={<span className="font-medium">Facebook</span>}
                         name="facebook"
                         rules={[{ required: true }]}
@@ -118,6 +122,7 @@ const SettingForm: React.FC<SettingFormProps> = () => {
                     </Form.Item>
 
                     <Form.Item<FieldType>
+                        required={false}
                         label={<span className="font-medium">{t('timeupdaterate_hour')}</span>}
                         name="time_update_exchange_rate"
                         rules={[{ required: true }]}
@@ -134,6 +139,7 @@ const SettingForm: React.FC<SettingFormProps> = () => {
                         label={<span className="font-medium">{t('exchangeratediffernces')}</span>}
                         name="exchange_rate_diferences"
                         rules={[{ required: true }]}
+                        required={false}
                     >
                         <DatePicker
                             picker="time"
@@ -144,6 +150,7 @@ const SettingForm: React.FC<SettingFormProps> = () => {
                     </Form.Item>
 
                     <Form.Item<FieldType>
+                        required={false}
                         label={<span className="font-medium">{('Phone')}</span>}
                         name="phone"
                         rules={[{ required: true }]}
@@ -152,6 +159,7 @@ const SettingForm: React.FC<SettingFormProps> = () => {
                     </Form.Item>
 
                     <Form.Item<FieldType>
+                        required={false}
                         label={<span className="font-medium">{('Telegram')}</span>}
                         name="telegram"
                         rules={[{ required: true }]}
@@ -160,6 +168,7 @@ const SettingForm: React.FC<SettingFormProps> = () => {
                     </Form.Item>
 
                     <Form.Item<FieldType>
+                        required={false}
                         label={<span className="font-medium">{t('bank')}</span>}
                         name="bank_id"
                         rules={[{ required: true }]}
@@ -170,6 +179,7 @@ const SettingForm: React.FC<SettingFormProps> = () => {
                     </Form.Item>
 
                     <Form.Item
+                        required={false}
                         label={<span className="font-medium">{t('accountname')}</span>}
                         name="account_name"
                         rules={[{ required: true }]}
@@ -179,6 +189,7 @@ const SettingForm: React.FC<SettingFormProps> = () => {
                     </Form.Item>
 
                     <Form.Item<FieldType>
+                        required={false}
                         label={<span className="font-medium">{t('accountnumber')}</span>}
                         name="acount_no"
                         rules={[{ required: true }]}
@@ -187,6 +198,7 @@ const SettingForm: React.FC<SettingFormProps> = () => {
                     </Form.Item>
 
                     <Form.Item
+                        required={false}
                         wrapperCol={{ offset: 6, span: 16 }}
                         className="flex justify-end"
                     >

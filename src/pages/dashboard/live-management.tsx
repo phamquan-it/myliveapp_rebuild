@@ -16,9 +16,9 @@ import ViewStreamLog from '@/components/live-streams/ViewStreamLog';
 import { pagination } from '@/helpers/pagination';
 import syncObjectToUrl from '@/helpers/syncObjectToUrl';
 import getObjecFormUrlParameters from '@/hooks/getObjectFormParameter';
-import { SearchOutlined } from '@ant-design/icons';
+import { CheckOutlined, DownloadOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Input, Select, Table, Image, Checkbox } from 'antd';
+import { Button, Input, Select, Table, Image, Checkbox, ConfigProvider, Tooltip } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { ColumnType } from 'antd/lib/table';
 import dayjs from 'dayjs';
@@ -29,11 +29,8 @@ import { useRouter } from 'next/router';
 import { StringifiableRecord } from 'query-string';
 import React, { useEffect, useState } from 'react';
 
-interface PageProps {
-    modal?: any;
-}
 
-const Page: NextPage<PageProps> = ({ modal }) => {
+const Page = () => {
     const p = useTranslations("Placeholder")
     const router = useRouter()
     const { limit, offset, pageIndex, pageSize } = pagination(router, 1, 20)
@@ -57,45 +54,44 @@ const Page: NextPage<PageProps> = ({ modal }) => {
     const d = useTranslations("DashboardMenu")
     const columns: ColumnType<ActivityStream>[] = [
         {
-            title: t('entryno'),
-            dataIndex: 'key',
-            key: 'key',
+            title: ('ID'),
+            dataIndex: 'id',
+            key: 'id',
+            render: (text: number) => (
+                <span className="font-semibold text-blue-500">
+                    {text}
+                </span>
+            )
         },
         {
             title: t('email'),
             dataIndex: 'email',
             key: 'email',
-            render: (text: string, record, index) => record?.user?.email
+            render: (text: string, record, index) => (<div className="flex justify-between">
+                <div>
+                    {record?.user?.email}
+                </div>
+                <div className="flex gap-3">
+                    {(record.loop == "infinity") ?
+                        <Tooltip title="Loop">
+                            <SyncOutlined className="!text-blue-600" />
+                        </Tooltip>
+                        : ""}
+                    <Tooltip title={record.downloaded ? "Downloaded" : "Downloading"}>
+                        {record.downloaded ? <CheckOutlined className="!text-green-700" /> : <DownloadOutlined />}
+                    </Tooltip>
+                </div>
+            </div>)
         },
         {
-            title: ('ID'),
-            dataIndex: 'id',
-            key: 'id'
-        },
-        {
-            title: ('Loop'),
-            dataIndex: 'loop',
-            key: 'loop',
-            render: (loop) => <Checkbox defaultChecked={loop == "infinity"}></Checkbox>
-        },
-
-        {
-            title: d('platform'),
+            title: ('Platform'),
             dataIndex: 'platform',
             key: 'platform',
-            render: (text: string, record, index) => record?.platform?.name
-        },
-        {
-            title: ('Downloaded'),
-            dataIndex: 'downloaded',
-            key: 'downloaded',
-            render: (downloaded: boolean) => (downloaded) ? 'Yes' : 'No'
-        },
-        {
-            title: t('status'),
-            dataIndex: 'status',
-            key: 'status',
-            render: (text) => (<StreamState state={text} />)
+            render: () => (
+                <Image src="https://cdn-icons-png.flaticon.com/128/174/174883.png" alt="" width={25} />
+            ),
+            align: 'center',
+            width: 50
         },
         {
             title: t('start_time'),
@@ -108,6 +104,12 @@ const Page: NextPage<PageProps> = ({ modal }) => {
             dataIndex: 'end_at',
             key: 'end_at',
             render: (text: string) => text == undefined ? 'Not schedule' : dayjs(text).format('YYYY/MM/DD HH:mm')
+        },
+        {
+            title: t('status'),
+            dataIndex: 'status',
+            key: 'status',
+            render: (text) => (<StreamState state={text} />)
         },
         {
             title: t('createAt'),
@@ -168,31 +170,41 @@ const Page: NextPage<PageProps> = ({ modal }) => {
                 <DateFilter />
             </div>
         </div>
+        <ConfigProvider theme={{
+            components: {
+                Table: {
+                    cellPaddingBlock: 3
+                }
+            }
+        }}>
+            <Table 
+            rowClassName='font-sans'
+            dataSource={data?.data?.data.map((livestream: any, index: number) => ({
+                ...livestream,
+                key: pageIndex * pageSize + (index + 1) - pageSize,
+            }))}
 
-        <Table dataSource={data?.data?.data.map((livestream: any, index: number) => ({
-            ...livestream,
-            key: pageIndex * pageSize + (index + 1) - pageSize,
-        }))}
+                scroll={{
+                    x: 400
+                }}
+                loading={isFetching}
+                columns={columns}
+                pagination={{
+                    total: data?.data?.total,
+                    pageSize: pageSize,
+                    current: pageIndex
+                }}
+                rowSelection={{
+                    type: 'checkbox'
+                }}
+                onChange={(pagination) => {
+                    syncObj({
+                        pageIndex: pagination.current,
+                    })
+                }}
+            />
+        </ConfigProvider>
 
-            scroll={{
-                x: 400
-            }}
-            loading={isFetching}
-            columns={columns}
-            pagination={{
-                total: data?.data?.total,
-                pageSize: pageSize,
-                current: pageIndex
-            }}
-            rowSelection={{
-                type: 'checkbox'
-            }}
-            onChange={(pagination) => {
-                syncObj({
-                    pageIndex: pagination.current,
-                })
-            }}
-        />
     </>
 }
 

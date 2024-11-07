@@ -51,12 +51,12 @@ const Page = () => {
 
     const syncObj = syncObjectToUrl(router)
     return (
-        <>
-            <Tabs defaultActiveKey={tab} items={items} addIcon={<PlusOutlined />} tabPosition='top' onChange={(e) => {
+        <div className="!font-sans">
+            <Tabs className="!font-sans" defaultActiveKey={tab} items={items} addIcon={<PlusOutlined />} tabPosition='top' onChange={(e) => {
                 console.log('active key', e)
                 syncObj({ tab: e })
             }} />
-        </>
+        </div>
     );
 };
 export default Page;

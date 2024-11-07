@@ -74,5 +74,6 @@ export interface ActivityStream {
     resolution?: string | null,
     start_at?: string,
     end_at?: string
-    downloaded: any
+    downloaded: any,
+    loop?: string
 }

@@ -16,7 +16,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { ReactNode, useEffect, useState } from "react";
 import PageLayout from "@/components/PageLayout";
 import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
-import DashBoardLayout from "./layout";
+import DashBoardLayout from "@/components/DashboardLayout";
 
 config.autoAddCss = false;
 
@@ -49,7 +49,9 @@ export default function App({ Component, pageProps }: AppProps) {
                     >
                         <NextNProgress color="#29D" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} options={{ showSpinner: false }} />
                         <Layout>
-                            <Component {...pageProps} />
+                            <div className="font-sans">
+                                <Component {...pageProps} />
+                            </div>
                         </Layout>
                     </ConfigProvider>
                 </ReactQueryProvider>

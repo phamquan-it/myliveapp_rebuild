@@ -1,5 +1,5 @@
 import { EditFilled, PlusCircleFilled, UploadOutlined } from '@ant-design/icons';
-import { Button, Form, FormProps, Input, Modal, Upload, UploadProps, message } from 'antd';
+import { Button, ConfigProvider, Form, FormProps, Input, Modal, Upload, UploadProps, message } from 'antd';
 import React, { useState } from 'react';
 import axiosInstance from '@/apiClient/axiosConfig';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -19,7 +19,7 @@ interface UpdatePlatformProps {
     platform: any
 }
 const UpdatePlatform: React.FC<UpdatePlatformProps> = ({ platform }) => {
-     const queryClient = useQueryClient()
+    const queryClient = useQueryClient()
 
     console.log(platform.id)
     const createPlatform = useMutation({
@@ -31,7 +31,7 @@ const UpdatePlatform: React.FC<UpdatePlatformProps> = ({ platform }) => {
         onSuccess: (res) => {
             message.success("Success")
             setIsModalOpen(false)
-            queryClient.invalidateQueries({ queryKey:['platform'] })
+            queryClient.invalidateQueries({ queryKey: ['platform'] })
         },
         onError: (err) => {
             message.error(err.message)
@@ -76,7 +76,13 @@ const UpdatePlatform: React.FC<UpdatePlatformProps> = ({ platform }) => {
         setIsModalOpen(true);
     }
     return <>
-        <Button type="primary" onClick={showModal} iconPosition="end" className='w-full' icon={<EditFilled />}></Button>
+        <ConfigProvider theme={{
+            token: {
+                colorPrimary:'green'
+            }
+            }}>
+            <Button  onClick={showModal} iconPosition="end"  icon={<EditFilled />} className="border-green-700 text-green-700"></Button>
+        </ConfigProvider>
         <Modal title="Create" open={isModalOpen} onCancel={handleCancel} footer={[]}>
             <Form
                 layout="vertical"

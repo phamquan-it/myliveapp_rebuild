@@ -178,6 +178,7 @@ const Page = () => {
                     } />
             </div>
             <Table
+                rowClassName="font-sans"
                 loading={isFetching}
                 scroll={{
                     x: 300

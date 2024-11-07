@@ -71,6 +71,7 @@ const CreateAdvandedConfig: React.FC<CreateAdvandedConfigProps> = () => {
                 autoComplete="off"
             >
                 <Form.Item<AdvandedConfig>
+                    required={false}
                     label="Name"
                     name="name"
                     rules={[{ required: true }]}
@@ -78,6 +79,7 @@ const CreateAdvandedConfig: React.FC<CreateAdvandedConfigProps> = () => {
                     <Input placeholder="Enter config name" />
                 </Form.Item>
                 <Form.Item<AdvandedConfig>
+                    required={false}
                     label="Resolution"
                     name="resolution_key"
                     rules={[{ required: true }]}
@@ -85,6 +87,7 @@ const CreateAdvandedConfig: React.FC<CreateAdvandedConfigProps> = () => {
                     <Select options={resolutionData.data?.data.map((resolution) => ({ value: resolution.key, label: resolution.key }))} placeholder="Select resolution" />
                 </Form.Item>
                 <Form.Item<AdvandedConfig>
+                    required={false}
                     label="Max stream"
                     name="max_stream"
                     rules={[{ required: true }]}

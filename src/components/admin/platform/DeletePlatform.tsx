@@ -1,7 +1,7 @@
 import axiosInstance from '@/apiClient/axiosConfig';
 import { DeleteFilled, DeleteOutlined } from '@ant-design/icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button, Popconfirm, PopconfirmProps, message } from 'antd';
+import { Button, ConfigProvider, Popconfirm, PopconfirmProps, message } from 'antd';
 import React from 'react';
 interface DeletePlatformProps {
     id: number
@@ -34,16 +34,22 @@ const DeletePlatform: React.FC<DeletePlatformProps> = ({ id }) => {
 
 
     return <>
-        <Popconfirm
-            title="Delete the task"
-            description="Are you sure to delete this platform?"
-            onConfirm={confirm}
-            onCancel={cancel}
-            okText="Yes"
-            cancelText="No"
-        >
-            <Button danger type="primary" icon={<DeleteFilled />} loading={isPending}></Button>
-        </Popconfirm>
+        <ConfigProvider theme={{
+            token: {
+                colorPrimary: 'red'
+            }
+        }} >
+            <Popconfirm
+                title="Delete the task"
+                description="Are you sure to delete this platform?"
+                onConfirm={confirm}
+                onCancel={cancel}
+                okText="Yes"
+                cancelText="No"
+            >
+                <Button icon={<DeleteFilled />} className="text-red-600 border-red-600" loading={isPending}></Button>
+            </Popconfirm>
+        </ConfigProvider>
     </>
 }
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, Form, Image, Input, Modal, Select, Table } from "antd";
+import { Button, Form, Image, Input, Modal, Select, Skeleton, Table } from "antd";
 import Head from "next/head";
 import { GetStaticPropsContext } from "next";
 import { PlusCircleFilled, StarFilled } from "@ant-design/icons";
@@ -23,8 +23,8 @@ import filterOptionByLabel from "@/hooks/filterOptionByLabel";
 import axiosInstance from "@/apiClient/axiosConfig";
 import SearchInput from "@/components/filters/SearchInput";
 import { ColumnType, ColumnsType } from "antd/es/table";
-import DashBoardLayout from "../layout";
-const Page = ()=> {
+import ServiceList from "@/components/service";
+const Page = () => {
     const router = useRouter();
     const token = getCookie("token");
 
@@ -91,7 +91,7 @@ const Page = ()=> {
             dataIndex: "id",
             key: "id",
             align: "center",
-            render: (id: number) => <Button type='primary' size='small' onClick={() => {
+            render: (id: number) => <Button type='primary' onClick={() => {
             }}>{t('buy')}</Button>
         },
     ];
@@ -124,36 +124,14 @@ const Page = ()=> {
                     <CreateService />
                 </div>
 
-                <Table
-                    loading={isFetching}
-                    dataSource={data?.data?.services
-                        .map((service: any, index: number) => ({
-                            ...service, key: index
-                        }))}
-                    columns={columns}
-                    expandable={{
-                        expandedRowRender: (record: any) => (
-                            <TextArea
-                                value={record.description_en}
-                                readOnly
-                                autoSize
-                            />
-                        ),
-                        rowExpandable: (record) =>
-                            record?.description_en !== undefined,
-                    }}
-                    scroll={{ x: 1000 }}
-                    pagination={{
-                        position: ["bottomCenter"],
-                        defaultCurrent: 1,
-                        showSizeChanger: true,
-                        pageSize: 20,
-                    }}
-                />
+                <Skeleton loading={isFetching}>
+                    <ServiceList data={data?.data?.services} />
+                </Skeleton>
             </div>
         </div>
     );
 }
+export default Page
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
     return {

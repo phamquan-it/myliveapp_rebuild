@@ -8,9 +8,12 @@ import {
     CheckOutlined,
     CloseOutlined,
     PlusCircleFilled,
+    UserOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
+    Avatar,
+    ConfigProvider,
     Form,
     Input,
     Modal,
@@ -18,6 +21,7 @@ import {
     Switch,
     Table,
     TablePaginationConfig,
+    Tag,
 } from "antd";
 import { AnyObject } from "antd/es/_util/type";
 import {
@@ -51,32 +55,49 @@ const Page = () => {
     const d = useTranslations("DashboardMenu");
     const columns: ColumnsType<any> = [
         {
-            align: "center",
             title: t("entryno"),
             dataIndex: "key",
             key: "key",
+            width: 70
         },
         {
-            title: t("name"),
+            title: <div className="py-2">
+                {t("name")}
+            </div>,
             dataIndex: "name",
             key: "name",
+            render: (text, record) => (<>
+                <div className="font-semibold">{text}</div>
+                <span className="text-slate-500" style={{
+                    fontSize: 12
+                }}>{record?.email}</span>
+            </>)
         },
         {
-            title: "Email",
-            dataIndex: "email",
-            key: "email",
+            title: "Avatar",
+            dataIndex: "avatar",
+            key: "avatar",
+            render: (text, record) => <>
+                 <Avatar size={40} icon={<UserOutlined />} />
+            </>
+        },
+        {
+            title: "Role",
+            dataIndex: "role",
+            key: "role",
+            render: (text, record) => record?.role?.name
         },
         {
             title: t("isactive"),
             dataIndex: "isActive",
             key: "isActive",
-            render: (text: string, record: any) => (
-                <Switch
-                    defaultChecked={record?.isActive == "1" ? true : false}
-                    onChange={(value) => {
-                    }}
-                />
-            ),
+
+            render: (value) => (<>
+                {value ?
+                    <Tag color="blue" className="font-semibold">Active</Tag> :
+                    <Tag color="red" className="font-semibold">In active</Tag>
+                }
+            </>)
         },
         {
             title: t("createat"),
@@ -90,19 +111,14 @@ const Page = () => {
             dataIndex: "remains",
             key: "remains",
             align: "right",
+            render: (text) => <span className="font-semibold">{text}$</span>
         },
         {
             title: t("totalmoney"),
             dataIndex: "total",
             key: "total",
             align: "right",
-        },
-        {
-            align: "center",
-            title: t("role"),
-            dataIndex: "role",
-            key: "role",
-            render: (text: string, record: any) => record?.role?.name,
+            render: (text) => <span className="font-semibold">{text}$</span>
         },
         {
             title: t("action"),
@@ -158,26 +174,37 @@ const Page = () => {
                 />
 
             </div>
-            <Table
-                dataSource={data?.data?.data?.map((item: any, index: number) => ({
-                    ...item,
-                    key: pageIndex * pageSize + (index + 1) - pageSize,
-                }))}
-                onChange={(pagination) => {
-                    syncObj({
-                        pageIndex: pagination.current,
-                    })
-                }}
 
-                columns={columns}
-                loading={isFetching}
-                scroll={{ x: 900 }}
-                pagination={{
-                    total: data?.data.total,
-                    pageSize: pageSize,
-                    current: pageIndex,
-                }}
-            />
+            <ConfigProvider theme={{
+                components: {
+                    Table: {
+                        cellPaddingBlock: 5
+                    }
+                }
+            }}>
+                <Table rowClassName="font-sans"
+                    dataSource={data?.data?.data?.map((item: any, index: number) => ({
+                        ...item,
+                        key: pageIndex * pageSize + (index + 1) - pageSize,
+                    }))}
+                    onChange={(pagination) => {
+                        syncObj({
+                            pageIndex: pagination.current,
+                        })
+                    }}
+                    rowSelection={{
+                        type: "checkbox"
+                    }}
+                    columns={columns}
+                    loading={isFetching}
+                    scroll={{ x: 900 }}
+                    pagination={{
+                        total: data?.data.total,
+                        pageSize: pageSize,
+                        current: pageIndex,
+                    }}
+                />
+            </ConfigProvider>
         </>
     );
 };
