@@ -12,3 +12,7 @@
   height: 20px;
   color: rgb(0, 119, 0);
 }
+
+.ant-form-item{
+    padding-bottom: 0px !important;
+}

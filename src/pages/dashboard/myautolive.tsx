@@ -50,6 +50,7 @@ import HorizoneMenu from "@/components/admin/HorizoneMenu";
 import PlatformSelect from "@/components/admin/PlatformSelect";
 import { usePlatformData } from "@/components/live-streams/CreateStreamByAdmin";
 import { FaPlay } from "react-icons/fa";
+import AdminLayout from "@/components/admin-layout";
 export interface StreamDataType {
     createAt?: string
     download_link?: string
@@ -179,7 +180,7 @@ const Page = () => {
     };
     const s = useTranslations('StreamStatus')
     return (
-        <>
+        <AdminLayout selected={[]} breadcrumbItems={[]}>
             <Affix>
                 <HorizoneMenu data={streamsSelected}>
                     <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} />
@@ -222,7 +223,7 @@ const Page = () => {
                 </div>
             </div>
             <Table
-               
+
                 rowClassName="!font-sans"
                 rowSelection={{
                     type: 'checkbox',
@@ -249,7 +250,7 @@ const Page = () => {
                 columns={columns}
 
             />
-        </>
+        </AdminLayout>
     );
 };
 export default Page;

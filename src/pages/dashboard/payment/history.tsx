@@ -28,6 +28,7 @@ import { pagination } from "@/helpers/pagination";
 import axiosInstance from "@/apiClient/axiosConfig";
 import syncObjectToUrl from "@/helpers/syncObjectToUrl";
 import SearchInput from "@/components/filters/SearchInput";
+import AdminLayout from "@/components/admin-layout";
 
 const Page = () => {
     const router = useRouter();
@@ -130,7 +131,7 @@ const Page = () => {
         syncObj({ keyword: e.target.value })
     }, 300)
     return (
-        <>
+        <AdminLayout selected={[]} breadcrumbItems={[]}>
             <div className="my-3 gap-3 grid lg:grid-cols-5 md:grid-cols-2">
                 <HistoryStatitical
                     color="rgb(10, 143, 220)"
@@ -200,7 +201,7 @@ const Page = () => {
                     }))}
                 columns={columns} />
 
-        </>
+        </AdminLayout>
     );
 };
 export default Page;

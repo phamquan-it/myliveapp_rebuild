@@ -1,5 +1,6 @@
 import { AdvandedConfig } from '@/@type/AdvandedConfig';
 import axiosInstance from '@/apiClient/axiosConfig';
+import AdminLayout from '@/components/admin-layout';
 import CreateAdvandedConfig from '@/components/admin/advandedConfig/create-advande-config';
 import { DeleteAdvandedConfig } from '@/components/admin/advandedConfig/delete-advanded-config';
 import { UpdateAdvandedConfig } from '@/components/admin/advandedConfig/update-advanded-config';
@@ -71,7 +72,7 @@ const Page: React.FC<PageProps> = () => {
     const syncObj = syncObjectToUrl(router)
     const t = useTranslations('MyLanguage')
     const d = useTranslations('DashboardMenu')
-    return <>
+    return <AdminLayout  selected={[]} breadcrumbItems={[]} >
         <div className="flex justify-between py-3">
             <SearchInput />
             <CreateAdvandedConfig />
@@ -99,7 +100,7 @@ const Page: React.FC<PageProps> = () => {
                 }))}
             columns={columns}
         />
-    </>
+    </AdminLayout>
 }
 
 export default Page

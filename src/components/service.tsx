@@ -39,7 +39,7 @@ const ServiceList: React.FC<ServiceListProp> = ({ data }) => {
         },
     ];
     return <>
-        <Table dataSource={dataSource} columns={columns} />;
+        <Table dataSource={dataSource} columns={columns} />
     </>
 }
 

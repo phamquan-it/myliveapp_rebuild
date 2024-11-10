@@ -1,4 +1,5 @@
 import axiosInstance from "@/apiClient/axiosConfig";
+import AdminLayout from "@/components/admin-layout";
 import SearchInput from "@/components/filters/SearchInput";
 import { pagination } from "@/helpers/pagination";
 import syncObjectToUrl from "@/helpers/syncObjectToUrl";
@@ -130,7 +131,7 @@ const Page = () => {
     }, [router])
 
     return (
-        <>
+        <AdminLayout actions={[]} breadcrumbItems={[]}  selected={[]}>
             <div className="flex justify-between my-3">
 
                 <div className="flex" id="filter">
@@ -158,7 +159,7 @@ const Page = () => {
                         key: pageIndex * pageSize + (index + 1) - pageSize,
                     }))}
                 columns={columns} />
-        </>
+        </AdminLayout>
     );
 };
 export default Page;

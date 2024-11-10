@@ -39,6 +39,7 @@ import Reloadbtn from "../reloadbtn";
 import NumOfStreamsVps from "@/components/vps/NumOfStreamsVps";
 import { FaPlay } from "react-icons/fa";
 import { FiMoreVertical } from "react-icons/fi";
+import AdminLayout from "@/components/admin-layout";
 
 const Page = () => {
     const [openState, setOpenState] = useState(false)
@@ -201,7 +202,7 @@ const Page = () => {
     const syncObj = syncObjectToUrl(router)
     const [selectedRows, setSelectedRows] = useState<any>([])
     return (
-        <>
+        <AdminLayout selected={[]} breadcrumbItems={[]}>
             <Affix offsetTop={100}>
                 <HorizoneMenu data={selectedRows}>
                     <HideMenuSelected selectedRows={selectedRows} />
@@ -281,7 +282,8 @@ const Page = () => {
 
             </ConfigProvider>
 
-        </>
+
+        </AdminLayout>
     );
 };
 export default Page;

@@ -43,6 +43,7 @@ import syncObjectToUrl from "@/helpers/syncObjectToUrl";
 import OrderStatus from "@/components/filters/OrderStatus";
 import SearchInput from "@/components/filters/SearchInput";
 import Statistic from "@/components/admin/order/statistic";
+import AdminLayout from "@/components/admin-layout";
 
 const { Option } = Select;
 
@@ -204,38 +205,39 @@ const Page = () => {
 
     return (
         <>
-            <Statistic />
-            <div className="flex justify-between my-3 mt-10">
-                <div className='grid sm:flex gap-0.5' id="filter">
-                    <SearchInput />
-                    <OrderStatus />
+            <AdminLayout selected={[]} breadcrumbItems={[]}>
+                <Statistic />
+                <div className="flex justify-between my-3 mt-10">
+                    <div className='grid sm:flex gap-0.5' id="filter">
+                        <SearchInput />
+                        <OrderStatus />
+                    </div>
                 </div>
-            </div>
-            <ConfigProvider theme={{
-                components: {
-                    Table:{ 
-                        cellPaddingBlock: 3
-                }
-                }
+                <ConfigProvider theme={{
+                    components: {
+                        Table: {
+                            cellPaddingBlock: 3
+                        }
+                    }
                 }}>
-                <Table
-                    rowClassName="!font-sans"
-                    dataSource={data?.data.data.map((item: any, index: number) => ({
-                        ...item,
-                        key: pageIndex * 10 + (index + 1) - 10,
-                    }))}
-                    columns={columns}
-                    loading={isFetching}
-                    onChange={handleTableChange}
-                    scroll={{ x: 1200 }}
-                    pagination={{
-                        total: data?.data.total,
-                        pageSize: pageSize,
-                        current: pageIndex,
-                    }}
-                />
-
-            </ConfigProvider>
+                    <Table
+                        rowClassName="!font-sans"
+                        dataSource={data?.data.data.map((item: any, index: number) => ({
+                            ...item,
+                            key: pageIndex * 10 + (index + 1) - 10,
+                        }))}
+                        columns={columns}
+                        loading={isFetching}
+                        onChange={handleTableChange}
+                        scroll={{ x: 1200 }}
+                        pagination={{
+                            total: data?.data.total,
+                            pageSize: pageSize,
+                            current: pageIndex,
+                        }}
+                    />
+                </ConfigProvider>
+            </AdminLayout>
         </>
     );
 };

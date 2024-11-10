@@ -1,14 +1,7 @@
-"use client";
-import dynamic from "next/dynamic";
-import "chart.js/auto";
-import { Card, ConfigProvider, Select, Table, Tabs, TabsProps, Tag } from "antd";
-import Title from "antd/lib/typography/Title";
-import { FacebookFilled, LinkedinFilled, TwitchOutlined, TwitterCircleFilled, YoutubeFilled } from "@ant-design/icons";
-import { GetStaticPropsContext } from "next";
-import { FaShoppingBag } from "react-icons/fa";
-const Line = dynamic(() => import("react-chartjs-2").then((mod) => mod.Line), {
-    ssr: false,
-});
+import { FacebookFilled, LinkedinFilled, TwitterCircleFilled, XFilled, YoutubeFilled, YoutubeOutlined } from '@ant-design/icons';
+import { Card, ConfigProvider, Select, Table, Tag, Image, TabsProps, Tabs } from 'antd';
+import Title from 'antd/es/typography/Title';
+import React from 'react';
 interface PageProps {
 
 }
@@ -58,7 +51,7 @@ const onChange = (key: string) => {
 };
 
 const items: TabsProps['items'] = [
-    {
+     {
         key: '',
         label: 'All',
         children: '',
@@ -82,18 +75,15 @@ const items: TabsProps['items'] = [
 
 
 const Page: React.FC<PageProps> = () => {
-    return <div style={{
-        height: "calc(100vh - 65px)",
-        overflow: "auto"
-    }}>
-        <div className="p-3 livestream text-white" >
+    return <>
+        <div className="p-3 livestream text-white">
             <Title level={5}>Dashboard</Title>
             <Card title="" extra={<Select className="!w-36" options={[{
                 label: 'This year',
                 value: new Date().getFullYear()
             }]} />}>
                 <p></p>
-                <div className="grid grid-cols-5 rounded gap-1 bg-white shadown">
+                <div className="grid grid-cols-4 rounded gap-1 bg-white shadown">
                     <Card className="!bg-sky-500">
                         <Title level={5} className="!text-white !mb-0">
                             <FacebookFilled /> &nbsp;
@@ -119,13 +109,6 @@ const Page: React.FC<PageProps> = () => {
                             Twitter</Title>
                         <span className="text-white" style={{ fontSize: 12 }}>Income: $100</span>
                     </Card>
-                    <Card className="!bg-orange-400">
-                        <Title level={5} className="!text-white !mb-0 flex">
-                            <FaShoppingBag /> &nbsp;
-                            Shoppee</Title>
-                        <span className="text-white" style={{ fontSize: 12 }}>Income: $100</span>
-                    </Card>
-
                 </div>
             </Card>
 
@@ -139,11 +122,11 @@ const Page: React.FC<PageProps> = () => {
             } >
                 <p></p>
             </Card>
-            <Card title={
+            <Card  title={
                 <span style={{
                     fontWeight: '400'
                 }} className="font-sans">Recent orders</span>
-            } className="col-span-2" extra={<a href="#">More</a>}>
+            }  className="col-span-2" extra={<a href="#">More</a>}>
 
 
 
@@ -189,14 +172,8 @@ const Page: React.FC<PageProps> = () => {
                 <Table dataSource={dataSource} columns={columns} showHeader={false} pagination={false} />
             </Card>
         </div>
-    </div>
-}
-export default Page
 
-export async function getStaticProps({ locale }: GetStaticPropsContext) {
-    return {
-        props: {
-            messages: (await import(`../../../messages/${locale}.json`)).default,
-        },
-    };
+    </>
 }
+
+export default Page

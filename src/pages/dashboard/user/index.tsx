@@ -47,6 +47,7 @@ import { pagination } from "@/helpers/pagination";
 import axiosInstance from "@/apiClient/axiosConfig";
 import syncObjectToUrl from "@/helpers/syncObjectToUrl";
 import UserAction from "@/components/admin/user/UserAction";
+import AdminLayout from "@/components/admin-layout";
 const { Option } = Select;
 const Page = () => {
     const token = getCookie("token");
@@ -147,8 +148,8 @@ const Page = () => {
     })
     const syncObj = syncObjectToUrl(router)
     return (
-        <>
-            <div className="flex py-3 gap-2">
+        <AdminLayout selected={[]} breadcrumbItems={[]}>
+            <div className="flex py-3 gap-2 h-full">
                 <SearchInput />
                 <Select className="w-48" options={[
                     { value: 1, label: <span>User</span> },
@@ -205,7 +206,7 @@ const Page = () => {
                     }}
                 />
             </ConfigProvider>
-        </>
+        </AdminLayout>
     );
 };
 export default Page;

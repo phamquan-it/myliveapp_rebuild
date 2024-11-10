@@ -1,4 +1,5 @@
 import axiosInstance from '@/apiClient/axiosConfig';
+import AdminLayout from '@/components/admin-layout';
 import TableAction from '@/components/admin/TableAction';
 import EditPlatform from '@/components/admin/crudform/edit/EditPlatform';
 import DeletePlatform from '@/components/admin/platform/DeletePlatform';
@@ -88,7 +89,7 @@ const Page = () => {
         },
 
     ];
-    return <>
+    return <AdminLayout selected={[]} breadcrumbItems={[]}>
         <div style={{
             margin: "auto"
         }}>
@@ -128,7 +129,7 @@ const Page = () => {
 
             </ConfigProvider>
         </div>
-    </>
+    </AdminLayout>
 }
 
 export default Page

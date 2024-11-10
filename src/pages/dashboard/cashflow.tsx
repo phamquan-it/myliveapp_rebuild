@@ -1,4 +1,5 @@
 import axiosInstance from "@/apiClient/axiosConfig";
+import AdminLayout from "@/components/admin-layout";
 import SearchInput from "@/components/filters/SearchInput";
 import { useQuery } from "@tanstack/react-query";
 import { Input, Select, Table, TablePaginationConfig } from "antd";
@@ -91,9 +92,9 @@ const Page = () => {
 
     const p = useTranslations("Placeholder");
     return (
-        <>
+        <AdminLayout selected={[]} breadcrumbItems={[]}>
             <div className="flex justify-between mt-10 mb-3">
-                    <SearchInput />
+                <SearchInput />
             </div>
 
             <Table
@@ -111,7 +112,7 @@ const Page = () => {
                     //    pageSize: pageSize,
                 }}
             />
-        </>
+        </AdminLayout>
     );
 };
 export default Page;

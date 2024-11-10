@@ -31,7 +31,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
     if (!isReady) return (<div className="h-screen w-screen flex justify-center items-center"><Spin /> </div>)
 
-    const Layout = DashBoardLayout;
+    const Layout = router.asPath.includes('/dashboard') ? DashBoardLayout : PageLayout;
     return (
         <NextIntlClientProvider
             locale={router.locale}

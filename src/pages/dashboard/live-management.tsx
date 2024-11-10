@@ -1,6 +1,7 @@
 import { ActivityStream } from '@/@type/api_object';
 import axiosInstance from '@/apiClient/axiosConfig';
 import DateFilter from '@/components/DateFilter';
+import AdminLayout from '@/components/admin-layout';
 import CreateNewStream from '@/components/admin/create-new-stream';
 import StreamLog from '@/components/admin/streams/log';
 import DeleteStream from '@/components/autolive/DeleteStream';
@@ -131,7 +132,7 @@ const Page = () => {
     }, 300)
     const platformQuery = usePlatformData();
     const s = useTranslations('StreamStatus')
-    return <>
+    return <AdminLayout  selected={[]} breadcrumbItems={[]}>
         <div className="md:flex py-3 gap-2 justify-between">
             <div className='grid gap-2 md:flex gap-2'>
                 <SearchInput />
@@ -205,7 +206,7 @@ const Page = () => {
             />
         </ConfigProvider>
 
-    </>
+    </AdminLayout>
 }
 
 export default Page

@@ -24,6 +24,7 @@ import axiosInstance from "@/apiClient/axiosConfig";
 import SearchInput from "@/components/filters/SearchInput";
 import { ColumnType, ColumnsType } from "antd/es/table";
 import ServiceList from "@/components/service";
+import AdminLayout from "@/components/admin-layout";
 const Page = () => {
     const router = useRouter();
     const token = getCookie("token");
@@ -109,26 +110,28 @@ const Page = () => {
         },
     });
     return (
-        <div className="">
-            <Head>
-                <title>Service</title>
-                <link rel="icon" href="/logo.png" />
-            </Head>
-            <div>
+        <AdminLayout  selected={[]} breadcrumbItems={[]}>
+            <div className="">
+                <Head>
+                    <title>Service</title>
+                    <link rel="icon" href="/logo.png" />
+                </Head>
+                <div>
 
-                <div
-                    className="grid md:flex justify-between items-center my-3 gap-2"
-                    id="filter"
-                >
-                    <SearchInput />
-                    <CreateService />
+                    <div
+                        className="grid md:flex justify-between items-center my-3 gap-2"
+                        id="filter"
+                    >
+                        <SearchInput />
+                        <CreateService />
+                    </div>
+
+                    <Skeleton loading={isFetching}>
+                        <ServiceList data={data?.data?.services} />
+                    </Skeleton>
                 </div>
-
-                <Skeleton loading={isFetching}>
-                    <ServiceList data={data?.data?.services} />
-                </Skeleton>
             </div>
-        </div>
+        </AdminLayout>
     );
 }
 export default Page

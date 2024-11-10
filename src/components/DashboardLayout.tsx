@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react';
 import { IoIosLogOut } from "react-icons/io";
 import { BsFilterLeft } from "react-icons/bs";
-import { Button, ConfigProvider, Flex, Layout, Menu, MenuProps, Image, Avatar, Table, Dropdown, Input, Select, List, Card, Radio, DatePicker } from 'antd';
+import { Button, ConfigProvider, Flex, Layout, Menu, MenuProps, Image, Avatar, Table, Dropdown, Input, Select, List, Card, Radio, DatePicker, Modal } from 'antd';
 import { AppstoreOutlined, CloseOutlined, FilterFilled, FundOutlined, HistoryOutlined, HomeFilled, MailOutlined, PlusOutlined, SettingOutlined, SignalFilled, UserOutlined, WindowsFilled } from '@ant-design/icons';
 import { FaBuyNLarge, FaListUl, FaMoneyBill, FaServer, FaSubscript, FaUbuntu } from 'react-icons/fa';
 import { DashboardRouter } from '@/enums/router/dashboard';
@@ -18,6 +18,7 @@ import ServiceList from '@/components/service';
 import VpsTable from '@/components/admin/vps/VpsTable';
 import AutoLiveTable from '@/components/autolive/AutoLiveTable';
 import LocaleSwitcher from '@/LocaleSwitcher';
+import NewOrder from './live-streams/new-order';
 const { Header, Footer, Sider, Content } = Layout;
 interface DashBoardLayoutProps {
     children: ReactNode
@@ -30,22 +31,22 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
         {
             key: DashboardRouter.HOME,
             icon: <HomeFilled className="!text-lg" />,
-            label: <Link href={DashboardRouter.HOME}>{('Home')}</Link>,
+            label: <Link href={DashboardRouter.HOME}>{t('home')}</Link>,
         },
         {
             key: DashboardRouter.SERVICE,
             icon: <FaListUl />,
-            label: <Link href={DashboardRouter.SERVICE}>{('Services')}</Link>,
+            label: <Link href={DashboardRouter.SERVICE}>{t('services')}</Link>,
         },
         {
             key: DashboardRouter.MYAUTOLIVE,
             icon: <SignalFilled />,
-            label: <Link href={DashboardRouter.MYAUTOLIVE}>{('My autolive')}</Link>,
+            label: <Link href={DashboardRouter.MYAUTOLIVE}>{t('myautolive')}</Link>,
         },
         {
             key: DashboardRouter.PLATFORM,
             icon: <WindowsFilled />,
-            label: <Link href={DashboardRouter.PLATFORM}>{('Platforms')}</Link>,
+            label: <Link href={DashboardRouter.PLATFORM}>{t('platform')}</Link>,
         },
 
         {
@@ -54,46 +55,46 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
         {
             key: DashboardRouter.ORDER,
             icon: <FaBuyNLarge />,
-            label: <Link href={DashboardRouter.ORDER}>{('Orders')}</Link>,
+            label: <Link href={DashboardRouter.ORDER}>{t('order')}</Link>,
         },
         {
             key: DashboardRouter.PAYMENT_HISTORY,
             icon: <HistoryOutlined />,
-            label: <Link href={DashboardRouter.PAYMENT_HISTORY}>{('Payment history')}</Link>,
+            label: <Link href={DashboardRouter.PAYMENT_HISTORY}>{t('paymenthistory')}</Link>,
         },
         {
             key: DashboardRouter.CASHFLOW,
             icon: <FaMoneyBill />,
-            label: <Link href={DashboardRouter.CASHFLOW}>{('Cashflows')}</Link>,
+            label: <Link href={DashboardRouter.CASHFLOW}>{t('cashflow')}</Link>,
         },
         {
             key: DashboardRouter.REFUND,
             icon: <FundOutlined />,
-            label: <Link href={DashboardRouter.REFUND}>{('Refunds')}</Link>,
+            label: <Link href={DashboardRouter.REFUND}>{t('refund')}</Link>,
         },
         {
             key: DashboardRouter.LIVESTREAM,
             icon: <FaListUl />,
-            label: <Link href={DashboardRouter.LIVESTREAM}>{('Live streams')}</Link>,
+            label: <Link href={DashboardRouter.LIVESTREAM}>{t('livestreams')}</Link>,
         },
         {
             key: DashboardRouter.USER,
             icon: <UserOutlined />,
-            label: <Link href={DashboardRouter.USER}>{('Users')}</Link>,
+            label: <Link href={DashboardRouter.USER}>{t('user')}</Link>,
         },
         {
             type: 'divider',
         },
         {
             key: DashboardRouter.SETTING,
-            label: <Link href={DashboardRouter.SETTING}>{('Settings')}</Link>,
+            label: <Link href={DashboardRouter.SETTING}>{t('Settings')}</Link>,
             icon: <SettingOutlined />,
         },
 
         {
             key: DashboardRouter.ADVANDED_CONFIG,
             icon: <VscSettings />,
-            label: <Link href={DashboardRouter.ADVANDED_CONFIG}>{('AdvancedConfig')}</Link>,
+            label: <Link href={DashboardRouter.ADVANDED_CONFIG}>{t('advancedConfig')}</Link>,
         },
 
         {
@@ -120,7 +121,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
         console.log('click ', e);
     };
     const [newOrderText, setNewOrderText] = useState("New order")
-
+    const [isModalOpen, setIsModalOpen] = useState(false)
     const [filterOpen, setFilterOpen] = useState(true)
     return <>
         <ConfigProvider theme={{
@@ -132,7 +133,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
             }
 
         }}>
-            <Layout className="h-screen " >
+            <Layout className="h-screen" >
                 <Header className="border-b">
                     <div className="flex justify-between items-center h-full">
 
@@ -143,7 +144,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                             </div>
                         </div>
                         <div className="p-3 flex justify-center gap-2 items-center">
-                            <LocaleSwitcher/>
+                            <LocaleSwitcher />
                             <Dropdown trigger={['click']} dropdownRender={() => <>
                                 <div className="border bg-white py-3 rounded w-64">
                                     <div className="px-3 pb-3">
@@ -173,6 +174,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                 </Header>
                 <Layout>
                     <Sider theme="light"
+                        className="border-r"
                         onChange={(e) => {
                             console.log(e)
                         }} onCollapse={(collaped) => {
@@ -182,12 +184,16 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                             overflowY: 'auto',
                             scrollbarWidth: "thin"
                         }}
-                        collapsible
                     >
                         <div className="p-3">
                             <Button type="default"
                                 icon={<PlusOutlined />}
-                                className="w-50 shadow " block size="large">
+                                className="w-50 shadow "
+                                block
+                                size="large"
+                                onClick={() => {
+                                    setIsModalOpen(true)
+                                }}>
                                 <span className="!text-semibold !font-sans">
                                     {newOrderText}
                                 </span>
@@ -198,54 +204,16 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                             defaultSelectedKeys={['1']}
                             defaultOpenKeys={['sub1']}
                             mode="inline"
-                            items={items} className="font-sans"
+                            items={items} className="font-sans !border-r-0"
                         />
                     </Sider>
-                    <Content>
-
-                        <Layout className="h-full">
-                            <Header className='border-b border-s'>
-                                <div className="h-full flex items-center justify-between">
-                                    <Button type="default" icon={<BsFilterLeft />} size="large" onClick={() => {
-                                        setFilterOpen(!filterOpen)
-                                    }}></Button>
-                                    <div>
-                                        <SearchInput />
-                                    </div>
-                                </div>
-                            </Header>
-                            <Layout>
-                                <Content style={{
-                                    padding: 10,
-                                    overflow: "auto",
-                                    scrollbarWidth: "thin"
-                                }} className="font-serif ">
-                                    {children}
-
-
-                                </Content>
-                                <Sider collapsedWidth={0} width="40%" collapsed={filterOpen} style={{
-                                    backgroundColor: 'transparent'
-                                }} >
-                                    <div className="bg-white rounded m-3 p-3 shadow-md" style={{
-                                        height: "95%"
-                                    }}>
-
-                                        <div className="flex justify-between">
-                                            <Title level={5}><FilterFilled />Filters</Title>
-                                            <Button type="default" className="border-none" icon={<CloseOutlined />} onClick={() => {
-                                                setFilterOpen(true)
-                                            }}>
-
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </Sider>
-                            </Layout>
-                        </Layout>
-
-
-
+                    <Modal title="New order" open={isModalOpen} onCancel={() => {
+                        setIsModalOpen(false)
+                    }} footer={[]} width={1000}>
+                        <NewOrder />
+                    </Modal>
+                    <Content >
+                        {children}   
                     </Content>
                 </Layout>
             </Layout>

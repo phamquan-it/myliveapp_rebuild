@@ -334,9 +334,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                     }}
 
                 >
-                    <Suspense fallback={<div>Loading...</div>}>
-                        {children}
-                    </Suspense>
+                    {children}
                 </Content>
             </Layout>
         </Layout>
