@@ -7,7 +7,7 @@ const theme: ThemeConfig = {
   },
   components:{
       Table:{
-          cellPaddingBlock: 8,
+          cellPaddingBlock: 8
       }
   }
   

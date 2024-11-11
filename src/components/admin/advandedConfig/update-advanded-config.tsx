@@ -47,7 +47,7 @@ export const UpdateAdvandedConfig: React.FC<UpdateAdvandedConfigProps> = ({ adva
         setIsModalOpen(false)
     }
     return <>
-        <Button type="primary" icon={<EditFilled />} iconPosition="end" onClick={() => {
+        <Button type="default" icon={<EditFilled className="!text-green-600" />} className="border-green-600" iconPosition="end" onClick={() => {
             setIsModalOpen(true)
         }}></Button>
         <Modal title="Update" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okButtonProps={{

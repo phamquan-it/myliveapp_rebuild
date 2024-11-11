@@ -16,15 +16,15 @@ const StreamState: React.FC<StreamStateProps> = ({ state }) => {
     const s = useTranslations('StreamStatus')
     switch (state) {
         case StreamType.SCHEDULING:
-            return <Tag color='blue' className="font-semibold">{s('scheduling')}</Tag>
+            return <Tag color='blue' className="font-semibold font-sans">{s('scheduling')}</Tag>
         case StreamType.INITALIZE:
-            return <Tag color='magenta' className="font-semibold">{s('initalize')}</Tag>
+            return <Tag color='magenta' className="font-semibold  font-sans">{s('initalize')}</Tag>
         case StreamType.RUNNING:
-            return <Tag color='green' className="font-semibold">{s('running')}</Tag>
+            return <Tag color='green' className="font-semibold  font-sans">{s('running')}</Tag>
         case StreamType.STOPPED:
-            return <Tag color='red' className="font-semibold">{s('stopped')}</Tag>
+            return <Tag color='red' className="font-semibold  font-sans">{s('stopped')}</Tag>
         default:
-            return <Tag color='error' className="font-semibold">{s('error')}</Tag>
+            return <Tag color='error' className="font-semibold  font-sans">{s('error')}</Tag>
     }
 }
 

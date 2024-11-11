@@ -37,12 +37,14 @@ export const DeleteAdvandedConfig: React.FC<DeleteAdvandedConfigProps> = ({ id }
         setIsModalOpen(false)
     }
     return <>
-        <Button type="primary" danger icon={<DeleteFilled />} iconPosition="end" onClick={() => {
+        <Button type="default" danger icon={<DeleteFilled />} iconPosition="end" onClick={() => {
             setIsModalOpen(true)
         }}></Button>
         <Modal title="Delete" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okButtonProps={{
+            danger: true,
             loading: deleteAdvandedConfig.isPending
-        }}>
+        }}
+        >
             <p>Delete this config?</p>
         </Modal>
     </>

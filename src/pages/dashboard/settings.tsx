@@ -51,7 +51,10 @@ const Page = () => {
 
     const syncObj = syncObjectToUrl(router)
     return (
-        <div className="!font-sans">
+        <div className="!font-sans p-3" style={{
+            height: "calc(100vh - 65px)",
+            overflow: "auto"
+        }}>
             <Tabs className="!font-sans" defaultActiveKey={tab} items={items} addIcon={<PlusOutlined />} tabPosition='top' onChange={(e) => {
                 console.log('active key', e)
                 syncObj({ tab: e })

@@ -185,10 +185,7 @@ const Page = () => {
                     status: status,
                     offset: (pageIndex - 1) * pageSize,
                     limit: pageIndex * pageSize,
-                },
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                }
             }),
         placeholderData: (previousData) => previousData,
     });
@@ -205,13 +202,21 @@ const Page = () => {
 
     return (
         <>
-            <AdminLayout selected={[]} breadcrumbItems={[]}>
-                <Statistic />
-                <div className="flex justify-between my-3 mt-10">
-                    <div className='grid sm:flex gap-0.5' id="filter">
-                        <SearchInput />
-                        <OrderStatus />
-                    </div>
+            <AdminLayout selected={[]} breadcrumbItems={[
+                {
+                    title: <Link href="/dashboard">{d('home')}</Link>
+                },
+                {
+                    title: d('order'),
+                },
+            ]
+            } filterOption={(
+                <div className="flex items-center">
+                    <OrderStatus />
+                </div>
+            )}>
+                <div className="mb-3">
+                    <Statistic />
                 </div>
                 <ConfigProvider theme={{
                     components: {

@@ -1,8 +1,8 @@
 import React, { ReactNode, useState } from 'react';
 import { IoIosLogOut } from "react-icons/io";
 import { BsFilterLeft } from "react-icons/bs";
-import { Button, ConfigProvider, Flex, Layout, Menu, MenuProps, Image, Avatar, Table, Dropdown, Input, Select, List, Card, Radio, DatePicker, Modal } from 'antd';
-import { AppstoreOutlined, CloseOutlined, FilterFilled, FundOutlined, HistoryOutlined, HomeFilled, MailOutlined, PlusOutlined, SettingOutlined, SignalFilled, UserOutlined, WindowsFilled } from '@ant-design/icons';
+import { Button, ConfigProvider, Flex, Layout, Menu, MenuProps, Image, Avatar, Table, Dropdown, Input, Select, List, Card, Radio, DatePicker, Modal, Tooltip } from 'antd';
+import { AppstoreOutlined, CloseOutlined, EditFilled, FilterFilled, FundOutlined, HistoryOutlined, HomeFilled, MailOutlined, PlusOutlined, SettingOutlined, SignalFilled, UserOutlined, WindowsFilled } from '@ant-design/icons';
 import { FaBuyNLarge, FaListUl, FaMoneyBill, FaServer, FaSubscript, FaUbuntu } from 'react-icons/fa';
 import { DashboardRouter } from '@/enums/router/dashboard';
 import { useTranslations } from 'next-intl';
@@ -14,16 +14,39 @@ import UserTable from '@/components/newui/UserTable';
 import { ColumnsType } from 'antd/es/table';
 import SearchInput from '@/components/filters/SearchInput';
 import CashflowTable from '@/components/cashflowTable';
-import ServiceList from '@/components/service';
 import VpsTable from '@/components/admin/vps/VpsTable';
 import AutoLiveTable from '@/components/autolive/AutoLiveTable';
 import LocaleSwitcher from '@/LocaleSwitcher';
 import NewOrder from './live-streams/new-order';
+import { deleteCookie } from 'cookies-next';
+import router from 'next/router';
+import axiosInstance from '@/apiClient/axiosConfig';
+import { useQuery } from '@tanstack/react-query';
 const { Header, Footer, Sider, Content } = Layout;
 interface DashBoardLayoutProps {
     children: ReactNode
 }
 const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
+
+
+    const columns: ColumnsType<any> = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+            render: (text: string) => (<div className="font-semibold">{text}</div>)
+        },
+        {
+            title: 'Value',
+            dataIndex: 'value',
+            key: 'value',
+            align: "right",
+            render: (text) => (<span className="font-semibold">
+                {text}$
+            </span>)
+        },
+    ];
+
     type MenuItem = Required<MenuProps>['items'][number];
     const t = useTranslations("DashboardMenu");
 
@@ -117,12 +140,32 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
         },
     ];
 
+    const { data, isSuccess } = useQuery({
+        queryKey: ["info"],
+        queryFn: () =>
+            axiosInstance.get(`/auth/profile`),
+    });
+
     const onClick: MenuProps['onClick'] = (e) => {
         console.log('click ', e);
     };
     const [newOrderText, setNewOrderText] = useState("New order")
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [filterOpen, setFilterOpen] = useState(true)
+
+    const dataSource = [
+        {
+            key: '1',
+            name: 'Total',
+            value: data?.data?.total,
+        },
+        {
+            key: '2',
+            name: 'Remains',
+            value: data?.data?.remains,
+        },
+    ];
+
     return <>
         <ConfigProvider theme={{
             components: {
@@ -147,9 +190,16 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                             <LocaleSwitcher />
                             <Dropdown trigger={['click']} dropdownRender={() => <>
                                 <div className="border bg-white py-3 rounded w-64">
-                                    <div className="px-3 pb-3">
-                                        <Title level={5} className="!mb-0">Pham Quan</Title>
-                                        <p className="text-slate-600">c2202lm.pmquan@aptech.vn</p>
+                                    <div className="px-3 pb-3 font-sans">
+                                        <div className="flex justify-between">
+                                            <Title level={5} className="!mb-0 !font-sans">{data?.data?.name}</Title>
+                                            <Tooltip title="Edit profile">
+                                                <Button type="default" size="small" icon={<EditFilled />} shape="circle" onClick={() => {
+                                                    router.push('/dashboard/user/info')
+                                                }}></Button>
+                                            </Tooltip>
+                                        </div>
+                                        <p className="text-slate-600">{data?.data?.email}</p>
                                     </div>
                                     <ConfigProvider theme={{
                                         components: {
@@ -158,10 +208,14 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                                             }
                                         }
                                     }}>
-                                        <Table dataSource={dataSource} columns={columns} showHeader={false} pagination={false} />
+                                        <Table dataSource={dataSource} columns={columns} showHeader={false} pagination={false} rowClassName="font-sans" />
                                         <div className="px-2 pt-3 flex justify-end gap-2">
-                                            <Button type="primary" size="small">Deposit</Button>
-                                            <Button type="default" size="small" >Logout</Button>
+                                            <Button type="primary" className="font-sans" size="small">Deposit</Button>
+                                            <Button type="default" className="font-sans" size="small" onClick={() => {
+                                                deleteCookie("token");
+                                                router.push("/login");
+                                            }}
+                                            >Logout</Button>
 
                                         </div>
                                     </ConfigProvider>
@@ -201,7 +255,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                         </div>
                         <Menu
                             onClick={onClick}
-                            defaultSelectedKeys={['1']}
+                            defaultSelectedKeys={[router.pathname]}
                             defaultOpenKeys={['sub1']}
                             mode="inline"
                             items={items} className="font-sans !border-r-0"
@@ -213,7 +267,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                         <NewOrder />
                     </Modal>
                     <Content >
-                        {children}   
+                        {children}
                     </Content>
                 </Layout>
             </Layout>
@@ -223,34 +277,4 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
 
 export default DashBoardLayout
 
-const dataSource = [
-    {
-        key: '1',
-        name: 'Total',
-        age: 32,
-    },
-    {
-        key: '2',
-        name: 'Remains',
-        age: 42,
-    },
-];
-
-const columns: ColumnsType<any> = [
-    {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-        render: (text: string) => (<div className="font-semibold">{text}</div>)
-    },
-    {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
-        align: "right",
-        render: (text) => (<span className="font-semibold">
-            {text}$
-        </span>)
-    },
-];
 

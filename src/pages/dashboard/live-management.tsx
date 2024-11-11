@@ -26,6 +26,7 @@ import dayjs from 'dayjs';
 import { debounce } from 'lodash';
 import { GetStaticPropsContext, NextPage } from 'next';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { StringifiableRecord } from 'query-string';
 import React, { useEffect, useState } from 'react';
@@ -132,45 +133,54 @@ const Page = () => {
     }, 300)
     const platformQuery = usePlatformData();
     const s = useTranslations('StreamStatus')
-    return <AdminLayout  selected={[]} breadcrumbItems={[]}>
-        <div className="md:flex py-3 gap-2 justify-between">
-            <div className='grid gap-2 md:flex gap-2'>
-                <SearchInput />
-                <Select className='w-48' options={platformQuery.data?.data?.platforms.map((platform: any) => ({
-                    ...platform,
-                    label: (
-                        <div className="flex items-center gap-1">
-                            <Image width={20} src={platform.image} alt="image" />
-                            {platform?.name}
-                        </div>
-                    ),
-                    value: platform.id,
-                }))}
-                    placeholder="Select platform"
-                    onChange={(e) => {
-                        syncObj({ platform: e ?? '' })
-                    }}
-                    allowClear
-                />
-                <SelectVps />
-                <UserSelect />
-                <Select
-                    placeholder="Select status"
-                    allowClear
-                    options={[
-                        { value: 'scheduling', label: <span>{s('scheduling')}</span> },
-                        { value: 'initalize', label: <span>{s('initalize')}</span> },
-                        { value: 'running', label: <span>{s('running')}</span> },
-                        { value: 'stopped', label: <span>{s('stopped')}</span> },
-                        { value: 'error', label: <span>{s('error')}</span> },
-                    ]} className='w-full mt-2 sm:mt-0 sm:w-48'
-                    onChange={(e) => {
-                        syncObj({ ...router.query, status: e ?? '' })
-                    }}
-                />
-                <DateFilter />
-            </div>
+    return <AdminLayout selected={[]} breadcrumbItems={
+        [
+            {
+                title: <Link href="/dashboard">{d('home')}</Link>
+            },
+
+            {
+                title: d('livestreams'),
+            },
+        ]
+    } filterOption={(
+        <div className="flex gap-2 items-center">
+            <Select className='w-48' options={platformQuery.data?.data?.platforms.map((platform: any) => ({
+                ...platform,
+                label: (
+                    <div className="flex items-center gap-1">
+                        <Image width={20} src={platform.image} alt="image" />
+                        {platform?.name}
+                    </div>
+                ),
+                value: platform.id,
+            }))}
+                placeholder="Select platform"
+                onChange={(e) => {
+                    syncObj({ platform: e ?? '' })
+                }}
+                allowClear
+            />
+            <SelectVps />
+            <UserSelect />
+            <Select
+                placeholder="Select status"
+                allowClear
+                options={[
+                    { value: 'scheduling', label: <span>{s('scheduling')}</span> },
+                    { value: 'initalize', label: <span>{s('initalize')}</span> },
+                    { value: 'running', label: <span>{s('running')}</span> },
+                    { value: 'stopped', label: <span>{s('stopped')}</span> },
+                    { value: 'error', label: <span>{s('error')}</span> },
+                ]} className='w-full mt-2 sm:mt-0 sm:w-48'
+                onChange={(e) => {
+                    syncObj({ ...router.query, status: e ?? '' })
+                }}
+            />
+            <DateFilter />
         </div>
+    )}>
+        <div className="my-3"></div>
         <ConfigProvider theme={{
             components: {
                 Table: {
@@ -178,12 +188,12 @@ const Page = () => {
                 }
             }
         }}>
-            <Table 
-            rowClassName='font-sans'
-            dataSource={data?.data?.data.map((livestream: any, index: number) => ({
-                ...livestream,
-                key: pageIndex * pageSize + (index + 1) - pageSize,
-            }))}
+            <Table
+                rowClassName='font-sans'
+                dataSource={data?.data?.data.map((livestream: any, index: number) => ({
+                    ...livestream,
+                    key: pageIndex * pageSize + (index + 1) - pageSize,
+                }))}
 
                 scroll={{
                     x: 400

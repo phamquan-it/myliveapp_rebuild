@@ -16,6 +16,7 @@ import dayjs from 'dayjs';
 import { debounce } from 'lodash';
 import { GetStaticPropsContext } from 'next';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import router, { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
@@ -89,20 +90,25 @@ const Page = () => {
         },
 
     ];
-    return <AdminLayout selected={[]} breadcrumbItems={[]}>
+    return <AdminLayout selected={[]} breadcrumbItems={[
+        {
+            title: <Link href="/dashboard">{d('home')}</Link>
+        },
+        {
+            title: d('platform'),
+        },
+    ]} staticAction={(
+        <CreatePlatform />
+    )}>
         <div style={{
             margin: "auto"
         }}>
-            <div className="sm:flex justify-between py-3">
-                <div className='mb-2 sm:mb-0'>
-                    <SearchInput />
-                </div>
-                <CreatePlatform />
-            </div>
+
             <ConfigProvider theme={{
                 components: {
                     Table: {
-                        cellPaddingBlock: 5
+                        cellPaddingBlock: 5,
+                        cellPaddingInline: 30
                     }
                 }
             }}>

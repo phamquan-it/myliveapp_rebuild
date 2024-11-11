@@ -37,10 +37,10 @@ import EditLiveStreams from "@/components/live-streams/EditLiveStreams";
 import LiveState from "@/components/client/LiveState";
 import { useTranslations } from "next-intl";
 import { getCookie } from "cookies-next";
-import { ColumnType, ColumnsType } from "antd/es/table";
+import { ColumnType, ColumnsType, TableProps } from "antd/es/table";
 import StreamState, { StreamType } from "@/components/autolive/StreamState";
 import StreamAction from "@/components/autolive/stream-action";
-import { DeleteFilled, DesktopOutlined, DownloadOutlined, StopOutlined } from "@ant-design/icons";
+import { CheckOutlined, DeleteFilled, DesktopOutlined, DownloadOutlined, StopOutlined, SyncOutlined } from "@ant-design/icons";
 import SearchInput from "@/components/filters/SearchInput";
 import StatisticStatus from "@/components/admin/order/statistic-status";
 import { IoPlay } from "react-icons/io5";
@@ -51,6 +51,7 @@ import PlatformSelect from "@/components/admin/PlatformSelect";
 import { usePlatformData } from "@/components/live-streams/CreateStreamByAdmin";
 import { FaPlay } from "react-icons/fa";
 import AdminLayout from "@/components/admin-layout";
+import Link from "next/link";
 export interface StreamDataType {
     createAt?: string
     download_link?: string
@@ -85,12 +86,32 @@ const Page = () => {
             title: ("ID"),
             dataIndex: "id",
             key: "id",
+            render: (text) => (
+                <span className="font-semibold">
+                    {text}
+                </span>
+            )
         },
         {
             title: t("name"),
             dataIndex: "name",
             key: "name",
-            ellipsis: true
+            ellipsis: true,
+            render: (text, record) => (<>
+                <div className="flex justify-between">
+                    <div className="w-8/12 overflow-hidden">
+                        {text}
+                    </div>
+                    {record.downloaded ?
+                        <CheckOutlined style={{
+                            color: "green"
+                        }} /> :
+                        <Tooltip title="Downloading">
+                            <DownloadOutlined />
+                        </Tooltip>
+                    }
+                </div>
+            </>)
         },
         {
             title: d("platform"),
@@ -98,7 +119,12 @@ const Page = () => {
             key: "platform",
             render: (text: string, record: any) => record?.platform?.name
         },
-
+        {
+            title: t("loop"),
+            dataIndex: "loop",
+            key: "loop",
+            render: (text: string, record: any) => <SyncOutlined className="!text-sky-600" />
+        },
         {
             title: t("resolution"),
             dataIndex: "resolution",
@@ -134,10 +160,7 @@ const Page = () => {
             dataIndex: "status",
             key: "status",
             render: (text: string, record) => (
-                record.downloaded ? <StreamState state={text} /> :
-                    <Tooltip title="Downloading">
-                        <Spin size="small" />
-                    </Tooltip>
+                <StreamState state={text} />
             ),
         },
         {
@@ -169,87 +192,89 @@ const Page = () => {
 
     const [streamsSelected, setStreamsSelected] = useState<StreamDataType[]>([])
     const syncObj = syncObjectToUrl(router)
-    const rowSelection = {
-        onChange: (selectedRowKeys: React.Key[], selectedRows: StreamDataType[]) => {
-            setStreamsSelected(selectedRows)
-        },
-        getCheckboxProps: (record: StreamDataType) => ({
-            disabled: record.name === 'Disabled User', // Column configuration not to be checked
-            name: record.name,
-        }),
-    };
     const s = useTranslations('StreamStatus')
+
+    // handle table
+    const tableProps: TableProps = {
+        rowKey: 'id',
+        rowSelection: {
+            type: 'checkbox',
+            onChange: (selectedRowKeys: React.Key[], selectedRows: StreamDataType[]) => {
+                setStreamsSelected(selectedRows)
+            },
+            getCheckboxProps: (record: StreamDataType) => ({
+                disabled: record.name === 'Disabled User', // Column configuration not to be checked
+                name: record.name,
+            }),
+        },
+        columns,
+        rowClassName: "!font-sans",
+        loading: isFetching,
+        onChange: (pagination) => {
+            syncObj({
+                pageIndex: pagination.current,
+            })
+        },
+        dataSource: data?.data.data.map((item: any, index: number) => ({
+            ...item,
+            key: pageIndex * pageSize + (index + 1) - pageSize,
+        })),
+        scroll: { x: 800 },
+        pagination: {
+            total: data?.data?.total,
+            pageSize: pageSize,
+            current: pageIndex
+        }
+    }
+
     return (
-        <AdminLayout selected={[]} breadcrumbItems={[]}>
-            <Affix>
-                <HorizoneMenu data={streamsSelected}>
-                    <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} />
-                </HorizoneMenu>
-            </Affix>
+        <AdminLayout selected={streamsSelected} breadcrumbItems={
+            [
+                {
+                    title: <Link href="/dashboard">{d('home')}</Link>
+                },
+                {
+                    title: d('myautolive'),
+                },
+            ]
+        } actions={
+            <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} />
+        } filterOption={(
+            <div className="flex items-center gap-2">
+                <Select
+                    placeholder="Select platform"
+                    style={{
+                        width: 200
+                    }} options={platformQuery?.data?.data?.platforms.map((platform: any) => ({
+                        ...platform,
+                        label: (
+                            <div className="flex items-center gap-1">
+                                <Image width={20} src={platform.image} alt="image" />
+                                {platform?.name}
+                            </div>
+                        ),
+                        value: platform.id,
+                    }))} onChange={(e) => {
+                        if (e == undefined) e = ""
+                        syncObj({ ...router.query, platform: e })
+                    }} allowClear />
+                <Select allowClear
+                    options={[
+                        { value: 'initalize', label: <span>{s('initalize')}</span> },
+                        { value: 'scheduling', label: <span>{s('scheduling')}</span> },
+                        { value: 'running', label: <span>{s('running')}</span> },
+                        { value: 'stopped', label: <span>{s('stopped')}</span> },
+                        { value: 'error', label: <span>{s('error')}</span> },
+                    ]} className='w-full mt-2 sm:mt-0 sm:w-48'
+                    placeholder="Select status"
+                    onChange={(e) => {
+                        syncObj({ ...router.query, status: e ?? '' })
+                    }}
+                />
 
-            <div className="flex justify-between items-center">
-                <div className={`sm:flex py-3 gap-2 transition duration-500 transform ${streamsSelected.length == 0 ? '' : ''}`}>
-                    <SearchInput />
-                    <Select
-                        placeholder="Select platform"
-                        style={{
-                            width: 200
-                        }} options={platformQuery?.data?.data?.platforms.map((platform: any) => ({
-                            ...platform,
-                            label: (
-                                <div className="flex items-center gap-1">
-                                    <Image width={20} src={platform.image} alt="image" />
-                                    {platform?.name}
-                                </div>
-                            ),
-                            value: platform.id,
-                        }))} onChange={(e) => {
-                            if (e == undefined) e = ""
-                            syncObj({ ...router.query, platform: e })
-                        }} allowClear />
-                    <Select allowClear
-                        options={[
-                            { value: 'initalize', label: <span>{s('initalize')}</span> },
-                            { value: 'scheduling', label: <span>{s('scheduling')}</span> },
-                            { value: 'running', label: <span>{s('running')}</span> },
-                            { value: 'stopped', label: <span>{s('stopped')}</span> },
-                            { value: 'error', label: <span>{s('error')}</span> },
-                        ]} className='w-full mt-2 sm:mt-0 sm:w-48'
-                        placeholder="Select status"
-                        onChange={(e) => {
-                            syncObj({ ...router.query, status: e ?? '' })
-                        }}
-                    />
-                </div>
             </div>
-            <Table
-
-                rowClassName="!font-sans"
-                rowSelection={{
-                    type: 'checkbox',
-                    ...rowSelection,
-
-                }}
-                loading={isFetching}
-                onChange={(pagination) => {
-                    syncObj({
-                        pageIndex: pagination.current,
-                    })
-                }}
-                pagination={{
-                    total: data?.data?.total,
-                    pageSize: pageSize,
-                    current: pageIndex
-                }}
-
-                dataSource={data?.data.data.map((item: any, index: number) => ({
-                    ...item,
-                    key: pageIndex * pageSize + (index + 1) - pageSize,
-                }))}
-                scroll={{ x: 800 }}
-                columns={columns}
-
-            />
+        )}>
+            <Table {...tableProps} />
         </AdminLayout>
     );
 };

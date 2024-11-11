@@ -131,16 +131,17 @@ const Page = () => {
     }, [router])
 
     return (
-        <AdminLayout actions={[]} breadcrumbItems={[]}  selected={[]}>
-            <div className="flex justify-between my-3">
+        <AdminLayout actions={[]} breadcrumbItems={
+            [
+                {
+                    title: <Link href="/dashboard">{d('home')}</Link>
+                },
 
-                <div className="flex" id="filter">
-                    <div>
-                        <SearchInput />
-                    </div>
-
-                </div>
-            </div>
+                {
+                    title: d('refund'),
+                },
+            ]
+        } selected={[]}>
             <Table
                 loading={isFetching}
                 onChange={(pagination) => {

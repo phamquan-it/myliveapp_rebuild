@@ -12,6 +12,8 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useTranslations } from "use-intl";
+import AdminLayout from "../admin-layout";
+import Link from "next/link";
 
 
 
@@ -68,8 +70,11 @@ const UserProfile: React.FC = () => {
     }, [data, form])
 
     return (
-        <>
-            <div className="w-10/12 grid md:grid-cols-2 m-auto gap-9 sm:shadow-md p-4 sm:rounded-md sm:border">
+        <AdminLayout selected={[]} breadcrumbItems={[
+            { title: <Link href={"/dashboard"}>Home</Link> },
+            { title: "User info" }
+        ]}>
+            <div className="w-10/12 grid md:grid-cols-2 m-auto gap-9 sm:shadow p-4 sm:rounded-md sm:border bg-white">
                 <div>
                     <ToastContainer />
                     <Form
@@ -149,7 +154,8 @@ const UserProfile: React.FC = () => {
                     </Form.Item>
                 </Form>
             </div>
-        </>
+
+        </AdminLayout>
     );
 };
 

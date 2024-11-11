@@ -6,6 +6,8 @@ import Title from "antd/lib/typography/Title";
 import { FacebookFilled, LinkedinFilled, TwitchOutlined, TwitterCircleFilled, YoutubeFilled } from "@ant-design/icons";
 import { GetStaticPropsContext } from "next";
 import { FaShoppingBag } from "react-icons/fa";
+import PlatformChart from "@/components/charts/PlatformChart";
+import LineChart from "@/components/charts/LineChart";
 const Line = dynamic(() => import("react-chartjs-2").then((mod) => mod.Line), {
     ssr: false,
 });
@@ -137,7 +139,7 @@ const Page: React.FC<PageProps> = () => {
                     fontWeight: '400'
                 }} className="font-sans">Platforms  statistic</span>
             } >
-                <p></p>
+                <PlatformChart/> 
             </Card>
             <Card title={
                 <span style={{
@@ -168,6 +170,8 @@ const Page: React.FC<PageProps> = () => {
                     fontWeight: '200'
                 }}>Top livestreams</span>
             } className="col-span-2">
+
+                <LineChart/>
                 <ConfigProvider theme={{
                     components: {
                         Table: {

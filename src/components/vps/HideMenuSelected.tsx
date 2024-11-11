@@ -13,7 +13,7 @@ const HideMenuSelected: React.FC<HideMenuSelectedProps> = ({ selectedRows }) => 
 
 
     return <>
-        <div className='grid sm:flex gap-2 pb-2'>
+        <div className='grid sm:flex gap-2'>
             <StartVps vps={selectedRows} />
             <StopVps vps={selectedRows} />
             <StopAllLive vps={selectedRows} />

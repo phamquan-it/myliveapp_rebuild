@@ -48,6 +48,7 @@ import axiosInstance from "@/apiClient/axiosConfig";
 import syncObjectToUrl from "@/helpers/syncObjectToUrl";
 import UserAction from "@/components/admin/user/UserAction";
 import AdminLayout from "@/components/admin-layout";
+import Link from "next/link";
 const { Option } = Select;
 const Page = () => {
     const token = getCookie("token");
@@ -79,7 +80,7 @@ const Page = () => {
             dataIndex: "avatar",
             key: "avatar",
             render: (text, record) => <>
-                 <Avatar size={40} icon={<UserOutlined />} />
+                <Avatar size={40} icon={<UserOutlined />} />
             </>
         },
         {
@@ -148,9 +149,19 @@ const Page = () => {
     })
     const syncObj = syncObjectToUrl(router)
     return (
-        <AdminLayout selected={[]} breadcrumbItems={[]}>
-            <div className="flex py-3 gap-2 h-full">
-                <SearchInput />
+        <AdminLayout selected={[]} breadcrumbItems={
+            [
+                {
+                    title: <Link href="/dashboard">{d('home')}</Link>
+                },
+
+                {
+                    title: d('user'),
+                },
+            ]
+
+        } filterOption={(
+            <div className="flex gap-2 items-center">
                 <Select className="w-48" options={[
                     { value: 1, label: <span>User</span> },
                     { value: 2, label: <span>Manager</span> },
@@ -175,7 +186,7 @@ const Page = () => {
                 />
 
             </div>
-
+        )}>
             <ConfigProvider theme={{
                 components: {
                     Table: {

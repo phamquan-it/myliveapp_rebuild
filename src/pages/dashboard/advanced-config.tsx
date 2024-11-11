@@ -13,6 +13,7 @@ import { Button, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { GetStaticPropsContext } from 'next';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 interface PageProps {
@@ -20,29 +21,32 @@ interface PageProps {
 }
 
 const Page: React.FC<PageProps> = () => {
+
+    const t = useTranslations('MyLanguage')
     const columns: ColumnsType<AdvandedConfig> = [
         {
-            title: 'No.',
+            title: t('entryno'),
             dataIndex: 'key',
             key: 'key',
         },
         {
-            title: 'Name',
+            title: t('name'),
             dataIndex: 'name',
             key: 'name',
         },
         {
-            title: 'Resolution',
+            title: t('resolution'),
             dataIndex: 'resolution_key',
             key: 'resolution_key',
         },
         {
-            title: 'Max stream',
+            title: t('max_streams'),
             dataIndex: 'max_stream',
             key: 'max_stream',
+            align: 'center'
         },
         {
-            title: 'Action',
+            title: t('action'),
             dataIndex: 'id',
             key: 'id',
             render: (id, advandedConfig) => (
@@ -70,13 +74,19 @@ const Page: React.FC<PageProps> = () => {
         placeholderData: (previousData) => previousData,
     });
     const syncObj = syncObjectToUrl(router)
-    const t = useTranslations('MyLanguage')
     const d = useTranslations('DashboardMenu')
-    return <AdminLayout  selected={[]} breadcrumbItems={[]} >
-        <div className="flex justify-between py-3">
-            <SearchInput />
-            <CreateAdvandedConfig />
-        </div>
+    return <AdminLayout selected={[]} breadcrumbItems={[
+        {
+            title: <Link href="/dashboard">{d('home')}</Link>
+        },
+
+        {
+            title: d('advancedConfig'),
+        },
+    ]
+    } staticAction={(
+        <CreateAdvandedConfig />
+    )} >
         <Table<AdvandedConfig>
             rowClassName="font-sans"
             loading={isFetching}

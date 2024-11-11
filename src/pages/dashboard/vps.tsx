@@ -40,6 +40,8 @@ import NumOfStreamsVps from "@/components/vps/NumOfStreamsVps";
 import { FaPlay } from "react-icons/fa";
 import { FiMoreVertical } from "react-icons/fi";
 import AdminLayout from "@/components/admin-layout";
+import AdvancedSetup from "@/components/vps/advanced-setup";
+import Link from "next/link";
 
 const Page = () => {
     const [openState, setOpenState] = useState(false)
@@ -133,35 +135,21 @@ const Page = () => {
             </span>)
         },
         {
-            dataIndex: 'id',
-            key: 'id',
-            render: () => (<>
-                <Button shape="circle" type="link" className="border-none text-slate-700" icon={
-                    <FiMoreVertical />
-                }></Button>
-            </>),
-            width: 50
-        },
-
-
-        //      {
-        //          title: '',
-        //          width: 190,
-        //          dataIndex: ('slug'),
-        //          render: (text: any, record: any) => (<div className="grid grid-cols-4">
-        //              <VpsDetail slug={record} closeModal={() => { }} />
-        //              <Button type="default" disabled={record.status != "running"} icon={<>&gt;_</>} onClick={() => {
-        //                  setSSHInfo({
-        //                      ipv4OrHost: record.ipv4,
-        //                      sshUser: 'root'
-        //                  })
-        //              }}></Button>
-
-
-        //              {/* <VpsButtonState record={record}/> */}
-        //              <VpsHideOption vps={record} />
-        //          </div>)
-        //      }
+            title: '',
+            width: 190,
+            dataIndex: ('slug'),
+            render: (text: any, record: any) => (<div className="grid grid-cols-4">
+                <VpsDetail slug={record} closeModal={() => { }} />
+                <Button type="default" disabled={record.status != "running"} icon={<>&gt;_</>} onClick={() => {
+                    setSSHInfo({
+                        ipv4OrHost: record.ipv4,
+                        sshUser: 'root'
+                    })
+                }}></Button>
+                <VpsHideOption vps={record} />
+                <AdvancedSetup />
+            </div>)
+        }
     ]
 
     const [connectionState, setConnectionState] = useState(false);
@@ -202,12 +190,31 @@ const Page = () => {
     const syncObj = syncObjectToUrl(router)
     const [selectedRows, setSelectedRows] = useState<any>([])
     return (
-        <AdminLayout selected={[]} breadcrumbItems={[]}>
-            <Affix offsetTop={100}>
-                <HorizoneMenu data={selectedRows}>
-                    <HideMenuSelected selectedRows={selectedRows} />
-                </HorizoneMenu>
-            </Affix>
+        <AdminLayout selected={selectedRows} breadcrumbItems={
+            [
+
+                {
+                    title: <Link href="/dashboard">{d('home')}</Link>
+                },
+                {
+                    title: 'Vps',
+                },
+            ]
+        } actions={(
+            <HideMenuSelected selectedRows={selectedRows} />
+        )} staticAction={(
+            <Button
+                type="primary"
+                id="create"
+                icon={<PlusCircleFilled />}
+                iconPosition="end"
+                onClick={() => {
+                    setShowModal(true)
+                }}
+            >
+                {t("create")}
+            </Button>
+        )}>
             <Modal
                 title={`Terminal ${sshInfo.sshUser}@${sshInfo.ipv4OrHost}`}
                 open={isModalOpen}
@@ -229,19 +236,7 @@ const Page = () => {
             </Modal>
             <div className="grid gap-2 sm:flex justify-between items-center my-3">
                 <div id="filter">
-                    <SearchInput />
                 </div>
-                <Button
-                    type="primary"
-                    id="create"
-                    icon={<PlusCircleFilled />}
-                    iconPosition="end"
-                    onClick={() => {
-                        setShowModal(true)
-                    }}
-                >
-                    {t("create")}
-                </Button>
             </div>
             <ConfigProvider theme={{
                 components: {

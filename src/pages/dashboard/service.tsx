@@ -23,8 +23,8 @@ import filterOptionByLabel from "@/hooks/filterOptionByLabel";
 import axiosInstance from "@/apiClient/axiosConfig";
 import SearchInput from "@/components/filters/SearchInput";
 import { ColumnType, ColumnsType } from "antd/es/table";
-import ServiceList from "@/components/service";
 import AdminLayout from "@/components/admin-layout";
+import Link from "next/link";
 const Page = () => {
     const router = useRouter();
     const token = getCookie("token");
@@ -37,21 +37,6 @@ const Page = () => {
             dataIndex: "name",
             key: "name",
 
-        },
-        {
-            title: t("rate"),
-            dataIndex: "rate",
-            key: "rate",
-            render: (rate: number) => (
-                <>
-                    <div className="flex gap-1">
-                        <div>{rate}</div>
-                        <StarFilled style={{
-                            color: 'orange'
-                        }} />
-                    </div>
-                </>
-            )
         },
         {
             title: t("minorder"),
@@ -87,6 +72,19 @@ const Page = () => {
             align: "right",
         },
         {
+            title: t("rate"),
+            dataIndex: "rate",
+            key: "rate",
+            render: (rate: number) => (
+                <>
+                    <div className="flex gap-1">
+                        <div>{rate}</div>
+                    </div>
+                </>
+            )
+        },
+
+        {
             width: 200,
             title: t("action"),
             dataIndex: "id",
@@ -110,7 +108,17 @@ const Page = () => {
         },
     });
     return (
-        <AdminLayout  selected={[]} breadcrumbItems={[]}>
+        <AdminLayout selected={[]} breadcrumbItems={[
+            {
+                title: <Link href="/dashboard">Home</Link>
+            },
+            {
+                title: 'Services',
+            },
+
+        ]} staticAction={(
+            <CreateService />
+        )}>
             <div className="">
                 <Head>
                     <title>Service</title>
@@ -122,12 +130,10 @@ const Page = () => {
                         className="grid md:flex justify-between items-center my-3 gap-2"
                         id="filter"
                     >
-                        <SearchInput />
-                        <CreateService />
-                    </div>
+                                          </div>
 
                     <Skeleton loading={isFetching}>
-                        <ServiceList data={data?.data?.services} />
+                        <Table rowClassName="font-sans" dataSource={data?.data?.services} columns={columns} />
                     </Skeleton>
                 </div>
             </div>

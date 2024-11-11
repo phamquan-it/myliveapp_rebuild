@@ -8,6 +8,7 @@ import Title from "antd/lib/typography/Title";
 import dayjs from "dayjs";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -92,11 +93,18 @@ const Page = () => {
 
     const p = useTranslations("Placeholder");
     return (
-        <AdminLayout selected={[]} breadcrumbItems={[]}>
-            <div className="flex justify-between mt-10 mb-3">
-                <SearchInput />
-            </div>
+        <AdminLayout selected={[]} breadcrumbItems={
+            [
 
+                {
+                    title: <Link href="/dashboard">{d('home')}</Link>
+                },
+
+                {
+                    title: d('cashflow'),
+                },
+            ]
+        }>
             <Table
                 dataSource={data?.data.data.map((item: any, index: number) => ({
                     ...item,

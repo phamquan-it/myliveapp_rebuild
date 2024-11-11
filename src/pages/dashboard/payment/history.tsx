@@ -29,6 +29,7 @@ import axiosInstance from "@/apiClient/axiosConfig";
 import syncObjectToUrl from "@/helpers/syncObjectToUrl";
 import SearchInput from "@/components/filters/SearchInput";
 import AdminLayout from "@/components/admin-layout";
+import Link from "next/link";
 
 const Page = () => {
     const router = useRouter();
@@ -131,8 +132,36 @@ const Page = () => {
         syncObj({ keyword: e.target.value })
     }, 300)
     return (
-        <AdminLayout selected={[]} breadcrumbItems={[]}>
-            <div className="my-3 gap-3 grid lg:grid-cols-5 md:grid-cols-2">
+        <AdminLayout selected={[]} breadcrumbItems={
+            [
+                {
+                    title: <Link href="/dashboard">{d('home')}</Link>
+                },
+
+                {
+                    title: d('paymenthistory'),
+                },
+            ]
+
+        } filterOption={<div className="flex items-center">
+            <Select className='mt-2 sm:mt-0'
+                style={{ width: 200 }}
+                placeholder={p('select_status')}
+                showSearch
+                filterOption={filterOptionByLabel}
+                allowClear
+                options={[
+                    { value: 'deny', label: "Deny" },
+                    { value: 'inprogress', label: "In progess" },
+                    { value: 'pennding', label: "Pending" },
+                    { value: 'completed', label: "Completed" },
+                ]}
+                onChange={(e) => {
+                    syncObj({ status: e ?? '' })
+                }
+                } />
+        </div>}>
+            <div className=" gap-3 grid lg:grid-cols-5 md:grid-cols-2">
                 <HistoryStatitical
                     color="rgb(10, 143, 220)"
                     monney={0.207}
@@ -160,23 +189,6 @@ const Page = () => {
                 />
             </div>
             <div className="sm:flex gap-1 my-3" id="filter">
-                <SearchInput />
-                <Select className='mt-2 sm:mt-0'
-                    style={{ width: 200 }}
-                    placeholder={p('select_status')}
-                    showSearch
-                    filterOption={filterOptionByLabel}
-                    allowClear
-                    options={[
-                        { value: 'deny', label: "Deny" },
-                        { value: 'inprogress', label: "In progess" },
-                        { value: 'pennding', label: "Pending" },
-                        { value: 'completed', label: "Completed" },
-                    ]}
-                    onChange={(e) => {
-                        syncObj({ status: e??'' })
-                    }
-                    } />
             </div>
             <Table
                 rowClassName="font-sans"

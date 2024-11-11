@@ -13,6 +13,7 @@ import StopVps from "@/components/vps/action/StopVps";
 import StopAllLive from "@/components/vps/action/StopAllLive";
 import RestartVps from "@/components/vps/action/RestartVps";
 import DeleteVps from "@/components/vps/action/DeleteVps";
+import { FiMoreVertical } from "react-icons/fi";
 interface VpsHideOptionProps {
     vps: any
 }
@@ -121,7 +122,7 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
             //disabled: true,
             icon: <DeleteFilled style={{
                 color: "red"
-                }} />, label: <DeleteVps deletefunction={deleteVps.mutate} slug={vps.slug}/>, key: 'delete'
+            }} />, label: <DeleteVps deletefunction={deleteVps.mutate} slug={vps.slug} />, key: 'delete'
         }, // 菜单项务必填写 key
     ];
     // handle dropdown
@@ -146,11 +147,12 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
 
             <Dropdown trigger={['click']} menu={{ items, onClick: handleMenuClick }}>
                 <Tooltip title={vps.status}>
-                    <Button type="primary" danger={(vpsState?.includes("stop"))}
+                    <Button type="default" shape="circle" danger={(vpsState?.includes("stop"))}
                         loading={vpsState == "stopping"
                             || vpsState == "starting"
                             || vps.status == 'provisioning'}
-                        icon={<MenuOutlined />}>
+                        icon={<FiMoreVertical />
+                        }>
 
                     </Button>
                 </Tooltip>
