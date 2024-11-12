@@ -44,6 +44,7 @@ import OrderStatus from "@/components/filters/OrderStatus";
 import SearchInput from "@/components/filters/SearchInput";
 import Statistic from "@/components/admin/order/statistic";
 import AdminLayout from "@/components/admin-layout";
+import OrderState from "@/components/admin/order/order-state";
 
 const { Option } = Select;
 
@@ -77,16 +78,12 @@ const Page = () => {
         },
         {
             title: t("createat"),
-            dataIndex: "create_date",
-            key: "create_date",
+            dataIndex: "create_at",
+            key: "create_at",
             align: "center",
-            render: (text: string) => (
-                <>
-                    {dayjs(text).format("HH:mm:ss")}
-                    <br />
-                    {dayjs(text).format("YYYY-MM-DD")}
-                </>
-            ),
+            render: (text: string, record: any) => {
+                return dayjs(text).format('YYYY/MM/DD')
+            },
         },
 
         {
@@ -125,27 +122,7 @@ const Page = () => {
             key: "status",
             render: (text: string) => {
                 return (
-                    <div className="">
-                        <Tag
-                            color={
-                                text == "Completed"
-                                    ? "green"
-                                    : text == "In progress"
-                                        ? "yellow"
-                                        : text == "Canceled"
-                                            ? "orange"
-                                            : text == "Processing"
-                                                ? "cyan"
-                                                : text == "Partial"
-                                                    ? "blue"
-                                                    : text == "Pending"
-                                                        ? "yellow"
-                                                        : "red"
-                            }
-                        >
-                            {text}
-                        </Tag>
-                    </div>
+                    <OrderState orderState={text}/>   
                 );
             },
         },
@@ -153,7 +130,7 @@ const Page = () => {
             title: t("action"),
             dataIndex: "id",
             key: "id",
-            width: 70,
+            width: 100,
             align: "center",
             render: (text: string, record: any) => {
                 return (

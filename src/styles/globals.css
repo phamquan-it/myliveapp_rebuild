@@ -14,5 +14,15 @@
 }
 
 .ant-form-item{
-    padding-bottom: 0px !important;
+    margin-bottom: 10px !important;
 }
+
+.ant-form-item-required::before{
+    display: none !important;
+}
+
+.ant-form-item-required::after {
+    content: "*" !important;
+    color: red;
+}
+

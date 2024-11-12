@@ -143,6 +143,7 @@ const Page = () => {
             ]
         } selected={[]}>
             <Table
+                rowClassName={'!font-sans'}
                 loading={isFetching}
                 onChange={(pagination) => {
                     syncObj({

@@ -103,8 +103,8 @@ const Page = () => {
         },
         {
             title: t("createat"),
-            dataIndex: "createdAt",
-            key: "createdAt",
+            dataIndex: "createAt",
+            key: "createAt",
             align: "center",
             render: (text: string) => format(text, router.locale || "en"),
         },
@@ -113,7 +113,10 @@ const Page = () => {
             dataIndex: "remains",
             key: "remains",
             align: "right",
-            render: (text) => <span className="font-semibold">{text}$</span>
+            render: (text, record) => {
+                console.log(record)
+                return <span className="font-semibold">{text}$</span>
+            }
         },
         {
             title: t("totalmoney"),

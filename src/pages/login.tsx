@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useEffect } from "react";
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button, Checkbox, message } from "antd";
 import Title from "antd/es/typography/Title";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
@@ -26,14 +26,14 @@ const LoginForm = () => {
         mutationKey: ["login"],
         mutationFn: (body) => axiosInstance.post("/auth/login?language=en", body),
         onSuccess: (data) => {
-            toast.success("Success");
+            message.success("Success");
             console.log(data.data);
             setCookie("token", data.data.accessToken);
             setCookie("refresh_token", data.data.refreshToken);
             router.push("/dashboard");
         },
         onError: (err) => {
-            toast.error(err.message);
+            message.error(err.message);
         },
     });
     async function onFinish(values: any) {

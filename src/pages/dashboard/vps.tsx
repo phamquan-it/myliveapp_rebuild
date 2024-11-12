@@ -147,7 +147,7 @@ const Page = () => {
                     })
                 }}></Button>
                 <VpsHideOption vps={record} />
-                <AdvancedSetup />
+                <AdvancedSetup slug={text}  />
             </div>)
         }
     ]
