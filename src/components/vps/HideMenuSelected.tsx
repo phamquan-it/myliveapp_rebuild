@@ -10,8 +10,6 @@ interface HideMenuSelectedProps {
 }
 
 const HideMenuSelected: React.FC<HideMenuSelectedProps> = ({ selectedRows }) => {
-
-
     return <>
         <div className='grid sm:flex gap-2'>
             <StartVps vps={selectedRows} />

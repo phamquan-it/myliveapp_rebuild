@@ -22,6 +22,9 @@ import { deleteCookie } from 'cookies-next';
 import router from 'next/router';
 import axiosInstance from '@/apiClient/axiosConfig';
 import { useQuery } from '@tanstack/react-query';
+import { userPath } from '@/user_access/filterMenu';
+import { isUser } from '@/user_access/checkrole';
+import { useProfile } from '@/apiClient/providers/useProfile';
 const { Header, Footer, Sider, Content } = Layout;
 interface DashBoardLayoutProps {
     children: ReactNode
@@ -140,16 +143,13 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
         },
     ];
 
-    const { data, isSuccess } = useQuery({
-        queryKey: ["info"],
-        queryFn: () =>
-            axiosInstance.get(`/auth/profile`),
-    });
+    const { data, isSuccess } = useProfile()
+    console.log("user:", data?.data)
 
     const onClick: MenuProps['onClick'] = (e) => {
         console.log('click ', e);
     };
-    const [newOrderText, setNewOrderText] = useState("New order")
+    const [newOrderText, setNewOrderText] = useState(t('neworder'))
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [filterOpen, setFilterOpen] = useState(true)
 
@@ -165,7 +165,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
             value: data?.data?.remains,
         },
     ];
-
+    const m = useTranslations("MyLanguage")
     return <>
         <ConfigProvider theme={{
             components: {
@@ -187,9 +187,14 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                             </div>
                         </div>
                         <div className="p-3 flex justify-center gap-2 items-center">
-                            <LocaleSwitcher />
+                            <div className="hidden h-full sm:flex items-center">
+                                <LocaleSwitcher />
+                            </div>
                             <Dropdown trigger={['click']} dropdownRender={() => <>
                                 <div className="border bg-white py-3 rounded w-64">
+                                    <div className="px-2 sm:hidden">
+                                        <LocaleSwitcher />
+                                    </div>
                                     <div className="px-3 pb-3 font-sans">
                                         <div className="flex justify-between">
                                             <Title level={5} className="!mb-0 !font-sans">{data?.data?.name}</Title>
@@ -208,7 +213,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                                             }
                                         }
                                     }}>
-                                        <Table dataSource={dataSource} columns={columns} showHeader={false} pagination={false} rowClassName="font-sans" />
+                                        <Table dataSource={dataSource} rowKey='name' columns={columns} showHeader={false} pagination={false} rowClassName="font-sans" />
                                         <div className="px-2 pt-3 flex justify-end gap-2">
                                             <Button type="primary" className="font-sans" size="small">Deposit</Button>
                                             <Button type="default" className="font-sans" size="small" onClick={() => {
@@ -228,6 +233,8 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                 </Header>
                 <Layout>
                     <Sider theme="light"
+                        breakpoint="lg"
+                        collapsible
                         className="border-r"
                         onChange={(e) => {
                             console.log(e)
@@ -258,13 +265,16 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                             defaultSelectedKeys={[router.pathname]}
                             defaultOpenKeys={['sub1']}
                             mode="inline"
-                            items={items} className="font-sans !border-r-0"
+                            items={(isUser(data)) ?
+                                items.filter(item => item && userPath.includes(item.key as DashboardRouter)) : items
+                            }
+                            className="font-sans !border-r-0"
                         />
                     </Sider>
-                    <Modal title="New order" open={isModalOpen} onCancel={() => {
+                    <Modal title={m('newOrder')} open={isModalOpen} onCancel={() => {
                         setIsModalOpen(false)
                     }} footer={[]} width={1000}>
-                        <NewOrder />
+                        <NewOrder role={data?.data?.role_id} />
                     </Modal>
                     <Content >
                         {children}

@@ -143,7 +143,7 @@ const Page = () => {
                 },
             ]
 
-        } filterOption={<div className="flex items-center">
+        } filterOption={<div className="hidden md:flex  items-center">
             <Select className='mt-2 sm:mt-0'
                 style={{ width: 200 }}
                 placeholder={p('select_status')}
@@ -158,9 +158,25 @@ const Page = () => {
                 ]}
                 onChange={(e) => {
                     syncObj({ status: e ?? '' })
-                }
-                } />
-        </div>}>
+                }} />
+
+        </div>} rightFilter={<>
+            <Select className='mt-2 sm:mt-0'
+                style={{ width: 200 }}
+                placeholder={p('select_status')}
+                showSearch
+                filterOption={filterOptionByLabel}
+                allowClear
+                options={[
+                    { value: 'deny', label: "Deny" },
+                    { value: 'inprogress', label: "In progess" },
+                    { value: 'pennding', label: "Pending" },
+                    { value: 'completed', label: "Completed" },
+                ]}
+                onChange={(e) => {
+                    syncObj({ status: e ?? '' })
+                }} />
+        </>}>
             <div className=" gap-3 grid lg:grid-cols-5 md:grid-cols-2">
                 <HistoryStatitical
                     color="rgb(10, 143, 220)"

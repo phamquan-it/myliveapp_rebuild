@@ -122,7 +122,7 @@ const Page = () => {
             key: "status",
             render: (text: string) => {
                 return (
-                    <OrderState orderState={text}/>   
+                    <OrderState orderState={text} />
                 );
             },
         },
@@ -188,10 +188,12 @@ const Page = () => {
                 },
             ]
             } filterOption={(
-                <div className="flex items-center">
+                <div className="hidden items-center md:flex">
                     <OrderStatus />
                 </div>
-            )}>
+            )} rightFilter={<>
+                <OrderStatus />
+            </>}>
                 <div className="mb-3">
                     <Statistic />
                 </div>

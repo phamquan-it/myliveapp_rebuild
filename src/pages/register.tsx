@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Modal, Checkbox } from "antd";
+import { Form, Input, Button, Modal, Checkbox, message } from "antd";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { ToastContainer, toast } from "react-toastify";
@@ -31,12 +31,12 @@ const RegiterForm = () => {
         },
         onError: (err) => {
             console.log(err);
-            toast.error("An error occured");
+            message.error("An error occured");
         },
     });
     const onFinish = async (values: any) => {
         if (values.confirmpassword != values.password) {
-            toast.error(t("confirmpasswordError"));
+            message.error(t("confirmpasswordError"));
             return;
         }
         mutate(values);
@@ -44,8 +44,8 @@ const RegiterForm = () => {
 
     return (
         <>
-            <div className="h-screen flex items-center justify-center bg-slate-100">
-                <div className="w-1/3 rounded px-5 py-5 bg-white shadow">
+            <div className="h-screen flex items-center justify-center sm:bg-slate-100">
+                <div className="w-full md:w-1/2 lg:w-1/3 rounded px-5 py-5 bg-white shadow">
                     <Title level={3} className="!mb-1" >
                         LiveStreams
                     </Title>

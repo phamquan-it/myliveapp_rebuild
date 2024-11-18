@@ -5,6 +5,7 @@ import { handleUploadFile } from '../../../handleUploadFile';
 import axiosInstance from '@/apiClient/axiosConfig';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { headers } from 'next/headers';
+import { useTranslations } from 'next-intl';
 type FieldType = {
     name?: string;
     rmtp?: string;
@@ -25,6 +26,7 @@ const CreatePlatform = () => {
         onSuccess: (res) => {
             message.success("Success")
             setIsModalOpen(false)
+            queryClient.invalidateQueries({ queryKey: ['platform'] })
         },
         onError: (err) => {
             message.error(err.message)
@@ -54,7 +56,7 @@ const CreatePlatform = () => {
             setKey(response.key)
             onSuccess && onSuccess(response);
             message.success('File uploaded successfully');
-            queryClient.invalidateQueries({queryKey:['platform']})
+            queryClient.invalidateQueries({ queryKey: ['platform'] })
         } catch (error) {
             onError && onError(error);
             message.error('File upload failed');
@@ -69,14 +71,22 @@ const CreatePlatform = () => {
     const showModal = () => {
         setIsModalOpen(true);
     }
+
+    const t = useTranslations("MyLanguage")
+    const [form] = Form.useForm()
     return <>
         <div>
-            <Button type="primary" onClick={showModal} icon={<PlusCircleFilled />} iconPosition="end" className='w-full'>Create</Button>
+            <Button type="primary" onClick={showModal} icon={<PlusCircleFilled />} iconPosition="end" className='w-full'>{t('create')}</Button>
         </div>
-        <Modal title="Create" open={isModalOpen} onCancel={handleCancel} footer={[]}>
+        <Modal title={t('create')} open={isModalOpen} onCancel={handleCancel} onOk={() => {
+            form.submit()
+        }} okButtonProps={{
+            loading: createPlatform.isPending
+        }}>
             <Form
                 layout="vertical"
                 name="basic"
+                form={form}
                 style={{ maxWidth: 600 }}
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
@@ -84,8 +94,8 @@ const CreatePlatform = () => {
                 autoComplete="off"
             >
                 <Form.Item<FieldType>
-                    required={false}
-                    label="Name"
+                    required
+                    label={t('name')}
                     name="name"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
@@ -105,11 +115,6 @@ const CreatePlatform = () => {
                         <Button icon={<UploadOutlined />}>Click to Upload</Button>
                     </Upload>
                 </div>
-                <Form.Item >
-                    <Button type="primary" loading={createPlatform.isPending} htmlType="submit">
-                        Create
-                    </Button>
-                </Form.Item>
             </Form>
         </Modal>
     </>

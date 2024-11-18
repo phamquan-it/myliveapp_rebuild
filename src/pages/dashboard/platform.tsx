@@ -1,4 +1,5 @@
 import axiosInstance from '@/apiClient/axiosConfig';
+import { useProfile } from '@/apiClient/providers/useProfile';
 import AdminLayout from '@/components/admin-layout';
 import TableAction from '@/components/admin/TableAction';
 import EditPlatform from '@/components/admin/crudform/edit/EditPlatform';
@@ -8,6 +9,7 @@ import CreatePlatform from '@/components/general/create-platform';
 import { pagination } from '@/helpers/pagination';
 import syncObjectToUrl from '@/helpers/syncObjectToUrl';
 import getObjecFormUrlParameters from '@/hooks/getObjectFormParameter';
+import { isUser } from '@/user_access/checkrole';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Input, Spin, Table, Image, ConfigProvider } from 'antd';
 import Title from 'antd/es/typography/Title';
@@ -76,20 +78,22 @@ const Page = () => {
             key: 'createAt',
             render: (text: string) => dayjs(text).format('YYYY/MM/DD')
         },
-        {
-            title: t('action'),
-            dataIndex: 'id',
-            key: 'id',
-            width: 130,
-            render: (id: number, record: any, index: number) => (
-                <div className="flex gap-2">
-                    <EditPlatform platform={record} />
-                    <DeletePlatform id={id} />
-                </div>
-            )
-        },
 
     ];
+
+    const action = {
+        title: t('action'),
+        dataIndex: 'id',
+        key: 'id',
+        width: 140,
+        render: (id: number, record: any, index: number) => (
+            <div className="flex gap-2">
+                <EditPlatform platform={record} />
+                <DeletePlatform id={id} />
+            </div>
+        )
+    }
+
     return <AdminLayout selected={[]} breadcrumbItems={[
         {
             title: <Link href="/dashboard">{d('home')}</Link>
@@ -98,7 +102,9 @@ const Page = () => {
             title: d('platform'),
         },
     ]} staticAction={(
-        <CreatePlatform />
+        !isUser(useProfile()?.data) ?
+            <CreatePlatform />
+            : <></>
     )}>
         <div style={{
             margin: "auto"
@@ -131,11 +137,10 @@ const Page = () => {
                             ...platform,
                             key: pageIndex * pageSize + (index + 1) - pageSize,
                         }))}
-                    columns={columns} />
-
+                    columns={isUser(useProfile()?.data) ? columns : [...columns, action]} />
             </ConfigProvider>
         </div>
-    </AdminLayout>
+    </AdminLayout >
 }
 
 export default Page

@@ -18,8 +18,8 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, 
     const startLive = useMutation({
         mutationKey: ['startlive'],
         mutationFn: (data: {
-            stream_id: number
-        }) => axiosInstance.get('/autolive-control/start-live', {
+            stream_id: any[] | undefined
+        }) => axiosInstance.get('/autolive-control/start-streams', {
             params: {
                 language: "en",
                 stream_id: data.stream_id
@@ -45,7 +45,12 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, 
 
     const stopLive = useMutation({
         mutationKey: ['stoplive'],
-        mutationFn: (data: any) => axiosInstance.post('/autolive-control/stop-live', data),
+        mutationFn: (data: any[]) => axiosInstance.get('/autolive-control/stop-streams', {
+            params:{
+                language:"en",
+                stream_id: data
+            }
+        }),
         onSuccess: () => {
             message.success("Success")
             setTimeout(() => {
@@ -78,20 +83,15 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, 
 
 
     const confirm: PopconfirmProps['onConfirm'] = (e) => {
-        streamIdSelected.forEach((value) => {
-            startLive.mutate({
-                stream_id: value
-            })
+        const ids = streamsSelected.map(stream => stream.id);
+        startLive.mutate({
+            stream_id: ids
         })
     };
     // stop streams
     const confirmStop: PopconfirmProps['onConfirm'] = (e) => {
-        streamIdSelected.forEach((value) => {
-            stopLive.mutate({
-                stream_id: value
-            })
-        })
-
+        const ids = streamsSelected.map(stream => stream.id);
+        stopLive.mutate(ids)
     };
 
 

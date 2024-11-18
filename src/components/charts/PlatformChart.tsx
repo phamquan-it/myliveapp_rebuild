@@ -22,10 +22,11 @@ const PlatformChart = () => {
         fontWeight: "bold",
       },
     },
+    width: 300,  // Optional: set width if needed
     legend: {
       color: {
         title: false,
-        position: "right",
+        position: "top",
         rowPadding: 5,
       },
     },

@@ -59,6 +59,7 @@ const nextConfig = {
     },
     env: {
         API_URL: 'https://api.golive365.top/'
+        //API_URL: 'http://localhost:3031'
     }
 };
 

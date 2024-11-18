@@ -10,6 +10,7 @@ const { Header, Footer, Sider, Content } = Layout;
 const inter = Inter({ subsets: ["latin"] });
 
 interface AdminLayoutProps {
+    rightFilter?: ReactNode
     filterOption?: ReactNode
     staticAction?: ReactNode,
     actions?: ReactNode,
@@ -17,7 +18,7 @@ interface AdminLayoutProps {
     selected: any[],
     breadcrumbItems: any[]
 }
-const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, staticAction, breadcrumbItems, filterOption }) => {
+const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, staticAction, breadcrumbItems, filterOption, rightFilter }) => {
 
 
     const label = {
@@ -27,7 +28,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, 
     const [filter, setFilter] = useState(true)
     return (
         <Layout className="bg-yellow-500 h-full">
-            <Header className="border-b">
+            <Header className="border-b overflow-hidden">
                 <div className="flex justify-between h-full item-center">
                     <div className="flex items-center gap-2">
                         <Button type="default" icon={<BsFilterLeft />} onClick={() => {
@@ -55,41 +56,23 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, 
             </Header>
             <Content className="bg-red-500">
                 <Layout className="h-full">
-                    <Content className="p-2 overflow-auto" style={{
+                    <Content className={`p-2 ${filter?'overflow-auto':'overflow-hidden' }`} style={{
                         height: "calc(100vh - 130px)"
                     }}>
                         <Breadcrumb items={breadcrumbItems} />
-                        <div className="pt-3">
+                        <div className="pt-3 ">
                             {children}
                         </div>
                     </Content>
                     <Sider
                         collapsed={filter} collapsedWidth={0}
-                        className="min-w-fit !bg-transparent p-2 !h-full !overflow-auto" width="350"
+                        className="min-w-fit !bg-transparent py-2 !h-full !overflow-auto" width="260"
                         style={{ overflow: 'hidden' }} // hides overflow content
                     >
                         <div className="w-full bg-white shadow rounded py-3 pb-5 px-2 font-sans">
                             <div className="grid gap-1 overflow-hidden">
                                 <Title level={5} className="!mb-0 !pb-0">Filters</Title>
-                                <span {...label}>Search</span>
-                                <Input placeholder="Search" />
-                                <span {...label} >Platform</span>
-                                <Select placeholder="Select platform" allowClear options={[{
-                                    value: 'sample', label: <div className="flex items-center gap-2">
-                                        <Image height={20} alt="" src="https:/picsum.photos/200/200" />
-                                        <span>Youtube</span>
-                                    </div>
-                                }]} />
-
-                                <span {...label}>Status</span>
-                                <Select placeholder="Select status" options={[{ value: 'sample', label: <span>Scheduling</span> }]} />
-                                <span {...label}>Loop</span>
-                                <Checkbox >Only</Checkbox>
-                                <Checkbox >Infinity</Checkbox>
-                                <div className="border-b"></div>
-                                <span {...label} ></span>
-                                <DatePicker placeholder="Start date" />
-                                <DatePicker placeholder="End date" />
+                                { rightFilter??''}    
                             </div>
                         </div>
                     </Sider>

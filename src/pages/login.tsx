@@ -47,8 +47,8 @@ const LoginForm = () => {
 
 
     return (
-        <div className="h-screen flex justify-center items-center bg-slate-100">
-            <div className="w-full md:w1/2 lg:w-1/3 p-3 border shadow rounded bg-white">
+        <div className="h-screen flex justify-center items-center sm:bg-slate-100">
+            <div className="w-full md:w-1/2 lg:w-1/3 p-3 md:border md:shadow rounded md:bg-white">
                 <Form
                     className="py-3 pe-3"
                     name="basic"

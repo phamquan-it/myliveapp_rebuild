@@ -84,7 +84,7 @@ const Page = () => {
             </>
         },
         {
-            title: "Role",
+            title: t("role"),
             dataIndex: "role",
             key: "role",
             render: (text, record) => record?.role?.name
@@ -164,7 +164,7 @@ const Page = () => {
             ]
 
         } filterOption={(
-            <div className="flex gap-2 items-center">
+            <div className="hidden xl:flex gap-2 items-center">
                 <Select className="w-48" options={[
                     { value: 1, label: <span>User</span> },
                     { value: 2, label: <span>Manager</span> },
@@ -189,7 +189,31 @@ const Page = () => {
                 />
 
             </div>
-        )}>
+        )} rightFilter={(<>
+            <Select className="w-48" options={[
+                { value: 1, label: <span>User</span> },
+                { value: 2, label: <span>Manager</span> },
+                { value: 3, label: <span>Admin</span> },
+            ]}
+                onChange={(e) => {
+                    syncObj({ role: e ?? '' })
+                }}
+                placeholder="Select role"
+                allowClear
+            />
+            <Select className="w-48" options={[
+                { value: 1, label: <span>Active</span> },
+                { value: 0, label: <span>In active</span> },
+            ]
+            }
+                allowClear
+                onChange={(e) => {
+                    syncObj({ is_active: e ?? '' })
+                }}
+                placeholder="Is active"
+            />
+
+        </>)}>
             <ConfigProvider theme={{
                 components: {
                     Table: {

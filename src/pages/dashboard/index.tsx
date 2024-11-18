@@ -95,7 +95,7 @@ const Page: React.FC<PageProps> = () => {
                 value: new Date().getFullYear()
             }]} />}>
                 <p></p>
-                <div className="grid grid-cols-5 rounded gap-1 bg-white shadown">
+                <div className="grid md:grid-cols-2 lg:grid-cols-5 rounded gap-1 bg-white shadown">
                     <Card className="!bg-sky-500">
                         <Title level={5} className="!text-white !mb-0">
                             <FacebookFilled /> &nbsp;
@@ -133,45 +133,26 @@ const Page: React.FC<PageProps> = () => {
 
         </div>
 
-        <div className="p-3 pt-0 livestream grid grid-cols-3 gap-3">
-            <Card title={
-                <span style={{
-                    fontWeight: '400'
-                }} className="font-sans">Platforms  statistic</span>
-            } >
-                <PlatformChart/> 
-            </Card>
-            <Card title={
-                <span style={{
-                    fontWeight: '400'
-                }} className="font-sans">Recent orders</span>
-            } className="col-span-2" extra={<a href="#">More</a>}>
+        <div className="p-3 pt-0 grid lg:grid-cols-3 gap-2">
+            <div className="">
+                <Card className="!w-full" title={
+                    <span style={{
+                        fontWeight: '400'
+                    }} className="font-sans">Platforms  statistic</span>
+                } >
+                    <PlatformChart />
+                </Card>
 
-
-
-                <Tabs type="card" defaultActiveKey="1" items={items} onChange={onChange} />
-                <ConfigProvider theme={{
-                    components: {
-                        Table: {
-                            headerBg: 'rgb(248 250 252)',
-                            cellPaddingBlock: 10
-                        }
-
-                    }
-                }} >
-
-                    <Table dataSource={dataSource} columns={columns} pagination={false} />
-                </ConfigProvider>
-            </Card>
+            </div>
         </div>
-        <div className="p-3 pt-0 livestream grid grid-cols-3 gap-3">
+        <div className="p-3">
             <Card title={
                 <span className="font-sans" style={{
                     fontWeight: '200'
                 }}>Top livestreams</span>
             } className="col-span-2">
 
-                <LineChart/>
+                <LineChart />
                 <ConfigProvider theme={{
                     components: {
                         Table: {
@@ -184,14 +165,7 @@ const Page: React.FC<PageProps> = () => {
 
                 </ConfigProvider>
             </Card>
-            <Card title={
-                <span className="font-sans" style={{
-                    fontWeight: '200'
-                }}>Deposit</span>
-            } >
 
-                <Table dataSource={dataSource} columns={columns} showHeader={false} pagination={false} />
-            </Card>
         </div>
     </div>
 }

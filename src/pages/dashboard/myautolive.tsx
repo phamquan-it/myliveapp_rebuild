@@ -139,7 +139,6 @@ const Page = () => {
             title: t("start_time"),
             dataIndex: "start_at",
             key: "start_at",
-            ellipsis: true,
             render: (text) => (<>
                 <CountdownTimer startTime={text} />
             </>)
@@ -171,7 +170,6 @@ const Page = () => {
         },
     ];
 
-    const token = getCookie('token')
     const { data, isFetching, isError } = useQuery({
         queryKey: ["activityStream", router.asPath],
         queryFn: () =>
@@ -182,9 +180,6 @@ const Page = () => {
                     limit: pageIndex * pageSize,
                     status: router?.query?.status,
                     platform: router?.query?.platform
-                },
-                headers: {
-                    Authorization: `Bearer ${token}`,
                 },
             }),
         placeholderData: (previousData) => previousData,
@@ -226,7 +221,7 @@ const Page = () => {
             current: pageIndex
         }
     }
-
+    const p = useTranslations("Placeholder")
     return (
         <AdminLayout selected={streamsSelected} breadcrumbItems={
             [
@@ -240,9 +235,9 @@ const Page = () => {
         } actions={
             <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} />
         } filterOption={(
-            <div className="flex items-center gap-2">
+            <div className="hidden items-center gap-2 xl:flex">
                 <Select
-                    placeholder="Select platform"
+                    placeholder={p('selectplatform')}
                     style={{
                         width: 200
                     }} options={platformQuery?.data?.data?.platforms.map((platform: any) => ({
@@ -266,14 +261,50 @@ const Page = () => {
                         { value: 'stopped', label: <span>{s('stopped')}</span> },
                         { value: 'error', label: <span>{s('error')}</span> },
                     ]} className='w-full mt-2 sm:mt-0 sm:w-48'
-                    placeholder="Select status"
+                    placeholder={p('select_status')}
                     onChange={(e) => {
                         syncObj({ ...router.query, status: e ?? '' })
                     }}
                 />
 
             </div>
-        )}>
+
+        )} rightFilter={<>
+            <Select
+                placeholder={p('selectplatform')}
+                style={{
+                    width: 200
+                }} options={platformQuery?.data?.data?.platforms.map((platform: any) => ({
+                    ...platform,
+                    label: (
+                        <div className="flex items-center gap-1">
+                            <Image width={20} src={platform.image} alt="image" />
+                            {platform?.name}
+                        </div>
+                    ),
+                    value: platform.id,
+                }))} onChange={(e) => {
+                    if (e == undefined) e = ""
+                    syncObj({ ...router.query, platform: e })
+                }} allowClear />
+            <Select allowClear
+                options={[
+                    { value: 'initalize', label: <span>{s('initalize')}</span> },
+                    { value: 'scheduling', label: <span>{s('scheduling')}</span> },
+                    { value: 'running', label: <span>{s('running')}</span> },
+                    { value: 'stopped', label: <span>{s('stopped')}</span> },
+                    { value: 'error', label: <span>{s('error')}</span> },
+                ]} className='mt-2'
+                style={{
+                    width: 200
+                }}
+                placeholder={p('select_status')}
+                onChange={(e) => {
+                    syncObj({ ...router.query, status: e ?? '' })
+                }}
+            />
+
+        </>}>
             <Table {...tableProps} />
         </AdminLayout>
     );

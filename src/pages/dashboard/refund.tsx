@@ -59,17 +59,19 @@ const Page = () => {
                 dayjs(record.createdAt).format("DD/MM/YYYY HH:mm:ss"), //
         },
         {
-            title: ("ID Stream"),
+            title: t("stream_id"),
             dataIndex: "key",
             key: "key",
+            ellipsis: true,
             render: (text: string, record: any) => {
                 return record?.activityStream?.id
             },
         },
         {
-            title: ("Stream name"),
+            title: t("stream_name"),
             dataIndex: "key",
             key: "key",
+            ellipsis: true,
             render: (text: string, record: any) => {
                 return record?.activityStream?.name
             },
@@ -90,9 +92,9 @@ const Page = () => {
         {
             width: 130,
             align: "right",
-            title: ("Reason"),
+            title: t("reason"),
             dataIndex: "reason",
-            key: "reason",
+            key: ("reason"),
         },
         {
             width: 130,
@@ -160,7 +162,7 @@ const Page = () => {
                         ...refund,
                         key: pageIndex * pageSize + (index + 1) - pageSize,
                     }))}
-                columns={columns} />
+                columns={columns} scroll={{ x: 600 }} />
         </AdminLayout>
     );
 };

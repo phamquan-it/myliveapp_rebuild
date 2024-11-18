@@ -33,7 +33,7 @@ const Page = () => {
 
         },
         {
-            title: "Description",
+            title: t("desc"),
             dataIndex: "description",
             key: "description",
         },
@@ -45,24 +45,17 @@ const Page = () => {
             align: "center",
         },
         {
-            title: ("Inflow"),
-            dataIndex: "inflow",
-            key: "inflow",
-            width: "10%",
-            align: "center",
-        },
-        {
-            title: ("outflow"),
-            dataIndex: "outflow",
-            key: "outflow",
+            title: t("amount"),
+            dataIndex: "amount",
+            key: "amount",
             width: "10%",
             align: "right",
         },
         {
-            title: ("Transaction date"),
+            title: t("transaction_date"),
             dataIndex: "transaction_date",
             key: "transaction_date",
-            width: "10%",
+            width: "14%",
             render: (text: string) => dayjs(text).format("YYYY-MM-DD HH"),
         },
         {

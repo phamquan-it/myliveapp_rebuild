@@ -90,7 +90,20 @@
         "myautolive": "My autolive"
     },
     "MyLanguage": {
-        "schedule": "schedule",
+        "source_link":"Source link",
+        "stream_name":"Stream name",
+        "stream_key":"Stream key",
+        "create_stream":"Create",
+        "reset":"Reset",
+        "file_size":"File size",
+        "duration":"Duration",
+        "extention":"Extention",
+        "newOrder": "New order",
+        "notschedule":"Not schedule",
+        "amount":"Amount",
+        "transaction_date":"Transaction date",
+        "desc": "Description",
+        "schedule": "Schedule",
         "update_info": "Update info",
         "change_password": "Change password",
         "update_servive_price": "Update services price",
@@ -187,14 +200,19 @@
         "serviceid": "Service ID",
         "startdate": "Start date",
         "charge": "Charge",
-        "creator": "Creator"
+        "creator": "Creator",
+        "stream_id": "ID Stream",
+        "stream_name": "Stream name",
+        "reason": "Reason"
     },
     "Placeholder": {
         "search": "Search...",
         "selectplatform": "Select platform",
         "selectcategory": "Select category",
         "selectprovider": "Select provider",
-        "select_status": "Select status"
+        "select_status": "Select status",
+        "selectuser": "Select user",
+        "selectvps": "Select vps"
     },
     "UserProfile": {
         "name": "Name",
@@ -242,5 +260,12 @@
     "Unit": {
         "cores": "cores",
         "streams": "streams"
+    },
+    "Datefilter":{
+        "selectDate":"Select date",
+        "monthago":"month ago",
+        "recent_month":"recents month",
+        "yearago":"year ago",
+        "custom":"Custom"
     }
 }

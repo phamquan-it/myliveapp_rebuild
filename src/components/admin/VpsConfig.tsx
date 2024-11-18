@@ -147,6 +147,7 @@ const VpsConfig: React.FC<VpsConfigProps> = () => {
 
 
         <Table bordered
+            scroll={{ x: 500 }}
             loading={conversion.isFetching}
             dataSource={conversion?.data?.data.map((
                 conv: any,

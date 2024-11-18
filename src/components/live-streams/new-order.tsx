@@ -21,8 +21,10 @@ import { handleUploadFile } from '../../../handleUploadFile';
 import { getVideoProperties } from '@/helpers/getVideoInfo';
 const { RangePicker } = DatePicker;
 
-
-const NewOrder = () => {
+interface NewOrderProps {
+    role?: number
+}
+const NewOrder: React.FC<NewOrderProps> = ({ role }) => {
     const queryClient = useQueryClient()
     const [videoInfo, setVideoInfo] = useState({
         resolution: '',
@@ -189,12 +191,12 @@ const NewOrder = () => {
         })
     }, [checkLink.data])
 
-
+    const p = useTranslations("Placeholder")
 
     const platformquery = usePlatformData();
     const [sourceLink, setSourceLink] = useState(SourceLink.GOOGLE_DRIVE)
     return <div className="h-full">
-        <div className="grid grid-cols-3 h-full gap-3">
+        <div className="grid lg:grid-cols-3 h-full gap-3">
             <div className="col-span-2 row-span-1">
                 <Form
                     name="basic"
@@ -207,15 +209,17 @@ const NewOrder = () => {
                     autoComplete="off"
                     labelAlign="left"
                 >
+                    {role == 1 ? '' :
+                        <Form.Item<StreamType>
+                            label="Vps"
+                            name="vpsId"
+                            rules={[{ required: true }]}
+                        >
+                            <Select options={data?.data.map((vp: any) => ({ ...vp, value: vp.vps_vps_provider, label: `${vp.name} - ${vp.vps_vps_provider}` }))} />
+                        </Form.Item>
+                    }
                     <Form.Item<StreamType>
-                        label="Vps"
-                        name="vpsId"
-                        rules={[{ required: true }]}
-                    >
-                        <Select options={data?.data.map((vp: any) => ({ ...vp, value: vp.vps_vps_provider, label: `${vp.name} - ${vp.vps_vps_provider}` }))} />
-                    </Form.Item>
-                    <Form.Item<StreamType>
-                        label="Source link"
+                        label={t('source_link')}
                         name="source_link"
                         validateStatus={linkState ? "success" : "error"}
                         rules={[{ required: sourceLink != "gcloud" }]}
@@ -268,7 +272,9 @@ const NewOrder = () => {
                                 </div>
                             </> : <></>
                     }
-                    <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
+                    <Form.Item wrapperCol={{
+                        sm: { offset: 4, span: 20 }
+                    }}>
                         <div className="grid grid-cols-2 gap-2">
                             <Form.Item<StreamType>
                                 name="platformId"
@@ -284,35 +290,36 @@ const NewOrder = () => {
                                     ),
                                     value: platform.id,
                                 }))}
-                                    placeholder="Select platform"
+                                    placeholder={p("selectplatform")}
                                 />
                             </Form.Item>
                             <Form.Item<StreamType>
                                 name="name"
                                 rules={[{ required: true }]}
                             >
-                                <Input placeholder="Stream name" />
+                                <Input placeholder={t('stream_name')} />
                             </Form.Item>
                         </div>
                     </Form.Item>
                     <Form.Item<StreamType>
-                        label="Stream key"
+                        label={t('stream_key')}
                         name="key"
                         rules={[{ required: true }]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        wrapperCol={{ offset: 4, span: 20 }}
-                        rules={[{ required: true }]}
-                    >
+                        wrapperCol={{
+                            sm: { offset: 4, span: 20 }
+                        }}
+                        rules={[{ required: true }]}>
                         <Space>
                             <Form.Item<StreamType>
                                 name="loop"
                             >
                                 <Checkbox checked={loop} onChange={() => {
                                     setLoop(!loop)
-                                }}>Loop</Checkbox>
+                                }}>{t('loop')}</Checkbox>
                             </Form.Item>
 
                             <Form.Item
@@ -320,14 +327,16 @@ const NewOrder = () => {
                             >
                                 <Checkbox checked={useCron} onChange={(e) => {
                                     setUseCron(!useCron)
-                                }} value="loop">Schedule</Checkbox>
+                                }} value="loop">{t('schedule')}</Checkbox>
                             </Form.Item>
 
                         </Space>
                     </Form.Item>
                     {(useCron) ?
                         <Form.Item
-                            wrapperCol={{ offset: 4, span: 20 }}
+                            wrapperCol={{
+                                sm: { offset: 4, span: 20 }
+                            }}
                             name="schedule"
                             rules={[{ required: true }]}
                         >
@@ -335,13 +344,15 @@ const NewOrder = () => {
                         </Form.Item>
                         : ''
                     }
-                    <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
+                    <Form.Item wrapperCol={{
+                        sm: { offset: 4, span: 20 }
+                    }}>
                         <div className="flex gap-2">
                             <Button type="primary" htmlType="submit" loading={createStreamMutation.isPending || isUploading}>
-                                Create
+                                {t('create_stream')}
                             </Button>
                             <Button htmlType="reset">
-                                Reset
+                                {t('reset')}
                             </Button>
                             <Form.Item>
                                 {isUploading ? "Uploading..." : ''}
@@ -352,10 +363,10 @@ const NewOrder = () => {
             </div>
             <div className="grid grid-rows-2 gap-3">
                 <Input.TextArea readOnly value={`
-Resolution: ${videoInfo.resolution}
-Fize size: ${videoInfo.size ?? ''}
-Duration: ${videoInfo.duration ?? ''}
-Extention: ${videoInfo.ext ?? ''}
+${t('resolution')}: ${videoInfo.resolution}
+${t('file_size')}: ${videoInfo.size ?? ''}
+${t('duration')}: ${videoInfo.duration ?? ''}
+${t('extention')}: ${videoInfo.ext ?? ''}
                     `} />
                 <Table showHeader={false} dataSource={dataSource} columns={columns} pagination={false} />
             </div>

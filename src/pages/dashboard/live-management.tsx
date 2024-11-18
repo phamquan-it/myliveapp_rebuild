@@ -1,6 +1,7 @@
 import { ActivityStream } from '@/@type/api_object';
 import axiosInstance from '@/apiClient/axiosConfig';
 import DateFilter from '@/components/DateFilter';
+import MutistreamsAction from '@/components/MutistreamsAction';
 import AdminLayout from '@/components/admin-layout';
 import CreateNewStream from '@/components/admin/create-new-stream';
 import StreamLog from '@/components/admin/streams/log';
@@ -19,7 +20,7 @@ import syncObjectToUrl from '@/helpers/syncObjectToUrl';
 import getObjecFormUrlParameters from '@/hooks/getObjectFormParameter';
 import { CheckOutlined, DownloadOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Input, Select, Table, Image, Checkbox, ConfigProvider, Tooltip } from 'antd';
+import { Button, Input, Select, Table, Image, Checkbox, ConfigProvider, Tooltip, TableProps } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { ColumnType } from 'antd/lib/table';
 import dayjs from 'dayjs';
@@ -86,26 +87,26 @@ const Page = () => {
             </div>)
         },
         {
-            title: ('Platform'),
+            title: d('platform'),
             dataIndex: 'platform',
             key: 'platform',
             render: () => (
                 <Image src="https://cdn-icons-png.flaticon.com/128/174/174883.png" alt="" width={25} />
             ),
             align: 'center',
-            width: 50
+            width: 100
         },
         {
             title: t('start_time'),
             dataIndex: 'start_at',
             key: 'start_at',
-            render: (text: string) => text == undefined ? 'Not schedule' : dayjs(text).format('YYYY/MM/DD HH:mm')
+            render: (text: string) => text == undefined ? t('notschedule') : dayjs(text).format('YYYY/MM/DD HH:mm')
         },
         {
             title: t('end_time'),
             dataIndex: 'end_at',
             key: 'end_at',
-            render: (text: string) => text == undefined ? 'Not schedule' : dayjs(text).format('YYYY/MM/DD HH:mm')
+            render: (text: string) => text == undefined ? t('notschedule') : dayjs(text).format('YYYY/MM/DD HH:mm')
         },
         {
             title: t('status'),
@@ -133,7 +134,32 @@ const Page = () => {
     }, 300)
     const platformQuery = usePlatformData();
     const s = useTranslations('StreamStatus')
-    return <AdminLayout selected={[]} breadcrumbItems={
+    const [streamsSelected, setStreamsSelected] = useState<any[]>([])
+    const tableProps: TableProps<ActivityStream> = {
+        rowKey: 'id',
+        dataSource: data?.data?.data,
+        scroll: { x: 400 },
+        rowSelection: {
+            type: "checkbox",
+            onChange: (selectedRowKeys, selectedRows) => {
+                setStreamsSelected(selectedRows)
+            }
+        },
+        loading: isFetching,
+        columns,
+        pagination: {
+            total: data?.data?.total,
+            pageSize: pageSize,
+            current: pageIndex
+        },
+        onChange: (pagination) => {
+            syncObj({
+                pageIndex: pagination.current,
+            })
+        }
+
+    }
+    return <AdminLayout selected={streamsSelected} breadcrumbItems={
         [
             {
                 title: <Link href="/dashboard">{d('home')}</Link>
@@ -143,8 +169,50 @@ const Page = () => {
                 title: d('livestreams'),
             },
         ]
-    } filterOption={(
-        <div className="flex gap-2 items-center">
+    }
+        actions={<>
+            <MutistreamsAction streamsSelected={[{ id: 1 }]} setStreamsSelected={setStreamsSelected} />
+        </>}
+        filterOption={(
+            <div className="flex gap-2 items-center hidden 2xl:flex">
+                <Select className='w-48' options={platformQuery.data?.data?.platforms.map((platform: any) => ({
+                    ...platform,
+                    label: (
+                        <div className="flex items-center gap-1">
+                            <Image width={20} src={platform.image} alt="image" />
+                            {platform?.name}
+                        </div>
+                    ),
+                    value: platform.id,
+                }))}
+                    placeholder={p('selectplatform')}
+                    onChange={(e) => {
+                        syncObj({ platform: e ?? '' })
+                    }}
+                    allowClear
+                />
+                <SelectVps />
+                <UserSelect />
+                <Select
+                    placeholder={p('select_status')}
+                    allowClear
+                    options={[
+                        { value: 'scheduling', label: <span>{s('scheduling')}</span> },
+                        { value: 'initalize', label: <span>{s('initalize')}</span> },
+                        { value: 'running', label: <span>{s('running')}</span> },
+                        { value: 'stopped', label: <span>{s('stopped')}</span> },
+                        { value: 'error', label: <span>{s('error')}</span> },
+                    ]}
+                    style={{
+                        width: 200
+                    }}
+                    onChange={(e) => {
+                        syncObj({ ...router.query, status: e ?? '' })
+                    }}
+                />
+                <DateFilter />
+            </div>
+        )} rightFilter={<>
             <Select className='w-48' options={platformQuery.data?.data?.platforms.map((platform: any) => ({
                 ...platform,
                 label: (
@@ -155,7 +223,7 @@ const Page = () => {
                 ),
                 value: platform.id,
             }))}
-                placeholder="Select platform"
+                placeholder={p('selectplatform')}
                 onChange={(e) => {
                     syncObj({ platform: e ?? '' })
                 }}
@@ -164,7 +232,7 @@ const Page = () => {
             <SelectVps />
             <UserSelect />
             <Select
-                placeholder="Select status"
+                placeholder={p('select_status')}
                 allowClear
                 options={[
                     { value: 'scheduling', label: <span>{s('scheduling')}</span> },
@@ -172,14 +240,17 @@ const Page = () => {
                     { value: 'running', label: <span>{s('running')}</span> },
                     { value: 'stopped', label: <span>{s('stopped')}</span> },
                     { value: 'error', label: <span>{s('error')}</span> },
-                ]} className='w-full mt-2 sm:mt-0 sm:w-48'
+                ]}
+                style={{
+                    width: 200
+                }}
                 onChange={(e) => {
                     syncObj({ ...router.query, status: e ?? '' })
                 }}
             />
             <DateFilter />
-        </div>
-    )}>
+
+        </>}>
         <div className="my-3"></div>
         <ConfigProvider theme={{
             components: {
@@ -190,29 +261,9 @@ const Page = () => {
         }}>
             <Table
                 rowClassName='font-sans'
-                dataSource={data?.data?.data.map((livestream: any, index: number) => ({
-                    ...livestream,
-                    key: pageIndex * pageSize + (index + 1) - pageSize,
-                }))}
 
-                scroll={{
-                    x: 400
-                }}
-                loading={isFetching}
-                columns={columns}
-                pagination={{
-                    total: data?.data?.total,
-                    pageSize: pageSize,
-                    current: pageIndex
-                }}
-                rowSelection={{
-                    type: 'checkbox'
-                }}
-                onChange={(pagination) => {
-                    syncObj({
-                        pageIndex: pagination.current,
-                    })
-                }}
+
+                {...tableProps}
             />
         </ConfigProvider>
 

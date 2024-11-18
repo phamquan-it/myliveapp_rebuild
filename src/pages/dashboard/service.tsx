@@ -100,20 +100,18 @@ const Page = () => {
             return axiosInstance.get(`/service/list?language=${router.locale}`, {
                 params: {
                     keyword: router.query.keyword ?? ''
-                },
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                }
             });
         },
     });
+    const d = useTranslations('DashboardMenu')
     return (
         <AdminLayout selected={[]} breadcrumbItems={[
             {
-                title: <Link href="/dashboard">Home</Link>
+                title: <Link href="/dashboard">{d('home')}</Link>
             },
             {
-                title: 'Services',
+                title: d('services'),
             },
 
         ]} staticAction={(
@@ -130,10 +128,12 @@ const Page = () => {
                         className="grid md:flex justify-between items-center my-3 gap-2"
                         id="filter"
                     >
-                                          </div>
+                    </div>
 
                     <Skeleton loading={isFetching}>
-                        <Table rowClassName="font-sans" dataSource={data?.data?.services} columns={columns} />
+                        <Table rowClassName="font-sans" scroll={{
+                            x: 300
+                        }} dataSource={data?.data?.services} columns={columns} />
                     </Skeleton>
                 </div>
             </div>

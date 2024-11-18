@@ -15,6 +15,7 @@ import {
     Tag,
     Image,
     Tooltip,
+    Progress,
 } from "antd";
 import Title from "antd/es/typography/Title";
 import { GetStaticPropsContext } from "next";
@@ -42,6 +43,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import AdminLayout from "@/components/admin-layout";
 import AdvancedSetup from "@/components/vps/advanced-setup";
 import Link from "next/link";
+import Network from "@/components/vps/network";
 
 const Page = () => {
     const [openState, setOpenState] = useState(false)
@@ -104,7 +106,14 @@ const Page = () => {
             key: 'brand',
             render: (text: string, record: any) => record?.vps?.brand
         },
-
+        {
+            title: "Network",
+            dataIndex: "slug",
+            key: 'slug',
+            render: (text: string) => <>
+                <Network slug={text}/>
+            </>
+        },
         {
             title: ('Amount'),
             dataIndex: "stream",
@@ -147,7 +156,7 @@ const Page = () => {
                     })
                 }}></Button>
                 <VpsHideOption vps={record} />
-                <AdvancedSetup slug={text}  />
+                <AdvancedSetup slug={text} />
             </div>)
         }
     ]
@@ -162,9 +171,6 @@ const Page = () => {
     const openModalViewDetail = () => {
         setIsViewDetailOpen(true)
     }
-
-
-
     const openModal = () => {
         setIsModalOpen(true);
         setConnectionState(true);
@@ -192,7 +198,6 @@ const Page = () => {
     return (
         <AdminLayout selected={selectedRows} breadcrumbItems={
             [
-
                 {
                     title: <Link href="/dashboard">{d('home')}</Link>
                 },
@@ -250,6 +255,7 @@ const Page = () => {
                         ...item,
                         key: pageIndex * pageSize + (index + 1) - pageSize,
                     }))}
+                    rowKey='slug'
                     columns={columns}
                     loading={isFetching}
                     scroll={{ x: 1000 }}
