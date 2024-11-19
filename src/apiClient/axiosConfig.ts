@@ -9,12 +9,10 @@ axiosInstance.interceptors.request.use(
     (config) => {
         // Get the token from the cookies
         const token = getCookie('token');
-
         // If token exists, add it to the Authorization header
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
         }
-
         return config;
     },
     (error) => {

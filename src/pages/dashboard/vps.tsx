@@ -44,6 +44,8 @@ import AdminLayout from "@/components/admin-layout";
 import AdvancedSetup from "@/components/vps/advanced-setup";
 import Link from "next/link";
 import Network from "@/components/vps/network";
+import VpsPrice from "@/components/admin/vps/vps-price";
+import VpsStatus from "@/components/admin/vps/vps-status";
 
 const Page = () => {
     const [openState, setOpenState] = useState(false)
@@ -52,6 +54,16 @@ const Page = () => {
     const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [sync, setSync] = useState(false)
+    const profilesSlug = useQuery({
+        queryKey: ['ProfileSlug', location], queryFn: () => axiosInstance.get(
+            "/vps-provider/get-profile-for-create-vps", {
+            params: {
+                locationId: 'dk'
+            }
+        })
+    });
+
+
     const { data, isFetching, isError } = useQuery({
         queryKey: ['vpsData', isModalOpen],
         queryFn: () => axiosInstance.get<any>('/vps-provider/getvps', {
@@ -111,7 +123,7 @@ const Page = () => {
             dataIndex: "slug",
             key: 'slug',
             render: (text: string) => <>
-                <Network slug={text}/>
+                <Network slug={text} />
             </>
         },
         {
@@ -122,26 +134,23 @@ const Page = () => {
         },
         {
             title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
-            render: () => <>
-                <div className="flex justify-center">
-                    <Tooltip title="Running">
-                        <FaPlay className="text-sky-600" />
-                    </Tooltip>
-                </div>
-            </>,
+            dataIndex: 'slug',
+            key: 'slug',
+            render: (text, record) => {
+                console.log("vps", record)
+                return <>
+                    <VpsStatus slug={text}/>    
+                </>
+            },
             align: "center"
         },
         {
             title: 'Price',
-            dataIndex: 'address',
-            key: 'address',
+            dataIndex: 'profile',
+            key: 'profile',
             width: 150,
             align: "right",
-            render: () => (<span className="font-semibold">
-                10$
-            </span>)
+            render: (text) => (<VpsPrice profile={text} profiles={profilesSlug?.data} />)
         },
         {
             title: '',
