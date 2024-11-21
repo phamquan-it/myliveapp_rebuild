@@ -29,7 +29,7 @@ const Page = () => {
                     },
                     {
                         title: 'CentOS',
-                        icon: 'https://static-00.iconduck.com/assets.00/centos-icon-2048x2048-39pfdqnc.png'
+                        icon: 'https://cdn.icon-icons.com/icons2/2699/PNG/96/centos_logo_icon_167761.png'
                     },
                     {
                         title: 'Ferora',
@@ -37,7 +37,7 @@ const Page = () => {
                     },
                     {
                         title: 'Pop!_OS',
-                        icon: 'https://static-00.iconduck.com/assets.00/pop-os-icon-2048x2048-mjad7yws.png'
+                        icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5WSC6L3K-Yeh3E3BqTwMNowjyZuFLbq6EIA&s'
                     },
                     {
                         title: 'Arch Linux',

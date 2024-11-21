@@ -36,9 +36,6 @@ const Page = () => {
                     offset,
                     limit
                 },
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                },
             }),
         placeholderData: (previousData) => previousData,
     });

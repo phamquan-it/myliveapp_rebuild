@@ -7,15 +7,17 @@ interface VpsPriceProps {
 }
 
 const VpsPrice: React.FC<VpsPriceProps> = ({ profile, profiles }) => {
+    const { data, isFetching, isError } = useQuery({
+        queryKey: ['profile' + profile],
+        queryFn: () => axiosInstance.get("vps-profile/get-price", {
+            params: {
+                profile
+            }
+        })
+    })
 
-  //  useEffect(()=>{
-  //      if(profiles?.data != undefined){
-  //          profiles?.data?.map((pf:any)=>{
-  //              console.log("Profile",pf)
-  //          })
-  //      }
-  //  }, [profiles])
-    return <>16$</>
+    console.log("vps", data?.data)
+    return <>${data?.data/ 100}</>
 }
 
 export default VpsPrice

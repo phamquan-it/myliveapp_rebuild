@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
-import _ from 'lodash-es';
-import path from 'path';
+import _ from "lodash-es";
+import path from "path";
 const nextConfig = {
     experimental: {
-        esmExternals: 'loose', // Enabling the loose behavior for ESM externals
+        esmExternals: "loose", // Enabling the loose behavior for ESM externals
     },
     reactStrictMode: true,
     transpilePackages: [
@@ -48,20 +48,20 @@ const nextConfig = {
         // Example of using `path` with `import`
         config.resolve.alias = {
             ...config.resolve.alias,
-            'lodash-es': path.resolve('./node_modules/lodash-es')
+            "lodash-es": path.resolve("./node_modules/lodash-es"),
         };
 
         return config;
     },
     i18n: {
-        locales: ['en', 'vi'],
-        defaultLocale: 'en'
+        locales: ["en", "vi"],
+        defaultLocale: "en",
     },
     env: {
-        API_URL: 'https://api.golive365.top/',
-        //API_URL: 'http://localhost:3031'
-        WEBDOCK_URL: "https://api.webdock.io/v1"
-    }
+        API_URL: "https://api.golive365.top/",
+        //   API_URL: 'http://localhost:3031',
+        WEBDOCK_URL: "https://api.webdock.io/v1",
+    },
 };
 
 export default nextConfig;
