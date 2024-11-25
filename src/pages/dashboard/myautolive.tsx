@@ -117,13 +117,10 @@ const Page = () => {
             title: d("platform"),
             dataIndex: "platform",
             key: "platform",
-            render: (text: string, record: any) => record?.platform?.name
-        },
-        {
-            title: t("loop"),
-            dataIndex: "loop",
-            key: "loop",
-            render: (text: string, record: any) => <SyncOutlined className="!text-sky-600" />
+            render: (text: string, record: any) => <>
+                <Image width={25} src={record.platform?.image} alt="" />
+            </>,
+            align: "center"
         },
         {
             title: t("resolution"),
@@ -135,6 +132,13 @@ const Page = () => {
             dataIndex: "duration",
             key: "duration",
         },
+        {
+            title: t("loop"),
+            dataIndex: "loop",
+            key: "loop",
+            render: (text: string, record: any) => <SyncOutlined className="!text-sky-600" />
+        },
+
         {
             title: t("start_time"),
             dataIndex: "start_at",
@@ -186,6 +190,7 @@ const Page = () => {
     });
 
     const [streamsSelected, setStreamsSelected] = useState<StreamDataType[]>([])
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const syncObj = syncObjectToUrl(router)
     const s = useTranslations('StreamStatus')
 
@@ -195,12 +200,14 @@ const Page = () => {
         rowSelection: {
             type: 'checkbox',
             onChange: (selectedRowKeys: React.Key[], selectedRows: StreamDataType[]) => {
+                setSelectedRowKeys(selectedRowKeys)
                 setStreamsSelected(selectedRows)
             },
             getCheckboxProps: (record: StreamDataType) => ({
                 disabled: record.name === 'Disabled User', // Column configuration not to be checked
                 name: record.name,
             }),
+            selectedRowKeys
         },
         columns,
         rowClassName: "!font-sans",
@@ -233,7 +240,7 @@ const Page = () => {
                 },
             ]
         } actions={
-            <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} />
+            <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} setSelectedRowKeys={setSelectedRowKeys} />
         } filterOption={(
             <div className="hidden items-center gap-2 xl:flex">
                 <Select

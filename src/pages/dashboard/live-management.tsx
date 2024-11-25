@@ -90,10 +90,10 @@ const Page = () => {
             title: d('platform'),
             dataIndex: 'platform',
             key: 'platform',
-            render: () => (
-                <Image src="https://cdn-icons-png.flaticon.com/128/174/174883.png" alt="" width={25} />
-            ),
-            align: 'center',
+            render: (text: string, record: any) => <>
+                <Image width={25} src={record.platform?.image} alt="" />
+            </>,
+            align: "center",
             width: 100
         },
         {

@@ -136,7 +136,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ role }) => {
                 values.source_link = getGoogleDriveKey(values.source_link + '') + ''
                 break;
             case SourceLink.YOUTUBE:
-                values.source_link = getManifestUrl(youtubeCheckLink?.data?.data);
+                values.source_link = values.source_link;
                 break
             case SourceLink.UPLOAD:
                 console.log(values)

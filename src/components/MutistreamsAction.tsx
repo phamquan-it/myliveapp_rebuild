@@ -9,9 +9,10 @@ import { IoPlay } from 'react-icons/io5';
 interface MutistreamsActionProps {
     streamsSelected: StreamDataType[],
     setStreamsSelected: (newStreamSelected: []) => void
+    setSelectedRowKeys?: (streams:any[]) => void
 }
 
-const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, setStreamsSelected }) => {
+const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, setStreamsSelected, setSelectedRowKeys }) => {
     const queryClient = useQueryClient()
 
     // start streams
@@ -53,6 +54,7 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, 
         }),
         onSuccess: () => {
             message.success("Success")
+            setStreamsSelected([])
             setTimeout(() => {
                 queryClient.invalidateQueries({ queryKey: ['activityStream'] })
             }, 3000)
@@ -94,7 +96,6 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, 
         stopLive.mutate(ids)
     };
 
-
     const deleteStream = useMutation({
         mutationKey: ['delete-stream'],
         mutationFn: (data: {
@@ -102,6 +103,10 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, 
         }) => axiosInstance.delete("/activity-stream/delete/" + data.stream_id),
         onSuccess: () => {
             message.success("Success")
+            if(setSelectedRowKeys != undefined){
+                setSelectedRowKeys([])
+                setStreamsSelected([])
+            } 
             queryClient.invalidateQueries({ queryKey: ['activityStream'] })
         },
         onError: (err) => {
@@ -116,14 +121,12 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, 
                 stream_id: value
             })
         })
-
     };
 
 
     const w = useTranslations('Warning')
     const t = useTranslations('MyLanguage')
     return <div className='grid sm:flex gap-1'>
-
 
         <Tooltip title={w('start_selected_stream')}>
             <Popconfirm

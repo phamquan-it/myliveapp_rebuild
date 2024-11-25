@@ -56,7 +56,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, 
             </Header>
             <Content className="bg-red-500">
                 <Layout className="h-full">
-                    <Content className={`p-2 ${filter?'overflow-auto':'overflow-hidden' }`} style={{
+                    <Content className={`p-2 ${filter ? 'overflow-auto' : 'overflow-hidden'}`} style={{
                         height: "calc(100vh - 130px)"
                     }}>
                         <Breadcrumb items={breadcrumbItems} />
@@ -72,7 +72,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, 
                         <div className="w-full bg-white shadow rounded py-3 pb-5 px-2 font-sans">
                             <div className="grid gap-1 overflow-hidden">
                                 <Title level={5} className="!mb-0 !pb-0">Filters</Title>
-                                { rightFilter??''}    
+                                {rightFilter ?? ''}
                             </div>
                         </div>
                     </Sider>
