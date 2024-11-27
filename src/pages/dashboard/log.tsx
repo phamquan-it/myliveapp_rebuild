@@ -28,6 +28,8 @@ import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 import SearchInput from "@/components/filters/SearchInput";
 import { pagination } from "@/helpers/pagination";
 import axiosInstance from "@/apiClient/axiosConfig";
+import AdminLayout from "@/components/admin-layout";
+import Link from "next/link";
 
 const Page = () => {
     const d = useTranslations("DashboardMenu");
@@ -35,37 +37,24 @@ const Page = () => {
     const columns: any = [
         {
             title: t("entryno"),
-            dataIndex: "key",
-            key: "key",
-            align: "center",
+            dataIndex: "id",
+            key: "id",
+
         },
         {
-            title: t("name"),
-            dataIndex: "name",
-            key: "name",
-        },
-        {
-            title: t("email"),
-            dataIndex: "email",
-            key: "email",
-        },
-        {
-            title: t("method"),
-            dataIndex: "method",
-            key: "method",
-            render: (text: string) => (
-                <Tag color={text == "POST" ? "orange" : "purple"}>{text}</Tag>
-            ),
+            title: t("desc"),
+            dataIndex: "description",
+            key: "description",
         },
         {
             title: t("action"),
             dataIndex: "action",
-            key: "action",
+            key: "action"
         },
         {
             title: t("createAt"),
-            dataIndex: "createdAt",
-            key: "createdAt",
+            dataIndex: "create_at",
+            key: "create_at",
             render: (text: string) => (
                 <>{dayjs(text).format("DD/MM/YYYY hh:mm:ss")}</>
             ),
@@ -76,24 +65,25 @@ const Page = () => {
     const { limit, offset, pageSize, pageIndex } = pagination(router)
     const { data } = useQuery({
         queryKey: ['log'],
-        queryFn: ()=>axiosInstance.get('/log/list')
-    }) 
+        queryFn: () => axiosInstance.get('/log/list?language=en&offset=0&limit=10')
+    })
+    useEffect(() => {
+        console.log("LOg", data?.data)
+
+    })
     return (
-        <>
-            <Title level={2} className="text-center">
-                {d("log")}
-            </Title>
-            <div className="my-3 flex gap-1">
-                <div id="filter">
-                    <SearchInput />
-                </div>
-            </div>
+        <AdminLayout selected={[]} breadcrumbItems={[
+            {
+                title: <Link href="/dashboard">{d('home')}</Link>
+            },
+            {
+                title: d('log'),
+            },
+
+        ]}>
             <Table
-                className="border rounded shadow-md"
-                dataSource={data?.data.data.map((item: any, index: number) => ({
-                    ...item,
-                    key: pageIndex * pageSize + (index + 1) - pageSize,
-                }))}
+                rowKey="id"
+                dataSource={data?.data.data}
                 scroll={{ x: 800 }}
                 columns={columns}
                 pagination={{
@@ -104,7 +94,7 @@ const Page = () => {
                     position: ["bottomCenter"],
                 }}
             />
-        </>
+        </AdminLayout>
     );
 };
 export default Page;

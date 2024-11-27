@@ -58,8 +58,8 @@ const nextConfig = {
         defaultLocale: "en",
     },
     env: {
-        //  API_URL: "https://api.golive365.top/",
-        API_URL: "http://localhost:3031",
+        API_URL: "https://api.golive365.top/",
+      //  API_URL: "http://localhost:3031/",
         WEBDOCK_URL: "https://api.webdock.io/v1",
     },
 };

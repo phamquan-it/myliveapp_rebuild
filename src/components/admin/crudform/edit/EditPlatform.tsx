@@ -16,7 +16,7 @@ type FieldType = {
 
 
 interface UpdatePlatformProps {
-    platform: any
+    platform: FieldType
 }
 const UpdatePlatform: React.FC<UpdatePlatformProps> = ({ platform }) => {
     const queryClient = useQueryClient()
@@ -83,17 +83,18 @@ const UpdatePlatform: React.FC<UpdatePlatformProps> = ({ platform }) => {
             }}>
             <Button  onClick={showModal} iconPosition="end"  icon={<EditFilled />} className="border-green-700 text-green-700"></Button>
         </ConfigProvider>
-        <Modal title="Create" open={isModalOpen} onCancel={handleCancel} footer={[]}>
+        <Modal title="Update" open={isModalOpen} onCancel={handleCancel} footer={[]}>
             <Form
                 layout="vertical"
                 name="basic"
                 style={{ maxWidth: 600 }}
-                initialValues={{ remember: true }}
+                initialValues={{ ...platform }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
                 <Form.Item<FieldType>
+                    
                     label="Name"
                     name="name"
                     rules={[{ required: true }]}

@@ -21,6 +21,7 @@ import {
 } from "antd";
 import { AnyObject } from "antd/es/_util/type";
 import {
+    ColumnsType,
     FilterValue,
     SorterResult,
     TableCurrentDataSource,
@@ -52,8 +53,8 @@ const Page = () => {
     const d = useTranslations("DashboardMenu");
     const t = useTranslations("MyLanguage");
     const router = useRouter()
-    const { limit, offset, pageIndex, pageSize } = pagination(router, 1, 10)
-    const columns: any[] = [
+    const { limit, offset, pageIndex, pageSize } = pagination(router)
+    const columns: ColumnsType<any> = [
         {
             title: "ID Orders",
             dataIndex: "id",
@@ -73,7 +74,7 @@ const Page = () => {
             dataIndex: "key",
             key: "key",
             align: "center",
-            render: (text: any, record: any) => record?.user?.email,
+            render: (text: any, record: any) => record?.user?.name,
             ellipsis: true,
         },
         {
@@ -148,7 +149,6 @@ const Page = () => {
             },
         },
     ];
-    const token = getCookie("token");
 
     const [openState, setOpenState] = useState(false);
 
