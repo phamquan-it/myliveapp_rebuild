@@ -13,8 +13,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axiosClient from "@/apiClient/axiosClient";
 import { setCookie } from "cookies-next";
 import axiosInstance from "@/apiClient/axiosConfig";
+import LocaleSwitcher from "@/LocaleSwitcher";
 const LoginForm = () => {
     const t = useTranslations("Authenlication");
+    const p = useTranslations("Placeholder");
 
     const layout = {
         labelCol: { span: 24 }, // Set the label width to take up the full width
@@ -48,6 +50,9 @@ const LoginForm = () => {
 
     return (
         <div className="h-screen flex justify-center items-center sm:bg-slate-100">
+            <div className="absolute top-2 end-4">
+                <LocaleSwitcher/>
+            </div>
             <div className="w-full md:w-1/2 lg:w-1/3 p-3 md:border md:shadow rounded md:bg-white">
                 <Form
                     className="py-3 pe-3"
@@ -61,14 +66,14 @@ const LoginForm = () => {
                         <Title level={3} className="!pt-4 !mb-1">
                             LiveStreams
                         </Title>
-                        <p className="text-slate-700">Welcome to livestreams</p>
+                        <p className="text-slate-700">{ t('welcome') }</p>
                     </div>
                     <div className="px-2">
                         <Form.Item<FieldType>
                             name="email"
                             rules={[{ required: true, message: t("requiredEmail") }]}
                         >
-                            <Input className="py-2" placeholder="Enter email" />
+                            <Input className="py-2" placeholder={ p('enteryourmail')} />
                         </Form.Item>
 
                         <Form.Item<FieldType>
@@ -81,19 +86,19 @@ const LoginForm = () => {
                                 },
                             ]}
                         >
-                            <Input.Password className="py-2" placeholder="Enter password" />
+                            <Input.Password className="py-2" placeholder={ p('enteryourpassword') } />
                         </Form.Item>
                         <div className="flex justify-between">
                             <Form.Item
                                 className="!mb-0"
                                 rules={[{ required: true }]}
                             >
-                                <Checkbox>Remenber me</Checkbox>
+                                <Checkbox>{t("remenber_me")}</Checkbox>
                             </Form.Item>
                             <Form.Item
                                 className="!mb-0"
                             >
-                                <Link href="forgot-password">Forgot password?</Link>
+                                <Link href="forgot-password">{t('forgot')}</Link>
                             </Form.Item>
                         </div>
                         <Form.Item className="!mt-5">

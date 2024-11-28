@@ -13,6 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import { setCookie } from "cookies-next";
 import { AuthApi } from "@/apiClient/providers/auth";
 import axiosInstance from "@/apiClient/axiosConfig";
+import LocaleSwitcher from "@/LocaleSwitcher";
 
 const RegiterForm = () => {
     const [openSuccessModal, setOpenSuccessModal] = useState(false)
@@ -42,14 +43,18 @@ const RegiterForm = () => {
         mutate(values);
     };
 
+    const p = useTranslations("Placeholder")
     return (
         <>
             <div className="h-screen flex items-center justify-center sm:bg-slate-100">
+                <div className="absolute top-2 end-4">
+                    <LocaleSwitcher />
+                </div>
                 <div className="w-full md:w-1/2 lg:w-1/3 rounded px-5 py-5 bg-white shadow">
                     <Title level={3} className="!mb-1" >
                         LiveStreams
                     </Title>
-                    <p className="text-slate-700 pb-3 text-sm font-semibold">Create new account</p>
+                    <p className="text-slate-700 pb-3 text-sm font-semibold">{ t('createnewaccount') }</p>
                     <Modal title="Notification" open={openSuccessModal} footer={<Button type="primary" onClick={() => {
                         setOpenSuccessModal(false)
                         router.push("/login")
@@ -66,15 +71,15 @@ const RegiterForm = () => {
                     >
                         <Form.Item
                             name="name"
-                            rules={[{ required: true, message: t("requiredFullname") }]}
+                            rules={[{ required: true }]}
                         >
-                            <Input className="py-2" placeholder="Enter your name" />
+                            <Input className="py-2" placeholder={p('enteryourname')} />
                         </Form.Item>
                         <Form.Item
                             name="email"
-                            rules={[{ required: true, message: t("requiredEmail") }]}
+                            rules={[{ required: true }]}
                         >
-                            <Input className="py-2" placeholder="Enter your email" />
+                            <Input className="py-2" placeholder={p('enteryourmail')} />
                         </Form.Item>
                         <Form.Item
                             name="password"
@@ -86,7 +91,7 @@ const RegiterForm = () => {
                                 },
                             ]}
                         >
-                            <Input.Password className="py-2" placeholder="Enter password" />
+                            <Input.Password className="py-2" placeholder={p('enteryourpassword')} />
                         </Form.Item>
                         <Form.Item
                             name="confirmpassword"
@@ -99,10 +104,10 @@ const RegiterForm = () => {
                                 },
                             ]}
                         >
-                            <Input.Password className="py-2" placeholder="Confirm password" />
+                            <Input.Password className="py-2" placeholder={t('rpassword')} />
                         </Form.Item>
                         <Form.Item className="!mb-0">
-                            <Checkbox>I accept terms and policy</Checkbox>
+                            <Checkbox>{ t('accepttermsandpolicy') }</Checkbox>
                         </Form.Item>
                         <Form.Item>
                             <div className="">
@@ -120,7 +125,8 @@ const RegiterForm = () => {
                         </Form.Item>
                         <Form.Item className="" label="" name="">
                             <div className="flex items-center">
-                                You have an account?                                <Button
+                                {p('youhaveanaccount')}
+                                <Button
                                     type="link"
                                     className="!px-1"
                                     onClick={() => {

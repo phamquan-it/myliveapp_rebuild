@@ -167,6 +167,7 @@ const Home = ({
     const [showModal, setShowModal] = useState(false);
 
     const tableProps: TableProps = {
+        rowClassName: "font-sans",
         columns,
         dataSource: [
             { name: "Live streams 1", level: 1, min: 5, max: 10 },
@@ -186,7 +187,10 @@ const Home = ({
                     Layout: {
                         headerBg: 'white',
                         headerPadding: 5,
-                        footerBg: '#2d323d'
+                        footerBg: '#2d323d',
+                    },
+                    Table: {
+                        rowHoverBg: '#1677ff'
                     }
                 }
             }}>
@@ -259,21 +263,14 @@ const Home = ({
                                                 <h1 className="flex gap-1 justify-center text-xl">
                                                     <span className="">{item.icon}</span>
                                                     <span
-                                                        className="text-xl"
-                                                        style={{
-                                                            backgroundImage:
-                                                                "linear-gradient(90deg, rgba(9,121,10,1) 0%, rgba(3,62,182,1) 100%)",
-                                                            WebkitBackgroundClip: "text",
-                                                            WebkitTextFillColor: "transparent",
-                                                            backgroundClip: "text",
-                                                        }}
+                                                        className="text-xl font-sans"
                                                     >
                                                         {item.title}
                                                     </span>
                                                 </h1>
                                             </div>
                                             <p
-                                                className="text-sm text-center mt-1"
+                                                className="text-sm text-center mt-1 font-sans"
                                                 style={{
                                                     fontSize: 15,
                                                     lineHeight: 1.5,
@@ -306,7 +303,8 @@ const Home = ({
                             className="container mx-auto grid grid-cols-4 gap-4"
                             style={{
                                 fontSize: 12,
-                                color: "#98a2aa"
+                                color: "#98a2aa",
+                                maxWidth: 1400
                             }}
                         >
                             <div className="">
@@ -327,7 +325,7 @@ const Home = ({
                                 <div className="flex gap-2">
                                     <YoutubeFilled />
                                     <FacebookFilled />
-                                    <XOutlined/>
+                                    <XOutlined />
                                 </div>
                                 <p>Email: info@example.com</p>
                                 <p>Phone: +1 123-456-7890</p>

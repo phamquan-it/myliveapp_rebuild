@@ -34,7 +34,11 @@
         "confirmpassword": "Xác nhận nhận mật khẩu không được để trống!",
         "confirmpasswordError": "Xác nhận mật khẩu không khớp!",
         "success": "Thành công!",
-        "min5char": "Mật khẩu phải có tối thiểu 5 ký tự!"
+        "min5char": "Mật khẩu phải có tối thiểu 8 ký tự!",
+        "remenber_me":"Nhớ mật khẩu",
+        "welcome":"Chào mừng đến với livestreams",
+        "createnewaccount":"Tạo tài khoản mới",
+        "accepttermsandpolicy":"Tôi chấp nhận quy định và điều khoản"
     },
     "Index": {
         "title": "Start",
@@ -211,7 +215,11 @@
         "selectprovider": "Chọn nhà cung cấp",
         "select_status": "Chọn trạng thái",
         "selectuser": "Chọn người dùng",
-        "selectvps": "Chọn vps"
+        "selectvps": "Chọn vps",
+        "enteryourname": "Tên của bạn",
+        "enteryourmail": "Email của bạn",
+        "enteryourpassword": "Mật khẩu của bạn",
+        "youhaveanaccount": "Bạn đã có tài khoản?"
     },
     "UserProfile": {
         "name": "Tên",
