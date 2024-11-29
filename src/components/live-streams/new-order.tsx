@@ -321,7 +321,29 @@ const NewOrder: React.FC<NewOrderProps> = ({ role }) => {
                                     setLoop(!loop)
                                 }}>{t('loop')}</Checkbox>
                             </Form.Item>
+                        </Space>
+                    </Form.Item>
 
+                    <Form.Item
+                        wrapperCol={{
+                            sm: { offset: 4, span: 20 }
+                        }}
+                        rules={[{ required: true }]}>
+                        <Space>
+
+                            <Form.Item
+                                wrapperCol={{
+                                    sm: { offset: 0, span: 24 }
+                                }}
+                                name={useCron ? "schedule" : ""}
+                                rules={[{ required: true }]}
+                            >
+                                <RangePicker
+                                    disabled={useCron == false}
+                                    renderExtraFooter={() => <>
+                                        <Button type="link">Today</Button>
+                                    </>} showTime={{ format: 'HH:mm' }} type="week" format="YYYY-MM-DD HH:mm" placeholder={[t('start_time'), t('endtime')]} />
+                            </Form.Item>
                             <Form.Item
                                 name="schedule"
                             >
@@ -332,18 +354,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ role }) => {
 
                         </Space>
                     </Form.Item>
-                    {(useCron) ?
-                        <Form.Item
-                            wrapperCol={{
-                                sm: { offset: 4, span: 20 }
-                            }}
-                            name="schedule"
-                            rules={[{ required: true }]}
-                        >
-                            <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" placeholder={[t('start_time'), t('endtime')]} />
-                        </Form.Item>
-                        : ''
-                    }
+
                     <Form.Item wrapperCol={{
                         sm: { offset: 4, span: 20 }
                     }}>

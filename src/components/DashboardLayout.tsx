@@ -69,19 +69,44 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
             icon: <SignalFilled />,
             label: <Link href={DashboardRouter.MYAUTOLIVE}>{t('myautolive')}</Link>,
         },
+
         {
-            key: DashboardRouter.PLATFORM,
-            icon: <WindowsFilled />,
-            label: <Link href={DashboardRouter.PLATFORM}>{t('platform')}</Link>,
+            label: "Manage",
+            type: "group",
+            children: [
+                {
+                    type: 'divider',
+                },
+                {
+                    key: 'sub4',
+                    label: <Link href={DashboardRouter.VPS}>{('Vps')}</Link>,
+                    icon: <FaServer />,
+                },
+                {
+                    key: 'scrip',
+                    label: <Link href={DashboardRouter.SCRIPT_SETUP}>{('Script setup')}</Link>,
+                    icon: <FaUbuntu />,
+                },
+                {
+                    key: DashboardRouter.SETTING,
+                    label: <Link href={DashboardRouter.SETTING}>{t('Settings')}</Link>,
+                    icon: <SettingOutlined />,
+                },
+                {
+                    key: DashboardRouter.ADVANDED_CONFIG,
+                    icon: <VscSettings />,
+                    label: <Link href={DashboardRouter.ADVANDED_CONFIG}>{t('advancedConfig')}</Link>,
+                },
+            ]
         },
 
         {
             type: 'divider',
         },
         {
-            key: DashboardRouter.ORDER,
-            icon: <FaBuyNLarge />,
-            label: <Link href={DashboardRouter.ORDER}>{t('order')}</Link>,
+            key: DashboardRouter.PLATFORM,
+            icon: <WindowsFilled />,
+            label: <Link href={DashboardRouter.PLATFORM}>{t('platform')}</Link>,
         },
         {
             key: DashboardRouter.PAYMENT_HISTORY,
@@ -107,39 +132,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
             key: DashboardRouter.USER,
             icon: <UserOutlined />,
             label: <Link href={DashboardRouter.USER}>{t('user')}</Link>,
-        },
-        {
-            type: 'divider',
-        },
-        {
-            key: DashboardRouter.SETTING,
-            label: <Link href={DashboardRouter.SETTING}>{t('Settings')}</Link>,
-            icon: <SettingOutlined />,
-        },
-
-        {
-            key: DashboardRouter.ADVANDED_CONFIG,
-            icon: <VscSettings />,
-            label: <Link href={DashboardRouter.ADVANDED_CONFIG}>{t('advancedConfig')}</Link>,
-        },
-
-        {
-            key: 'grp',
-            label: 'Vps',
-            type: 'group',
-            children: [
-                {
-                    key: 'sub4',
-                    label: <Link href={DashboardRouter.VPS}>{('Vps')}</Link>,
-                    icon: <FaServer />,
-                },
-                {
-                    key: 'scrip',
-                    label: <Link href={DashboardRouter.SCRIPT_SETUP}>{('Script setup')}</Link>,
-                    icon: <FaUbuntu />,
-                },
-
-            ]
         },
     ];
 
@@ -259,7 +251,12 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                                     {newOrderText}
                                 </span>
                             </Button>
+                            <ul className="rounded border mt-3">
+                                <li className="p-2 bg-sky-100">test</li>
+                                <li className="p-2">dd</li>
+                            </ul>
                         </div>
+
                         <Menu
                             onClick={onClick}
                             defaultSelectedKeys={[router.pathname]}

@@ -49,11 +49,11 @@ const LoginForm = () => {
 
 
     return (
-        <div className="h-screen flex justify-center items-center sm:bg-slate-100">
+        <div className="h-screen flex justify-center items-center">
             <div className="absolute top-2 end-4">
                 <LocaleSwitcher/>
             </div>
-            <div className="w-full md:w-1/2 lg:w-1/3 p-3 md:border md:shadow rounded md:bg-white">
+            <div className="w-full md:w-1/2 lg:w-1/3 p-3  rounded">
                 <Form
                     className="py-3 pe-3"
                     name="basic"

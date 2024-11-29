@@ -1,5 +1,5 @@
 import { Inter } from "next/font/google";
-import { Button, Checkbox, DatePicker, Divider, Input, Menu, MenuProps, Modal, Radio, Select, Table, TableProps, Image, Breadcrumb, BreadcrumbProps } from "antd";
+import { Button, Checkbox, DatePicker, Divider, Input, Menu, MenuProps, Modal, Radio, Select, Table, TableProps, Image, Breadcrumb, BreadcrumbProps, Dropdown, SelectProps, ConfigProvider } from "antd";
 import { ReactNode, useEffect, useState } from "react";
 import { Flex, Layout } from 'antd';
 import Title from "antd/es/typography/Title";
@@ -25,20 +25,60 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, 
         className: "text-sm text-slate-500 mt-1",
         style: { fontSize: "12px" }
     }
-    const [filter, setFilter] = useState(true)
+    const [filter, setFilter] = useState(false)
+
+    const options: SelectProps['options'] = [];
+
+    for (let i = 10; i < 36; i++) {
+        options.push({
+            label: i.toString(36) + i,
+            value: i.toString(36) + i,
+        });
+    }
+
+    const handleChange = (value: string[]) => {
+        console.log(`selected ${value}`);
+    };
+
+    const handleDropdownVisibleChange = (visible: boolean) => {
+        setFilter(visible); // Sync the visibility state with dropdown behavior
+    };
+    const selectProps: SelectProps = {
+        style: {
+            minWidth: 300
+        },
+        dropdownClassName: "!border-transparent",
+      //  dropdownRender: (menu) => {
+      //      console.log(menu)
+      //      return (<>
+      //          <div className="w-48 bg-white border rounded p-3">
+      //              test
+      //          </div>
+      //      </>)
+      //  },
+        mode: "multiple",
+        size: "large",
+        open: filter,
+        variant: "borderless",
+        placeholder: "Filter",
+        defaultValue: ['a10', 'c12'],
+        onChange: handleChange,
+        options,
+        allowClear: true,
+        popupClassName: " !w-64",
+        onDropdownVisibleChange: handleDropdownVisibleChange,
+    }
     return (
-        <Layout className="bg-yellow-500 h-full">
+        <Layout className="bg-yellow-500 h-full" >
             <Header className="border-b overflow-hidden">
                 <div className="flex justify-between h-full item-center">
                     <div className="flex items-center gap-2">
-                        <Button type="default" icon={<BsFilterLeft />} onClick={() => {
-                            setFilter(!filter)
+
+                        <Button type="default" icon={<BsFilterLeft />} size="large" onClick={() => {
+                            setFilter(true)
                         }}></Button>
-                        <div className="flex gap-2">
-                            <div>
-                                <SearchInput />
-                            </div>
-                            <div className="flex gap-2">{filterOption ?? <></>}</div>
+                        <div className="flex gap-2 !border-none">
+                            <Select {...selectProps} />
                         </div>
                     </div>
                     <div className="flex items-center gap-1">
@@ -64,25 +104,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, 
                             {children}
                         </div>
                     </Content>
-                    <Sider
-                        collapsed={filter} collapsedWidth={0}
-                        className="min-w-fit !bg-transparent py-2 !h-full !overflow-auto" width="260"
-                        style={{ overflow: 'hidden' }} // hides overflow content
-                    >
-                        <div className="w-full bg-white shadow rounded py-3 pb-5 px-2 font-sans">
-                            <div className="grid gap-1 overflow-hidden">
-                                <Title level={5} className="!mb-0 !pb-0">Filters</Title>
-                                {rightFilter ?? ''}
-                            </div>
-                        </div>
-                    </Sider>
-
-
                 </Layout>
 
             </Content>
 
-        </Layout>
+        </Layout >
     );
 }
 

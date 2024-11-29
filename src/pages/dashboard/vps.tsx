@@ -119,6 +119,15 @@ const Page = () => {
             render: (text: string, record: any) => record?.vps?.brand
         },
         {
+            title: 'Price',
+            dataIndex: 'profile',
+            key: 'profile',
+            width: 150,
+            align: "right",
+            render: (text) => (<VpsPrice profile={text} profiles={profilesSlug?.data} />)
+        },
+
+        {
             title: "Network",
             dataIndex: "slug",
             key: 'slug',
@@ -127,7 +136,7 @@ const Page = () => {
             </>
         },
         {
-            title: ('Amount'),
+            title: ('No. Stream'),
             dataIndex: "stream",
             align: "center",
             render: (text, record) => <NumOfStreamsVps slug={record.slug} />
@@ -139,18 +148,10 @@ const Page = () => {
             render: (text, record) => {
                 console.log("vps", record)
                 return <>
-                    <VpsStatus slug={text}/>    
+                    <VpsStatus slug={text} />
                 </>
             },
             align: "center"
-        },
-        {
-            title: 'Price',
-            dataIndex: 'profile',
-            key: 'profile',
-            width: 150,
-            align: "right",
-            render: (text) => (<VpsPrice profile={text} profiles={profilesSlug?.data} />)
         },
         {
             title: '',

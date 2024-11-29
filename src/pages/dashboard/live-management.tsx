@@ -31,6 +31,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { StringifiableRecord } from 'query-string';
 import React, { useEffect, useState } from 'react';
+import { MdOutlineSync, MdOutlineSyncDisabled } from 'react-icons/md';
 
 
 const Page = () => {
@@ -75,11 +76,6 @@ const Page = () => {
                     {record?.user?.email}
                 </div>
                 <div className="flex gap-3">
-                    {(record.loop == "infinity") ?
-                        <Tooltip title="Loop">
-                            <SyncOutlined className="!text-blue-600" />
-                        </Tooltip>
-                        : ""}
                     <Tooltip title={record.downloaded ? "Downloaded" : "Downloading"}>
                         {record.downloaded ? <CheckOutlined className="!text-green-700" /> : <DownloadOutlined />}
                     </Tooltip>
@@ -96,6 +92,17 @@ const Page = () => {
             align: "center",
             width: 100
         },
+        {
+            title: t('loop'),
+            dataIndex: 'loop',
+            key: 'loop',
+            render: (text, record: any) => <>
+                <div className="flex justify-center">{text == "infinity" ? <MdOutlineSync /> : <MdOutlineSyncDisabled />}</div>
+            </>,
+            align: "center",
+            width: 100
+        },
+
         {
             title: t('start_time'),
             dataIndex: 'start_at',
@@ -171,7 +178,7 @@ const Page = () => {
         ]
     }
         actions={<>
-            <MutistreamsAction streamsSelected={[{ id: 1 }]} setStreamsSelected={setStreamsSelected} />
+            <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} />
         </>}
         filterOption={(
             <div className="flex gap-2 items-center hidden 2xl:flex">
@@ -261,8 +268,6 @@ const Page = () => {
         }}>
             <Table
                 rowClassName='font-sans'
-
-
                 {...tableProps}
             />
         </ConfigProvider>
