@@ -8,6 +8,9 @@ const theme: ThemeConfig = {
   components:{
       Table:{
           cellPaddingBlock: 8
+      },
+      Layout: {
+          headerBg:'white'
       }
   }
   
