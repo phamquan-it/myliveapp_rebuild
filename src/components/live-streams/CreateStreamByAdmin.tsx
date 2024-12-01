@@ -1,3 +1,4 @@
+import { Platform } from '@/@type';
 import axiosInstance from '@/apiClient/axiosConfig';
 import { AuthApi } from '@/apiClient/providers/auth';
 import { PlusCircleFilled } from '@ant-design/icons';
