@@ -3,13 +3,19 @@ import { FilterOutlined } from "@ant-design/icons";
 import { Button, List, Select, SelectProps, Spin, Tag } from "antd";
 import { Flex, Layout } from 'antd';
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { IoFilterOutline } from "react-icons/io5";
 const { Header, Footer, Sider, Content } = Layout;
 
 
 
 export default function Home() {
-
+    const dialogFilter = [
+        'platform'
+    ]
+    const keywordFilter = [
+        'keyword'
+    ]
     const options = [
         {
             label: "Bản quyền",
@@ -19,7 +25,10 @@ export default function Home() {
             label: "Nền tảng",
             value: 'platform'
         },
-
+        {
+            label: "Từ khóa",
+            value: 'keyword'
+        },
     ]
 
     const router = useRouter()
@@ -29,6 +38,8 @@ export default function Home() {
             ? [router.query.filters]
             : [];
     const [open, setOpen] = useState(false)
+
+
     const selectProps: SelectProps = {
         open,
         mode: "tags",
@@ -77,7 +88,9 @@ export default function Home() {
         </div>,
         value: filters,
         tagRender: (props) => (<>
-            <TagFilter tagProps={props} type={(props.value == 1) ? FilterTagType.DEFAULT : FilterTagType.DIALOG} />
+            <TagFilter tagProps={props} type={(dialogFilter.indexOf(props.value) != -1) ?
+                FilterTagType.DIALOG : (keywordFilter.indexOf(props.value) != -1) ?
+                    FilterTagType.SEARCH : FilterTagType.DEFAULT} />
         </>)
 
     }
@@ -85,6 +98,7 @@ export default function Home() {
     useEffect(() => {
         setIsReady(router.isReady)
     }, [router.isReady])
+ 
     return (
 
         <Flex gap="middle" wrap>
@@ -93,7 +107,7 @@ export default function Home() {
                     <Header >
                         <div className="flex h-full border-b items-center px-2">
                             <Button size="middle" type="default" icon={
-                                <FilterOutlined />
+                                <IoFilterOutline />
                             } onClick={() => {
                                 setOpen(true)
                             }}></Button>
@@ -106,3 +120,5 @@ export default function Home() {
         </Flex>
     );
 }
+
+

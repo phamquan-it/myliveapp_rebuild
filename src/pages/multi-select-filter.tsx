@@ -11,14 +11,25 @@ interface FilterSelectProps {
     renderElement?: ReactNode
 }
 const MultiSelectFilter: React.FC<FilterSelectProps> = ({ onMultiSelectFilterly, useFormFilter, dataFilters, renderElement }) => {
-     // Set default values after the component mounts
-    const [filtersData, setFiltersData] = useState(dataFilters)
+    const router = useRouter();
+    const platformSelected = Array.isArray(router.query.platform)
+        ? router.query.platform
+        : router.query.platform
+            ? [router.query.platform]
+            : [];
+    // Set default values after the component mounts
+    const [filtersData, setFiltersData] = useState(dataFilters.map((item) => {
+        if (platformSelected.includes(item.id + '')) {
+            item.value = true
+        }
+        return item
+    }))
     useEffect(() => {
         useFormFilter.setFieldsValue({
-            filterRender: dataFilters,
+            filterRender: filtersData,
         });
-    }, [useFormFilter, dataFilters]);
-    const syncObj = syncObjectToUrl(useRouter())
+    }, [useFormFilter, filtersData]);
+    const syncObj = syncObjectToUrl(router)
     return (
         <Form
             form={useFormFilter}

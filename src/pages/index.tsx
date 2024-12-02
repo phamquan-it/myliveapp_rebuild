@@ -286,13 +286,10 @@ const Home = ({
                             <Title level={3} className="!text-gray-700 !text-center mt-7">
                                 Bảng giá dịch vụ
                             </Title>
-                            <div
-                                className="flex gap-2 py-3"
-                            >
-                                <SearchInput />
-
-                            </div>
                             <div className="container mx-auto">
+                                <div className="flex gap-2 py-3">
+                                    <SearchInput />
+                                </div>
                                 <Table {...tableProps} />
                             </div>
                         </div>
