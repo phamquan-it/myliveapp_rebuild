@@ -1,3 +1,4 @@
+import { User } from "@/@type/api_object";
 import axiosInstance from "@/apiClient/axiosConfig";
 import AdminLayout from "@/components/admin-layout";
 import SearchInput from "@/components/filters/SearchInput";
@@ -11,7 +12,12 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-
+enum DataType {
+  OR = 'or',
+  COR = 'cor',
+  DEP = 'dep',
+  REF = 'ref',
+}
 const { Option } = Select;
 const Page = () => {
     const router = useRouter();
@@ -23,6 +29,7 @@ const Page = () => {
 
     const t = useTranslations("MyLanguage");
     const d = useTranslations("DashboardMenu");
+    const cf = useTranslations("CashflowAction")
     const columns: ColumnsType<any> = [
         {
             title: t("entryno"),
@@ -33,9 +40,25 @@ const Page = () => {
 
         },
         {
+            title: t("email"),
+            dataIndex: "user",
+            key: "user",
+            ellipsis: true,
+            render: (user:User) => user.email 
+        },
+        {
             title: t("desc"),
             dataIndex: "description",
             key: "description",
+            ellipsis: true,
+        },
+        {
+            title: t("action"),
+            dataIndex: "action",
+            key: "action",
+            width: "13%",
+            align: "center",
+            render:(text: DataType)=>cf(text)
         },
         {
             title: ("Balance"),
@@ -52,16 +75,9 @@ const Page = () => {
             align: "right",
         },
         {
-            title: t("transaction_date"),
-            dataIndex: "transaction_date",
-            key: "transaction_date",
-            width: "14%",
-            render: (text: string) => dayjs(text).format("YYYY-MM-DD HH"),
-        },
-        {
             title: t("createat"),
-            dataIndex: "createdAt",
-            key: "createdAt",
+            dataIndex: "create_at",
+            key: "create_at",
             width: "15%",
             align: "center",
             render: (text: string) => dayjs(text).format("YYYY-MM-DD HH:mm:ss"),
@@ -92,7 +108,6 @@ const Page = () => {
                 {
                     title: <Link href="/dashboard">{d('home')}</Link>
                 },
-
                 {
                     title: d('cashflow'),
                 },

@@ -2,7 +2,7 @@ import React, { ReactNode, useState } from 'react';
 import { IoIosLogOut } from "react-icons/io";
 import { BsFilterLeft } from "react-icons/bs";
 import { Button, ConfigProvider, Flex, Layout, Menu, MenuProps, Image, Avatar, Table, Dropdown, Input, Select, List, Card, Radio, DatePicker, Modal, Tooltip } from 'antd';
-import { AppstoreOutlined, CloseOutlined, EditFilled, FilterFilled, FundOutlined, HistoryOutlined, HomeFilled, MailOutlined, PlusOutlined, SettingOutlined, SignalFilled, UserOutlined, WindowsFilled } from '@ant-design/icons';
+import { AppstoreOutlined, CloseOutlined, EditFilled, FilterFilled, FundOutlined, HistoryOutlined, HomeFilled, MailOutlined, PlusCircleFilled, PlusOutlined, SettingOutlined, SignalFilled, UserOutlined, WindowsFilled } from '@ant-design/icons';
 import { FaBuyNLarge, FaListUl, FaMoneyBill, FaServer, FaSubscript, FaUbuntu } from 'react-icons/fa';
 import { DashboardRouter } from '@/enums/router/dashboard';
 import { useTranslations } from 'next-intl';
@@ -60,6 +60,11 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
             label: <Link href={DashboardRouter.HOME}>{t('home')}</Link>,
         },
         {
+            key: DashboardRouter.PLATFORM,
+            icon: <WindowsFilled />,
+            label: <Link href={DashboardRouter.PLATFORM}>{t('platform')}</Link>,
+        },
+        {
             key: DashboardRouter.SERVICE,
             icon: <FaListUl />,
             label: <Link href={DashboardRouter.SERVICE}>{t('services')}</Link>,
@@ -69,50 +74,15 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
             icon: <SignalFilled />,
             label: <Link href={DashboardRouter.MYAUTOLIVE}>{t('myautolive')}</Link>,
         },
-
-        {
-            label: "Manage",
-            type: "group",
-            children: [
-                {
-                    type: 'divider',
-                },
-                {
-                    key: 'sub4',
-                    label: <Link href={DashboardRouter.VPS}>{('Vps')}</Link>,
-                    icon: <FaServer />,
-                },
-                {
-                    key: 'scrip',
-                    label: <Link href={DashboardRouter.SCRIPT_SETUP}>{('Script setup')}</Link>,
-                    icon: <FaUbuntu />,
-                },
-                {
-                    key: DashboardRouter.SETTING,
-                    label: <Link href={DashboardRouter.SETTING}>{t('Settings')}</Link>,
-                    icon: <SettingOutlined />,
-                },
-                {
-                    key: DashboardRouter.ADVANDED_CONFIG,
-                    icon: <VscSettings />,
-                    label: <Link href={DashboardRouter.ADVANDED_CONFIG}>{t('advancedConfig')}</Link>,
-                },
-            ]
-        },
-
         {
             type: 'divider',
         },
         {
-            key: DashboardRouter.PLATFORM,
-            icon: <WindowsFilled />,
-            label: <Link href={DashboardRouter.PLATFORM}>{t('platform')}</Link>,
+            key: DashboardRouter.LIVESTREAM,
+            icon: <FaListUl />,
+            label: <Link href={DashboardRouter.LIVESTREAM}>{t('livestreams')}</Link>,
         },
-        {
-            key: DashboardRouter.PAYMENT_HISTORY,
-            icon: <HistoryOutlined />,
-            label: <Link href={DashboardRouter.PAYMENT_HISTORY}>{t('paymenthistory')}</Link>,
-        },
+
         {
             key: DashboardRouter.CASHFLOW,
             icon: <FaMoneyBill />,
@@ -124,15 +94,37 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
             label: <Link href={DashboardRouter.REFUND}>{t('refund')}</Link>,
         },
         {
-            key: DashboardRouter.LIVESTREAM,
-            icon: <FaListUl />,
-            label: <Link href={DashboardRouter.LIVESTREAM}>{t('livestreams')}</Link>,
-        },
-        {
             key: DashboardRouter.USER,
             icon: <UserOutlined />,
             label: <Link href={DashboardRouter.USER}>{t('user')}</Link>,
         },
+        {
+            key: DashboardRouter.SETTING,
+            label: <Link href={DashboardRouter.SETTING}>{t('Settings')}</Link>,
+            icon: <SettingOutlined />,
+        },
+        {
+            key: 'sub4',
+            label: <Link href={DashboardRouter.VPS}>{('Vps')}</Link>,
+            icon: <FaServer />,
+        },
+
+        {
+            key: 'scrip',
+            label: <Link href={DashboardRouter.SCRIPT_SETUP}>{('Script setup')}</Link>,
+            icon: <FaUbuntu />,
+        },
+        {
+            key: DashboardRouter.PAYMENT_HISTORY,
+            icon: <HistoryOutlined />,
+            label: <Link href={DashboardRouter.PAYMENT_HISTORY}>{t('paymenthistory')}</Link>,
+        },
+        {
+            key: DashboardRouter.ADVANDED_CONFIG,
+            icon: <VscSettings />,
+            label: <Link href={DashboardRouter.ADVANDED_CONFIG}>{t('advancedConfig')}</Link>,
+        },
+
     ];
 
     const { data, isSuccess } = useProfile()
@@ -166,7 +158,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                     headerPadding: 17
                 }
             }
-
         }}>
             <Layout className="h-screen" >
                 <Header className="border-b">
@@ -180,6 +171,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                         </div>
                         <div className="p-3 flex justify-center gap-2 items-center">
                             <div className="hidden h-full sm:flex items-center">
+
                                 <LocaleSwitcher />
                             </div>
                             <Dropdown trigger={['click']} dropdownRender={() => <>
@@ -251,12 +243,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                                     {newOrderText}
                                 </span>
                             </Button>
-                            <ul className="rounded border mt-3">
-                                <li className="p-2 bg-sky-100">test</li>
-                                <li className="p-2">dd</li>
-                            </ul>
                         </div>
-
                         <Menu
                             onClick={onClick}
                             defaultSelectedKeys={[router.pathname]}

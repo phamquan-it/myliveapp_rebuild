@@ -1,4 +1,10 @@
 {
+    "CashflowAction": {
+        "or": "Order",
+        "cor": "Cancel order",
+        "dep": "Deposit",
+        "ref": "Refund"
+    },
     "OrderStatus": {
         "inprogress": "In progress",
         "completed": "Completed",

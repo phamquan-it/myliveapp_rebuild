@@ -1,4 +1,10 @@
 {
+    "CashflowAction": {
+        "or": "Đặt hàng",
+        "cor": "Hủy đặt hàng",
+        "dep": "Nạp tiền",
+        "ref": "Hoàn tiền"
+    },
     "OrderStatus": {
         "inprogress": "Đang xử lý",
         "completed": "Đã hoàn thành",
@@ -35,10 +41,10 @@
         "confirmpasswordError": "Xác nhận mật khẩu không khớp!",
         "success": "Thành công!",
         "min5char": "Mật khẩu phải có tối thiểu 8 ký tự!",
-        "remenber_me":"Nhớ mật khẩu",
-        "welcome":"Chào mừng đến với livestreams",
-        "createnewaccount":"Tạo tài khoản mới",
-        "accepttermsandpolicy":"Tôi chấp nhận quy định và điều khoản"
+        "remenber_me": "Nhớ mật khẩu",
+        "welcome": "Chào mừng đến với livestreams",
+        "createnewaccount": "Tạo tài khoản mới",
+        "accepttermsandpolicy": "Tôi chấp nhận quy định và điều khoản"
     },
     "Index": {
         "title": "Start",
