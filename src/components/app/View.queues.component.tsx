@@ -34,7 +34,7 @@ const ViewQueuesProcess: React.FC<ViewQueuesProcessProps> = ({ ipv4,service }) =
             // Ensure the fit addon is loaded and the terminal is fitted
             //fitAddon.fit();
 
-            const socket = io(`https://api.golive365.top/stream-log?ipv4=${ipv4}`);
+            const socket = io(`${process.env.API_URL}/stream-log?ipv4=${ipv4}`);
             socketRef.current = socket;
 
 

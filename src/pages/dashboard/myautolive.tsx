@@ -157,6 +157,7 @@ const Page = () => {
             title: t("price"),
             dataIndex: "price",
             key: "price",
+            render: (text)=>`$${text}`
         },
         {
             title: t("status"),

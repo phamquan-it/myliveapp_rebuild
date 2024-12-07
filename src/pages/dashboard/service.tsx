@@ -33,17 +33,21 @@ const Page = () => {
 
     const columns: ColumnsType<any> = [
         {
+            title: t("entryno"),
+            dataIndex: "key",
+            key: "key",
+        },
+
+        {
             title: t("name"),
             dataIndex: "name",
             key: "name",
-
         },
         {
             title: t("minorder"),
             dataIndex: "min",
             key: "min",
             align: "right",
-
         },
         {
             title: t("maxorder"),

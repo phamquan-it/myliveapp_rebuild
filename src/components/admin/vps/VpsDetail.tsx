@@ -13,6 +13,7 @@ import LiveStream from "@/components/vps/vps-details/live-stream";
 import VpsProfile from "@/components/vps/vps-details/vps-profiles";
 import axiosInstance from "@/apiClient/axiosConfig";
 import XtermLog from "@/components/vps/vps-details/xterm-log";
+import { useRouter } from "next/router";
 interface VpsDetailProps {
     slug: any,
     closeModal: Function
@@ -73,8 +74,6 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug }) => {
     });
     const [vpsData, setVpsData] = useState<any>()
 
-
-
     const [serviceId, setServiceId] = useState('apache2')
     const items: TabsProps['items'] = [
         {
@@ -90,11 +89,17 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug }) => {
             children: <Table dataSource={data?.data} loading={isFetching} columns={columns} />,
         },
     ];
+    console.log("Vps detail", slug.slug)
+    const router = useRouter()
+    useEffect(() => {
+        if (
+            router.query?.slug == slug.slug
+        ) {
+            setIsModalOpen(true)
+        }
+    }, [router.query, slug])
 
-    useEffect(()=>{
-        setServiceId('apache2')
-    },[isModalOpen])
-       return (
+    return (
         <>
             <Button type="default" onClick={() => setIsModalOpen(true)} icon={<EyeFilled />}></Button>
             <Modal destroyOnClose={true} width={1300} title="Vps detail" open={isModalOpen} onCancel={() => {

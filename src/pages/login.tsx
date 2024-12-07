@@ -17,11 +17,6 @@ import LocaleSwitcher from "@/LocaleSwitcher";
 const LoginForm = () => {
     const t = useTranslations("Authenlication");
     const p = useTranslations("Placeholder");
-
-    const layout = {
-        labelCol: { span: 24 }, // Set the label width to take up the full width
-        wrapperCol: { span: 24 }, // Set the input width to take up the full width
-    };
     const router = useRouter();
     const dispatch = useDispatch();
     const { isPending, mutate } = useMutation({
@@ -51,80 +46,62 @@ const LoginForm = () => {
     return (
         <div className="h-screen flex justify-center items-center">
             <div className="absolute top-2 end-4">
-                <LocaleSwitcher/>
+                <LocaleSwitcher />
             </div>
-            <div className="w-full md:w-1/2 lg:w-1/3 p-3  rounded">
+            <div className="w-full md:w-1/2 lg:w-1/4 p-3  rounded" style={{ maxWidth: 600 }}>
+                <Title level={3} className="!text-slate-800 text-center">{ t('login') }</Title>
                 <Form
-                    className="py-3 pe-3"
+                    className="py-3 pe-3 "
+
                     name="basic"
-                    initialValues={{ remember: true }}
-                    {...layout}
                     onFinish={onFinish}
+                    layout="vertical"
                 >
+                    <Form.Item<FieldType>
+                        name="email"
+                        label=<span className="font-semibold text-slate-700">{t('email')}</span>
+                        rules={[{ required: true, message: t("requiredEmail") }]}
+                    >
+                        <Input className="py-2" />
+                    </Form.Item>
 
-                    <div className="px-2 pb-3">
-                        <Title level={3} className="!pt-4 !mb-1">
-                            LiveStreams
-                        </Title>
-                        <p className="text-slate-700">{ t('welcome') }</p>
-                    </div>
-                    <div className="px-2">
-                        <Form.Item<FieldType>
-                            name="email"
-                            rules={[{ required: true, message: t("requiredEmail") }]}
+                    <Form.Item<FieldType>
+                        label=<span className="font-semibold text-slate-700">{t('password')}</span>
+                        name="password"
+                        rules={[
+                            { required: true, message: t("requiredpassword") },
+                            {
+                                min: 8,
+                                message: t("min5char"),
+                            },
+                        ]}
+                    >
+                        <Input.Password className="py-2" />
+                    </Form.Item>
+                        <Button href={"/"} type="link" className="!px-0">{t('gotohomepage')}</Button>
+                    <Form.Item className="!mt-5">
+                        <Button
+                            type="primary"
+                            block
+                            size="large"
+                            htmlType="submit"
+                            loading={isPending}
                         >
-                            <Input className="py-2" placeholder={ p('enteryourmail')} />
-                        </Form.Item>
-
-                        <Form.Item<FieldType>
-                            name="password"
-                            rules={[
-                                { required: true, message: t("requiredpassword") },
-                                {
-                                    min: 8,
-                                    message: t("min5char"),
-                                },
-                            ]}
-                        >
-                            <Input.Password className="py-2" placeholder={ p('enteryourpassword') } />
-                        </Form.Item>
-                        <div className="flex justify-between">
-                            <Form.Item
-                                className="!mb-0"
-                                rules={[{ required: true }]}
-                            >
-                                <Checkbox>{t("remenber_me")}</Checkbox>
-                            </Form.Item>
-                            <Form.Item
-                                className="!mb-0"
-                            >
-                                <Link href="forgot-password">{t('forgot')}</Link>
-                            </Form.Item>
-                        </div>
-                        <Form.Item className="!mt-5">
+                            {t("login")}
+                        </Button>
+                        <p className="text-center flex items-center justify-center mt-3 text-slate-400">
+                            {t("donothaveanacount")}
                             <Button
-                                type="primary"
-                                block
-                                size="large"
-                                htmlType="submit"
-                                loading={isPending}
+                                className="!px-0"
+                                type="link"
+                                onClick={() => {
+                                    router.push("/register");
+                                }}
                             >
-                                {t("login")}
+                                {t("register")}
                             </Button>
-                            <p className="text-center flex items-center mt-3">
-                                {t("donothaveanacount")}
-                                <Button
-                                    className="!px-0"
-                                    type="link"
-                                    onClick={() => {
-                                        router.push("/register");
-                                    }}
-                                >
-                                    {t("register")}
-                                </Button>
-                            </p>
-                        </Form.Item>
-                    </div>
+                        </p>
+                    </Form.Item>
                 </Form>
             </div>
         </div>

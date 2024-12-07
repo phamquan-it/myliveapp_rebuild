@@ -16,10 +16,7 @@ const Page = () => {
     return (
         <>
             <div className="w-full">
-                <Title level={1} className="text-center !font-bold">
-                    {d("deposit")}
-                </Title>
-                <div className="m-auto w-1/2 min-w-80 bg-white p-5 pt-10 rounded-2xl">
+                <div className="m-auto w-1/2 min-w-80 bg-white p-5 pt-10 rounded-2xl mt-4">
                     <Form
                         name="basic"
                         labelCol={{ span: 6 }}

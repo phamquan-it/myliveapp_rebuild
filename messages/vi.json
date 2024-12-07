@@ -26,7 +26,7 @@
     "Authenlication": {
         "donothaveanacount": "Chưa có tài khoản?",
         "rpassword": "Xác nhận mật khẩu",
-        "gotohomepage": "Đi tới trang chủ",
+        "gotohomepage": "Trang chủ",
         "username": "Tên người dùng",
         "password": "Mật khẩu",
         "login": "Đăng nhập",
@@ -100,6 +100,7 @@
         "myautolive": "Luồng live của tôi"
     },
     "MyLanguage": {
+        "platform": "Nền tảng",
         "source_link": "Link nguồn",
         "stream_name": "Tên luồng",
         "stream_key": "Khóa luồng",

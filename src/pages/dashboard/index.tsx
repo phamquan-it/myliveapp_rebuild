@@ -8,53 +8,14 @@ import { GetStaticPropsContext } from "next";
 import { FaShoppingBag } from "react-icons/fa";
 import PlatformChart from "@/components/charts/PlatformChart";
 import LineChart from "@/components/charts/LineChart";
+import LivestreamsStatisticTable from "@/components/statistics/livestreams-table";
+import VpsStatistic from "@/components/statistics/vps-statistic";
 const Line = dynamic(() => import("react-chartjs-2").then((mod) => mod.Line), {
     ssr: false,
 });
 interface PageProps {
 
 }
-const dataSource = [
-    {
-        key: '1',
-        name: 'Mike',
-        age: 32,
-        address: '10 Downing Street',
-    },
-    {
-        key: '2',
-        name: 'John',
-        age: 42,
-        address: '10 Downing Street',
-    },
-];
-
-const columns = [
-    {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-    },
-    {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
-    },
-    {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address',
-    },
-    {
-        title: 'Status',
-        dataIndex: 'age',
-        key: 'age',
-        render: () => (<>
-            <Tag color="blue">Scheduling</Tag>
-        </>)
-    },
-
-];
 const onChange = (key: string) => {
     console.log(key);
 };
@@ -88,85 +49,68 @@ const Page: React.FC<PageProps> = () => {
         height: "calc(100vh - 65px)",
         overflow: "auto"
     }}>
-        <div className="p-3 livestream text-white" >
-            <Title level={5}>Dashboard</Title>
-            <Card title="" extra={<Select className="!w-36" options={[{
-                label: 'This year',
-                value: new Date().getFullYear()
-            }]} />}>
-                <p></p>
-                <div className="grid md:grid-cols-2 lg:grid-cols-5 rounded gap-1 bg-white shadown">
-                    <Card className="!bg-sky-500">
-                        <Title level={5} className="!text-white !mb-0">
-                            <FacebookFilled /> &nbsp;
-                            Facebook</Title>
-                        <span className="text-white" style={{ fontSize: 12 }}>Income: $100</span>
 
-                    </Card>
-                    <Card className="!bg-teal-500">
-                        <Title level={5} className="!text-white !mb-0">
-                            <LinkedinFilled /> &nbsp;
-                            Linkedin</Title>
-                        <span className="text-white" style={{ fontSize: 12 }}>Income: $100</span>
-                    </Card>
-                    <Card className="!bg-red-500">
-                        <Title level={5} className="!text-white !mb-0">
-                            <YoutubeFilled /> &nbsp;
-                            Youtube</Title>
-                        <span className="text-white" style={{ fontSize: 12 }}>Income: $100</span>
-                    </Card>
-                    <Card className="!bg-slate-500">
-                        <Title level={5} className="!text-white !mb-0">
-                            <TwitterCircleFilled /> &nbsp;
-                            Twitter</Title>
-                        <span className="text-white" style={{ fontSize: 12 }}>Income: $100</span>
-                    </Card>
-                    <Card className="!bg-orange-400">
-                        <Title level={5} className="!text-white !mb-0 flex">
-                            <FaShoppingBag /> &nbsp;
-                            Shoppee</Title>
-                        <span className="text-white" style={{ fontSize: 12 }}>Income: $100</span>
-                    </Card>
-
+        <Title level={5} className="ps-3 pt-3">Dashboard</Title>
+        <div className="grid grid-cols-2 px-3 gap-3">
+            <Card title="All orders">
+                <div className="grid grid-cols-2 text-center">
+                    <div>
+                        <Title level={4}>0</Title>
+                        <p className="text-slate-600 text-center">Current</p>
+                    </div>
+                    <div>
+                        <Title level={4}>0</Title>
+                        <p className="text-slate-600 text-center">Lifetime</p>
+                    </div>
                 </div>
             </Card>
 
-        </div>
-
-        <div className="p-3 pt-0 grid lg:grid-cols-3 gap-2">
-            <div className="">
-                <Card className="!w-full" title={
-                    <span style={{
-                        fontWeight: '400'
-                    }} className="font-sans">Platforms  statistic</span>
-                } >
-                    <PlatformChart />
-                </Card>
-
-            </div>
-        </div>
-        <div className="p-3">
-            <Card title={
-                <span className="font-sans" style={{
-                    fontWeight: '200'
-                }}>Top livestreams</span>
-            } className="col-span-2">
-
-                <LineChart />
-                <ConfigProvider theme={{
-                    components: {
-                        Table: {
-                            headerBg: 'rgb(248 250 252)',
-                            cellPaddingBlock: 10
-                        }
-
-                    }
-                }} >
-
-                </ConfigProvider>
+            <Card title="Funds">
+                <div className="grid grid-cols-2 text-center">
+                    <div>
+                        <Title level={4}>$0</Title>
+                        <p className="text-slate-600 text-center">Current</p>
+                    </div>
+                    <div>
+                        <Title level={4}>$0</Title>
+                        <p className="text-slate-600 text-center">Lifetime</p>
+                    </div>
+                </div>
             </Card>
+            <Card title="Orders" className="col-span-2">
+                <div className="grid grid-cols-5 text-center">
+                    <div>
+                        <Title level={4}>0</Title>
+                        <p className="text-slate-600 text-center">Initalize</p>
+                    </div>
+                    <div>
+                        <Title level={4}>0</Title>
+                        <p className="text-slate-600 text-center">Scheduling</p>
+                    </div>
+                    <div>
+                        <Title level={4}>0</Title>
+                        <p className="text-slate-600 text-center">Running</p>
+                    </div>
+                    <div>
+                        <Title level={4}>0</Title>
+                        <p className="text-slate-600 text-center">Stopped</p>
+                    </div>
+                    <div>
+                        <Title level={4}>0</Title>
+                        <p className="text-slate-600 text-center">Error</p>
+                    </div>
+                </div>
+            </Card>
+            <div className="col-span-2">
+                <VpsStatistic />
+            </div>
+            <div className="col-span-2">
+                <LivestreamsStatisticTable />
+            </div>
 
         </div>
+
+
     </div>
 }
 export default Page

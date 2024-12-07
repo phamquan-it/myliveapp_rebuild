@@ -16,13 +16,13 @@
 .ant-form-item{
     margin-bottom: 10px !important;
 }
-
-.ant-form-item-required::before{
-    display: none !important;
+.ant-form-item-required::before {
+    content: "" !important;
 }
 
 .ant-form-item-required::after {
     content: "*" !important;
-    color: red;
+    visibility: visible !important;
+    color: red !important;
 }
 

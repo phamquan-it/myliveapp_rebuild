@@ -13,10 +13,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 enum DataType {
-  OR = 'or',
-  COR = 'cor',
-  DEP = 'dep',
-  REF = 'ref',
+    OR = 'or',
+    COR = 'cor',
+    DEP = 'dep',
+    REF = 'ref',
 }
 const { Option } = Select;
 const Page = () => {
@@ -44,7 +44,7 @@ const Page = () => {
             dataIndex: "user",
             key: "user",
             ellipsis: true,
-            render: (user:User) => user.email 
+            render: (user: User) => user.email
         },
         {
             title: t("desc"),
@@ -58,7 +58,7 @@ const Page = () => {
             key: "action",
             width: "13%",
             align: "center",
-            render:(text: DataType)=>cf(text)
+            render: (text: DataType) => cf(text)
         },
         {
             title: ("Balance"),
@@ -66,6 +66,7 @@ const Page = () => {
             key: "balance",
             width: "13%",
             align: "center",
+            render: (text: string) => <span className="">{text}</span>
         },
         {
             title: t("amount"),
@@ -73,6 +74,9 @@ const Page = () => {
             key: "amount",
             width: "10%",
             align: "right",
+            render: (text, record) => (record.action == DataType.OR) ?
+                <span className="text-red-600">-{text}</span> :
+                <span className="text-green-500">+{text}</span>
         },
         {
             title: t("createat"),

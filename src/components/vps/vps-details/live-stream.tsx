@@ -8,6 +8,7 @@ import { ColumnType } from 'antd/es/table';
 import Title from 'antd/es/typography/Title';
 import React, { ReactNode, useEffect, useState } from 'react';
 import LiveSpeed from './live-speed';
+import { useRouter } from 'next/router';
 interface LiveStreamProps {
     slug: any;
     setService: Function
@@ -84,14 +85,19 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
             dataIndex: 'stkey',
             key: 'stkey',
             ellipsis: true
-        },
-
+        }
     ];
-    const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
 
+    const router = useRouter()
+    const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([Number(router.query?.stream_id)]);
+    useEffect(() => {
+        setTimeout(() => {
+            setService("vps-log" + Number(router.query?.stream_id))
+        }, 1000)
+    }, [router.query])
     return <>
         <Title level={5} className="text-center border-b">Live stream</Title>
-        <Table id="live-table" dataSource={data?.data?.map((data: any, index: number) => ({
+        <Table id="live-table" rowKey="id" dataSource={data?.data?.map((data: any, index: number) => ({
             ...data, stkey: data.key, key: index + 1
         }))} loading={isFetching}
             columns={columns}
@@ -103,16 +109,15 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
                     onClick: () => {
                         console.log(record)
                         setService("vps-log" + record.id)
-                        setSelectedRowKeys([record.key]);
+                        setSelectedRowKeys([record.id]);
                     }
                 }
             }}
             rowSelection={{
-                renderCell: ()=> <></>,
+                renderCell: () => <></>,
                 type: 'radio',
                 selectedRowKeys, // controlled selected row keys
             }}
-
         />
 
     </>

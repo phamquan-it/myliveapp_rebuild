@@ -10,6 +10,7 @@ import Link from "next/link";
 import { GetStaticPropsContext } from 'next';
 import { VscSettings } from 'react-icons/vsc';
 import Title from 'antd/lib/typography/Title';
+import { PiHandDepositBold } from "react-icons/pi";
 import UserTable from '@/components/newui/UserTable';
 import { ColumnsType } from 'antd/es/table';
 import SearchInput from '@/components/filters/SearchInput';
@@ -25,6 +26,7 @@ import { useQuery } from '@tanstack/react-query';
 import { userPath } from '@/user_access/filterMenu';
 import { isUser } from '@/user_access/checkrole';
 import { useProfile } from '@/apiClient/providers/useProfile';
+
 const { Header, Footer, Sider, Content } = Layout;
 interface DashBoardLayoutProps {
     children: ReactNode
@@ -57,22 +59,22 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
         {
             key: DashboardRouter.HOME,
             icon: <HomeFilled className="!text-lg" />,
-            label: <Link href={DashboardRouter.HOME}>{t('home')}</Link>,
+            label: <Link className="text-slate-700" href={DashboardRouter.HOME}>{t('home')}</Link>,
         },
         {
             key: DashboardRouter.PLATFORM,
             icon: <WindowsFilled />,
-            label: <Link href={DashboardRouter.PLATFORM}>{t('platform')}</Link>,
+            label: <Link className=" text-slate-700" href={DashboardRouter.PLATFORM}>{t('platform')}</Link>,
         },
         {
             key: DashboardRouter.SERVICE,
             icon: <FaListUl />,
-            label: <Link href={DashboardRouter.SERVICE}>{t('services')}</Link>,
+            label: <Link className="text-slate-700" href={DashboardRouter.SERVICE}>{t('services')}</Link>,
         },
         {
             key: DashboardRouter.MYAUTOLIVE,
             icon: <SignalFilled />,
-            label: <Link href={DashboardRouter.MYAUTOLIVE}>{t('myautolive')}</Link>,
+            label: <Link className="text-slate-700" href={DashboardRouter.MYAUTOLIVE}>{t('myautolive')}</Link>,
         },
         {
             type: 'divider',
@@ -80,49 +82,49 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
         {
             key: DashboardRouter.LIVESTREAM,
             icon: <FaListUl />,
-            label: <Link href={DashboardRouter.LIVESTREAM}>{t('livestreams')}</Link>,
+            label: <Link className="text-slate-700" href={DashboardRouter.LIVESTREAM}>{t('livestreams')}</Link>,
         },
 
         {
             key: DashboardRouter.CASHFLOW,
             icon: <FaMoneyBill />,
-            label: <Link href={DashboardRouter.CASHFLOW}>{t('cashflow')}</Link>,
+            label: <Link className="text-slate-700" href={DashboardRouter.CASHFLOW}>{t('cashflow')}</Link>,
         },
         {
             key: DashboardRouter.REFUND,
             icon: <FundOutlined />,
-            label: <Link href={DashboardRouter.REFUND}>{t('refund')}</Link>,
+            label: <Link className="text-slate-700" href={DashboardRouter.REFUND}>{t('refund')}</Link>,
         },
         {
             key: DashboardRouter.USER,
             icon: <UserOutlined />,
-            label: <Link href={DashboardRouter.USER}>{t('user')}</Link>,
+            label: <Link className="text-slate-700" href={DashboardRouter.USER}>{t('user')}</Link>,
         },
         {
             key: DashboardRouter.SETTING,
-            label: <Link href={DashboardRouter.SETTING}>{t('Settings')}</Link>,
+            label: <Link className="text-slate-700" href={DashboardRouter.SETTING}>{t('Settings')}</Link>,
             icon: <SettingOutlined />,
         },
         {
             key: 'sub4',
-            label: <Link href={DashboardRouter.VPS}>{('Vps')}</Link>,
+            label: <Link className="text-slate-700" href={DashboardRouter.VPS}>{('Vps')}</Link>,
             icon: <FaServer />,
         },
 
         {
             key: 'scrip',
-            label: <Link href={DashboardRouter.SCRIPT_SETUP}>{('Script setup')}</Link>,
+            label: <Link className="text-slate-700" href={DashboardRouter.SCRIPT_SETUP}>{('Script setup')}</Link>,
             icon: <FaUbuntu />,
         },
         {
             key: DashboardRouter.PAYMENT_HISTORY,
             icon: <HistoryOutlined />,
-            label: <Link href={DashboardRouter.PAYMENT_HISTORY}>{t('paymenthistory')}</Link>,
+            label: <Link className="text-slate-700" href={DashboardRouter.PAYMENT_HISTORY}>{t('paymenthistory')}</Link>,
         },
         {
             key: DashboardRouter.ADVANDED_CONFIG,
             icon: <VscSettings />,
-            label: <Link href={DashboardRouter.ADVANDED_CONFIG}>{t('advancedConfig')}</Link>,
+            label: <Link className="text-slate-700" href={DashboardRouter.ADVANDED_CONFIG}>{t('advancedConfig')}</Link>,
         },
 
     ];
@@ -133,10 +135,8 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
     const onClick: MenuProps['onClick'] = (e) => {
         console.log('click ', e);
     };
-    const [newOrderText, setNewOrderText] = useState(t('neworder'))
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [filterOpen, setFilterOpen] = useState(true)
-
+    const [collaped, setCollaped] = useState(false)
     const dataSource = [
         {
             key: '1',
@@ -219,30 +219,50 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                     <Sider theme="light"
                         breakpoint="lg"
                         collapsible
+                        collapsed={collaped}
                         className="border-r"
                         onChange={(e) => {
                             console.log(e)
                         }} onCollapse={(collaped) => {
-                            setNewOrderText(collaped ? "" : "New order")
+                            setCollaped(collaped)
                         }}
                         style={{
                             overflowY: 'auto',
                             scrollbarWidth: "thin"
                         }}
                     >
-                        <div className="p-3">
+                        <div className="p-3 pb-0 grid gap-2 ">
                             <Button type="default"
                                 icon={<PlusOutlined />}
-                                className="w-50 shadow "
+                                className="shadow"
+                                size="large"
+                                onClick={() => {
+                                    setIsModalOpen(true)
+                                }}>
+                                <span className="!text-semibold !font-sans">{collaped ? '' : t('neworder')}</span>
+                            </Button>
+                            <Button type="primary"
+                                className="shadow "
+                                icon={collaped? <PiHandDepositBold />:'' }
                                 block
                                 size="large"
                                 onClick={() => {
                                     setIsModalOpen(true)
                                 }}>
                                 <span className="!text-semibold !font-sans">
-                                    {newOrderText}
+                                    {collaped ? '' : 'Deposit'}
                                 </span>
                             </Button>
+                        </div>
+                        <div className="border rounded m-3 font-sans text-slate-700">
+                            <div className="bg-sky-100 border-b p-2 flex justify-between">
+                                <span>Funds</span>
+                                <span>${data?.data?.remains}</span>
+                            </div>
+                            <div className="p-2 flex justify-between">
+                                <span>In progess</span>
+                                <span>0</span>
+                            </div>
                         </div>
                         <Menu
                             onClick={onClick}

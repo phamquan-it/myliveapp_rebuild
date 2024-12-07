@@ -25,7 +25,7 @@
     "Authenlication": {
         "donothaveanacount": "Do not have an account?",
         "rpassword": "Confirm password",
-        "gotohomepage": "Go to home page",
+        "gotohomepage": "Home",
         "username": "Username",
         "password": "Password",
         "login": "Login",
@@ -40,10 +40,10 @@
         "confirmpasswordError": "Confirm password is not match!",
         "success": "Success!",
         "min5char": "Password should have at least 8 characters",
-        "remenber_me":"Remenber me",
-        "welcome":"Welcome to livestreams",
-        "createnewaccount":"Create new account",
-        "accepttermsandpolicy":"I accept terms and policy"
+        "remenber_me": "Remenber me",
+        "welcome": "Welcome to livestreams",
+        "createnewaccount": "Create new account",
+        "accepttermsandpolicy": "I accept terms and policy"
     },
     "Index": {
         "title": "Home",
@@ -100,6 +100,7 @@
         "myautolive": "My autolive"
     },
     "MyLanguage": {
+        "platform": "Platform",
         "source_link": "Source link",
         "stream_name": "Stream name",
         "stream_key": "Stream key",

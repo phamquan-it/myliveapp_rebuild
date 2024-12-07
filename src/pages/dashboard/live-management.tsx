@@ -102,7 +102,18 @@ const Page = () => {
             align: "center",
             width: 100
         },
-
+        {
+            title: ('Vps'),
+            dataIndex: 'vps',
+            key: 'vps',
+            render: (vps: any, record: any) => <>
+                <Button type="link" href={`/dashboard/vps?slug=${vps?.hostname}&stream_id=${record?.id}`}>
+                    {vps?.hostname}
+                </Button>
+            </>,
+            align: "center",
+            width: 100
+        },
         {
             title: t('start_time'),
             dataIndex: 'start_at',

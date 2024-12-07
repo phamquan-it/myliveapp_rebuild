@@ -50,11 +50,8 @@ const RegiterForm = () => {
                 <div className="absolute top-2 end-4">
                     <LocaleSwitcher />
                 </div>
-                <div className="w-full md:w-1/2 lg:w-1/3 px-5 py-5 bg-white">
-                    <Title level={3} className="!mb-1" >
-                        LiveStreams
-                    </Title>
-                    <p className="text-slate-700 pb-3 text-sm font-semibold">{t('createnewaccount')}</p>
+                <div className="w-full md:w-1/2 lg:w-1/4 px-5 py-5 bg-white">
+                    <Title level={3} className="!text-slate-800 text-center">{t('register')}</Title>
                     <Modal title="Notification" open={openSuccessModal} footer={<Button type="primary" onClick={() => {
                         setOpenSuccessModal(false)
                         router.push("/login")
@@ -71,18 +68,21 @@ const RegiterForm = () => {
                     >
                         <Form.Item
                             name="name"
+                            label=<span className="font-semibold text-slate-700">{t('fullname')}</span>
                             rules={[{ required: true }]}
                         >
                             <Input className="py-2" placeholder={p('enteryourname')} />
                         </Form.Item>
                         <Form.Item
                             name="email"
-                            rules={[{ required: true }]}
+                            label=<span className="font-semibold text-slate-700">{t('email')}</span>
+                            rules={[{ required: true, message: t("requiredEmail") }]}
                         >
-                            <Input className="py-2" placeholder={p('enteryourmail')} />
+                            <Input className="py-2" />
                         </Form.Item>
                         <Form.Item
                             name="password"
+                            label=<span className="font-semibold text-slate-700">{t('password')}</span>
                             rules={[
                                 { required: true, message: t("requiredpassword") },
                                 {
@@ -95,7 +95,7 @@ const RegiterForm = () => {
                         </Form.Item>
                         <Form.Item
                             name="confirmpassword"
-
+                            label=<span className="font-semibold text-slate-700">{t('rpassword')}</span>
                             rules={[
                                 { required: true, message: t("confirmpassword") },
                                 {
@@ -106,11 +106,8 @@ const RegiterForm = () => {
                         >
                             <Input.Password className="py-2" placeholder={t('rpassword')} />
                         </Form.Item>
-                        <Form.Item className="!mb-0">
-                            <Checkbox>{t('accepttermsandpolicy')}</Checkbox>
-                        </Form.Item>
                         <Form.Item>
-                            <div className="">
+                            <div className="mt-3">
                                 <Button
                                     type="primary"
                                     block
