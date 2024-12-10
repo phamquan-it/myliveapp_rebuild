@@ -161,17 +161,12 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
     const [defaultMenuActive, setDefaultMenuActive] = useState<string[]>([]);
     const [activeKey, setActiveKey] = useState(["1"]);
     const router = useRouter();
-    const token = getCookie("token");
     const [isReady, setIsReady] = useState(false)
 
     const { data, isSuccess } = useQuery({
         queryKey: ["info"],
         queryFn: () =>
-            axiosInstance.get(`/auth/profile`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }),
+            axiosInstance.get(`/auth/profile`),
     });
     useEffect(() => {
         if (isSuccess) setIsReady(true);

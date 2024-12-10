@@ -2,16 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { Terminal } from "@xterm/xterm";
 import "@xterm/xterm/css/xterm.css";
-interface XtermLogProps{
+interface XtermLogProps {
     isModalOpen: boolean
 }
-export default function Home(xtermLogProps:XtermLogProps) {
+export default function Home(xtermLogProps: XtermLogProps) {
     const terminalRef = useRef<HTMLDivElement | null>(null);
     const socketRef = useRef<any>(null);
     const [key, setKey] = useState(0);
     const [service, setService] = useState('log')
 
-    const socket = io(`http://localhost:3000`);
+    const socket = io(`${process.env.API_URL}`);
     useEffect(() => {
         if (typeof window !== "undefined" && terminalRef.current) {
             const { Terminal } = require("@xterm/xterm");
@@ -78,7 +78,7 @@ export default function Home(xtermLogProps:XtermLogProps) {
             >
                 sqlserver
             </button>
-        {xtermLogProps.isModalOpen?<div
+            {xtermLogProps.isModalOpen ? <div
                 className={(key < 1) ? 'invisible' : 'visible'}
                 id="terminal"
                 ref={terminalRef}
@@ -86,8 +86,8 @@ export default function Home(xtermLogProps:XtermLogProps) {
                     height: 200,
                     width: "100%"
                 }}
-        />:''
-}
+            /> : ''
+            }
 
         </main>
     );

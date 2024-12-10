@@ -30,6 +30,7 @@ import syncObjectToUrl from "@/helpers/syncObjectToUrl";
 import SearchInput from "@/components/filters/SearchInput";
 import AdminLayout from "@/components/admin-layout";
 import Link from "next/link";
+import PaymentAction from "@/components/admin/payment/payment-action";
 
 const Page = () => {
     const router = useRouter();
@@ -52,7 +53,7 @@ const Page = () => {
             title: t("creator"),
             dataIndex: "userCreate",
             key: "userCreate",
-            render: (text: string, record: any) => record?.userCreate?.email,
+            render: (text: string, record: any) => record?.user?.name,
         },
         {
             title: "ID",
@@ -98,9 +99,10 @@ const Page = () => {
             title: t("action"),
             dataIndex: "id",
             key: "id",
-            render: (text: string, record: any) => {
+            render: (text: number, record: any) => {
                 return (
                     <div className="flex justify-center">
+                        <PaymentAction paymentId={text} />
                     </div>
                 );
             },
@@ -127,10 +129,17 @@ const Page = () => {
             }),
         placeholderData: (previousData) => previousData,
     });
+    const paymentStatistic = useQuery({
+        queryKey: ['payment/statistic'],
+        queryFn: () => axiosInstance.get("/statistic/payment-statistic")
+    })
+    const { total, processing, pendding } = paymentStatistic?.data?.data || {}
+
     const syncObj = syncObjectToUrl(router)
     const handleInput = debounce((e) => {
         syncObj({ keyword: e.target.value })
     }, 300)
+    const s = useTranslations("OrderStatus")
     return (
         <AdminLayout selected={[]} breadcrumbItems={
             [
@@ -142,7 +151,6 @@ const Page = () => {
                     title: d('paymenthistory'),
                 },
             ]
-
         } filterOption={<div className="hidden md:flex  items-center">
             <Select className='mt-2 sm:mt-0'
                 style={{ width: 200 }}
@@ -159,7 +167,6 @@ const Page = () => {
                 onChange={(e) => {
                     syncObj({ status: e ?? '' })
                 }} />
-
         </div>} rightFilter={<>
             <Select className='mt-2 sm:mt-0'
                 style={{ width: 200 }}
@@ -181,7 +188,7 @@ const Page = () => {
                 <HistoryStatitical
                     color="rgb(10, 143, 220)"
                     monney={0.207}
-                    info="Current Viral SMM balance"
+                    info="Current Webdock balance"
                 />
                 <HistoryStatitical
                     color="rgb(23, 182, 221)"
@@ -190,18 +197,18 @@ const Page = () => {
                 />
                 <HistoryStatitical
                     color="rgb(73, 189, 101)"
-                    monney={0.207}
-                    info="Completed"
+                    monney={total}
+                    info={s('completed')}
                 />
                 <HistoryStatitical
                     color="rgb(244, 152, 32)"
-                    monney={0.207}
-                    info="Pending"
+                    monney={processing}
+                    info={s('processing')}
                 />
                 <HistoryStatitical
                     color="rgb(158, 73, 230)"
-                    monney={0.207}
-                    info="In Progress"
+                    monney={pendding}
+                    info={s('inprogress')}
                 />
             </div>
             <div className="sm:flex gap-1 my-3" id="filter">
@@ -228,12 +235,10 @@ const Page = () => {
                         key: pageIndex * pageSize + (index + 1) - pageSize,
                     }))}
                 columns={columns} />
-
         </AdminLayout>
     );
 };
 export default Page;
-
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
     return {
         props: {

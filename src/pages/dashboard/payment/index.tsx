@@ -31,6 +31,7 @@ import { PlusCircleFilled, StarFilled } from "@ant-design/icons";
 import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
 import { toast } from "react-toastify";
+import PaymentAction from "@/components/admin/payment/payment-action";
 
 const Page = () => {
     const [pageIndex, setPageIndex] = useState(1);
@@ -88,6 +89,9 @@ const Page = () => {
             title: t("action"),
             dataIndex: "id",
             key: "id",
+            render: (id: number) => <>
+                <PaymentAction paymentId={id} />
+            </>
         },
     ];
 

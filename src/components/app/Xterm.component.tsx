@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Terminal } from "@xterm/xterm"; // Corrected import path
 import "@xterm/xterm/css/xterm.css";
 import { io } from "socket.io-client";
-import { Button } from "antd";
+import { Button, Modal } from "antd";
 import { FitAddon } from '@xterm/addon-fit';
 
 export interface SSHInfo {
@@ -82,16 +82,21 @@ const XtermUI: React.FC<XtermUIProps> = ({ SSHInfo, }) => {
 
     }, [key]); // Add reconnect as a dependency
 
-    useEffect(() => {
-        if (key < 1)
-            setTimeout(() => {
-                setKey(key + 1)
-            }, 400)
-
-    }, [key])
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const handleCancel = () => {
+        setIsModalOpen(false)
+    }
     return (
         <>
-            <div key={key} ref={terminalRef} className={(key<1)?'invisible':''} style={{ width: "100%", height: "392px", overflow: "hidden" }}></div>
+            <Button type="default" icon={<>&gt;_</>} onClick={() => {
+                setIsModalOpen(true)
+                setTimeout(() => {
+                    setKey(key + 1)
+                }, 100)
+            }}></Button>
+            <Modal title="Basic Modal" open={isModalOpen} onCancel={handleCancel} destroyOnClose={true} footer={[]} width={800}>
+                <div key={key} ref={terminalRef} className={(key < 1) ? 'invisible' : ''} style={{ width: "100%", height: "392px", overflow: "hidden" }}></div>
+            </Modal>
         </>
     );
 };

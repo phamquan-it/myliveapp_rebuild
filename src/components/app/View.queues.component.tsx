@@ -77,7 +77,6 @@ const ViewQueuesProcess: React.FC<ViewQueuesProcessProps> = ({ ipv4,service }) =
     return (
         <div key={key}>
             <Button type="primary" onClick={refreshComponent} icon={<EyeFilled />}></Button>
-
             <div ref={terminalRef} style={{ width: "100%", height: "250px", overflow: "hidden" }}></div>
             {/* Component content */}
         </div>

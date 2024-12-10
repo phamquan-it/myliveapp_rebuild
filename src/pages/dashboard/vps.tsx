@@ -82,18 +82,10 @@ const Page = () => {
 
     const d = useTranslations("DashboardMenu");
 
-    const [sshInfo, setSSHInfo] = useState(
-        {
-            ipv4OrHost: "",
-            sshUser: ""
-        }
-    )
-    const setSlugData = (slug: string) => {
-        setSlug(slug)
-    }
+
     const columns: ColumnsType<any> = [
         {
-            title: <div className="py-2">No.</div>,
+            title: <div className="py-2">{t('entryno')}</div>,
             dataIndex: "key",
             key: 'key',
             width: 35
@@ -105,7 +97,7 @@ const Page = () => {
             key: 'name',
         },
         {
-            title: 'Platform',
+            title: t('platform'),
             dataIndex: 'platform',
             key: 'platform',
             render: () => (
@@ -119,7 +111,7 @@ const Page = () => {
             render: (text: string, record: any) => record?.vps?.brand
         },
         {
-            title: 'Price',
+            title: t('price'),
             dataIndex: 'profile',
             key: 'profile',
             width: 150,
@@ -142,7 +134,7 @@ const Page = () => {
             render: (text, record) => <NumOfStreamsVps slug={record.slug} />
         },
         {
-            title: 'Status',
+            title: t('status'),
             dataIndex: 'slug',
             key: 'slug',
             render: (text, record) => {
@@ -159,12 +151,10 @@ const Page = () => {
             dataIndex: ('slug'),
             render: (text: any, record: any) => (<div className="grid grid-cols-4">
                 <VpsDetail slug={record} closeModal={() => { }} />
-                <Button type="default" disabled={record.status != "running"} icon={<>&gt;_</>} onClick={() => {
-                    setSSHInfo({
-                        ipv4OrHost: record.ipv4,
-                        sshUser: 'root'
-                    })
-                }}></Button>
+                <XtermUI SSHInfo={{
+                    ipv4OrHost: '192.168.1.51', sshUser: 'root'
+                }} />
+
                 <VpsHideOption vps={record} />
                 <AdvancedSetup slug={text} />
             </div>)
@@ -172,35 +162,7 @@ const Page = () => {
     ]
 
     const [connectionState, setConnectionState] = useState(false);
-    const [isViewDetailOpen, setIsViewDetailOpen] = useState(false)
-    const [slug, setSlug] = useState<any>('')
-    const hideModalViewDetail = () => {
-        setSlug('')
-        setIsViewDetailOpen(false)
-    }
-    const openModalViewDetail = () => {
-        setIsViewDetailOpen(true)
-    }
-    const openModal = () => {
-        setIsModalOpen(true);
-        setConnectionState(true);
-    };
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setConnectionState(false);
-    };
-    useEffect(() => {
-        //open modal when sshInfo change
-        if (sshInfo.sshUser != "" && sshInfo.sshUser !== "")
-            openModal()
-    }, [sshInfo])
-
-    useEffect(() => {
-        //open modal view detail
-        if (slug != '')
-            openModalViewDetail()
-    }, [slug])
 
     const { pageIndex, pageSize, limit, offset } = pagination(router)
     const syncObj = syncObjectToUrl(router)
@@ -230,25 +192,7 @@ const Page = () => {
                 {t("create")}
             </Button>
         )}>
-            <Modal
-                title={`Terminal ${sshInfo.sshUser}@${sshInfo.ipv4OrHost}`}
-                open={isModalOpen}
-                onOk={closeModal}
-                onCancel={closeModal}
-                width={850}
-                destroyOnClose={true} footer={null}
-            >
-                <XtermUI SSHInfo={sshInfo} />
-            </Modal>
 
-            <Modal width={1000}
-                title={t("create")}
-                open={showModal}
-                onCancel={hideModal}
-                footer={null}
-            >
-                <VpsForm closeModal={hideModal} setSlug={setSlugData} />
-            </Modal>
             <div className="grid gap-2 sm:flex justify-between items-center my-3">
                 <div id="filter">
                 </div>
@@ -289,11 +233,7 @@ const Page = () => {
                         }
                     }}
                 />
-
-
             </ConfigProvider>
-
-
         </AdminLayout>
     );
 };

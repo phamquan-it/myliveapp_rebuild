@@ -17,7 +17,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const Page = () => {
-    const token = getCookie("token");
     const router = useRouter();
     const t = useTranslations("MyLanguage");
     const p = useTranslations("Placeholder");
@@ -37,43 +36,43 @@ const Page = () => {
         },
         {
             title: "ID",
-            dataIndex: "id",
-            key: "id",
+            dataIndex: "financialTransaction",
+            key: "financialTransaction",
             width: 80,
         },
         {
             title: t("email"),
-            dataIndex: "key",
-            key: "key",
-            render: (text: string, record: any) => {
-                return record?.user?.email;
+            dataIndex: "financialTransaction",
+            key: "financialTransaction",
+            render: (text: any) => {
+                return text?.user?.email;
             },
             ellipsis: true,
         },
         {
             width: 160,
             title: t("date"),
-            dataIndex: "createdAt",
-            key: "createdAt",
+            dataIndex: "create_at",
+            key: "create_at",
             render: (text: string, record: any) =>
                 dayjs(record.createdAt).format("DD/MM/YYYY HH:mm:ss"), //
         },
         {
             title: t("stream_id"),
-            dataIndex: "key",
-            key: "key",
+            dataIndex: "financialTransaction",
+            key: "financialTransaction",
             ellipsis: true,
-            render: (text: string, record: any) => {
-                return record?.activityStream?.id
+            render: (text: any, record: any) => {
+                return text?.activityStream?.id
             },
         },
         {
             title: t("stream_name"),
-            dataIndex: "key",
-            key: "key",
+            dataIndex: "financialTransaction",
+            key: "financialTransaction",
             ellipsis: true,
-            render: (text: string, record: any) => {
-                return record?.activityStream?.name
+            render: (text: any, record: any) => {
+                return text?.activityStream?.name
             },
         },
         {
@@ -117,10 +116,7 @@ const Page = () => {
                     offset: (pageIndex - 1) * pageSize,
                     limit: pageIndex * pageSize,
                 },
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }),
+                           }),
         placeholderData: (previousData) => previousData,
     });
 

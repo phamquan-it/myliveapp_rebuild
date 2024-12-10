@@ -199,7 +199,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                                     }}>
                                         <Table dataSource={dataSource} rowKey='name' columns={columns} showHeader={false} pagination={false} rowClassName="font-sans" />
                                         <div className="px-2 pt-3 flex justify-end gap-2">
-                                            <Button type="primary" className="font-sans" size="small">Deposit</Button>
+                                            <Button type="primary" className="font-sans" size="small">{t('deposit')}</Button>
                                             <Button type="default" className="font-sans" size="small" onClick={() => {
                                                 deleteCookie("token");
                                                 router.push("/login");
@@ -250,7 +250,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                                     setIsModalOpen(true)
                                 }}>
                                 <span className="!text-semibold !font-sans">
-                                    {collaped ? '' : 'Deposit'}
+                                    {collaped ? '' : t('deposit')}
                                 </span>
                             </Button>
                         </div>

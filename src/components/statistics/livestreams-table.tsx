@@ -2,7 +2,7 @@ import { ActivityStream } from '@/@type/api_object';
 import axiosInstance from '@/apiClient/axiosConfig';
 import { pagination } from '@/helpers/pagination';
 import { useQuery } from '@tanstack/react-query';
-import { Table, Tooltip, Image } from 'antd';
+import { Table, Tooltip, Image, Button } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import dayjs from 'dayjs';
 import { useTranslations } from 'next-intl';
@@ -10,11 +10,13 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import StreamState from '../autolive/StreamState';
 import { CheckOutlined, DownloadOutlined } from '@ant-design/icons';
+import { DashboardRouter } from '@/enums/router/dashboard';
 interface LivestreamsStatisticTableProps {
-
+    currentTotal: number,
+    remains: number
 }
 
-const LivestreamsStatisticTable: React.FC<LivestreamsStatisticTableProps> = () => {
+const LivestreamsStatisticTable: React.FC<LivestreamsStatisticTableProps> = ({ currentTotal, remains }) => {
     const t = useTranslations('MyLanguage')
     const router = useRouter()
     const { limit, offset, pageIndex, pageSize } = pagination(router, 1, 20)
@@ -101,17 +103,20 @@ const LivestreamsStatisticTable: React.FC<LivestreamsStatisticTableProps> = () =
     ];
 
     return <>
-        <Table<ActivityStream> showHeader={true} title={() => (
-            <div className="font-semibold text-slate-700 flex gap-5">
-                <div>
-                    Revenuse:
+        <Table<ActivityStream> rowKey="id" showHeader={true} title={() => (
+            <div className="flex justify-between">
+                <div className="font-semibold text-slate-700 flex gap-5">
+                    <div>
+                        Revenuse: ${currentTotal - remains}
+                    </div>
+                    <div>
+                        Cost:
+                    </div>
+                    <div>
+                        Profit:
+                    </div>
                 </div>
-                <div>
-                    Cost:
-                </div>
-                <div>
-                    Profit:
-                </div>
+                <Button href={DashboardRouter.LIVESTREAM} type="link" className="!px-0 !font-semibold !text-slate-700">Manage</Button>
             </div>
         )} dataSource={data?.data?.data} pagination={{
             pageSize
