@@ -145,19 +145,20 @@ const Page = () => {
             key: "start_at",
             render: (text) => (<>
                 <CountdownTimer startTime={text} />
-            </>)
+            </>),
+            ellipsis: true
         },
         {
             title: t('end_time'),
             dataIndex: 'end_at',
             key: 'end_at',
-            render: (text: string) => text == undefined ? 'Not schedule' : dayjs(text).format('YYYY/MM/DD HH:mm')
+            render: (text: string) => text == undefined ? 'Not schedule' : dayjs(text).format('YYYY/MM/DD HH:mm'),
         },
         {
             title: t("price"),
             dataIndex: "price",
             key: "price",
-            render: (text)=>`$${text}`
+            render: (text) => `$${text}`
         },
         {
             title: t("status"),

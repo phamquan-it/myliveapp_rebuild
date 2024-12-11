@@ -24,7 +24,6 @@ import React, { useEffect, useState } from 'react';
 
 const Page = () => {
     const router = useRouter()
-    const token = getCookie("token");
     const { limit, offset, pageIndex, pageSize } = pagination(router)
     const { data, isFetching, isError } = useQuery({
         queryKey: ["platform", router],

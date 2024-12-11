@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/apiClient/axiosConfig";
 import { useTranslations } from "next-intl";
 import UserStatistic from "@/components/statistics/user-statistic";
+import SystemLog from "@/components/statistics/system-log";
 const Line = dynamic(() => import("react-chartjs-2").then((mod) => mod.Line), {
     ssr: false,
 });
@@ -150,6 +151,7 @@ const Page: React.FC<PageProps> = () => {
             <div className="col-span-3">
                 <LivestreamsStatisticTable currentTotal={currentTotal} remains={remains} />
             </div>
+            <SystemLog/>
         </div>
     </div>
 }

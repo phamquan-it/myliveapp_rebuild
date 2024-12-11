@@ -328,7 +328,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ role }) => {
                         wrapperCol={{
                             sm: { offset: 4, span: 20 }
                         }}
-                        rules={[{ required: true }]}>
+                        rules={[{ required: useCron }]}>
                         <Space>
 
                             <Form.Item
@@ -336,7 +336,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ role }) => {
                                     sm: { offset: 0, span: 24 }
                                 }}
                                 name={useCron ? "schedule" : ""}
-                                rules={[{ required: true }]}
+                                rules={[{ required: useCron }]}
                             >
                                 <RangePicker
                                     disabled={useCron == false}
