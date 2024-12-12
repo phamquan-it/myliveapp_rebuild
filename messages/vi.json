@@ -281,5 +281,13 @@
         "recent_month": "tháng gần đây",
         "yearago": "năm trước",
         "custom": "Tuỳ chỉnh"
+    },
+    "AppFilter": {
+        "platfrom": "Nền tảng",
+        "user": "Người dùng",
+        "vps": "Vps",
+        "streamStatus": "Trạng thái luồng",
+        "user_active": "Kích hoạt",
+        "date":"Thời gian"
     }
 }

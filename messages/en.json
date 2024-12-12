@@ -282,5 +282,13 @@
         "recent_month": "recents month",
         "yearago": "year ago",
         "custom": "Custom"
+    },
+    "AppFilter": {
+        "platfrom": "Platform",
+        "user": "User",
+        "vps": "Vps",
+        "streamStatus": "Stream status",
+        "user_active": "Active",
+        "date":"Date"
     }
 }
