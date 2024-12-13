@@ -1,9 +1,14 @@
-import Filter from '@/components/filters/filter';
+import Filter, { AppFilter } from '@/components/filters/filter';
 import { GetStaticPropsContext } from 'next';
 import React from 'react';
 const Page = () => {
     return <div className="pt-4">
-        <Filter />
+        <Filter filterList={[
+            AppFilter.PLATFORM,
+            AppFilter.USER,
+            AppFilter.VPS,
+            AppFilter.STREAM_STATUS
+        ]} />
     </div>
 }
 

@@ -11,6 +11,8 @@ import TagDialog from './tag-dialogs/tag-dialog';
 import SearchTextTruncate from './text-truncates/search-text-truncate';
 import { AppFilter } from './filter';
 import RadioListFilter from './radio-list-filter';
+import MultiselectTextTruncate from './text-truncates/multiselect-text-truncate';
+import { Platform } from '@/@type/api_object';
 interface FilterTagProps {
     props: TagProps,
     children: string
@@ -49,6 +51,15 @@ const FilterTag: React.FC<FilterTagProps> = ({ props, children }) => {
     }
     const router = useRouter()
     const syncObj = syncObjectToUrl(router)
+    const s = useTranslations("StreamStatus")
+
+    const statusOptions = [
+        { id: 'initalize', name: s('initalize') },
+        { id: 'scheduling', name: s('scheduling') },
+        { id: 'running', name: s('running') },
+        { id: 'stopped', name: s('stopped') },
+        { id: 'error', name: s('error') },
+    ]
 
     switch (children) {
         case 'keyword':
@@ -63,6 +74,14 @@ const FilterTag: React.FC<FilterTagProps> = ({ props, children }) => {
                 </Tooltip>
             </>
         case AppFilter.PLATFORM:
+            const selectedPlatformIds = Array.isArray(router.query.platform)
+                ? router.query.platform
+                : router.query.platform
+                    ? [router.query.platform]
+                    : [];
+            const selectedPlatformNames = platformData?.data?.data?.platforms
+                .filter((pl: any) => (selectedPlatformIds.indexOf(pl.id + '') != -1))
+                .map((pl: any) => pl.name)
             return <div>
                 <TagDialog
                     isDialogOpen={isDialogOpen}
@@ -81,10 +100,19 @@ const FilterTag: React.FC<FilterTagProps> = ({ props, children }) => {
                     filterBy={children}
                     removeOnClose={() => { syncObj({ platform: '' }) }}
                     props={{ ...props }} >
-                    {t('platform')}:
+                    {t('platform')}: <MultiselectTextTruncate data={selectedPlatformNames} props={{ style: { maxWidth: 80 } }} />
                 </TagDialog>
             </div>
         case AppFilter.VPS:
+            const selectedVpsIds = Array.isArray(router.query.vps)
+                ? router.query.vps
+                : router.query.vps
+                    ? [router.query.vps]
+                    : [];
+            const selectedVpsNames = vpsData?.data?.data
+                .filter((vp: any) => (selectedVpsIds.indexOf(vp.vps_vps_provider + '') != -1))
+                .map((vp: any) => vp.name)
+
             return <>
                 <TagDialog
                     isDialogOpen={isDialogOpen}
@@ -104,10 +132,18 @@ const FilterTag: React.FC<FilterTagProps> = ({ props, children }) => {
                     filterBy={children}
                     removeOnClose={() => { syncObj({ vps: '' }) }}
                     props={{ ...props }}>
-                    {t('vps')}:
+                    {t('vps')}:&nbsp; <MultiselectTextTruncate data={selectedVpsNames} props={{ style: { maxWidth: 80 } }} />
                 </TagDialog>
             </>
         case AppFilter.USER:
+            const selectedUserIds = Array.isArray(router.query.user)
+                ? router.query.user
+                : router.query.user
+                    ? [router.query.user]
+                    : [];
+            const selectedUserNames = userData?.data?.data?.data
+                .filter((u: any) => (selectedUserIds.indexOf(u.id) != -1))
+                .map((u: any) => u.email)
             return <>
                 <TagDialog
                     isDialogOpen={isDialogOpen}
@@ -126,10 +162,14 @@ const FilterTag: React.FC<FilterTagProps> = ({ props, children }) => {
                     filterBy={children}
                     removeOnClose={() => { syncObj({ user: '' }) }}
                     props={{ ...props }}>
-                    {t('user')}
+                    {t('user')}: &nbsp; <MultiselectTextTruncate data={selectedUserNames} props={{ style: { maxWidth: 150 } }} />
                 </TagDialog>
             </>
         case AppFilter.STREAM_STATUS:
+            const status = Array.isArray(router.query.status)
+                ? router.query.status.join(',') // Handle array case
+                : router.query.status || ''; // Handle string or undefined case
+            const statusName = statusOptions.find(option => option.id === status)?.name;
             return <>
                 <TagDialog
                     isDialogOpen={isDialogOpen}
@@ -137,23 +177,17 @@ const FilterTag: React.FC<FilterTagProps> = ({ props, children }) => {
                     dialogRender={(<div className="w-48">
                         <RadioListFilter name="statusFilter"
                             renderLabel="name"
-                            dataFilter={[
-                                { id: 'initalize', name: "Initalize" },
-                                { id: 'scheduling', name: "Scheduling" },
-                                { id: 'running', name: "Runing" },
-                                { id: 'stopped', name: "Stopped" },
-                                { id: 'error', name: "Error" },
-                            ]}
+                            dataFilter={statusOptions}
                             onFinish={(values) => {
-                               syncObj({ status: values.filter })
-                               closeDialog()
+                                syncObj({ status: values.filter })
+                                closeDialog()
                             }} />
 
                     </div>)}
                     filterBy={children}
                     removeOnClose={() => { syncObj({ status: '' }) }}
                     props={{ ...props }}>
-                    {t('status')}
+                    {t('status')}:&nbsp; {statusName}
                 </TagDialog>
             </>
         default:

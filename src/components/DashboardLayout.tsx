@@ -11,7 +11,6 @@ import { GetStaticPropsContext } from 'next';
 import { VscSettings } from 'react-icons/vsc';
 import Title from 'antd/lib/typography/Title';
 import { PiHandDepositBold } from "react-icons/pi";
-import UserTable from '@/components/newui/UserTable';
 import { ColumnsType } from 'antd/es/table';
 import SearchInput from '@/components/filters/SearchInput';
 import CashflowTable from '@/components/cashflowTable';

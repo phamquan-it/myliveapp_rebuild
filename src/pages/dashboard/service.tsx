@@ -25,6 +25,7 @@ import SearchInput from "@/components/filters/SearchInput";
 import { ColumnType, ColumnsType } from "antd/es/table";
 import AdminLayout from "@/components/admin-layout";
 import Link from "next/link";
+import { AppFilter } from "@/components/filters/filter";
 const Page = () => {
     const router = useRouter();
     const token = getCookie("token");
@@ -118,7 +119,9 @@ const Page = () => {
                 title: d('services'),
             },
 
-        ]} staticAction={(
+        ]}
+        filterOptions={[AppFilter.PLATFORM]}
+        staticAction={(
             <CreateService />
         )}>
             <div className="">

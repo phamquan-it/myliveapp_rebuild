@@ -5,20 +5,22 @@ import { Flex, Layout } from 'antd';
 import Title from "antd/es/typography/Title";
 import { BsFilterLeft } from "react-icons/bs";
 import SearchInput from "./filters/SearchInput";
+import Filter, { AppFilter } from "./filters/filter";
+import { CloseOutlined } from "@ant-design/icons";
+import { useRouter } from "next/router";
 const { Header, Footer, Sider, Content } = Layout;
 
 const inter = Inter({ subsets: ["latin"] });
 
 interface AdminLayoutProps {
-    rightFilter?: ReactNode
-    filterOption?: ReactNode
+    filterOptions?: AppFilter[]
     staticAction?: ReactNode,
     actions?: ReactNode,
     children: ReactNode,
     selected: any[],
     breadcrumbItems: any[]
 }
-const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, staticAction, breadcrumbItems, filterOption, rightFilter }) => {
+const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, staticAction, breadcrumbItems, filterOptions = [] }) => {
 
 
     const label = {
@@ -48,14 +50,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, 
             minWidth: 300
         },
         dropdownClassName: "!border-transparent",
-      //  dropdownRender: (menu) => {
-      //      console.log(menu)
-      //      return (<>
-      //          <div className="w-48 bg-white border rounded p-3">
-      //              test
-      //          </div>
-      //      </>)
-      //  },
         mode: "multiple",
         size: "large",
         open: filter,
@@ -68,27 +62,33 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, 
         popupClassName: " !w-64",
         onDropdownVisibleChange: handleDropdownVisibleChange,
     }
+    const router = useRouter()
+    const hasAnyProperty = Object.keys(router.query).length
+    console.log("filter b", hasAnyProperty);
     return (
         <Layout className="bg-yellow-500 h-full" >
-            <Header className="border-b overflow-hidden">
+            <Header className="border-b">
                 <div className="flex justify-between h-full item-center">
                     <div className="flex items-center gap-2">
-
-                        <Button type="default" icon={<BsFilterLeft />} size="large" onClick={() => {
-                            setFilter(true)
-                        }}></Button>
-                        <div className="flex gap-2 !border-none">
-                            <Select {...selectProps} />
-                        </div>
+                        <Filter filterList={filterOptions} />
                     </div>
                     <div className="flex items-center gap-1">
-                        <div className={`flex gap-1 items-center duration-150 overflow-hidden ${(selected.length == 0) ? 'opacity-0 -translate-y-12' : ''}`}>
-                            {(selected.length != 0) ?
-                                <>
-                                    {actions ?? <></>}
-                                </> :
-                                <></>
-                            }
+
+                        <div className="flex gap-1">
+                            <Button type="default"
+                                className={`!border-0 !shadow-none ${hasAnyProperty > 1 ? "" : "!hidden"}`}
+                                icon={<CloseOutlined className="!text-xl" />}
+                                onClick={() => {
+                                    router.push({ query: {} })
+                                }}></Button>
+                            <div className={`flex gap-1 items-center duration-150 overflow-hidden ${(selected.length == 0) ? 'opacity-0 -translate-y-12' : ''}`}>
+                                {(selected.length != 0) ?
+                                    <>
+                                        {actions ?? <></>}
+                                    </> :
+                                    <></>
+                                }
+                            </div>
                         </div>
                         {staticAction ?? <></>}
                     </div>

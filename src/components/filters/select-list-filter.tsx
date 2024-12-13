@@ -7,6 +7,7 @@ import { usePlatformData } from '../live-streams/CreateStreamByAdmin';
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/apiClient/axiosConfig';
 import RadioListFilter from './radio-list-filter';
+import { useTranslations } from 'next-intl';
 interface SelectListFilterProps {
     filterBy: string;
     closePopup: () => void
@@ -25,6 +26,7 @@ const SelectListFilter: React.FC<SelectListFilterProps> = ({ closePopup, filterB
 
     const router = useRouter()
     const syncObj = syncObjectToUrl(router)
+    const s = useTranslations("StreamStatus")
     switch (filterBy) {
         case 'platform':
             return <CheckboxListFilter
@@ -60,11 +62,11 @@ const SelectListFilter: React.FC<SelectListFilterProps> = ({ closePopup, filterB
             return <RadioListFilter name="userFilter"
                 renderLabel="name"
                 dataFilter={[
-                    { id: 'initalize', name: "Initalize" },
-                    { id: 'scheduling', name: "Scheduling" },
-                    { id: 'running', name: "Runing" },
-                    { id: 'stopped', name: "Stopped" },
-                    { id: 'error', name: "Error" },
+                    { id: 'initalize', name: s("initalize") },
+                    { id: 'scheduling', name: s("scheduling") },
+                    { id: 'running', name: s("running") },
+                    { id: 'stopped', name: s("stopped") },
+                    { id: 'error', name: s("error") },
                 ]}
                 onFinish={(values) => {
                     closePopup()

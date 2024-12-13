@@ -2,6 +2,7 @@ import { Button, Checkbox, Form, Image } from 'antd';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { AppFilter } from './filter';
+import { useTranslations } from 'next-intl';
 interface CheckboxListFilterProps {
     withIcon?: string,
     filterBy?: AppFilter
@@ -63,7 +64,7 @@ const CheckboxListFilter: React.FC<CheckboxListFilterProps> = ({
             })
         });
     }, [form, dataFilter, router.query, filterBy]);
-
+    const t = useTranslations("MyLanguage")
     return <>
         <Form
             form={form}
@@ -94,7 +95,7 @@ const CheckboxListFilter: React.FC<CheckboxListFilterProps> = ({
             </Form.List>
             <Form.Item className="!flex !justify-end pt-2 border-t px-2">
                 <Button type="primary" disabled={isSubmitDisabled} htmlType="submit">
-                    Apply
+                    {t("apply")}
                 </Button>
             </Form.Item>
         </Form>

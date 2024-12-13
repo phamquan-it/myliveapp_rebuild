@@ -22,22 +22,12 @@ const RadioListFilter: React.FC<RadioListFilterProps> = ({
 
     const [form] = Form.useForm()
     useEffect(() => {
-        const selectedPlatform = Array.isArray(router.query.platform)
-            ? router.query.platform
-            : router.query.platform
-                ? [router.query.platform]
-                : [];
-
+        const status = Array.isArray(router.query.status)
+            ? router.query.status.join(',') // Handle array case
+            : router.query.status || ''; // Handle string or undefined case
 
         form.setFieldsValue({
-            filterRender: (!dataFilter) ? [] : dataFilter.map((data) => {
-                switch (filterBy) {
-                    case AppFilter.STREAM_STATUS:
-                        data.value = selectedPlatform.indexOf(data.id + '') != -1
-                        break;
-                }
-                return data
-            })
+            filter: status
         });
     }, [form, dataFilter, router.query, filterBy]);
 

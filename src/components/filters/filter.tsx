@@ -2,9 +2,11 @@ import { CloseOutlined, FilterOutlined } from '@ant-design/icons';
 import { Layout, Tag, Select, Card, Button } from 'antd';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
+import { LuListFilter } from "react-icons/lu";
 import FilterTag from './filter-tag';
 import SelectListFilter from './select-list-filter';
 import { MessageKeys, useTranslations } from 'next-intl';
+import { IoFilterOutline } from 'react-icons/io5';
 
 const { Header, Footer, Content } = Layout;
 
@@ -19,14 +21,16 @@ export enum AppFilter {
 }
 
 
+interface FilterProps {
+    filterList?: AppFilter[]
+}
 
-
-export default function Filter() {
+const Filter: React.FC<FilterProps> = ({ filterList = [] }) => {
 
     const router = useRouter()
     const [open, setOpen] = useState(false)
     const [trigger, setTrigger] = useState<AppFilter>(AppFilter.NONE)
-    const [options, setOptions] = useState<AppFilter[]>([AppFilter.PLATFORM])
+    const [options, setOptions] = useState<AppFilter[]>([])
     const handleRemoveKeyword = (key: string) => {
         setOptions((prevOptions) => prevOptions.filter((option) => option !== key));
     };
@@ -67,20 +71,22 @@ export default function Filter() {
         { label: t('platform'), value: AppFilter.PLATFORM },
         { label: t('user'), value: AppFilter.USER },
         { label: t('status'), value: AppFilter.STREAM_STATUS },
-        { label: t('date'), value: AppFilter.DATE },
-    ]
+    ].filter(option =>
+        filterList.includes(option.value)
+    );
     const filter = filterOptions.filter((opt) => options.indexOf(opt.value) == -1)
+    const p = useTranslations("Placeholder")
     return (
         <div className="flex items-center">
             <Button type="default"
                 onClick={() => {
                     setOpen(true)
                 }}
-                size="large" className="mx-2 !border-0 !shadow-none" icon={<FilterOutlined className="!text-3xl" />}></Button>
+                size="large" className="mx-2 !border-0 !shadow-none" icon={<LuListFilter className="!text-3xl" />}></Button>
             <div className="flex items-center">
                 {options.map((opt) => (
                     <FilterTag key={opt} props={{
-                        className: "!py-2 !px-2  text-slate-800",
+                        className: "!py-2 !px-2  text-slate-800 ",
                         closable: true,
                         onClose: () => {
                             handleRemoveKeyword(opt)
@@ -92,7 +98,7 @@ export default function Filter() {
             </div>
             <div className="relative">
 
-                <div ref={elementRef} className="absolute top-0" style={{ zIndex: 1000 }}>
+                <div ref={elementRef} className="absolute top-4" style={{ zIndex: 1000 }}>
                     <Card title={t(trigger)} styles={{
                         header: {
                             padding: 0,
@@ -117,7 +123,7 @@ export default function Filter() {
                     style={{ width: 200 }}
                     suffixIcon={null}
                     showSearch
-                    placeholder={'Filter'}
+                    placeholder={p("filter")}
                     variant="borderless"
                     onKeyDown={handleKeyDown}
                     value={null}
@@ -140,3 +146,4 @@ export default function Filter() {
         </div>
     );
 }
+export default Filter

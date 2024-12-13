@@ -66,7 +66,7 @@ const TagDialog: React.FC<TagDialogProps> = ({ filterBy, props, removeOnClose, d
             <span onClick={() => {
                 setIsDialogOpen(true)
             }} >
-                <Tag style={tagStyle} key={filterBy} {...props} onClose={removeOnClose}>
+                <Tag style={tagStyle} key={filterBy} {...props} className={`${props?.className} flex`} onClose={removeOnClose}>
                     {children}
                 </Tag>
             </span>

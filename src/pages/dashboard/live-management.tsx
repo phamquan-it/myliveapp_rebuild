@@ -9,7 +9,7 @@ import DeleteStream from '@/components/autolive/DeleteStream';
 import StreamState from '@/components/autolive/StreamState';
 import ViewAutoliveDetail from '@/components/autolive/ViewAutoliveDetail';
 import SearchInput from '@/components/filters/SearchInput';
-import SelectVps from '@/components/filters/SelectVps';
+import { AppFilter } from '@/components/filters/filter';
 import UserSelect from '@/components/general/user-select';
 import VpsSelect from '@/components/general/vps-select';
 import CreateStreamByAdmin, { usePlatformData } from '@/components/live-streams/CreateStreamByAdmin';
@@ -188,87 +188,11 @@ const Page = () => {
             },
         ]
     }
+        filterOptions={[AppFilter.PLATFORM, AppFilter.USER, AppFilter.VPS, AppFilter.STREAM_STATUS]}
         actions={<>
             <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} />
         </>}
-        filterOption={(
-            <div className="flex gap-2 items-center hidden 2xl:flex">
-                <Select className='w-48' options={platformQuery.data?.data?.platforms.map((platform: any) => ({
-                    ...platform,
-                    label: (
-                        <div className="flex items-center gap-1">
-                            <Image width={20} src={platform.image} alt="image" />
-                            {platform?.name}
-                        </div>
-                    ),
-                    value: platform.id,
-                }))}
-                    placeholder={p('selectplatform')}
-                    onChange={(e) => {
-                        syncObj({ platform: e ?? '' })
-                    }}
-                    allowClear
-                />
-                <SelectVps />
-                <UserSelect />
-                <Select
-                    placeholder={p('select_status')}
-                    allowClear
-                    options={[
-                        { value: 'scheduling', label: <span>{s('scheduling')}</span> },
-                        { value: 'initalize', label: <span>{s('initalize')}</span> },
-                        { value: 'running', label: <span>{s('running')}</span> },
-                        { value: 'stopped', label: <span>{s('stopped')}</span> },
-                        { value: 'error', label: <span>{s('error')}</span> },
-                    ]}
-                    style={{
-                        width: 200
-                    }}
-                    onChange={(e) => {
-                        syncObj({ ...router.query, status: e ?? '' })
-                    }}
-                />
-                <DateFilter />
-            </div>
-        )} rightFilter={<>
-            <Select className='w-48' options={platformQuery.data?.data?.platforms.map((platform: any) => ({
-                ...platform,
-                label: (
-                    <div className="flex items-center gap-1">
-                        <Image width={20} src={platform.image} alt="image" />
-                        {platform?.name}
-                    </div>
-                ),
-                value: platform.id,
-            }))}
-                placeholder={p('selectplatform')}
-                onChange={(e) => {
-                    syncObj({ platform: e ?? '' })
-                }}
-                allowClear
-            />
-            <SelectVps />
-            <UserSelect />
-            <Select
-                placeholder={p('select_status')}
-                allowClear
-                options={[
-                    { value: 'scheduling', label: <span>{s('scheduling')}</span> },
-                    { value: 'initalize', label: <span>{s('initalize')}</span> },
-                    { value: 'running', label: <span>{s('running')}</span> },
-                    { value: 'stopped', label: <span>{s('stopped')}</span> },
-                    { value: 'error', label: <span>{s('error')}</span> },
-                ]}
-                style={{
-                    width: 200
-                }}
-                onChange={(e) => {
-                    syncObj({ ...router.query, status: e ?? '' })
-                }}
-            />
-            <DateFilter />
-
-        </>}>
+    >
         <div className="my-3"></div>
         <ConfigProvider theme={{
             components: {

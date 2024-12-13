@@ -4,7 +4,7 @@ interface SearchTextTruncateProps {
 }
 
 const SearchTextTruncate: React.FC<SearchTextTruncateProps> = ({ text }) => {
-    return <div className="w-12 text-ellipsis overflow-hidden">
+    return <div className="text-ellipsis overflow-hidden  whitespace-nowrap" style={{ maxWidth: 48 }}>
         {text}
     </div>
 }

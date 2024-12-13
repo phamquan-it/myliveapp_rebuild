@@ -100,6 +100,7 @@
         "myautolive": "Luồng live của tôi"
     },
     "MyLanguage": {
+        "apply": "Áp dụng",
         "platform": "Nền tảng",
         "source_link": "Link nguồn",
         "stream_name": "Tên luồng",
@@ -216,6 +217,7 @@
         "reason": "Nội dung"
     },
     "Placeholder": {
+        "filter": "Lọc",
         "search": "Tìm kiếm...",
         "selectplatform": "Chọn nền tảng",
         "selectcategory": "Chọn danh mục",

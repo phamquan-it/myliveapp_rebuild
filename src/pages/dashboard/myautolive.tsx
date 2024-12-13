@@ -52,6 +52,7 @@ import { usePlatformData } from "@/components/live-streams/CreateStreamByAdmin";
 import { FaPlay } from "react-icons/fa";
 import AdminLayout from "@/components/admin-layout";
 import Link from "next/link";
+import { AppFilter } from "@/components/filters/filter";
 export interface StreamDataType {
     createAt?: string
     download_link?: string
@@ -243,77 +244,8 @@ const Page = () => {
             ]
         } actions={
             <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} setSelectedRowKeys={setSelectedRowKeys} />
-        } filterOption={(
-            <div className="hidden items-center gap-2 xl:flex">
-                <Select
-                    placeholder={p('selectplatform')}
-                    style={{
-                        width: 200
-                    }} options={platformQuery?.data?.data?.platforms.map((platform: any) => ({
-                        ...platform,
-                        label: (
-                            <div className="flex items-center gap-1">
-                                <Image width={20} src={platform.image} alt="image" />
-                                {platform?.name}
-                            </div>
-                        ),
-                        value: platform.id,
-                    }))} onChange={(e) => {
-                        if (e == undefined) e = ""
-                        syncObj({ ...router.query, platform: e })
-                    }} allowClear />
-                <Select allowClear
-                    options={[
-                        { value: 'initalize', label: <span>{s('initalize')}</span> },
-                        { value: 'scheduling', label: <span>{s('scheduling')}</span> },
-                        { value: 'running', label: <span>{s('running')}</span> },
-                        { value: 'stopped', label: <span>{s('stopped')}</span> },
-                        { value: 'error', label: <span>{s('error')}</span> },
-                    ]} className='w-full mt-2 sm:mt-0 sm:w-48'
-                    placeholder={p('select_status')}
-                    onChange={(e) => {
-                        syncObj({ ...router.query, status: e ?? '' })
-                    }}
-                />
-
-            </div>
-
-        )} rightFilter={<>
-            <Select
-                placeholder={p('selectplatform')}
-                style={{
-                    width: 200
-                }} options={platformQuery?.data?.data?.platforms.map((platform: any) => ({
-                    ...platform,
-                    label: (
-                        <div className="flex items-center gap-1">
-                            <Image width={20} src={platform.image} alt="image" />
-                            {platform?.name}
-                        </div>
-                    ),
-                    value: platform.id,
-                }))} onChange={(e) => {
-                    if (e == undefined) e = ""
-                    syncObj({ ...router.query, platform: e })
-                }} allowClear />
-            <Select allowClear
-                options={[
-                    { value: 'initalize', label: <span>{s('initalize')}</span> },
-                    { value: 'scheduling', label: <span>{s('scheduling')}</span> },
-                    { value: 'running', label: <span>{s('running')}</span> },
-                    { value: 'stopped', label: <span>{s('stopped')}</span> },
-                    { value: 'error', label: <span>{s('error')}</span> },
-                ]} className='mt-2'
-                style={{
-                    width: 200
-                }}
-                placeholder={p('select_status')}
-                onChange={(e) => {
-                    syncObj({ ...router.query, status: e ?? '' })
-                }}
-            />
-
-        </>}>
+        }
+        >
             <Table {...tableProps} />
         </AdminLayout>
     );
