@@ -1,7 +1,9 @@
 import { CloseOutlined } from '@ant-design/icons';
 import { Button, Card, Tag, TagProps } from 'antd';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import { AppFilter } from '../filter';
 interface TagDialogProps {
     children?: ReactNode | string
     isDialogOpen: boolean
@@ -17,7 +19,7 @@ const TagDialog: React.FC<TagDialogProps> = ({ filterBy, props, removeOnClose, d
     const elementRef = useRef<HTMLDivElement>(null);
     const handleClickOutside = (event: MouseEvent) => {
         if (elementRef.current && !elementRef.current.contains(event.target as Node)) {
-            console.log('Clicked outside the element!');
+            //Clicked outside the element!
             setIsDialogOpen(false)
         }
     };
@@ -33,10 +35,18 @@ const TagDialog: React.FC<TagDialogProps> = ({ filterBy, props, removeOnClose, d
 
         setIsDialogOpen(!isDialogOpen)
     }
+    const af = useTranslations("AppFilter")
+
+    const titleText = filterBy as AppFilter
+
+    const tagStyle: React.CSSProperties = {
+        padding: 5,
+        fontFamily:"sans-serif"
+    }
     return <>
         <span className="relative">
-            <div ref={elementRef} className={`absolute -top-2 start-0 ${isDialogOpen ? '' : "hidden"}`}>
-                <Card className="shadow-md" title={filterBy} style={{ zIndex: 1000 }} styles={{
+            <div ref={elementRef} className={`absolute -top-1 start-0 ${isDialogOpen ? '' : "hidden"}`}>
+                <Card className={`shadow-md`} title={af(titleText)} style={{ zIndex: 1000 }} styles={{
                     header: {
                         minHeight: 40,
                         padding: 0,
@@ -56,7 +66,7 @@ const TagDialog: React.FC<TagDialogProps> = ({ filterBy, props, removeOnClose, d
             <span onClick={() => {
                 setIsDialogOpen(true)
             }} >
-                <Tag key={filterBy} {...props} onClose={removeOnClose}>
+                <Tag style={tagStyle} key={filterBy} {...props} onClose={removeOnClose}>
                     {children}
                 </Tag>
             </span>

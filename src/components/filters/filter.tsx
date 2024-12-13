@@ -4,23 +4,35 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import FilterTag from './filter-tag';
 import SelectListFilter from './select-list-filter';
-import { useTranslations } from 'next-intl';
+import { MessageKeys, useTranslations } from 'next-intl';
 
 const { Header, Footer, Content } = Layout;
 
 
+export enum AppFilter {
+    PLATFORM = "platform",
+    USER = "user",
+    VPS = "vps",
+    STREAM_STATUS = "status",
+    DATE = "date",
+    NONE = "none"
+}
+
+
+
 
 export default function Filter() {
+
     const router = useRouter()
     const [open, setOpen] = useState(false)
-    const [trigger, setTrigger] = useState('none')
-    const [options, setOptions] = useState<string[]>(['platform'])
+    const [trigger, setTrigger] = useState<AppFilter>(AppFilter.NONE)
+    const [options, setOptions] = useState<AppFilter[]>([AppFilter.PLATFORM])
     const handleRemoveKeyword = (key: string) => {
         setOptions((prevOptions) => prevOptions.filter((option) => option !== key));
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && keyword != "") {
             console.log('Enter key pressed');
             router.push({ query: { ...router.query, keyword } })
         }
@@ -29,8 +41,8 @@ export default function Filter() {
 
     const handleClickOutside = (event: MouseEvent) => {
         if (elementRef.current && !elementRef.current.contains(event.target as Node)) {
-            console.log('Clicked outside the element!');
-            setTrigger("none")
+            //  console.log('Clicked outside the element!');
+            setTrigger(AppFilter.NONE)
         }
     };
     const [keyword, setKeyword] = useState("")
@@ -45,106 +57,86 @@ export default function Filter() {
     useEffect(() => {
         setKeyword((router.query?.keyword != undefined ? router.query?.keyword + '' : ''))
         setOptions(Object.entries(router.query).map(
-            ([key]) => key
+            ([key]) => key as AppFilter
         ))
     }, [router.query])
+
+    const t = useTranslations("AppFilter")
     const filterOptions = [
-        { label: 'Vps', value: "vps" },
-        { label: 'Platform', value: "platform" },
-        { label: 'User', value: 'user' },
-        { label: 'Status', value: 'status' },
-        { label: 'Date', value: 'date' },
+        { label: t('vps'), value: AppFilter.VPS },
+        { label: t('platform'), value: AppFilter.PLATFORM },
+        { label: t('user'), value: AppFilter.USER },
+        { label: t('status'), value: AppFilter.STREAM_STATUS },
+        { label: t('date'), value: AppFilter.DATE },
     ]
     const filter = filterOptions.filter((opt) => options.indexOf(opt.value) == -1)
-    const af = useTranslations("AppFilter")
     return (
-        <div>
-            <p>Hello world</p>
-            <Layout>
-                <Header className="flex items-center">
-                    <Button type="default"
-                        onClick={() => {
-                            setOpen(true)
-                        }}
-                        size="large" className="mx-2 !border-0 !shadow-none" icon={<FilterOutlined className="!text-3xl" />}></Button>
-                    <div>
-                        {options.map((opt) => (
-                            <FilterTag key={opt} props={{
-                                className: "!border-0 !py-2 !px-2",
-                                closable: true,
-                                onClose: () => {
-                                    handleRemoveKeyword(opt)
-                                }
-                            }}>
-                                {opt}
-                            </FilterTag>
-                        ))}
-                    </div>
-                    <div className="relative">
+        <div className="flex items-center">
+            <Button type="default"
+                onClick={() => {
+                    setOpen(true)
+                }}
+                size="large" className="mx-2 !border-0 !shadow-none" icon={<FilterOutlined className="!text-3xl" />}></Button>
+            <div className="flex items-center">
+                {options.map((opt) => (
+                    <FilterTag key={opt} props={{
+                        className: "!py-2 !px-2  text-slate-800",
+                        closable: true,
+                        onClose: () => {
+                            handleRemoveKeyword(opt)
+                        }
+                    }}>
+                        {opt}
+                    </FilterTag>
+                ))}
+            </div>
+            <div className="relative">
 
-                        <div ref={elementRef} className="absolute top-4" style={{ zIndex: 1000 }}>
-                            <Card title={trigger} styles={{
-                                header: {
-                                    padding: 0,
-                                    minHeight: 30
-                                },
-                                title: {
-                                    fontSize: 14,
-                                    marginLeft: 10
-                                },
-                                body:{ padding: 0 }
-                            }} className={(trigger == "none") ? "hidden" : ''} extra={
-                                <Button icon={<CloseOutlined />} className="!border-0" onClick={() => {
-                                    setTrigger("none")
-                                }}></Button>}>
-                                <SelectListFilter closePopup={() => {
-                                    setTrigger("none");
-                                }} filterBy={trigger} />
-                            </Card>
-                        </div>
-                        <Select
-                            open={open}
-                            style={{ width: 200 }}
-                            suffixIcon={null}
-                            showSearch
-                            //   className={(trigger != "none") ? "-translate-y-24" : ''}
-                            placeholder={'Filter'}
-                            variant="borderless"
-                            onKeyDown={handleKeyDown}
-                            value={null}
-                            onSearch={(text) => {
-                                setKeyword(text)
-                            }}
-                            onDropdownVisibleChange={(open) => {
-                                setOpen(open)
-                            }}
-                            onChange={(e) => {
-                                setTrigger(e + '')
-                                console.log(e)
-                            }}
-                            notFoundContent={(<>
-                                <span className="text-slate-700">Tìm kiếm có chứa: {`"${keyword}"`}</span>
-                            </>)}
-                            options={filter}
-                        />
-                    </div>
-                </Header>
-
-                <Content>
-                    {options.map((opt) => (
-                        <Tag
-                            className="py-1 border-0"
-                            closable={true}
-                            key={opt}
-                        >
-                            {opt}
-                        </Tag>
-                    ))}
-
-                </Content>
-
-                <Footer>Footer</Footer>
-            </Layout>
+                <div ref={elementRef} className="absolute top-0" style={{ zIndex: 1000 }}>
+                    <Card title={t(trigger)} styles={{
+                        header: {
+                            padding: 0,
+                            minHeight: 40
+                        },
+                        title: {
+                            fontSize: 14,
+                            marginLeft: 10
+                        },
+                        body: { padding: 0 }
+                    }} className={`${(trigger == "none") ? "hidden" : ''}`} style={{ minWidth: 200 }} extra={
+                        <Button icon={<CloseOutlined />} className="!border-0" onClick={() => {
+                            setTrigger(AppFilter.NONE)
+                        }}></Button>}>
+                        <SelectListFilter closePopup={() => {
+                            setTrigger(AppFilter.NONE);
+                        }} filterBy={trigger} />
+                    </Card>
+                </div>
+                <Select
+                    open={open}
+                    style={{ width: 200 }}
+                    suffixIcon={null}
+                    showSearch
+                    placeholder={'Filter'}
+                    variant="borderless"
+                    onKeyDown={handleKeyDown}
+                    value={null}
+                    onSearch={(text) => {
+                        setKeyword(text)
+                    }}
+                    onDropdownVisibleChange={(open) => {
+                        setOpen(open)
+                    }}
+                    onChange={(e) => {
+                        setTrigger(e + '' as AppFilter)
+                        console.log(e)
+                    }}
+                    notFoundContent={(<>
+                        <span className="text-slate-700">Tìm kiếm có chứa: {`"${keyword}"`}</span>
+                    </>)}
+                    options={filter}
+                />
+            </div>
         </div>
     );
 }

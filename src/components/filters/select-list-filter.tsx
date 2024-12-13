@@ -6,6 +6,7 @@ import syncObjectToUrl from '@/helpers/syncObjectToUrl';
 import { usePlatformData } from '../live-streams/CreateStreamByAdmin';
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/apiClient/axiosConfig';
+import RadioListFilter from './radio-list-filter';
 interface SelectListFilterProps {
     filterBy: string;
     closePopup: () => void
@@ -22,35 +23,54 @@ const SelectListFilter: React.FC<SelectListFilterProps> = ({ closePopup, filterB
         queryFn: () => axiosInstance.get('/users', { params: { language: 'en' } })
     })
 
-    console.log(userData?.data?.data?.data)
-
-
-
     const router = useRouter()
     const syncObj = syncObjectToUrl(router)
     switch (filterBy) {
         case 'platform':
-            return <CheckboxListFilter renderLabel="name" dataFilter={platformData?.data?.data?.platforms} onFinish={(values) => {
-                const platform = values.filterRender.filter((platform: any) => (platform.value)).map((pl: any) => pl.id)
-                closePopup()
-                syncObj({ platform })
-            }} />
+            return <CheckboxListFilter
+                withIcon="image"
+                name="platformFilter"
+                renderLabel="name"
+                dataFilter={platformData?.data?.data?.platforms}
+                onFinish={(values) => {
+                    const platform = values.filterRender
+                        .filter((platform: any) => (platform.value))
+                        .map((pl: any) => pl.id)
+                    closePopup()
+                    syncObj({ platform })
+                }} />
         case 'vps':
-            return <CheckboxListFilter renderLabel="name" dataFilter={vpsData?.data?.data} onFinish={(values) => {
+            return <CheckboxListFilter name="vpsFilter" renderLabel="name" dataFilter={vpsData?.data?.data} onFinish={(values) => {
                 const vps = values.filterRender.filter((platform: any) => (platform.value)).map((vp: any) => vp.vps_vps_provider)
                 closePopup()
                 syncObj({ vps })
             }} />
         case 'user':
-            return <CheckboxListFilter renderLabel="email" dataFilter={userData?.data?.data?.data} onFinish={(values) => {
-                const user = values.filterRender.filter((u: any) => (u.value)).map((u: any) => u.id)
+            return <CheckboxListFilter name="userFilter" renderLabel="email" dataFilter={userData?.data?.data?.data} onFinish={(values) => {
+                const user = values
+                    .filterRender
+                    .filter((user: any) => (user.value))
+                    .map((user: any) => user.id)
                 closePopup()
                 syncObj({ user })
             }} />
         case 'date':
             return <>{filterBy} date</>
         case 'status':
-            return <>{filterBy} status</>
+            return <RadioListFilter name="userFilter"
+                renderLabel="name"
+                dataFilter={[
+                    { id: 'initalize', name: "Initalize" },
+                    { id: 'scheduling', name: "Scheduling" },
+                    { id: 'running', name: "Runing" },
+                    { id: 'stopped', name: "Stopped" },
+                    { id: 'error', name: "Error" },
+                ]}
+                onFinish={(values) => {
+                    closePopup()
+                    syncObj({ status: values.filter })
+
+                }} />
         default:
             return <p className="p-2">Invalid options</p>
     }

@@ -284,11 +284,11 @@
         "custom": "Custom"
     },
     "AppFilter": {
-        "platfrom": "Platform",
-        "user": "User",
-        "vps": "Vps",
-        "streamStatus": "Stream status",
-        "user_active": "Active",
-        "date":"Date"
+        "platform": "Platform",
+        "user":"User",
+        "vps":"Vps",
+        "status":"Status",
+        "date":"Date",
+        "none": "None"
     }
 }

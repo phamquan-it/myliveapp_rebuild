@@ -2,9 +2,9 @@ import Filter from '@/components/filters/filter';
 import { GetStaticPropsContext } from 'next';
 import React from 'react';
 const Page = () => {
-    return <>
+    return <div className="pt-4">
         <Filter />
-    </>
+    </div>
 }
 
 export default Page
