@@ -290,7 +290,7 @@
         "user":"User",
         "vps":"Vps",
         "status":"Status",
-        "date":"Date",
+        "payment_status":"Status",
         "none": "None"
     }
 }

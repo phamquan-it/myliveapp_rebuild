@@ -7,7 +7,6 @@ import Link from "next/link";
 import FormLayout from "@/components/client/FormLayout";
 import { useTranslations } from "next-intl";
 import { GetStaticPropsContext } from "next";
-import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axiosClient from "@/apiClient/axiosClient";
@@ -18,7 +17,6 @@ const LoginForm = () => {
     const t = useTranslations("Authenlication");
     const p = useTranslations("Placeholder");
     const router = useRouter();
-    const dispatch = useDispatch();
     const { isPending, mutate } = useMutation({
         mutationKey: ["login"],
         mutationFn: (body) => axiosInstance.post("/auth/login?language=en", body),

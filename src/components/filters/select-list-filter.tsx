@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/apiClient/axiosConfig';
 import RadioListFilter from './radio-list-filter';
 import { useTranslations } from 'next-intl';
+import { AppFilter } from './filter';
 interface SelectListFilterProps {
     filterBy: string;
     closePopup: () => void
@@ -27,6 +28,7 @@ const SelectListFilter: React.FC<SelectListFilterProps> = ({ closePopup, filterB
     const router = useRouter()
     const syncObj = syncObjectToUrl(router)
     const s = useTranslations("StreamStatus")
+    const o = useTranslations("OrderStatus")
     switch (filterBy) {
         case 'platform':
             return <CheckboxListFilter
@@ -56,8 +58,6 @@ const SelectListFilter: React.FC<SelectListFilterProps> = ({ closePopup, filterB
                 closePopup()
                 syncObj({ user })
             }} />
-        case 'date':
-            return <>{filterBy} date</>
         case 'status':
             return <RadioListFilter name="userFilter"
                 renderLabel="name"
@@ -71,6 +71,19 @@ const SelectListFilter: React.FC<SelectListFilterProps> = ({ closePopup, filterB
                 onFinish={(values) => {
                     closePopup()
                     syncObj({ status: values.filter })
+
+                }} />
+        case AppFilter.PAYMENT_STATUS:
+            return <RadioListFilter name="paymentFilter"
+                renderLabel="name"
+                dataFilter={[
+                    { id: 'inprogress', name: o("inprogress") },
+                    { id: 'processing', name: o("processing") },
+                    { id: 'compeleted', name: o("completed") },
+                ]}
+                onFinish={(values) => {
+                    closePopup()
+                    syncObj({ payment_status: values.filter })
 
                 }} />
         default:

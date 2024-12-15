@@ -16,7 +16,7 @@ export enum AppFilter {
     USER = "user",
     VPS = "vps",
     STREAM_STATUS = "status",
-    DATE = "date",
+    PAYMENT_STATUS = "payment_status",
     NONE = "none"
 }
 
@@ -71,6 +71,7 @@ const Filter: React.FC<FilterProps> = ({ filterList = [] }) => {
         { label: t('platform'), value: AppFilter.PLATFORM },
         { label: t('user'), value: AppFilter.USER },
         { label: t('status'), value: AppFilter.STREAM_STATUS },
+        { label: t('status'), value: AppFilter.PAYMENT_STATUS },
     ].filter(option =>
         filterList.includes(option.value)
     );

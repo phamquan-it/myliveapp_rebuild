@@ -4,6 +4,7 @@ import syncObjectToUrl from '@/helpers/syncObjectToUrl';
 import { useQuery } from '@tanstack/react-query';
 import { Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import dayjs from 'dayjs';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -28,30 +29,55 @@ const SystemLog = () => {
 
 
 
-    const columns:ColumnsType<any> = [
+    const columns: ColumnsType<any> = [
         {
             title: t('entryno'),
             dataIndex: 'id',
             key: 'id',
         },
         {
-            title: t('name'),
-            dataIndex: 'user_id',
-            key: 'name',
-            render: (text: string)=>(text== null)?"System": text,
+            title: t('email'),
+            dataIndex: 'email',
+            key: 'email',
             ellipsis: true
-            
+
         },
         {
-            title: t('desc'),
-            dataIndex: 'description',
-            key: 'description',
+            title: t('name'),
+            dataIndex: 'name',
+            key: 'name',
+            ellipsis: true
+
         },
+        {
+            title: t('method'),
+            dataIndex: 'method',
+            key: 'id',
+        },
+        {
+            title: t('action'),
+            dataIndex: 'action',
+            key: 'action',
+        },
+        {
+            title: t('createAt'),
+            dataIndex: 'create_at',
+            key: 'create_at',
+            render: (text: string) => dayjs(text).format("YYYY/MM/DD")
+        },
+
+
     ];
     const syncObj = syncObjectToUrl(router)
     console.log(data?.data?.data)
     return <>
-        <Table
+        <Table title={() => (
+            <>
+                <span className="font-semibold text-slate-700">
+                    LOG
+                </span>
+            </>
+        )} rowKey="id"
             onChange={(pagination) => {
                 syncObj({
                     pageIndex: pagination.current,

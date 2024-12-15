@@ -1,5 +1,4 @@
 import { CaretRightOutlined, DeleteFilled, EllipsisOutlined, MenuOutlined, PauseCircleFilled, PauseOutlined, PlaySquareTwoTone, SignalFilled, StopFilled, SyncOutlined } from "@ant-design/icons";
-import { icon } from "@fortawesome/fontawesome-svg-core";
 import { useMutation } from "@tanstack/react-query";
 import { Button, Dropdown, message, Modal, Tooltip } from "antd";
 import { MenuProps } from "antd/lib";

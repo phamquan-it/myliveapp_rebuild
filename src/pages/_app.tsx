@@ -1,7 +1,5 @@
 import ReactQueryProvider from "@/libs/react-query/ReactQueryProvider";
-import ReduxProvider from "@/libs/redux/Provider";
 import "@/styles/globals.css";
-import "@fortawesome/fontawesome-svg-core/styles.css";
 import "react-toastify/dist/ReactToastify.css";
 import theme from "@/theme/themeConfig";
 import { ConfigProvider, Spin } from "antd";
@@ -11,14 +9,10 @@ import { useRouter } from "next/router";
 import NextNProgress from 'nextjs-progressbar';
 import vi from "antd/locale/vi_VN";
 import en from "antd/locale/en_US";
-import { config } from "@fortawesome/fontawesome-svg-core";
-import "@fortawesome/fontawesome-svg-core/styles.css";
 import { ReactNode, useEffect, useState } from "react";
 import PageLayout from "@/components/PageLayout";
-import getObjecFormUrlParameters from "@/hooks/getObjectFormParameter";
 import DashBoardLayout from "@/components/DashboardLayout";
 
-config.autoAddCss = false;
 
 export default function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
@@ -39,7 +33,6 @@ export default function App({ Component, pageProps }: AppProps) {
             timeZone="Europe/Vienna"
         >
             {/* addRedux */}
-            <ReduxProvider>
                 {/* add react  query */}
                 <ReactQueryProvider>
                     {/* add ant design */}
@@ -55,7 +48,6 @@ export default function App({ Component, pageProps }: AppProps) {
                         </Layout>
                     </ConfigProvider>
                 </ReactQueryProvider>
-            </ReduxProvider>
         </NextIntlClientProvider>
     );
 }

@@ -7,7 +7,7 @@ const Page = () => {
             AppFilter.PLATFORM,
             AppFilter.USER,
             AppFilter.VPS,
-            AppFilter.STREAM_STATUS
+            AppFilter.PAYMENT_STATUS
         ]} />
     </div>
 }

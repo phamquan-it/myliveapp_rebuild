@@ -2,6 +2,7 @@ import { Button, Radio, Form, Image, Space } from 'antd';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { AppFilter } from './filter';
+import { useTranslations } from 'next-intl';
 interface RadioListFilterProps {
     withIcon?: string,
     filterBy?: AppFilter
@@ -14,17 +15,17 @@ interface RadioListFilterProps {
 const RadioListFilter: React.FC<RadioListFilterProps> = ({
     onFinish,
     renderLabel,
-    dataFilter,
+    dataFilter = [],
     name,
     filterBy
 }) => {
+    const t = useTranslations("MyLanguage")
     const router = useRouter();
-
     const [form] = Form.useForm()
     useEffect(() => {
         const status = Array.isArray(router.query.status)
             ? router.query.status.join(',') // Handle array case
-            : router.query.status || ''; // Handle string or undefined case
+            : router.query.status || dataFilter[0]?.id || ''; // Handle string or undefined case
 
         form.setFieldsValue({
             filter: status
@@ -37,7 +38,6 @@ const RadioListFilter: React.FC<RadioListFilterProps> = ({
             name={name}
             onFinish={onFinish}
             autoComplete="off"
-            initialValues={{ filter: dataFilter?.[0]?.id }}
         >
             <Form.Item className="px-2 pt-2"
                 name="filter"
@@ -53,7 +53,7 @@ const RadioListFilter: React.FC<RadioListFilterProps> = ({
             </Form.Item>
             <Form.Item className="!flex !justify-end pt-2 border-t px-2">
                 <Button type="primary" htmlType="submit">
-                    Apply
+                    {t("apply")}
                 </Button>
             </Form.Item>
         </Form>

@@ -30,7 +30,6 @@ import XtermUI, { SSHInfo } from "@/components/app/Xterm.component";
 import VpsDetail from "@/components/admin/vps/VpsDetail";
 import VpsHideOption from "@/components/admin/vps/VpsHideOption";
 import axiosInstance from "@/apiClient/axiosConfig";
-import SearchInput from "@/components/filters/SearchInput";
 import { pagination } from "@/helpers/pagination";
 import syncObjectToUrl from "@/helpers/syncObjectToUrl";
 import { ColumnsType } from "antd/es/table";
@@ -150,9 +149,9 @@ const Page = () => {
             width: 190,
             dataIndex: ('slug'),
             render: (text: any, record: any) => (<div className="grid grid-cols-4">
-                <VpsDetail slug={record} closeModal={() => { }} />
+                <VpsDetail slug={record} closeModal={() => { router.push({ query: {} }) }} />
                 <XtermUI SSHInfo={{
-                    ipv4OrHost: '192.168.1.51', sshUser: 'root'
+                    ipv4OrHost: record.ipv4, sshUser: 'root'
                 }} />
 
                 <VpsHideOption vps={record} />

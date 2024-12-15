@@ -31,13 +31,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, 
 
     const options: SelectProps['options'] = [];
 
-    for (let i = 10; i < 36; i++) {
-        options.push({
-            label: i.toString(36) + i,
-            value: i.toString(36) + i,
-        });
-    }
-
     const handleChange = (value: string[]) => {
         console.log(`selected ${value}`);
     };
@@ -70,7 +63,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, 
             <Header className="border-b">
                 <div className="flex justify-between h-full item-center">
                     <div className="flex items-center gap-2">
-                        <Filter filterList={filterOptions} />
+                        <Filter filterList={filterOptions}/>
                     </div>
                     <div className="flex items-center gap-1">
 
@@ -96,7 +89,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, 
             </Header>
             <Content className="bg-red-500">
                 <Layout className="h-full">
-                    <Content className={`p-2 ${filter ? 'overflow-auto' : 'overflow-hidden'}`} style={{
+                    <Content className={`p-2 overflow-auto`} style={{
                         height: "calc(100vh - 130px)"
                     }}>
                         <Breadcrumb items={breadcrumbItems} />

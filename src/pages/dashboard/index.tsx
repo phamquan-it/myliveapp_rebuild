@@ -147,11 +147,15 @@ const Page: React.FC<PageProps> = () => {
             <div className="col-span-2">
                 <VpsStatistic />
             </div>
-            <UserStatistic />
+            <div className="col-span-1  overflow-hidden">
+                <UserStatistic />
+            </div>
             <div className="col-span-3">
                 <LivestreamsStatisticTable currentTotal={currentTotal} remains={remains} />
             </div>
-            <SystemLog/>
+            <div className="col-span-3">
+                <SystemLog />
+            </div>
         </div>
     </div>
 }

@@ -20,6 +20,7 @@ interface FilterTagProps {
 
 const FilterTag: React.FC<FilterTagProps> = ({ props, children }) => {
     const t = useTranslations("AppFilter")
+    const o = useTranslations("OrderStatus")
     const platformData = usePlatformData()
     const vpsData = useQuery({
         queryKey: ['queryKey'],
@@ -46,13 +47,13 @@ const FilterTag: React.FC<FilterTagProps> = ({ props, children }) => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
     const closeDialog = () => {
         setIsDialogOpen(false)
     }
     const router = useRouter()
     const syncObj = syncObjectToUrl(router)
     const s = useTranslations("StreamStatus")
-
     const statusOptions = [
         { id: 'initalize', name: s('initalize') },
         { id: 'scheduling', name: s('scheduling') },
@@ -60,6 +61,13 @@ const FilterTag: React.FC<FilterTagProps> = ({ props, children }) => {
         { id: 'stopped', name: s('stopped') },
         { id: 'error', name: s('error') },
     ]
+
+    const paymentStatusOptions = [
+        { id: 'inprogress', name: (o("inprogress")) },
+        { id: 'processing', name: (o("processing")) },
+        { id: 'compeleted', name: (o("completed")) },
+    ]
+
 
     switch (children) {
         case 'keyword':
@@ -188,6 +196,31 @@ const FilterTag: React.FC<FilterTagProps> = ({ props, children }) => {
                     removeOnClose={() => { syncObj({ status: '' }) }}
                     props={{ ...props }}>
                     {t('status')}:&nbsp; {statusName}
+                </TagDialog>
+            </>
+        case AppFilter.PAYMENT_STATUS:
+            const paymentStatus = Array.isArray(router.query.payment_status)
+                ? router.query.payment_status.join(',') // Handle array case
+                : router.query.payment_status || ''; // Handle string or undefined case
+            const paymentStatusName = paymentStatusOptions.find(option => option.id === paymentStatus)?.name;
+            return <>
+                <TagDialog
+                    isDialogOpen={isDialogOpen}
+                    setIsDialogOpen={setIsDialogOpen}
+                    dialogRender={(<div className="w-48">
+                        <RadioListFilter name="paymentStatusFilter"
+                            renderLabel="name"
+                            dataFilter={paymentStatusOptions}
+                            onFinish={(values) => {
+                                syncObj({ payment_status: values.filter })
+                                closeDialog()
+                            }} />
+
+                    </div>)}
+                    filterBy={children}
+                    removeOnClose={() => { syncObj({ payment_status: '' }) }}
+                    props={{ ...props }}>
+                    {t('status')}:&nbsp; {paymentStatusName}
                 </TagDialog>
             </>
         default:

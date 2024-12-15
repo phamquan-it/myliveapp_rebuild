@@ -289,7 +289,7 @@
         "user": "Người dùng",
         "vps": "Vps",
         "status": "Trạng thái",
-        "date": "Thời gian",
+        "payment_status": "Trạng thái",
         "none": "None"
     }
 }

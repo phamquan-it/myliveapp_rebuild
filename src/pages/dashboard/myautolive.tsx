@@ -1,7 +1,6 @@
 import axiosClient from "@/apiClient/axiosClient";
 import _ from "lodash";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axiosInstance from '@/apiClient/axiosConfig';
 import TableAction from '@/components/admin/TableAction';
 import CreatePlatform from '@/components/general/create-platform';
@@ -14,7 +13,6 @@ import { debounce } from 'lodash';
 import { GetStaticPropsContext } from 'next';
 import router, { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
 import {
     Affix,
     Button,

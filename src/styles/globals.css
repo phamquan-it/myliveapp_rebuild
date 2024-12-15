@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 .terminal.xterm.xterm-dom-renderer-owner-1{
-  display: none;
+  display: hidden;
 }
 
 /* Custom scrollbar styles */

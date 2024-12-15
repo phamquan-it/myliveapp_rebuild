@@ -10,16 +10,11 @@ interface VpsSelectProps {
 }
 
 const VpsSelect: React.FC<VpsSelectProps> = () => {
-    const token = getCookie("token");
     const router = useRouter()
     const syncObj = syncObjectToUrl(router)
     const { data } = useQuery({
         queryKey: ['vps'],
-        queryFn: ()=> axiosInstance.get("/", {
-            params:{
-               Authorization: `Bearer ${token}`
-            }
-        })
+        queryFn: ()=> axiosInstance.get("/")
     });
     return <>
         <Select placeholder="Select vps" style={{

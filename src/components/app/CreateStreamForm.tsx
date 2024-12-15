@@ -16,7 +16,6 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { useCheckLink, useGoogleDriveCheckLink, useYoutubeCheckLink } from '@/apiClient/providers/streams';
 import { RcFile, UploadProps } from 'antd/es/upload';
-import md5 from 'md5';
 
 const { RangePicker } = DatePicker;
 
@@ -232,7 +231,7 @@ const CreateStreamForm: React.FC<CreateStreamFormProps> = ({ setStreamData, vps 
                                 ]}
                                     onChange={(e: string) => {
                                         if (e == 'upload' || e == 'gcloud') {
-                                            form.setFieldValue('drive_link', md5(new Date().toString()))
+                                            form.setFieldValue('drive_link', (new Date().toString()))
                                         }
                                         setSourceLink(e)
                                         setLinkState(false)

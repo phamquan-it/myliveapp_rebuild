@@ -86,8 +86,8 @@ const DateFilter = () => {
                 >
                     <Option value={DateFilterEnum.CURRENT_MONTH}>{subtractDate(0)}</Option>
                     <Option value={DateFilterEnum.ONE_MONTH_AGO}>1 {df('monthago')} ({subtractDate(1)})</Option>
-                    <Option value={DateFilterEnum.ONE_MONTH_AGO}>2 {df('monthago')} ({subtractDate(2)})</Option>
-                    <Option value={DateFilterEnum.ONE_MONTH_AGO}>3 {df('monthago')} ({subtractDate(3)})</Option>
+                    <Option value={DateFilterEnum.TWO_MONTH_AGO}>2 {df('monthago')} ({subtractDate(2)})</Option>
+                    <Option value={DateFilterEnum.THREE_MONTH_AGO}>3 {df('monthago')} ({subtractDate(3)})</Option>
                     <Option value={DateFilterEnum.THREE_RECENTS_MONTH}>3 {df('recent_month')}</Option>
                     <Option value={DateFilterEnum.SIX_RECENTS_MONTH}>6 {df('recent_month')}</Option>
                     <Option value={DateFilterEnum.ONE_YEAR_AGO}>1 {df('yearago')} {moment().subtract(1, 'year').format('YYYY')}</Option>

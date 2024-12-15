@@ -18,7 +18,7 @@ interface VpsDetailProps {
     slug: any,
     closeModal: Function
 }
-const VpsDetail: React.FC<VpsDetailProps> = ({ slug }) => {
+const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const handleOpenModal = () => {
         setIsModalOpen(true)
@@ -104,6 +104,7 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug }) => {
             <Button type="default" onClick={() => setIsModalOpen(true)} icon={<EyeFilled />}></Button>
             <Modal destroyOnClose={true} width={1300} title="Vps detail" open={isModalOpen} onCancel={() => {
                 setIsModalOpen(false);
+                closeModal()
             }} footer={[]}>
                 <div className="grid grid-cols-4 gap-2 pb-8">
                     <div>
