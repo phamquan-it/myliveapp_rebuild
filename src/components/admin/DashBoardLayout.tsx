@@ -273,7 +273,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutLayout> = ({ children }) => {
                             mode="inline"
                             defaultSelectedKeys={[router.pathname]}
                             items={items_menu.filter((item: any) => {
-                                if (role != "admin") return role == item.role;
+                                if (role != "admin" && role!="manage") return role == item.role;
                                 else return true;
                             })}
                         />

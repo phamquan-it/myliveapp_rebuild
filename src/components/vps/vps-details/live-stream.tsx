@@ -22,8 +22,6 @@ const LiveStream: React.FC<LiveStreamProps> = ({ slug, setService }) => {
             params: {
                 language: "en",
                 slug: slug.slug,
-                offset: 0,
-                limit: 5
             }
         }),
     })

@@ -11,7 +11,7 @@ const LiveSpeed: React.FC<LiveSpeedProps> = ({ stream }) => {
     const [liveLiveInfo, setLiveInfo] = useState<any>()
     useEffect(() => {
         console.log("stream", stream.id)
-        const newSocket = io('https://api.golive365.top/live-info'); // replace with your server URL
+        const newSocket = io(process.env.API_URL + 'live-info'); // replace with your server URL
         setInterval(() => {
             newSocket.emit("message", {
                 stream_id: streamData.id,

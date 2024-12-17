@@ -31,13 +31,27 @@ import SearchInput from "@/components/filters/SearchInput";
 import AdminLayout from "@/components/admin-layout";
 import Link from "next/link";
 import PaymentAction from "@/components/admin/payment/payment-action";
+import { User } from "@/@type/api_object";
+import { ColumnsType } from "antd/es/table";
+
+export interface Payment {
+    id: number,
+    method: string,
+    date: string,
+    update_at: string,
+    content: string
+    status: string
+    amount: number
+    rate: string
+    user: User
+}
 
 const Page = () => {
     const router = useRouter();
     const token = getCookie("token");
     const t = useTranslations("MyLanguage");
     const d = useTranslations("DashboardMenu");
-    const columns: any = [
+    const columns: ColumnsType<Payment> = [
         {
             title: t("entryno"),
             dataIndex: "key",
@@ -94,7 +108,6 @@ const Page = () => {
             key: "exchange_rate",
         },
         {
-            witdth: 200,
             align: "center",
             title: t("action"),
             dataIndex: "id",
@@ -102,7 +115,7 @@ const Page = () => {
             render: (text: number, record: any) => {
                 return (
                     <div className="flex justify-center">
-                        <PaymentAction paymentId={text} />
+                        <PaymentAction paymentInfo={record} paymentId={text} />
                     </div>
                 );
             },
@@ -122,9 +135,6 @@ const Page = () => {
                     offset,
                     limit,
                     status: router.query.status
-                },
-                headers: {
-                    "Authorization": `Bearer ${token}`
                 },
             }),
         placeholderData: (previousData) => previousData,
@@ -181,7 +191,7 @@ const Page = () => {
             </div>
             <div className="sm:flex gap-1 my-3" id="filter">
             </div>
-            <Table
+            <Table<Payment>
                 rowClassName="font-sans"
                 loading={isFetching}
                 scroll={{

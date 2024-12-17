@@ -1,11 +1,16 @@
+import axiosInstance from '@/apiClient/axiosConfig';
+import { Payment } from '@/pages/dashboard/payment/history';
 import { EditFilled, EditOutlined } from '@ant-design/icons';
-import { Button, ConfigProvider, Form, FormProps, Input, Modal } from 'antd';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button, ConfigProvider, Form, FormProps, Input, Modal, message } from 'antd';
 import React, { useState } from 'react';
 interface PaymentActionProps {
     paymentId: number
+    paymentInfo: Payment
 }
 
-const PaymentAction: React.FC<PaymentActionProps> = ({ paymentId }) => {
+const PaymentAction: React.FC<PaymentActionProps> = ({ paymentId, paymentInfo }) => {
+    const queryClient = useQueryClient()
     const [isModalOpen, setIsModalOpen] = useState(false)
     const handleOk = () => {
 
@@ -19,7 +24,16 @@ const PaymentAction: React.FC<PaymentActionProps> = ({ paymentId }) => {
         amount_usd?: string;
     };
 
+    const { data, isPending, mutate } = useMutation({
+        mutationKey: ['update-payment'],
+        mutationFn: (id: number | string) => axiosInstance.patch(`/payment/update/status/${id}`, { status: "completed" }),
+        onSuccess: () => {
+            message.success("OK")
+            queryClient.invalidateQueries({ queryKey: ['update-payment'] })
+        }
+    })
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+
         console.log('Success:', values);
     };
 
@@ -43,7 +57,7 @@ const PaymentAction: React.FC<PaymentActionProps> = ({ paymentId }) => {
                 labelCol={{ span: 6 }}
                 wrapperCol={{ span: 18 }}
                 style={{ maxWidth: 600 }}
-                initialValues={{ remember: true }}
+                initialValues={{ ...paymentInfo, amount_vnd: (paymentInfo.amount * 24000) }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
@@ -55,27 +69,29 @@ const PaymentAction: React.FC<PaymentActionProps> = ({ paymentId }) => {
                     name="amount_vnd"
                     rules={[{ required: true }]}
                 >
-                    <Input type="number" />
+                    <Input />
 
                 </Form.Item>
-                <Form.Item<FieldType>
+                <Form.Item<Payment>
                     className="pb-2"
                     label=<span className="font-semibold text-slate-800">Rate</span>
                     name="rate"
                 >
                     <Input />
                 </Form.Item>
-                <Form.Item<FieldType>
+                <Form.Item<Payment>
                     className="pb-2"
                     label=<span className="font-semibold text-slate-800">Amount(USD)</span>
-                    name="amount_usd"
+                    name="amount"
                 >
                     <Input />
                 </Form.Item>
             </Form>
             <div className="flex justify-between">
-                <Button type="primary" danger>Deny</Button>
-                <Button type="primary">Accept</Button>
+                <Button type="primary" danger loading={isPending} >Deny</Button>
+                <Button type="primary" loading={isPending} onClick={() => {
+                    mutate(paymentId)
+                }}>Accept</Button>
             </div>
         </Modal>
     </>

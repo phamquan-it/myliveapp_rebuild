@@ -215,7 +215,9 @@
         "creator": "Creator",
         "stream_id": "ID Stream",
         "stream_name": "Stream name",
-        "reason": "Reason"
+        "reason": "Reason",
+        "balance": "Balance",
+        "fluctuation":"Fluctuation"
     },
     "Placeholder": {
         "filter": "Filter",

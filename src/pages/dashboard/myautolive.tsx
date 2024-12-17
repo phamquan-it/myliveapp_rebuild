@@ -184,7 +184,7 @@ const Page = () => {
                     offset: (pageIndex - 1) * pageSize,
                     limit: pageIndex * pageSize,
                     status: router?.query?.status,
-                    platform: router?.query?.platform
+                    platforms: router?.query?.platform
                 },
             }),
         placeholderData: (previousData) => previousData,
@@ -240,7 +240,7 @@ const Page = () => {
                     title: d('myautolive'),
                 },
             ]
-        } actions={
+        } filterOptions={[AppFilter.PLATFORM, AppFilter.STREAM_STATUS]} actions={
             <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} setSelectedRowKeys={setSelectedRowKeys} />
         }
         >

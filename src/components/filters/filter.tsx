@@ -87,7 +87,7 @@ const Filter: React.FC<FilterProps> = ({ filterList = [] }) => {
             <div className="flex items-center">
                 {options.map((opt) => (
                     <FilterTag key={opt} props={{
-                        className: "!py-2 !px-2  text-slate-800 ",
+                        className: "!py-2 !px-2  text-slate-800 !border-0 font-semibold",
                         closable: true,
                         onClose: () => {
                             handleRemoveKeyword(opt)

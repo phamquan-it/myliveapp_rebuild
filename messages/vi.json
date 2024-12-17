@@ -192,8 +192,8 @@
         "amountvnd": "Số lượng(VND)",
         "account": "Tài khoản",
         "level": "Cấp độ",
-        "rate_config": "Tỷ lệ",
-        "initial_rate": "Tỷ lệ ban đầu",
+        "rate_config": "Tỷ giá",
+        "initial_rate": "Tỷ giá ban đầu",
         "create": "Tạo mới",
         "amountPaid": "Đã thanh toán",
         "refundAmount": "Đã hoàn tiền",
@@ -214,7 +214,9 @@
         "creator": "Người tạo",
         "stream_id": "ID Luồng",
         "stream_name": "Tên luồng",
-        "reason": "Nội dung"
+        "reason": "Nội dung",
+        "balance":"Còn lại",
+        "fluctuation":"Biến động"
     },
     "Placeholder": {
         "filter": "Lọc",

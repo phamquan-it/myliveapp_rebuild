@@ -191,7 +191,14 @@ const Page = () => {
                 {t("create")}
             </Button>
         )}>
-
+            <Modal width={1000}
+                title={t("create")}
+                open={showModal}
+                onCancel={hideModal}
+                footer={null}
+            >
+                <VpsForm closeModal={hideModal} setSlug={() => { }} />
+            </Modal>
             <div className="grid gap-2 sm:flex justify-between items-center my-3">
                 <div id="filter">
                 </div>

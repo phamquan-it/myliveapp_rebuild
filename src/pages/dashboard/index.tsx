@@ -15,12 +15,14 @@ import axiosInstance from "@/apiClient/axiosConfig";
 import { useTranslations } from "next-intl";
 import UserStatistic from "@/components/statistics/user-statistic";
 import SystemLog from "@/components/statistics/system-log";
+import { jwtDecode } from "jwt-decode";
+import { getCookie } from "cookies-next";
+import { useEffect } from "react";
+import { useProfile } from "@/apiClient/providers/useProfile";
 const Line = dynamic(() => import("react-chartjs-2").then((mod) => mod.Line), {
     ssr: false,
 });
-interface PageProps {
 
-}
 const onChange = (key: string) => {
     console.log(key);
 };
@@ -49,7 +51,9 @@ const items: TabsProps['items'] = [
 ];
 
 
-const Page: React.FC<PageProps> = () => {
+const Page = () => {
+
+
 
     const streamStatistic = useQuery({
         queryKey: ['/statistic/streams'],
@@ -76,50 +80,58 @@ const Page: React.FC<PageProps> = () => {
 
     const [scheduling, initalize, running, stopped, error] = streamStatistic?.data?.data || []
     const s = useTranslations("StreamStatus")
+    const { data, isSuccess } = useProfile()
+    const role = data?.data?.role_id
     return <div style={{
         height: "calc(100vh - 65px)",
         overflow: "auto"
     }}>
-
         <Title level={5} className="ps-3 pt-3">Dashboard</Title>
         <div className="grid grid-cols-3 px-3 gap-3">
-            <Card title="Orders">
-                <div className="grid grid-cols-2 text-center">
-                    <div>
-                        <Title level={4}>{order_stasus?.running}</Title>
-                        <p className="text-slate-600 text-center">In progress</p>
-                    </div>
-                    <div>
-                        <Title level={4}>{order_stasus?.completed}</Title>
-                        <p className="text-slate-600 text-center">Completed</p>
-                    </div>
-                </div>
-            </Card>
+            <div className="col-span-3">
+                <div className={`grid ${role != 3 && role != 2 ? "grid-cols-2" : "grid-cols-3"} gap-3`}>
+                    <Card title="Orders">
+                        <div className="grid grid-cols-2 text-center">
+                            <div>
+                                <Title level={4}>{order_stasus?.running}</Title>
+                                <p className="text-slate-600 text-center">In progress</p>
+                            </div>
+                            <div>
+                                <Title level={4}>{order_stasus?.completed}</Title>
+                                <p className="text-slate-600 text-center">Completed</p>
+                            </div>
+                        </div>
+                    </Card>
 
-            <Card title="Funds">
-                <div className="grid grid-cols-2 text-center">
-                    <div>
-                        <Title level={4}>${remains}</Title>
-                        <p className="text-slate-600 text-center">Current</p>
-                    </div>
-                    <div>
-                        <Title level={4}>${currentTotal}</Title>
-                        <p className="text-slate-600 text-center">Lifetime</p>
-                    </div>
+                    <Card title="Funds">
+                        <div className="grid grid-cols-2 text-center">
+                            <div>
+                                <Title level={4}>${remains}</Title>
+                                <p className="text-slate-600 text-center">Current</p>
+                            </div>
+                            <div>
+                                <Title level={4}>${currentTotal}</Title>
+                                <p className="text-slate-600 text-center">Lifetime</p>
+                            </div>
+                        </div>
+                    </Card>
+                    {(role != 3 && role != 2) ? <></> :
+                        <Card title="Vps">
+                            <div className="grid grid-cols-2 text-center">
+                                <div>
+                                    <Title level={4}>{vpsStatistic?.data?.data?.running_vps}</Title>
+                                    <p className="text-slate-600 text-center">Running</p>
+                                </div>
+                                <div>
+                                    <Title level={4}>{vpsStatistic?.data?.data?.amount}</Title>
+                                    <p className="text-slate-600 text-center">All</p>
+                                </div>
+                            </div>
+                        </Card>
+                    }
+
                 </div>
-            </Card>
-            <Card title="Vps">
-                <div className="grid grid-cols-2 text-center">
-                    <div>
-                        <Title level={4}>{vpsStatistic?.data?.data?.running_vps}</Title>
-                        <p className="text-slate-600 text-center">Running</p>
-                    </div>
-                    <div>
-                        <Title level={4}>{vpsStatistic?.data?.data?.amount}</Title>
-                        <p className="text-slate-600 text-center">All</p>
-                    </div>
-                </div>
-            </Card>
+            </div>
             <Card title="All orders" className="col-span-3">
                 <div className="grid grid-cols-5 text-center">
                     <div>
@@ -144,20 +156,25 @@ const Page: React.FC<PageProps> = () => {
                     </div>
                 </div>
             </Card>
-            <div className="col-span-2">
-                <VpsStatistic />
-            </div>
-            <div className="col-span-1  overflow-hidden">
-                <UserStatistic />
-            </div>
-            <div className="col-span-3">
-                <LivestreamsStatisticTable currentTotal={currentTotal} remains={remains} />
-            </div>
-            <div className="col-span-3">
-                <SystemLog />
-            </div>
+            {(role == 3 || role == 2) ?
+                <>
+                    <div className="col-span-2">
+                        <VpsStatistic />
+                    </div>
+                    <div className="col-span-1  overflow-hidden">
+                        <UserStatistic />
+                    </div>
+                    <div className="col-span-3">
+                        <LivestreamsStatisticTable currentTotal={currentTotal} remains={remains} />
+                    </div>
+                    <div className="col-span-3">
+                        <SystemLog />
+                    </div>
+                </> : ""
+            }
+
         </div>
-    </div>
+    </div >
 }
 export default Page
 

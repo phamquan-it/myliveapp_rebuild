@@ -19,6 +19,8 @@ import { StreamType } from '@/@type/CreateStreamType';
 import { RcFile } from 'antd/lib/upload';
 import { handleUploadFile } from '../../../handleUploadFile';
 import { getVideoProperties } from '@/helpers/getVideoInfo';
+import { useExchangeRate } from '@/apiClient/providers/exchangeRate';
+import { useRouter } from 'next/router';
 const { RangePicker } = DatePicker;
 
 interface NewOrderProps {
@@ -105,13 +107,14 @@ const NewOrder: React.FC<NewOrderProps> = ({ role }) => {
             return isMp4OrMov || Upload.LIST_IGNORE;
         },
     };
+    const router = useRouter()
     const createStreamMutation = useMutation({
         mutationKey: ['createStream'],
         mutationFn: (data: StreamType) =>
             axiosInstance.post('/autolive-control/create-new-stream', { ...data, resolution: videoInfo.resolution + '', duration: videoInfo.duration + '' }),
         onSuccess: () => {
             message.success("OK")
-            queryClient.invalidateQueries({ queryKey: ['activityStream', 'livestreams'] })
+            queryClient.invalidateQueries({ queryKey: ['activityStream'] })
         },
         onError: (err) => {
             message.error("Err")
@@ -192,7 +195,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ role }) => {
     }, [checkLink.data])
 
     const p = useTranslations("Placeholder")
-
+    const exchangeQuery = useExchangeRate()
     const platformquery = usePlatformData();
     const [sourceLink, setSourceLink] = useState(SourceLink.GOOGLE_DRIVE)
     return <div className="h-full">
@@ -373,13 +376,29 @@ const NewOrder: React.FC<NewOrderProps> = ({ role }) => {
                 </Form>
             </div>
             <div className="grid grid-rows-2 gap-3">
-                <Input.TextArea readOnly value={`
-${t('resolution')}: ${videoInfo.resolution}
-${t('file_size')}: ${videoInfo.size ?? ''}
-${t('duration')}: ${videoInfo.duration ?? ''}
-${t('extention')}: ${videoInfo.ext ?? ''}
-                    `} />
-                <Table showHeader={false} dataSource={dataSource} columns={columns} pagination={false} />
+                <Table showHeader={false} dataSource={[
+                    { name: t('resolution'), value: videoInfo.resolution },
+                    { name: t('file_size'), value: videoInfo.size },
+                    { name: t('duration'), value: videoInfo.duration },
+                    { name: t('extention'), value: videoInfo.ext }
+                ]} columns={columns} pagination={false} />
+                <Table showHeader={false} dataSource={[
+                    {
+                        key: '1',
+                        name: 'Price',
+                        value: 32,
+                    },
+                    {
+                        key: '2',
+                        name: 'Exchange rate',
+                        value: 24000,
+                    },
+                    {
+                        key: '3',
+                        name: 'Total(VND)',
+                        value: 42,
+                    },
+                ]} columns={columns} pagination={false} />
             </div>
         </div>
     </div>
@@ -414,25 +433,6 @@ const sourceOptions = [
 ]
 
 
-
-const dataSource = [
-    {
-        key: '1',
-        name: 'Price',
-        age: 32,
-    },
-    {
-        key: '2',
-        name: 'Exchange rate',
-        age: 24000,
-    },
-    {
-        key: '3',
-        name: 'Total(VND)',
-        age: 42,
-    },
-];
-
 const columns = [
     {
         title: 'Name',
@@ -440,9 +440,9 @@ const columns = [
         key: 'name',
     },
     {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
+        title: 'value',
+        dataIndex: 'value',
+        key: 'value',
     },
 ];
 

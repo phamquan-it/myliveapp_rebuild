@@ -16,7 +16,7 @@ import CreateStreamByAdmin, { usePlatformData } from '@/components/live-streams/
 import SelectDateForFilter from '@/components/live-streams/SelectDateForFilter';
 import ViewStreamLog from '@/components/live-streams/ViewStreamLog';
 import { pagination } from '@/helpers/pagination';
-import syncObjectToUrl from '@/helpers/syncObjectToUrl';
+import syncObjectToUrl, { removeEmptyStringProperties } from '@/helpers/syncObjectToUrl';
 import getObjecFormUrlParameters from '@/hooks/getObjectFormParameter';
 import { CheckOutlined, DownloadOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
@@ -39,20 +39,25 @@ const Page = () => {
     const router = useRouter()
     const { limit, offset, pageIndex, pageSize } = pagination(router, 1, 20)
     const [isReady, setIsReady] = useState(false)
-
+    const platforms = Array.isArray(router.query.platform)
+        ? router.query.platform // It's already an array
+        : router.query.platform
+            ? [router.query.platform] // Wrap the string in an array
+            : '';
     const { data, isFetching } = useQuery({
-        queryKey: ['livestreams', router.asPath],
+        queryKey: ['activityStream', router.query],
         queryFn: () => axiosInstance.get("/activity-stream?language=en", {
-            params: {
-                keyword: router.query.keyword ?? '',
+            params: removeEmptyStringProperties({
+                ...router.query,
                 offset,
                 limit,
-                ...router.query
-            }
+                platforms,
+                platform: ''
+            })
         })
     })
 
-    console.log(data)
+    console.log()
 
     const t = useTranslations("MyLanguage")
     const d = useTranslations("DashboardMenu")

@@ -50,7 +50,6 @@ const nextConfig = {
             ...config.resolve.alias,
             "lodash-es": path.resolve("./node_modules/lodash-es"),
         };
-
         return config;
     },
     i18n: {
@@ -58,9 +57,9 @@ const nextConfig = {
         defaultLocale: "en",
     },
     env: {
-       // API_URL: "https://api.golive365.top/",
-        API_URL: "http://localhost:3031",
-       // API_URL: "https://api-dev.golive365.top/",
+        // API_URL: "https://api.golive365.top/",
+        API_URL: "http://localhost:3031/",
+    //    API_URL: "https://api-dev.golive365.top/",
         WEBDOCK_URL: "https://api.webdock.io/v1",
     },
 };

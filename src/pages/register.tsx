@@ -71,7 +71,7 @@ const RegiterForm = () => {
                             label=<span className="font-semibold text-slate-700">{t('fullname')}</span>
                             rules={[{ required: true }]}
                         >
-                            <Input className="py-2" placeholder={p('enteryourname')} />
+                            <Input className="py-2" />
                         </Form.Item>
                         <Form.Item
                             name="email"
@@ -91,7 +91,7 @@ const RegiterForm = () => {
                                 },
                             ]}
                         >
-                            <Input.Password className="py-2" placeholder={p('enteryourpassword')} />
+                            <Input.Password className="py-2" />
                         </Form.Item>
                         <Form.Item
                             name="confirmpassword"
@@ -104,7 +104,7 @@ const RegiterForm = () => {
                                 },
                             ]}
                         >
-                            <Input.Password className="py-2" placeholder={t('rpassword')} />
+                            <Input.Password className="py-2" />
                         </Form.Item>
                         <Form.Item>
                             <div className="mt-3">

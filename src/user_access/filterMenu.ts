@@ -3,7 +3,7 @@ import { DashboardRouter } from "@/enums/router/dashboard"
 const userPath = [
     DashboardRouter.SERVICE,
     DashboardRouter.MYAUTOLIVE,
-    DashboardRouter.PLATFORM
+    DashboardRouter.HOME
 ]
 export {
     userPath

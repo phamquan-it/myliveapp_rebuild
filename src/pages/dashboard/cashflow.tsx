@@ -61,7 +61,7 @@ const Page = () => {
             render: (text: DataType) => cf(text)
         },
         {
-            title: ("Balance"),
+            title: t("balance"),
             dataIndex: "balance",
             key: "balance",
             width: "13%",
@@ -69,7 +69,7 @@ const Page = () => {
             render: (text: string) => <span className="">{text}</span>
         },
         {
-            title: t("amount"),
+            title: t("fluctuation"),
             dataIndex: "amount",
             key: "amount",
             width: "10%",
