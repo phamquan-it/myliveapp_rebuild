@@ -63,10 +63,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, 
             <Header className="border-b">
                 <div className="flex justify-between h-full item-center">
                     <div className="flex items-center gap-2">
-                        <Filter filterList={filterOptions}/>
+                        <Filter filterList={filterOptions} />
                     </div>
                     <div className="flex items-center gap-1">
-
+                        {staticAction ?? <></>}
                         <div className="flex gap-1">
                             <Button type="default"
                                 className={`!border-0 !shadow-none ${hasAnyProperty > 1 ? "" : "!hidden"}`}
@@ -83,7 +83,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, 
                                 }
                             </div>
                         </div>
-                        {staticAction ?? <></>}
                     </div>
                 </div>
             </Header>

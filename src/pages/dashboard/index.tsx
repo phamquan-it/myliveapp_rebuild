@@ -164,12 +164,6 @@ const Page = () => {
                     <div className="col-span-1  overflow-hidden">
                         <UserStatistic />
                     </div>
-                    <div className="col-span-3">
-                        <LivestreamsStatisticTable currentTotal={currentTotal} remains={remains} />
-                    </div>
-                    <div className="col-span-3">
-                        <SystemLog />
-                    </div>
                 </> : ""
             }
 

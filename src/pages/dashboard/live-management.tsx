@@ -92,7 +92,7 @@ const Page = () => {
             dataIndex: 'platform',
             key: 'platform',
             render: (text: string, record: any) => <>
-                <Image width={25} src={record.platform?.image} alt="" />
+                <Image width={25} src={record.platform?.image} alt="" preview={false} />
             </>,
             align: "center",
             width: 100
@@ -196,7 +196,9 @@ const Page = () => {
         filterOptions={[AppFilter.PLATFORM, AppFilter.USER, AppFilter.VPS, AppFilter.STREAM_STATUS]}
         actions={<>
             <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} />
-        </>}
+        </>} staticAction={
+            <DateFilter />
+        }
     >
         <div className="my-3"></div>
         <ConfigProvider theme={{

@@ -40,11 +40,12 @@
         "confirmpassword": "Xác nhận nhận mật khẩu không được để trống!",
         "confirmpasswordError": "Xác nhận mật khẩu không khớp!",
         "success": "Thành công!",
-        "min5char": "Mật khẩu phải có tối thiểu 8 ký tự!",
+        "min8char": "Mật khẩu phải có tối thiểu 8 ký tự!",
         "remenber_me": "Nhớ mật khẩu",
         "welcome": "Chào mừng đến với livestreams",
         "createnewaccount": "Tạo tài khoản mới",
-        "accepttermsandpolicy": "Tôi chấp nhận quy định và điều khoản"
+        "accepttermsandpolicy": "Tôi chấp nhận quy định và điều khoản",
+        "passwordStrength": "Không phải mật khẩu mạnh"
     },
     "Index": {
         "title": "Start",

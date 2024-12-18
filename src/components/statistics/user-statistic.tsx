@@ -23,11 +23,11 @@ const UserStatistic: React.FC<UserStatisticProps> = () => {
         queryFn: () => axiosInstance.get("/statistic/get-newest-user")
     })
 
-      const userRich = useQuery({
+    const userRich = useQuery({
         queryKey: ['user-rich', setStatisticBy],
         queryFn: () => axiosInstance.get("/statistic/get-richest-user")
     })
-    
+
 
     const t = useTranslations('MyLanguage')
     const columns: ColumnsType<any> = [
@@ -36,7 +36,7 @@ const UserStatistic: React.FC<UserStatisticProps> = () => {
             dataIndex: "key",
             key: "key",
             width: 70,
-            render: (text, record, index)=> index+1
+            render: (text, record, index) => index + 1
         },
         {
             title: <div className="py-2">
@@ -50,14 +50,6 @@ const UserStatistic: React.FC<UserStatisticProps> = () => {
                     fontSize: 12
                 }}>{record?.email}</span>
             </>)
-        },
-        {
-            title: "Avatar",
-            dataIndex: "avatar",
-            key: "avatar",
-            render: (text, record) => <>
-                <Avatar size={40} icon={<UserOutlined />} />
-            </>
         },
 
         {
@@ -91,7 +83,7 @@ const UserStatistic: React.FC<UserStatisticProps> = () => {
             ]} onChange={(e) => {
                 setStatisticBy(e)
             }} />
-        </div>)} dataSource={(statisticBy=='new')?userStatistic?.data?.data: userRich?.data?.data} columns={columns} 
+        </div>)} dataSource={(statisticBy == 'new') ? userStatistic?.data?.data : userRich?.data?.data} columns={columns}
             pagination={false}
         />
     </>

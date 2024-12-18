@@ -9,7 +9,7 @@ import { IoPlay } from 'react-icons/io5';
 interface MutistreamsActionProps {
     streamsSelected: StreamDataType[],
     setStreamsSelected: (newStreamSelected: []) => void
-    setSelectedRowKeys?: (streams:any[]) => void
+    setSelectedRowKeys?: (streams: any[]) => void
 }
 
 const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, setStreamsSelected, setSelectedRowKeys }) => {
@@ -47,8 +47,8 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, 
     const stopLive = useMutation({
         mutationKey: ['stoplive'],
         mutationFn: (data: any[]) => axiosInstance.get('/autolive-control/stop-streams', {
-            params:{
-                language:"en",
+            params: {
+                language: "en",
                 stream_id: data
             }
         }),
@@ -67,10 +67,10 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, 
 
     const deleteMultiStreams = useMutation({
         mutationKey: ['startlive'],
-        mutationFn: (data: {
-            stream_id: number[]
-        }) => axiosInstance.delete('/autolive-control/streams/start', {
-            data
+        mutationFn: (streams: number[]) => axiosInstance.delete('/activity-stream/delete', {
+            params: {
+                streams
+            }
         }),
         onSuccess: () => {
             message.success("Success")
@@ -96,31 +96,10 @@ const MutistreamsAction: React.FC<MutistreamsActionProps> = ({ streamsSelected, 
         stopLive.mutate(ids)
     };
 
-    const deleteStream = useMutation({
-        mutationKey: ['delete-stream'],
-        mutationFn: (data: {
-            stream_id: number
-        }) => axiosInstance.delete("/activity-stream/delete/" + data.stream_id),
-        onSuccess: () => {
-            message.success("Success")
-            if(setSelectedRowKeys != undefined){
-                setSelectedRowKeys([])
-                setStreamsSelected([])
-            } 
-            queryClient.invalidateQueries({ queryKey: ['activityStream'] })
-        },
-        onError: (err) => {
-            message.error(err.message)
-        }
-    })
-
     //delete stream
     const confirmDelete: PopconfirmProps['onConfirm'] = (e) => {
-        streamIdSelected.forEach((value) => {
-            deleteStream.mutate({
-                stream_id: value
-            })
-        })
+        const ids = streamsSelected.map(stream => stream.id ?? 0);
+        deleteMultiStreams.mutate(ids)
     };
 
 

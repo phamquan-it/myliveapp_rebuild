@@ -1,4 +1,5 @@
 import axiosInstance from "@/apiClient/axiosConfig";
+import DateFilter from "@/components/DateFilter";
 import AdminLayout from "@/components/admin-layout";
 import SearchInput from "@/components/filters/SearchInput";
 import { pagination } from "@/helpers/pagination";
@@ -116,7 +117,7 @@ const Page = () => {
                     offset: (pageIndex - 1) * pageSize,
                     limit: pageIndex * pageSize,
                 },
-                           }),
+            }),
         placeholderData: (previousData) => previousData,
     });
 
@@ -129,17 +130,21 @@ const Page = () => {
     }, [router])
 
     return (
-        <AdminLayout actions={[]} breadcrumbItems={
-            [
-                {
-                    title: <Link href="/dashboard">{d('home')}</Link>
-                },
+        <AdminLayout actions={[]}
+            staticAction={(
+                <DateFilter />
+            )}
+            breadcrumbItems={
+                [
+                    {
+                        title: <Link href="/dashboard">{d('home')}</Link>
+                    },
 
-                {
-                    title: d('refund'),
-                },
-            ]
-        } selected={[]}>
+                    {
+                        title: d('refund'),
+                    },
+                ]
+            } selected={[]} >
             <Table
                 rowClassName={'!font-sans'}
                 loading={isFetching}

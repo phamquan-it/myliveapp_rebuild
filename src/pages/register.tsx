@@ -76,7 +76,10 @@ const RegiterForm = () => {
                         <Form.Item
                             name="email"
                             label=<span className="font-semibold text-slate-700">{t('email')}</span>
-                            rules={[{ required: true, message: t("requiredEmail") }]}
+                            rules={[
+                                { required: true, message: t("requiredEmail") },
+                                { type: "email" }
+                            ]}
                         >
                             <Input className="py-2" />
                         </Form.Item>
@@ -86,9 +89,13 @@ const RegiterForm = () => {
                             rules={[
                                 { required: true, message: t("requiredpassword") },
                                 {
-                                    min: 5,
-                                    message: "Password should have at least 5 characters",
+                                    min: 8,
+                                    message: t("min8char"),
                                 },
+                                {
+                                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                                    message: t("passwordStrength"), // Message for weak password
+                                }
                             ]}
                         >
                             <Input.Password className="py-2" />
@@ -97,11 +104,15 @@ const RegiterForm = () => {
                             name="confirmpassword"
                             label=<span className="font-semibold text-slate-700">{t('rpassword')}</span>
                             rules={[
-                                { required: true, message: t("confirmpassword") },
+                                { required: true, message: t("requiredpassword") },
                                 {
                                     min: 8,
-                                    message: "Password should have at least 8 characters",
+                                    message: t("min8char"),
                                 },
+                                {
+                                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                                    message: t("passwordStrength"), // Message for weak password
+                                }
                             ]}
                         >
                             <Input.Password className="py-2" />

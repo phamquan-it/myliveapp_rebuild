@@ -70,7 +70,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ startTime }) => {
 
     return (
         <div>
-            <h1>{startTime == undefined ? 'Not schedule' : dayjs(startTime).format('YYYY/MM/DD HH:mm')}</h1>
+            <h1>{startTime == undefined ? t('notschedule') : dayjs(startTime).format('YYYY/MM/DD HH:mm')}</h1>
             {!isCountdownFinished ? (
                 <div className="border-t">
                     <span></span>

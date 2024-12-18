@@ -1,7 +1,10 @@
 import { User } from "@/@type/api_object";
 import axiosInstance from "@/apiClient/axiosConfig";
+import DateFilter from "@/components/DateFilter";
 import AdminLayout from "@/components/admin-layout";
 import SearchInput from "@/components/filters/SearchInput";
+import { pagination } from "@/helpers/pagination";
+import syncObjectToUrl from "@/helpers/syncObjectToUrl";
 import { useQuery } from "@tanstack/react-query";
 import { Input, Select, Table, TablePaginationConfig } from "antd";
 import { ColumnsType } from "antd/es/table";
@@ -22,7 +25,8 @@ const { Option } = Select;
 const Page = () => {
     const router = useRouter();
     const { query } = router
-    const { keyword, pageIndex, pageSize } = query
+    const { keyword } = query
+    const { offset, limit, pageIndex, pageSize } = pagination(router)
     useEffect(() => {
         console.log(query)
     }, [query])
@@ -37,6 +41,7 @@ const Page = () => {
             key: "key",
             width: "6%",
             align: "center",
+            render: (value, record, index) => pageIndex * pageSize + (index + 1) - pageSize
 
         },
         {
@@ -94,14 +99,22 @@ const Page = () => {
 
     const { data, isFetching, isError } = useQuery({
         queryKey: ["cashflow", router.asPath],
-        queryFn: () => axiosInstance.get('/cashflow/list?language=en'),
+        queryFn: () => axiosInstance.get('/cashflow/list', {
+            params: {
+                language: "en",
+                keyword: router.query?.keyword ?? '',
+                offset,
+                limit
+            }
+        }),
         placeholderData: (previousData) => previousData,
     });
+    const syncObj = syncObjectToUrl(router)
     const handleTableChange = (
         pagination: TablePaginationConfig,
     ) => {
         const current = pagination.current || 1;
-        const pageSize = pagination.pageSize || 20;
+        syncObj({ pageIndex: current })
     };
 
     const p = useTranslations("Placeholder");
@@ -116,20 +129,20 @@ const Page = () => {
                     title: d('cashflow'),
                 },
             ]
-        }>
+        } staticAction={<>
+            <DateFilter />
+        </>}>
             <Table
-                dataSource={data?.data.data.map((item: any, index: number) => ({
-                    ...item,
-                    key: 1 * 10 + (index + 1) - 10,
-                }))}
+                rowKey="id"
+                dataSource={data?.data.data}
                 scroll={{ x: 700 }}
                 columns={columns}
                 loading={isFetching}
                 onChange={handleTableChange}
                 pagination={{
                     total: data?.data.total,
-                    //       current: pageIndex,
-                    //    pageSize: pageSize,
+                    current: pageIndex,
+                    pageSize: pageSize,
                 }}
             />
         </AdminLayout>

@@ -60,9 +60,11 @@ const Filter: React.FC<FilterProps> = ({ filterList = [] }) => {
     }, []);
     useEffect(() => {
         setKeyword((router.query?.keyword != undefined ? router.query?.keyword + '' : ''))
-        setOptions(Object.entries(router.query).map(
-            ([key]) => key as AppFilter
-        ))
+        setOptions(
+            Object.entries(router.query)
+                .map(([key]) => key as AppFilter) // Map query keys to AppFilter
+                .filter(key => (Object.values(AppFilter).includes(key) || key + '' == "keyword"))
+        )
     }, [router.query])
 
     const t = useTranslations("AppFilter")

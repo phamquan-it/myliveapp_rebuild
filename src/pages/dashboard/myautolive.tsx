@@ -51,6 +51,7 @@ import { FaPlay } from "react-icons/fa";
 import AdminLayout from "@/components/admin-layout";
 import Link from "next/link";
 import { AppFilter } from "@/components/filters/filter";
+import DateFilter from "@/components/DateFilter";
 export interface StreamDataType {
     createAt?: string
     download_link?: string
@@ -117,7 +118,7 @@ const Page = () => {
             dataIndex: "platform",
             key: "platform",
             render: (text: string, record: any) => <>
-                <Image width={25} src={record.platform?.image} alt="" />
+                <Image width={25} src={record.platform?.image} alt="" preview={false} />
             </>,
             align: "center"
         },
@@ -151,7 +152,7 @@ const Page = () => {
             title: t('end_time'),
             dataIndex: 'end_at',
             key: 'end_at',
-            render: (text: string) => text == undefined ? 'Not schedule' : dayjs(text).format('YYYY/MM/DD HH:mm'),
+            render: (text: string) => text == undefined ? t('notschedule') : dayjs(text).format('YYYY/MM/DD HH:mm'),
         },
         {
             title: t("price"),
@@ -240,9 +241,13 @@ const Page = () => {
                     title: d('myautolive'),
                 },
             ]
-        } filterOptions={[AppFilter.PLATFORM, AppFilter.STREAM_STATUS]} actions={
-            <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} setSelectedRowKeys={setSelectedRowKeys} />
-        }
+        } filterOptions={[AppFilter.PLATFORM, AppFilter.STREAM_STATUS]}
+            staticAction={
+                <DateFilter />
+            }
+            actions={
+                <MutistreamsAction streamsSelected={streamsSelected} setStreamsSelected={setStreamsSelected} setSelectedRowKeys={setSelectedRowKeys} />
+            }
         >
             <Table {...tableProps} />
         </AdminLayout>

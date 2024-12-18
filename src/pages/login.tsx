@@ -13,6 +13,7 @@ import axiosClient from "@/apiClient/axiosClient";
 import { setCookie } from "cookies-next";
 import axiosInstance from "@/apiClient/axiosConfig";
 import LocaleSwitcher from "@/LocaleSwitcher";
+import { addHookAliases } from "next/dist/server/require-hook";
 const LoginForm = () => {
     const t = useTranslations("Authenlication");
     const p = useTranslations("Placeholder");
@@ -47,7 +48,7 @@ const LoginForm = () => {
                 <LocaleSwitcher />
             </div>
             <div className="w-full md:w-1/2 lg:w-1/4 p-3  rounded" style={{ maxWidth: 600 }}>
-                <Title level={3} className="!text-slate-800 text-center">{ t('login') }</Title>
+                <Title level={3} className="!text-slate-800 text-center">{t('login')}</Title>
                 <Form
                     className="py-3 pe-3 "
 
@@ -58,7 +59,11 @@ const LoginForm = () => {
                     <Form.Item<FieldType>
                         name="email"
                         label=<span className="font-semibold text-slate-700">{t('email')}</span>
-                        rules={[{ required: true, message: t("requiredEmail") }]}
+                        rules={[
+                            { required: true, message: t("requiredEmail") },
+                            { type: "email" },
+
+                        ]}
                     >
                         <Input className="py-2" />
                     </Form.Item>
@@ -70,13 +75,17 @@ const LoginForm = () => {
                             { required: true, message: t("requiredpassword") },
                             {
                                 min: 8,
-                                message: t("min5char"),
+                                message: t("min8char"),
+                            },
+                            {
+                                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                                message: t("passwordStrength"), // Message for weak password
                             },
                         ]}
                     >
                         <Input.Password className="py-2" />
                     </Form.Item>
-                        <Button href={"/"} type="link" className="!px-0">{t('gotohomepage')}</Button>
+                    <Button href={"/"} type="link" className="!px-0">{t('gotohomepage')}</Button>
                     <Form.Item className="!mt-5">
                         <Button
                             type="primary"

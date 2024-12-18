@@ -24,6 +24,12 @@ const VpsStatistic: React.FC<VpsStatisticProps> = () => {
         })
     });
 
+    const vpsStatistic = useQuery({
+        queryKey: ["/statistic/getvps-statistic"],
+        queryFn: () => axiosInstance.get("/statistic/getvps-statistic")
+    })
+
+    console.log("vps", vpsStatistic?.data?.data?.total)
     const columns: ColumnsType<any> = [
         {
             title: <div className="py-2">No.</div>,
@@ -85,10 +91,11 @@ const VpsStatistic: React.FC<VpsStatisticProps> = () => {
         <Table<Vps> pagination={false} title={() => (
             <div className="font-semibold text-slate-700 flex gap-5 justify-between">
                 <div className="flex gap-4">
-                    <div>Total: </div>
-                    <div>Idle: </div>
+                    <div>Total: {vpsStatistic?.data?.data?.total}</div>
+                    <div>Working:  {vpsStatistic?.data?.data?.working}</div>
+                    <div>Idle:  {vpsStatistic?.data?.data?.idle}</div>
                 </div>
-                <Button href={DashboardRouter.VPS} type="link" className="!px-0 !font-semibold !text-slate-700">Manage</Button> 
+                <Button href={DashboardRouter.VPS} type="link" className="!px-0 !font-semibold !text-slate-700">Manage</Button>
             </div>
         )} dataSource={data?.data} columns={columns} />
     </>

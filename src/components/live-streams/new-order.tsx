@@ -21,6 +21,8 @@ import { handleUploadFile } from '../../../handleUploadFile';
 import { getVideoProperties } from '@/helpers/getVideoInfo';
 import { useExchangeRate } from '@/apiClient/providers/exchangeRate';
 import { useRouter } from 'next/router';
+import { ColumnsType } from 'antd/lib/table';
+import dayjs from 'dayjs';
 const { RangePicker } = DatePicker;
 
 interface NewOrderProps {
@@ -198,6 +200,15 @@ const NewOrder: React.FC<NewOrderProps> = ({ role }) => {
     const exchangeQuery = useExchangeRate()
     const platformquery = usePlatformData();
     const [sourceLink, setSourceLink] = useState(SourceLink.GOOGLE_DRIVE)
+
+    console.log(exchangeQuery?.data?.data?.conversion_rate / 1000, "exchange")
+
+    const [selectedRange, setSelectedRange] = useState<any>(null);
+
+    const handleNowClick = () => {
+        const now = dayjs();
+        setSelectedRange([now, now]);
+    };
     return <div className="h-full">
         <div className="grid lg:grid-cols-3 h-full gap-3">
             <div className="col-span-2 row-span-1">
@@ -342,10 +353,11 @@ const NewOrder: React.FC<NewOrderProps> = ({ role }) => {
                                 rules={[{ required: useCron }]}
                             >
                                 <RangePicker
-                                    disabled={useCron == false}
-                                    renderExtraFooter={() => <>
-                                        <Button type="link">Today</Button>
-                                    </>} showTime={{ format: 'HH:mm' }} type="week" format="YYYY-MM-DD HH:mm" placeholder={[t('start_time'), t('endtime')]} />
+                                    disabled={useCron == false} placement="topRight"
+                                    disabledDate={disabledDate}
+                                    disabledTime={disabledTime}
+                                    value={selectedRange}
+                                    showTime={{ format: 'HH:mm' }} type="week" format="YYYY-MM-DD HH:mm" placeholder={[t('start_time'), t('endtime')]} />
                             </Form.Item>
                             <Form.Item
                                 name="schedule"
@@ -386,12 +398,12 @@ const NewOrder: React.FC<NewOrderProps> = ({ role }) => {
                     {
                         key: '1',
                         name: 'Price',
-                        value: 32,
+                        value: `$32`,
                     },
                     {
                         key: '2',
                         name: 'Exchange rate',
-                        value: 24000,
+                        value: exchangeQuery?.data?.data?.conversion_rate / 1000,
                     },
                     {
                         key: '3',
@@ -433,7 +445,7 @@ const sourceOptions = [
 ]
 
 
-const columns = [
+const columns: ColumnsType<any> = [
     {
         title: 'Name',
         dataIndex: 'name',
@@ -443,6 +455,7 @@ const columns = [
         title: 'value',
         dataIndex: 'value',
         key: 'value',
+        align: "right"
     },
 ];
 
@@ -470,3 +483,35 @@ export const customUploadFile = async (fileList: any, setUploading: any) => {
         setUploading(false);
     }
 }
+
+
+const disabledDate = (current: any) => {
+    // Disable dates before today
+    return current && current.isBefore(dayjs().startOf('day'));
+};
+
+const disabledTime = (date: any, type: any) => {
+    const now = dayjs();
+    if (!date) return {};
+
+    const isToday = date.isSame(now, 'day');
+
+    return {
+        disabledHours: () => {
+            const hours = [];
+            for (let i = 0; i < 24; i++) {
+                if (isToday && i < now.hour()) hours.push(i);
+            }
+            return hours;
+        },
+        disabledMinutes: (selectedHour: any) => {
+            const minutes = [];
+            if (isToday && selectedHour === now.hour()) {
+                for (let i = 0; i < 60; i++) {
+                    if (i < now.minute()) minutes.push(i);
+                }
+            }
+            return minutes;
+        },
+    };
+};

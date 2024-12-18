@@ -39,11 +39,12 @@
         "confirmpassword": "Confirm password is required!",
         "confirmpasswordError": "Confirm password is not match!",
         "success": "Success!",
-        "min5char": "Password should have at least 8 characters",
+        "min8char": "Password should have at least 8 characters",
         "remenber_me": "Remenber me",
         "welcome": "Welcome to livestreams",
         "createnewaccount": "Create new account",
-        "accepttermsandpolicy": "I accept terms and policy"
+        "accepttermsandpolicy": "I accept terms and policy",
+        "passwordStrength": "Not is strength password"
     },
     "Index": {
         "title": "Home",
@@ -111,7 +112,7 @@
         "duration": "Duration",
         "extention": "Extention",
         "newOrder": "New order",
-        "notschedule": "Not schedule",
+        "notschedule": "No schedule",
         "amount": "Amount",
         "transaction_date": "Transaction date",
         "desc": "Description",
