@@ -98,6 +98,13 @@ const Page = () => {
             width: 100
         },
         {
+            title: t('duration'),
+            dataIndex: 'duration',
+            key: 'duration',
+            align: "center",
+            width: 130
+        },
+        {
             title: t('loop'),
             dataIndex: 'loop',
             key: 'loop',
@@ -107,6 +114,13 @@ const Page = () => {
             align: "center",
             width: 100
         },
+        {
+            title: t('resolution'),
+            dataIndex: 'resolution',
+            key: 'resolution',
+            align: "center",
+        },
+
         {
             title: ('Vps'),
             dataIndex: 'vps',
@@ -143,12 +157,12 @@ const Page = () => {
             key: 'createAt',
             render: (text: string) => dayjs(text).format('YYYY/MM/DD')
         },
-
         {
             title: t('action'),
             dataIndex: 'id',
             key: 'id',
-            render: (text: string) => <ViewStreamLog id={text + ''} />
+            render: (text: string) => <ViewStreamLog id={text + ''} />,
+            align: "center"
         }
     ];
     const syncObj = syncObjectToUrl(router)

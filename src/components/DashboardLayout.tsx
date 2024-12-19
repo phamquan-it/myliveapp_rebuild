@@ -216,6 +216,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                 </Header>
                 <Layout>
                     <Sider theme="light"
+                        width={220}
                         breakpoint="lg"
                         collapsible
                         collapsed={collaped}

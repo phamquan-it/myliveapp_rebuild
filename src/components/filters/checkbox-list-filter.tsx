@@ -1,8 +1,9 @@
-import { Button, Checkbox, Form, Image } from 'antd';
+import { Button, Checkbox, Form, Image, Input } from 'antd';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { AppFilter } from './filter';
 import { useTranslations } from 'next-intl';
+import { SearchOutlined } from '@ant-design/icons';
 interface CheckboxListFilterProps {
     withIcon?: string,
     filterBy?: AppFilter
@@ -65,7 +66,11 @@ const CheckboxListFilter: React.FC<CheckboxListFilterProps> = ({
         });
     }, [form, dataFilter, router.query, filterBy]);
     const t = useTranslations("MyLanguage")
-    return <>
+    return <div>
+
+        <div className="p-2 border-b">
+            <Input prefix={<SearchOutlined/>} />
+        </div>
         <Form
             form={form}
             name={name}
@@ -81,10 +86,10 @@ const CheckboxListFilter: React.FC<CheckboxListFilterProps> = ({
                                 name={[name, 'value']} valuePropName="checked"
                             >
                                 <Checkbox>
-                                    <div className={`flex items-center gap-1 ${withIcon!=undefined?'translate-y-1':''}`}>
-                                        {withIcon!=undefined?
-                                        <Image preview={false} width={25} src={form.getFieldValue(['filterRender', name, withIcon])} alt="" />
-                                        :''}
+                                    <div className={`flex items-center gap-1 ${withIcon != undefined ? 'translate-y-1' : ''}`}>
+                                        {withIcon != undefined ?
+                                            <Image preview={false} width={20} src={form.getFieldValue(['filterRender', name, withIcon])} alt="" />
+                                            : ''}
                                         {form.getFieldValue(['filterRender', name, renderLabel])}
                                     </div>
                                 </Checkbox>
@@ -99,7 +104,7 @@ const CheckboxListFilter: React.FC<CheckboxListFilterProps> = ({
                 </Button>
             </Form.Item>
         </Form>
-    </>
+    </div>
 
 }
 

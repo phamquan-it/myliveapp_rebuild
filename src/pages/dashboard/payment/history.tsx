@@ -101,6 +101,8 @@ const Page = () => {
             title: t("amountusd"),
             dataIndex: "amount",
             key: "amount",
+            align: "right",
+            render: (text:any)=> `$${text}`
         },
         {
             title: t("rate"),

@@ -175,7 +175,11 @@ const Page = () => {
             render: (text: string) => dayjs(text).format('YYYY/MM/DD')
         },
     ];
-
+    const platforms = Array.isArray(router.query.platform)
+        ? router.query.platform // It's already an array
+        : router.query.platform
+            ? [router.query.platform] // Wrap the string in an array
+            : undefined;
     const { data, isFetching, isError } = useQuery({
         queryKey: ["activityStream", router.asPath],
         queryFn: () =>
@@ -184,8 +188,9 @@ const Page = () => {
                     keyword: router.query.keyword ?? '',
                     offset: (pageIndex - 1) * pageSize,
                     limit: pageIndex * pageSize,
-                    status: router?.query?.status,
-                    platforms: router?.query?.platform
+                    ...router.query,
+                    platforms,
+                    platform: ''
                 },
             }),
         placeholderData: (previousData) => previousData,
