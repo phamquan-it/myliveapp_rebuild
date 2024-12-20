@@ -87,7 +87,8 @@ const Page = () => {
             title: <div className="py-2">{t('entryno')}</div>,
             dataIndex: "key",
             key: 'key',
-            width: 35
+            width: 35,
+            render: (text, record, index) => pageIndex * pageSize + (index + 1) - pageSize
         },
 
         {
@@ -137,7 +138,6 @@ const Page = () => {
             dataIndex: 'slug',
             key: 'slug',
             render: (text, record) => {
-                console.log("vps", record)
                 return <>
                     <VpsStatus slug={text} />
                 </>
@@ -165,9 +165,9 @@ const Page = () => {
 
     const { pageIndex, pageSize, limit, offset } = pagination(router)
     const syncObj = syncObjectToUrl(router)
-    const [selectedRows, setSelectedRows] = useState<any>([])
+    const [selectedRowKeys, setSelectedRowKeys] = useState<any>([])
     return (
-        <AdminLayout selected={selectedRows} breadcrumbItems={
+        <AdminLayout selected={selectedRowKeys} breadcrumbItems={
             [
                 {
                     title: <Link href="/dashboard">{d('home')}</Link>
@@ -177,7 +177,7 @@ const Page = () => {
                 },
             ]
         } actions={(
-            <HideMenuSelected selectedRows={selectedRows} />
+            <HideMenuSelected selectedRowKeys={selectedRowKeys} />
         )} staticAction={(
             <Button
                 type="primary"
@@ -211,10 +211,7 @@ const Page = () => {
                 }
             }}>
                 <Table className="!font-sans"
-                    dataSource={data?.data.map((item: any, index: number) => ({
-                        ...item,
-                        key: pageIndex * pageSize + (index + 1) - pageSize,
-                    }))}
+                    dataSource={data?.data}
                     rowKey='slug'
                     columns={columns}
                     loading={isFetching}
@@ -234,8 +231,8 @@ const Page = () => {
                     }}
                     rowSelection={{
                         type: 'checkbox',
-                        onChange: (selectedRowKeys, selectedRows) => {
-                            setSelectedRows(selectedRows)
+                        onChange: (selectedRowKeys) => {
+                            setSelectedRowKeys(selectedRowKeys)
                         }
                     }}
                 />

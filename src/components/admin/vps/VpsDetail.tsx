@@ -89,7 +89,6 @@ const VpsDetail: React.FC<VpsDetailProps> = ({ slug, closeModal }) => {
             children: <Table dataSource={data?.data} loading={isFetching} columns={columns} />,
         },
     ];
-    console.log("Vps detail", slug.slug)
     const router = useRouter()
     useEffect(() => {
         if (

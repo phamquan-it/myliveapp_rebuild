@@ -16,8 +16,7 @@ const VpsPrice: React.FC<VpsPriceProps> = ({ profile, profiles }) => {
         })
     })
 
-    console.log("vps", data?.data)
-    return <>${data?.data/ 100}</>
+    return <>${data?.data / 100}</>
 }
 
 export default VpsPrice

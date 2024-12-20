@@ -11,8 +11,11 @@ interface NetworkProps {
 const Network: React.FC<NetworkProps> = ({ slug }) => {
     const { data, isFetching, isError } = useQuery({
         queryKey: ['metric' + slug],
-        queryFn: () => axios.get(`https://api.webdock.io/v1/servers/${slug}/metrics/now`, webdockConfig)
+        queryFn: () => axiosInstance.get(`/vps-provider/get-vps-network`, {
+            params: { slug }
+        })
     })
+
 
     const netwStyle: CSSProperties = {
         fontSize: 10

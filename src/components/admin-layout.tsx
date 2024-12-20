@@ -57,7 +57,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ actions, children, selected, 
     }
     const router = useRouter()
     const hasAnyProperty = Object.keys(router.query).length
-    console.log("filter b", hasAnyProperty);
     return (
         <Layout className="bg-yellow-500 h-full" >
             <Header className="border-b">

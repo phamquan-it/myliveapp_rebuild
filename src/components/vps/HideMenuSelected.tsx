@@ -6,17 +6,17 @@ import DeleteVps from './HideMenuVpsAction/DeleteVps';
 import RestartVps from './HideMenuVpsAction/RestartVps';
 import StopAllLive from './HideMenuVpsAction/StopAllLive';
 interface HideMenuSelectedProps {
-    selectedRows: any
+    selectedRowKeys: any
 }
 
-const HideMenuSelected: React.FC<HideMenuSelectedProps> = ({ selectedRows }) => {
+const HideMenuSelected: React.FC<HideMenuSelectedProps> = ({ selectedRowKeys }) => {
     return <>
         <div className='grid sm:flex gap-2'>
-            <StartVps vps={selectedRows} />
-            <StopVps vps={selectedRows} />
-            <StopAllLive vps={selectedRows} />
-            <RestartVps vps={selectedRows} />
-            <DeleteVps vps={selectedRows} />
+            <StartVps vps={selectedRowKeys} />
+            <StopVps vps={selectedRowKeys} />
+            <StopAllLive vps={selectedRowKeys} />
+            <RestartVps vps={selectedRowKeys} />
+            <DeleteVps selectedRowKeys={selectedRowKeys} />
         </div>
     </>
 }

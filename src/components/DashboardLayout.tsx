@@ -129,7 +129,6 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
     ];
 
     const { data, isSuccess } = useProfile()
-    console.log("user:", data?.data)
 
     const onClick: MenuProps['onClick'] = (e) => {
         console.log('click ', e);

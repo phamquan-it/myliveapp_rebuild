@@ -49,7 +49,7 @@ const Page = () => {
             dataIndex: "user",
             key: "user",
             ellipsis: true,
-            render: (user: User) => user.email
+            render: (user: User) => user?.email
         },
         {
             title: t("desc"),

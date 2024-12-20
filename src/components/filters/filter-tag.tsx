@@ -1,6 +1,6 @@
 import { Card, Dropdown, MenuProps, Tag, TagProps, Tooltip } from 'antd';
 import { NextRouter, useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import syncObjectToUrl from '@/helpers/syncObjectToUrl';
 import CheckboxListFilter from './checkbox-list-filter';
 import { usePlatformData } from '../live-streams/CreateStreamByAdmin';
@@ -13,12 +13,14 @@ import { AppFilter } from './filter';
 import RadioListFilter from './radio-list-filter';
 import MultiselectTextTruncate from './text-truncates/multiselect-text-truncate';
 import { Platform } from '@/@type/api_object';
+import { filterReducer, initialState } from './reducer/filter-params-reducer';
 interface FilterTagProps {
     props: TagProps,
     children: string
 }
 
 const FilterTag: React.FC<FilterTagProps> = ({ props, children }) => {
+    const [state, dispatch] = useReducer(filterReducer, initialState)
     const t = useTranslations("AppFilter")
     const o = useTranslations("OrderStatus")
     const platformData = usePlatformData()
@@ -27,8 +29,8 @@ const FilterTag: React.FC<FilterTagProps> = ({ props, children }) => {
         queryFn: () => axiosInstance.get<any>('vps-provider/getvps', { params: { language: "en" } })
     });
     const userData = useQuery({
-        queryKey: ['user'],
-        queryFn: () => axiosInstance.get('/users', { params: { language: 'en' } })
+        queryKey: ['user', state],
+        queryFn: () => axiosInstance.get('/users', { params: { language: 'en', ...state } })
     })
 
 
@@ -158,7 +160,9 @@ const FilterTag: React.FC<FilterTagProps> = ({ props, children }) => {
                     setIsDialogOpen={setIsDialogOpen}
                     dialogRender={(<>
                         <CheckboxListFilter
+                            withSearch={(keyword) => { dispatch({ type: "handleKeyword", keyword }) }}
                             filterBy={AppFilter.USER}
+                            loading={userData.isFetching}
                             dataFilter={userData?.data?.data?.data} onFinish={(values) => {
                                 const user = values.filterRender
                                     .filter((u: any) => (u.value))

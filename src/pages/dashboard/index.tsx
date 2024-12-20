@@ -19,6 +19,7 @@ import { jwtDecode } from "jwt-decode";
 import { getCookie } from "cookies-next";
 import { useEffect } from "react";
 import { useProfile } from "@/apiClient/providers/useProfile";
+import AutoLiveTable from "@/components/autolive/AutoLiveTable";
 const Line = dynamic(() => import("react-chartjs-2").then((mod) => mod.Line), {
     ssr: false,
 });
@@ -166,7 +167,9 @@ const Page = () => {
                     </div>
                 </> : ""
             }
-
+            <div className="col-span-3">
+                <LivestreamsStatisticTable currentTotal={0} remains={0} />
+            </div>
         </div>
     </div >
 }

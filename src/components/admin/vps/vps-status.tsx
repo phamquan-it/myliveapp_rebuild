@@ -13,17 +13,15 @@ const VpsStatus: React.FC<VpsStatusProps> = ({ slug }) => {
         queryKey: ['info' + slug],
         queryFn: () => axiosWebdock.get(api_path)
     })
-    console.log(info?.data?.data?.status)
-    return <div className="flex justify-center">{(info?.data?.data?.status == "running") ?
-        <Tooltip title="Running">
-            <FaPlay className="text-sky-500" />
-        </Tooltip>
-        :
-        <Tooltip title="Running">
-            <FaStop className="text-red-500" />
-        </Tooltip>
-    }
-    </div>
+    return (<>
+        <div className="flex justify-center">
+            {(info?.data?.data?.status == "running") ?
+                <FaPlay className="text-sky-500" />
+                :
+                <FaStop className="text-red-500" />
+            }
+        </div>
+    </>)
 }
 
 export default VpsStatus

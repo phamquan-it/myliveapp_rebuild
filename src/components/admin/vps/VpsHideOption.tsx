@@ -21,8 +21,7 @@ const VpsHideOption: React.FC<VpsHideOptionProps> = ({ vps }) => {
 
     //get vps info
     const getVpsInfo = useMutation({
-        mutationFn: () => axios.get(`https://api.webdock.io/v1/servers/${vps.slug}`,
-            webdockConfig),
+        mutationFn: () => axiosInstance.get(`/vps-provider/get-vps-status`, { params: { slug: vps.slug } }),
         onSuccess: (data) => {
             if (data.data.status != 'stopped' || data.data.status != 'running')
                 setVpsState(data.data.status);

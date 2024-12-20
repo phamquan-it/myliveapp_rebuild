@@ -4,13 +4,16 @@ import { useMutation } from '@tanstack/react-query';
 import { Button, Modal, message } from 'antd';
 import { useState } from 'react';
 interface DeleteVpsProps {
-    vps: any
+    selectedRowKeys: any
 }
 
-const DeleteVps: React.FC<DeleteVpsProps> = ({ vps }) => {
+const DeleteVps: React.FC<DeleteVpsProps> = ({ selectedRowKeys }) => {
+    console.log("Selected vps", selectedRowKeys)
 
     const deleteVps = useMutation({
-        mutationFn: (startData) => axiosInstance.post('/vps-provider/selected/stop', startData),
+        mutationFn: () => axiosInstance.delete('/vps-provider/delete', {
+            params: { slugs: selectedRowKeys }
+        }),
         onSuccess: () => {
             message.success("Success");
         },
@@ -27,12 +30,14 @@ const DeleteVps: React.FC<DeleteVpsProps> = ({ vps }) => {
     return <>
         <Button icon={<DeleteFilled style={{
             color: 'red'
-            }}/>} onClick={() => {
+        }} />} onClick={() => {
             setIsModalOpen(true)
         }}>Delete vps</Button>
-        <Modal title="Stop vps" open={isModalOpen} onCancel={handleCancel} onOk={() => {
-            const data = vps.map((vps: any) => ({ slug: vps.slug }))
-            deleteVps.mutate(data)
+        <Modal title="Delte vps" open={isModalOpen} okButtonProps={{
+            loading: deleteVps.isPending
+        }} onCancel={handleCancel} onOk={() => {
+            const data = selectedRowKeys.map((vps: any) => ({ slug: vps.slug }))
+            deleteVps.mutate()
         }}>
             <p>Delete selected vps?</p>
         </Modal>
