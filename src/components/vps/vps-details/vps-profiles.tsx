@@ -43,7 +43,7 @@ const VpsProfile: React.FC<VpsProfileProps> = ({ vpsProvider }) => {
             overflow: "auto"
         }}>
 
-            <Table dataSource={data?.data} id="live-table" className="rounded overflow-hidden" columns={columns} pagination={false} />
+            <Table rowKey="name" dataSource={data?.data} id="live-table" className="rounded overflow-hidden" columns={columns} pagination={false} />
         </div>
 
 

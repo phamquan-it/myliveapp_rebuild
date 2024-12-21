@@ -88,7 +88,7 @@ const VpsStatistic: React.FC<VpsStatisticProps> = () => {
 
     return <>
 
-        <Table<Vps> pagination={false} title={() => (
+        <Table<Vps> rowKey="slug" pagination={false} title={() => (
             <div className="font-semibold text-slate-700 flex gap-5 justify-between">
                 <div className="flex gap-4">
                     <div>Total: {vpsStatistic?.data?.data?.total}</div>

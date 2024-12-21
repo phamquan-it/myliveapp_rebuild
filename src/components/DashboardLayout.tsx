@@ -25,6 +25,7 @@ import { useQuery } from '@tanstack/react-query';
 import { userPath } from '@/user_access/filterMenu';
 import { isUser } from '@/user_access/checkrole';
 import { useProfile } from '@/apiClient/providers/useProfile';
+import Deposit from './deposit';
 
 const { Header, Footer, Sider, Content } = Layout;
 interface DashBoardLayoutProps {
@@ -134,6 +135,7 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
         console.log('click ', e);
     };
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isDepositOpen, setIsDepositOpen] = useState(false)
     const [collaped, setCollaped] = useState(false)
     const dataSource = [
         {
@@ -197,12 +199,11 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                                     }}>
                                         <Table dataSource={dataSource} rowKey='name' columns={columns} showHeader={false} pagination={false} rowClassName="font-sans" />
                                         <div className="px-2 pt-3 flex justify-end gap-2">
-                                            <Button type="primary" className="font-sans" size="small">{t('deposit')}</Button>
-                                            <Button type="default" className="font-sans" size="small" onClick={() => {
+                                            <Button type="default" className="font-sans" onClick={() => {
                                                 deleteCookie("token");
                                                 router.push("/login");
                                             }}
-                                            >Logout</Button>
+                                            >{t('logout')}</Button>
 
                                         </div>
                                     </ConfigProvider>
@@ -230,6 +231,9 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                             scrollbarWidth: "thin"
                         }}
                     >
+                        <Modal title={t('deposit')} open={isDepositOpen} onCancel={() => { setIsDepositOpen(false) }} footer={[]}>
+                            <Deposit />
+                        </Modal>
                         <div className="p-3 pb-0 grid gap-2 ">
                             <Button type="default"
                                 icon={<PlusOutlined />}
@@ -240,14 +244,14 @@ const DashBoardLayout: React.FC<DashBoardLayoutProps> = ({ children }) => {
                                 }}>
                                 <span className="!text-semibold !font-sans">{collaped ? '' : t('neworder')}</span>
                             </Button>
+
                             <Button type="primary"
                                 className="shadow "
-                                icon={collaped? <PiHandDepositBold />:'' }
+                                icon={collaped ? <PiHandDepositBold /> : ''}
                                 block
                                 size="large"
-                                onClick={() => {
-                                    setIsModalOpen(true)
-                                }}>
+                                onClick={() => { setIsDepositOpen(true) }}
+                            >
                                 <span className="!text-semibold !font-sans">
                                     {collaped ? '' : t('deposit')}
                                 </span>

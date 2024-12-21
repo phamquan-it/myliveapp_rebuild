@@ -214,7 +214,7 @@ const Page = () => {
                 disabled: record.name === 'Disabled User', // Column configuration not to be checked
                 name: record.name,
             }),
-            selectedRowKeys
+            selectedRowKeys,
         },
         columns,
         rowClassName: "!font-sans",
@@ -224,10 +224,7 @@ const Page = () => {
                 pageIndex: pagination.current,
             })
         },
-        dataSource: data?.data.data.map((item: any, index: number) => ({
-            ...item,
-            key: pageIndex * pageSize + (index + 1) - pageSize,
-        })),
+        dataSource: data?.data.data,
         scroll: { x: 800 },
         pagination: {
             total: data?.data?.total,

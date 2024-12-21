@@ -73,7 +73,7 @@ const UserStatistic: React.FC<UserStatisticProps> = () => {
 
 
     return <>
-        <Table<User> loading={userRich.isLoading || userStatistic.isLoading} title={() => (<div className="flex justify-between items-center">
+        <Table<User> rowKey="id" loading={userRich.isLoading || userStatistic.isLoading} title={() => (<div className="flex justify-between items-center">
             <span className="font-semibold text-sm text-slate-700">
                 Users | Total: {userTotal?.data?.data}
             </span>

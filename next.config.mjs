@@ -58,7 +58,7 @@ const nextConfig = {
     },
     env: {
         API_URL: "https://api.golive365.top/",
-        //  API_URL: "http://localhost:3031/",
+        // API_URL: "http://localhost:3031/",
         //    API_URL: "https://api-dev.golive365.top/",
         WEBDOCK_URL: "https://api.webdock.io/v1",
     },

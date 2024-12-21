@@ -1,5 +1,4 @@
 import axiosClient from "@/apiClient/axiosClient";
-import DashBoardLayout from "@/components/admin/DashBoardLayout";
 import DeleteForm from "@/components/admin/DeleteForm";
 import TableAction from "@/components/admin/TableAction";
 import EditUser from "@/components/admin/crudform/edit/EditUser";
